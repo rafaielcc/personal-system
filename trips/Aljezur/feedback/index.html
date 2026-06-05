@@ -10,7 +10,6 @@
   <title>Travel Log</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       background: #0d0d0d;
       font-family: 'Georgia', 'Times New Roman', serif;
@@ -19,17 +18,13 @@
       min-height: -webkit-fill-available;
       overscroll-behavior: none;
     }
-
     #app {
-      max-width: 480px;
-      margin: 0 auto;
-      min-height: 100vh;
-      min-height: -webkit-fill-available;
-      display: flex;
-      flex-direction: column;
+      max-width: 480px; margin: 0 auto;
+      min-height: 100vh; min-height: -webkit-fill-available;
+      display: flex; flex-direction: column;
     }
 
-    /* ── HEADER ── */
+    /* HEADER */
     .header {
       display: flex; align-items: center; justify-content: space-between;
       padding: 20px 20px 16px; border-bottom: 1px solid #1a1a1a;
@@ -42,36 +37,41 @@
       cursor: pointer; width: 32px; font-family: 'Georgia', serif;
       line-height: 1; padding: 0; -webkit-tap-highlight-color: transparent;
     }
-    .export-icon-btn {
+    .export-btn {
       background: none; border: 1px solid #2a2a2a; border-radius: 2px;
       color: #555; font-size: 13px; cursor: pointer; padding: 6px 12px;
       font-family: 'Georgia', serif; -webkit-tap-highlight-color: transparent;
-      letter-spacing: 0.05em;
     }
     .spacer { width: 32px; }
 
-    /* ── EMPTY STATE ── */
+    /* EMPTY */
     .empty-state {
       flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      padding: 60px 40px; gap: 12px;
+      align-items: center; justify-content: center; padding: 60px 40px; gap: 12px;
     }
     .empty-icon { font-size: 36px; color: #2a2a2a; }
     .empty-titulo { font-size: 17px; color: #444; }
     .empty-sub { font-size: 13px; color: #333; font-style: italic; text-align: center; line-height: 1.6; }
 
-    /* ── LISTA ── */
+    /* LISTA */
     .lista { flex: 1; padding: 12px 16px 100px; display: flex; flex-direction: column; gap: 12px; }
     .card { background: #111; border: 1px solid #1e1e1e; border-radius: 2px; padding: 16px 16px 12px; }
     .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .card-emoji { font-size: 14px; }
-    .card-categoria { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
-    .card-estrelas { font-size: 12px; color: #c8a96e; margin-left: auto; letter-spacing: 2px; }
+    .card-cat { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-stars { font-size: 12px; color: #c8a96e; margin-left: auto; letter-spacing: 2px; }
     .card-ts { font-size: 11px; color: #333; margin-bottom: 8px; }
     .card-titulo { font-size: 15px; color: #c8a96e; font-style: italic; margin-bottom: 6px; }
     .card-texto { font-size: 14px; color: #9a9590; line-height: 1.6; margin-bottom: 8px; }
-    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .card-tag { font-size: 11px; color: #555; border: 1px solid #222; border-radius: 2px; padding: 3px 8px; }
+    .card-preco {
+      display: flex; gap: 16px; padding: 8px 0; margin-bottom: 8px;
+      border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a;
+    }
+    .card-preco-item { display: flex; flex-direction: column; gap: 2px; }
+    .card-preco-label { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-preco-valor { font-size: 15px; color: #7a9e7e; font-family: 'Georgia', serif; }
     .card-acoes { display: flex; gap: 16px; padding-top: 10px; border-top: 1px solid #1a1a1a; }
     .acao-btn {
       background: none; border: none; color: #444; font-size: 12px;
@@ -85,7 +85,7 @@
       font-style: italic; text-align: center; width: 100%;
     }
 
-    /* ── FAB ── */
+    /* FAB */
     .fab {
       position: fixed; bottom: 32px; right: 24px;
       width: 56px; height: 56px; border-radius: 50%;
@@ -96,7 +96,7 @@
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
     }
 
-    /* ── FORM ── */
+    /* FORM */
     .form-scroll {
       flex: 1; overflow-y: auto; padding: 24px 20px 0;
       display: flex; flex-direction: column; gap: 24px;
@@ -105,7 +105,6 @@
     .form-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.1em; }
     .opcional { color: #333; text-transform: none; letter-spacing: 0; font-style: italic; font-size: 11px; }
 
-    /* Categorias */
     .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .cat-btn {
       background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
@@ -117,7 +116,6 @@
     .cat-emoji { font-size: 16px; }
     .cat-label { font-size: 14px; color: #888; font-family: 'Georgia', serif; }
 
-    /* Estrelas */
     .estrelas-row { display: flex; gap: 4px; }
     .estrela-btn {
       background: none; border: none; font-size: 32px; cursor: pointer;
@@ -127,7 +125,6 @@
     }
     .estrela-btn.ativo { color: #c8a96e; }
 
-    /* Tags */
     .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
     .tag-btn {
       background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
@@ -138,18 +135,30 @@
     }
     .tag-btn.ativo { background: #1a1a1a; border-color: #7a9e7e; color: #7a9e7e; }
 
-    input[type="text"], textarea {
+    /* Preço row */
+    .preco-row { display: flex; gap: 12px; }
+    .preco-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .preco-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .preco-calc {
+      background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 2px;
+      color: #7a9e7e; font-size: 15px; padding: 13px 14px;
+      font-family: 'Georgia', serif; min-height: 48px;
+      display: flex; align-items: center;
+    }
+
+    input[type="text"], input[type="number"], textarea {
       width: 100%; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 2px;
       color: #d4cfc7; font-size: 16px; padding: 13px 14px; outline: none;
       font-family: 'Georgia', serif; line-height: 1.6;
       -webkit-appearance: none; appearance: none;
     }
+    input[type="number"] { -moz-appearance: textfield; }
     textarea { resize: none; }
     ::placeholder { color: #333; }
 
     .form-footer {
-      padding: 16px 20px 40px; border-top: 1px solid #1a1a1a; background: #0d0d0d;
-      margin-top: 24px;
+      padding: 16px 20px 40px; border-top: 1px solid #1a1a1a;
+      background: #0d0d0d; margin-top: 24px;
     }
     .btn-primary {
       width: 100%; background: #c8a96e; border: none; border-radius: 2px;
@@ -167,7 +176,7 @@
     .btn-row { display: flex; gap: 12px; }
     .btn-row .btn-primary, .btn-row .btn-secondary { flex: 1; }
 
-    /* ── EXPORT ── */
+    /* EXPORT */
     .export-body { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
     .export-info { font-size: 13px; color: #555; font-style: italic; line-height: 1.6; }
     .export-pre {
@@ -177,7 +186,7 @@
       white-space: pre-wrap; flex: 1;
     }
 
-    /* ── CONFIRM ── */
+    /* CONFIRM */
     .confirm-body {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
@@ -192,7 +201,6 @@
 <div id="app"></div>
 <script>
 
-// ── DATA ─────────────────────────────────────────────────────────
 const CATS = [
   { id: "restaurante", label: "Restaurante", emoji: "🍽" },
   { id: "atracao",     label: "Atração",     emoji: "🗺" },
@@ -213,49 +221,44 @@ const TAGS = {
   outro:       ["Recomendo", "Voltaria", "Surpreendeu", "Desiludiu", "Bom preço"],
 };
 
-const KEY = "travel_log_v3";
+const KEY = "travel_log_v4";
 
-// ── STATE ─────────────────────────────────────────────────────────
-// Single source of truth — everything re-renders from here
 let S = {
-  view: "log",       // log | nova | exportar | confirmar
+  view: "log",
   entradas: [],
   editId: null,
-  // form fields — all updated directly, full re-render on each change
-  fCat:      "restaurante",
-  fEstrelas: 0,
-  fTags:     [],
-  fTitulo:   "",
-  fTexto:    "",
+  fCat: "restaurante", fEstrelas: 0, fTags: [],
+  fTitulo: "", fTexto: "",
+  fTotal: "", fPessoas: "",
 };
 
-// ── STORAGE ───────────────────────────────────────────────────────
-function load() {
-  try { const d = localStorage.getItem(KEY); return d ? JSON.parse(d) : []; } catch { return []; }
-}
-function save() {
-  try { localStorage.setItem(KEY, JSON.stringify(S.entradas)); } catch {}
-}
+function load() { try { const d = localStorage.getItem(KEY); return d ? JSON.parse(d) : []; } catch { return []; } }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(S.entradas)); } catch {} }
 S.entradas = load();
 
-// ── HELPERS ───────────────────────────────────────────────────────
 function ts() {
-  const n = new Date();
-  const p = v => String(v).padStart(2, "0");
+  const n = new Date(), p = v => String(v).padStart(2,"0");
   return { display: `${p(n.getDate())}/${p(n.getMonth()+1)} · ${p(n.getHours())}:${p(n.getMinutes())}`, raw: n.toISOString() };
 }
 
-function stars(n) { return "★".repeat(n) + "☆".repeat(5-n); }
+function stars(n) { return "★".repeat(n||0) + "☆".repeat(5-(n||0)); }
 
 function esc(s) {
   if (!s) return "";
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 }
 
+function calcPP() {
+  const t = parseFloat(S.fTotal);
+  const p = parseInt(S.fPessoas);
+  if (!t || !p || p === 0) return null;
+  return (t / p).toFixed(2);
+}
+
 function resetForm() {
   S.editId = null;
   S.fCat = "restaurante"; S.fEstrelas = 0; S.fTags = [];
-  S.fTitulo = ""; S.fTexto = "";
+  S.fTitulo = ""; S.fTexto = ""; S.fTotal = ""; S.fPessoas = "";
 }
 
 function canSave() { return S.fTitulo.trim() || S.fTexto.trim(); }
@@ -267,44 +270,44 @@ function exportText() {
     const c = CATS.find(x => x.id === e.cat);
     lines.push(`[${e.ts.display}] ${c?.emoji} ${c?.label}`);
     if (e.titulo) lines.push(`📍 ${e.titulo}`);
-    lines.push(`Avaliação: ${stars(e.estrelas||0)} (${e.estrelas||0}/5)`);
+    lines.push(`Avaliação: ${stars(e.estrelas)} (${e.estrelas||0}/5)`);
     if (e.tags?.length) lines.push(`Tags: ${e.tags.join(" · ")}`);
-    if (e.texto) lines.push(e.texto);
+    if (e.total)   lines.push(`Gasto total: ${e.total} €${e.pp ? `  |  Por pessoa: ${e.pp} €` : ""}`);
+    if (e.texto)   lines.push(e.texto);
     lines.push("");
   });
   return lines.join("\n");
 }
 
-// ── ACTIONS ───────────────────────────────────────────────────────
 function guardar() {
   if (!canSave()) return;
+  const pp = calcPP();
   const entry = {
     id: S.editId || Date.now().toString(),
     ts: S.editId ? S.entradas.find(e=>e.id===S.editId)?.ts : ts(),
     cat: S.fCat, estrelas: S.fEstrelas, tags: [...S.fTags],
     titulo: S.fTitulo.trim(), texto: S.fTexto.trim(),
+    total: S.fTotal ? parseFloat(S.fTotal) : null,
+    pessoas: S.fPessoas ? parseInt(S.fPessoas) : null,
+    pp: pp ? parseFloat(pp) : null,
   };
   if (S.editId) {
     S.entradas = S.entradas.map(e => e.id === S.editId ? entry : e);
   } else {
     S.entradas.unshift(entry);
   }
-  save();
-  resetForm();
-  S.view = "log";
-  render();
+  save(); resetForm(); S.view = "log"; render();
 }
 
-function apagar(id) {
-  S.entradas = S.entradas.filter(e => e.id !== id);
-  save(); render();
-}
+function apagar(id) { S.entradas = S.entradas.filter(e => e.id !== id); save(); render(); }
 
 function editar(id) {
   const e = S.entradas.find(e => e.id === id);
   if (!e) return;
   S.editId = id; S.fCat = e.cat; S.fEstrelas = e.estrelas||0;
   S.fTags = [...(e.tags||[])]; S.fTitulo = e.titulo||""; S.fTexto = e.texto||"";
+  S.fTotal = e.total != null ? String(e.total) : "";
+  S.fPessoas = e.pessoas != null ? String(e.pessoas) : "";
   S.view = "nova"; render();
 }
 
@@ -316,45 +319,62 @@ function render() {
   else if (S.view === "confirmar") app.innerHTML = viewConfirm();
   else                             app.innerHTML = viewLog();
 
-  // Restore scroll position for textarea/input after re-render
-  const ta = document.getElementById("f-texto");
-  const ti = document.getElementById("f-titulo");
-  if (ta) { ta.value = S.fTexto; }
-  if (ti) { ti.value = S.fTitulo; }
+  // Restore input values after re-render
+  const fields = { "f-titulo": "fTitulo", "f-texto": "fTexto", "f-total": "fTotal", "f-pessoas": "fPessoas" };
+  Object.entries(fields).forEach(([id, key]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = S[key];
+  });
 }
 
 // ── VIEW: LOG ─────────────────────────────────────────────────────
 function viewLog() {
-  if (!S.entradas.length) {
-    return `
-      <div class="header">
-        <span class="logo-mark">✦</span>
-        <span class="header-title">Travel Log</span>
-        <div class="spacer"></div>
-      </div>
-      <div class="empty-state">
-        <span class="empty-icon">✎</span>
-        <p class="empty-titulo">Log vazio</p>
-        <p class="empty-sub">Carrega em + para registar a primeira experiência.</p>
-      </div>
-      <button class="fab" onclick="S.view='nova';resetForm();render()">+</button>`;
-  }
+  if (!S.entradas.length) return `
+    <div class="header">
+      <span class="logo-mark">✦</span>
+      <span class="header-title">Travel Log</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="empty-state">
+      <span class="empty-icon">✎</span>
+      <p class="empty-titulo">Log vazio</p>
+      <p class="empty-sub">Carrega em + para registar a primeira experiência.</p>
+    </div>
+    <button class="fab" onclick="S.view='nova';resetForm();render()">+</button>`;
 
   const items = S.entradas.map(e => {
     const c = CATS.find(x => x.id === e.cat);
     const tagsHtml = e.tags?.length
       ? `<div class="card-tags">${e.tags.map(t=>`<span class="card-tag">${esc(t)}</span>`).join("")}</div>` : "";
+    const precoHtml = (e.total != null) ? `
+      <div class="card-preco">
+        <div class="card-preco-item">
+          <span class="card-preco-label">Total pago</span>
+          <span class="card-preco-valor">${e.total.toFixed(2)} €</span>
+        </div>
+        ${e.pp != null ? `
+        <div class="card-preco-item">
+          <span class="card-preco-label">Por pessoa</span>
+          <span class="card-preco-valor">${e.pp.toFixed(2)} €</span>
+        </div>` : ""}
+        ${e.pessoas != null ? `
+        <div class="card-preco-item">
+          <span class="card-preco-label">Pessoas</span>
+          <span class="card-preco-valor">${e.pessoas}</span>
+        </div>` : ""}
+      </div>` : "";
     return `
       <div class="card">
         <div class="card-top">
           <span class="card-emoji">${c?.emoji||""}</span>
-          <span class="card-categoria">${c?.label||""}</span>
-          <span class="card-estrelas">${stars(e.estrelas||0)}</span>
+          <span class="card-cat">${c?.label||""}</span>
+          <span class="card-stars">${stars(e.estrelas)}</span>
         </div>
         <div class="card-ts">${e.ts.display}</div>
         ${e.titulo ? `<p class="card-titulo">${esc(e.titulo)}</p>` : ""}
         ${e.texto  ? `<p class="card-texto">${esc(e.texto)}</p>`   : ""}
         ${tagsHtml}
+        ${precoHtml}
         <div class="card-acoes">
           <button class="acao-btn" onclick="editar('${e.id}')">Editar</button>
           <button class="acao-btn acao-apagar" onclick="apagar('${e.id}')">Apagar</button>
@@ -369,16 +389,17 @@ function viewLog() {
     <div class="header">
       <span class="logo-mark">✦</span>
       <span class="header-title">Travel Log</span>
-      <button class="export-icon-btn" onclick="S.view='exportar';render()">↗ Relatório</button>
+      <button class="export-btn" onclick="S.view='exportar';render()">↗ Relatório</button>
     </div>
     <div class="lista">${items}${limpar}</div>
     <button class="fab" onclick="S.view='nova';resetForm();render()">+</button>`;
 }
 
-// ── VIEW: NOVA / EDITAR ───────────────────────────────────────────
+// ── VIEW: NOVA ────────────────────────────────────────────────────
 function viewNova() {
   const isEdit = !!S.editId;
   const tagsAvail = TAGS[S.fCat] || TAGS.outro;
+  const pp = calcPP();
 
   const catsHtml = CATS.map(c => `
     <button class="cat-btn${S.fCat===c.id?" ativo":""}"
@@ -393,9 +414,9 @@ function viewNova() {
 
   const tagsHtml = tagsAvail.map(t => {
     const ativo = S.fTags.includes(t);
-    const te = esc(t);
+    const te = t.replace(/'/g, "\\'");
     return `<button class="tag-btn${ativo?" ativo":""}"
-      onclick="(function(){var i=S.fTags.indexOf('${te}');if(i===-1)S.fTags.push('${te}');else S.fTags.splice(i,1);render()})()">${te}</button>`;
+      onclick="(function(){var i=S.fTags.indexOf('${te}');if(i===-1)S.fTags.push('${te}');else S.fTags.splice(i,1);render()})()">${esc(t)}</button>`;
   }).join("");
 
   return `
@@ -423,8 +444,27 @@ function viewNova() {
         <div class="tags-wrap">${tagsHtml}</div>
       </div>
       <div class="form-section">
+        <span class="form-label">Valor gasto <span class="opcional">(opcional)</span></span>
+        <div class="preco-row">
+          <div class="preco-group">
+            <span class="preco-label">Total (€)</span>
+            <input type="number" id="f-total" placeholder="Ex: 45.00"
+              min="0" step="0.01" oninput="S.fTotal=this.value;render()" />
+          </div>
+          <div class="preco-group">
+            <span class="preco-label">Nº pessoas</span>
+            <input type="number" id="f-pessoas" placeholder="Ex: 2"
+              min="1" step="1" oninput="S.fPessoas=this.value;render()" />
+          </div>
+          <div class="preco-group">
+            <span class="preco-label">Por pessoa</span>
+            <div class="preco-calc">${pp ? pp + " €" : "—"}</div>
+          </div>
+        </div>
+      </div>
+      <div class="form-section">
         <span class="form-label">Comentário <span class="opcional">(opcional)</span></span>
-        <textarea id="f-texto" rows="5" placeholder="O que aconteceu? O que achaste?"
+        <textarea id="f-texto" rows="4" placeholder="O que aconteceu? O que achaste?"
           oninput="S.fTexto=this.value"></textarea>
       </div>
     </div>
@@ -474,7 +514,6 @@ function viewConfirm() {
     </div>`;
 }
 
-// ── COPY ──────────────────────────────────────────────────────────
 function copyReport(btn) {
   const txt = exportText();
   navigator.clipboard.writeText(txt).then(() => {
@@ -489,7 +528,6 @@ function copyReport(btn) {
   });
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
 render();
 </script>
 </body>
