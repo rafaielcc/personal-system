@@ -13,7 +13,7 @@
     body {
       background: #0d0d0d;
       font-family: 'Georgia', 'Times New Roman', serif;
-      color: #d4cfc7;
+      color: #f0ece4;
       min-height: 100vh;
       min-height: -webkit-fill-available;
       overscroll-behavior: none;
@@ -30,16 +30,16 @@
       padding: 20px 20px 16px; border-bottom: 1px solid #1a1a1a;
       position: sticky; top: 0; background: #0d0d0d; z-index: 10;
     }
-    .header-title { font-size: 13px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; }
+    .header-title { font-size: 13px; color: #aaa; letter-spacing: 0.1em; text-transform: uppercase; }
     .logo-mark { font-size: 18px; color: #c8a96e; width: 32px; text-align: center; }
     .back-btn {
-      background: none; border: none; color: #666; font-size: 22px;
+      background: none; border: none; color: #aaa; font-size: 22px;
       cursor: pointer; width: 32px; font-family: 'Georgia', serif;
       line-height: 1; padding: 0; -webkit-tap-highlight-color: transparent;
     }
     .export-btn {
-      background: none; border: 1px solid #2a2a2a; border-radius: 2px;
-      color: #555; font-size: 13px; cursor: pointer; padding: 6px 12px;
+      background: none; border: 1px solid #444; border-radius: 2px;
+      color: #aaa; font-size: 13px; cursor: pointer; padding: 6px 12px;
       font-family: 'Georgia', serif; -webkit-tap-highlight-color: transparent;
     }
     .spacer { width: 32px; }
@@ -49,38 +49,38 @@
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center; padding: 60px 40px; gap: 12px;
     }
-    .empty-icon { font-size: 36px; color: #2a2a2a; }
-    .empty-titulo { font-size: 17px; color: #444; }
-    .empty-sub { font-size: 13px; color: #333; font-style: italic; text-align: center; line-height: 1.6; }
+    .empty-icon { font-size: 36px; color: #444; }
+    .empty-titulo { font-size: 17px; color: #bbb; }
+    .empty-sub { font-size: 13px; color: #888; font-style: italic; text-align: center; line-height: 1.6; }
 
     /* LISTA */
     .lista { flex: 1; padding: 12px 16px 100px; display: flex; flex-direction: column; gap: 12px; }
     .card { background: #111; border: 1px solid #1e1e1e; border-radius: 2px; padding: 16px 16px 12px; }
     .card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
     .card-emoji { font-size: 14px; }
-    .card-cat { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-cat { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.08em; }
     .card-stars { font-size: 12px; color: #c8a96e; margin-left: auto; letter-spacing: 2px; }
-    .card-ts { font-size: 11px; color: #333; margin-bottom: 8px; }
+    .card-ts { font-size: 11px; color: #777; margin-bottom: 8px; }
     .card-titulo { font-size: 15px; color: #c8a96e; font-style: italic; margin-bottom: 6px; }
-    .card-texto { font-size: 14px; color: #9a9590; line-height: 1.6; margin-bottom: 8px; }
+    .card-texto { font-size: 14px; color: #e0dbd3; line-height: 1.6; margin-bottom: 8px; }
     .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
-    .card-tag { font-size: 11px; color: #555; border: 1px solid #222; border-radius: 2px; padding: 3px 8px; }
+    .card-tag { font-size: 11px; color: #999; border: 1px solid #333; border-radius: 2px; padding: 3px 8px; }
     .card-preco {
       display: flex; gap: 16px; padding: 8px 0; margin-bottom: 8px;
-      border-top: 1px solid #1a1a1a; border-bottom: 1px solid #1a1a1a;
+      border-top: 1px solid #222; border-bottom: 1px solid #222;
     }
     .card-preco-item { display: flex; flex-direction: column; gap: 2px; }
-    .card-preco-label { font-size: 10px; color: #444; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-preco-label { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.08em; }
     .card-preco-valor { font-size: 15px; color: #7a9e7e; font-family: 'Georgia', serif; }
-    .card-acoes { display: flex; gap: 16px; padding-top: 10px; border-top: 1px solid #1a1a1a; }
+    .card-acoes { display: flex; gap: 16px; padding-top: 10px; border-top: 1px solid #222; }
     .acao-btn {
-      background: none; border: none; color: #444; font-size: 12px;
+      background: none; border: none; color: #888; font-size: 12px;
       cursor: pointer; padding: 0; font-family: 'Georgia', serif;
       font-style: italic; -webkit-tap-highlight-color: transparent;
     }
-    .acao-apagar { color: #5a3a3a !important; }
+    .acao-apagar { color: #c07070 !important; }
     .limpar-btn {
-      background: none; border: none; color: #2e2e2e; font-size: 12px;
+      background: none; border: none; color: #666; font-size: 12px;
       cursor: pointer; padding: 8px 0; font-family: 'Georgia', serif;
       font-style: italic; text-align: center; width: 100%;
     }
@@ -102,24 +102,24 @@
       display: flex; flex-direction: column; gap: 24px;
     }
     .form-section { display: flex; flex-direction: column; gap: 10px; }
-    .form-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.1em; }
-    .opcional { color: #333; text-transform: none; letter-spacing: 0; font-style: italic; font-size: 11px; }
+    .form-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.1em; }
+    .opcional { color: #666; text-transform: none; letter-spacing: 0; font-style: italic; font-size: 11px; }
 
     .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     .cat-btn {
-      background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
+      background: transparent; border: 1px solid #333; border-radius: 2px;
       padding: 12px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px;
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
       transition: border-color 0.15s, background 0.15s;
     }
     .cat-btn.ativo { background: #1a1a1a; border-color: #c8a96e; }
     .cat-emoji { font-size: 16px; }
-    .cat-label { font-size: 14px; color: #888; font-family: 'Georgia', serif; }
+    .cat-label { font-size: 14px; color: #ccc; font-family: 'Georgia', serif; }
 
     .estrelas-row { display: flex; gap: 4px; }
     .estrela-btn {
       background: none; border: none; font-size: 32px; cursor: pointer;
-      color: #2a2a2a; line-height: 1; padding: 4px 6px;
+      color: #444; line-height: 1; padding: 4px 6px;
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
       transition: color 0.1s;
     }
@@ -127,8 +127,8 @@
 
     .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
     .tag-btn {
-      background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
-      color: #555; font-size: 13px; padding: 9px 14px; cursor: pointer;
+      background: transparent; border: 1px solid #333; border-radius: 2px;
+      color: #bbb; font-size: 13px; padding: 9px 14px; cursor: pointer;
       font-family: 'Georgia', serif;
       -webkit-tap-highlight-color: transparent; touch-action: manipulation;
       transition: border-color 0.15s, color 0.15s, background 0.15s;
@@ -138,23 +138,23 @@
     /* Preço row */
     .preco-row { display: flex; gap: 12px; }
     .preco-group { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-    .preco-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .preco-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; }
     .preco-calc {
-      background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 2px;
+      background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 2px;
       color: #7a9e7e; font-size: 15px; padding: 13px 14px;
       font-family: 'Georgia', serif; min-height: 48px;
       display: flex; align-items: center;
     }
 
     input[type="text"], input[type="number"], textarea {
-      width: 100%; background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 2px;
-      color: #d4cfc7; font-size: 16px; padding: 13px 14px; outline: none;
+      width: 100%; background: #0a0a0a; border: 1px solid #333; border-radius: 2px;
+      color: #f0ece4; font-size: 16px; padding: 13px 14px; outline: none;
       font-family: 'Georgia', serif; line-height: 1.6;
       -webkit-appearance: none; appearance: none;
     }
     input[type="number"] { -moz-appearance: textfield; }
     textarea { resize: none; }
-    ::placeholder { color: #333; }
+    ::placeholder { color: #555; }
 
     .form-footer {
       padding: 16px 20px 40px; border-top: 1px solid #1a1a1a;
@@ -178,10 +178,10 @@
 
     /* EXPORT */
     .export-body { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
-    .export-info { font-size: 13px; color: #555; font-style: italic; line-height: 1.6; }
+    .export-info { font-size: 13px; color: #aaa; font-style: italic; line-height: 1.6; }
     .export-pre {
-      background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 2px;
-      color: #666; font-size: 12px; padding: 16px;
+      background: #0a0a0a; border: 1px solid #2a2a2a; border-radius: 2px;
+      color: #ccc; font-size: 12px; padding: 16px;
       font-family: 'Courier New', monospace; line-height: 1.7;
       white-space: pre-wrap; flex: 1;
     }
@@ -194,7 +194,7 @@
     }
     .confirm-icon { font-size: 40px; }
     .confirm-titulo { font-size: 18px; color: #f0ece4; line-height: 1.5; }
-    .confirm-sub { font-size: 13px; color: #555; font-style: italic; }
+    .confirm-sub { font-size: 13px; color: #aaa; font-style: italic; }
   </style>
 </head>
 <body>
