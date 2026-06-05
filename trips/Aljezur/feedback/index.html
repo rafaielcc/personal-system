@@ -1,1 +1,585 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Travel Log" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>Travel Log</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    body {
+      background: #0d0d0d;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #d4cfc7;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      overscroll-behavior: none;
+    }
+
+    #app {
+      max-width: 480px;
+      margin: 0 auto;
+      min-height: 100vh;
+      min-height: -webkit-fill-available;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 20px 16px; border-bottom: 1px solid #1a1a1a;
+      position: sticky; top: 0; background: #0d0d0d; z-index: 10;
+    }
+    .header-title { font-size: 13px; color: #888; letter-spacing: 0.1em; text-transform: uppercase; }
+    .logo-mark { font-size: 18px; color: #c8a96e; width: 32px; text-align: center; }
+    .back-btn {
+      background: none; border: none; color: #666; font-size: 22px;
+      cursor: pointer; width: 32px; font-family: 'Georgia', serif;
+      line-height: 1; padding: 0; -webkit-tap-highlight-color: transparent;
+    }
+    .export-icon-btn {
+      background: none; border: 1px solid #2a2a2a; border-radius: 2px;
+      color: #555; font-size: 15px; cursor: pointer; padding: 4px 10px;
+      font-family: 'Georgia', serif; -webkit-tap-highlight-color: transparent;
+    }
+    .spacer { width: 32px; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 60px 40px; gap: 12px;
+    }
+    .empty-icon { font-size: 36px; color: #2a2a2a; }
+    .empty-titulo { font-size: 17px; color: #444; font-family: 'Georgia', serif; }
+    .empty-sub { font-size: 13px; color: #333; font-style: italic; text-align: center; line-height: 1.6; }
+
+    /* ── LISTA ── */
+    .lista { flex: 1; padding: 12px 16px 100px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; }
+    .card { background: #111; border: 1px solid #1e1e1e; border-radius: 2px; padding: 16px 16px 12px; }
+    .card-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+    .card-emoji { font-size: 14px; }
+    .card-categoria { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.08em; }
+    .card-estrelas { font-size: 13px; color: #c8a96e; margin-left: auto; letter-spacing: 1px; }
+    .card-ts { font-size: 11px; color: #333; }
+    .card-titulo { font-size: 15px; color: #c8a96e; font-style: italic; margin-bottom: 6px; }
+    .card-texto { font-size: 14px; color: #9a9590; line-height: 1.6; margin-bottom: 8px; }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .card-tag {
+      font-size: 11px; color: #555; border: 1px solid #2a2a2a;
+      border-radius: 2px; padding: 3px 8px; font-family: 'Georgia', serif;
+    }
+    .card-acoes { display: flex; gap: 16px; padding-top: 10px; border-top: 1px solid #1a1a1a; }
+    .acao-btn {
+      background: none; border: none; color: #444; font-size: 12px;
+      cursor: pointer; padding: 0; font-family: 'Georgia', serif;
+      font-style: italic; -webkit-tap-highlight-color: transparent;
+    }
+    .acao-btn-apagar { color: #5a3a3a !important; }
+    .limpar-btn {
+      background: none; border: none; color: #2e2e2e; font-size: 12px;
+      cursor: pointer; padding: 8px 0; font-family: 'Georgia', serif;
+      font-style: italic; text-align: center; width: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── FAB ── */
+    .fab {
+      position: fixed; bottom: 32px; right: 24px;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #c8a96e; border: none; color: #0d0d0d; font-size: 28px;
+      cursor: pointer; z-index: 50; line-height: 1;
+      box-shadow: 0 4px 24px rgba(200,169,110,0.3);
+      display: flex; align-items: center; justify-content: center;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+    }
+
+    /* ── FORM ── */
+    .form-body {
+      flex: 1; padding: 24px 20px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 24px;
+    }
+    .form-section { display: flex; flex-direction: column; gap: 10px; }
+    .form-label { font-size: 11px; color: #555; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Georgia', serif; }
+    .form-label .opcional { color: #333; text-transform: none; letter-spacing: 0; font-style: italic; }
+
+    /* Categorias */
+    .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .cat-btn {
+      background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
+      padding: 12px 14px; cursor: pointer; display: flex; align-items: center;
+      gap: 10px; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .cat-btn.ativo { background: #1a1a1a; border-color: #c8a96e; }
+    .cat-emoji { font-size: 16px; }
+    .cat-label { font-size: 14px; color: #888; font-family: 'Georgia', serif; }
+
+    /* Estrelas */
+    .estrelas-row { display: flex; gap: 8px; }
+    .estrela-btn {
+      background: none; border: none; font-size: 28px; cursor: pointer;
+      padding: 4px; color: #2a2a2a; transition: color 0.1s;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+      line-height: 1;
+    }
+    .estrela-btn.ativo { color: #c8a96e; }
+
+    /* Tags */
+    .tags-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag-btn {
+      background: transparent; border: 1px solid #2a2a2a; border-radius: 2px;
+      color: #555; font-size: 13px; padding: 8px 14px; cursor: pointer;
+      transition: all 0.15s; font-family: 'Georgia', serif;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+    }
+    .tag-btn.ativo { background: #1a1a1a; border-color: #7a9e7e; color: #7a9e7e; }
+
+    input[type="text"], textarea {
+      width: 100%; background: #0a0a0a; border: 1px solid #2a2a2a;
+      border-radius: 2px; color: #d4cfc7; font-size: 16px;
+      padding: 13px 14px; outline: none; font-family: 'Georgia', serif;
+      line-height: 1.6; -webkit-appearance: none; appearance: none;
+    }
+    textarea { resize: none; }
+    input[type="text"]::placeholder, textarea::placeholder { color: #333; }
+
+    .form-footer {
+      padding: 16px 20px 40px; border-top: 1px solid #1a1a1a; background: #0d0d0d;
+    }
+    .btn-guardar {
+      width: 100%; background: #c8a96e; border: none; border-radius: 2px;
+      color: #0d0d0d; font-size: 15px; padding: 16px; cursor: pointer;
+      font-family: 'Georgia', serif; letter-spacing: 0.03em;
+      -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+    }
+    .btn-guardar:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-guardar.vermelho { background: #8b3a3a; }
+    .btn-secundario {
+      width: 100%; background: transparent; border: 1px solid #2a2a2a;
+      border-radius: 2px; color: #555; font-size: 15px; padding: 16px;
+      cursor: pointer; font-family: 'Georgia', serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-row { display: flex; gap: 12px; }
+    .btn-row .btn-guardar, .btn-row .btn-secundario { flex: 1; }
+
+    /* ── EXPORTAR ── */
+    .export-body { flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+    .export-info { font-size: 13px; color: #555; font-style: italic; line-height: 1.6; }
+    .export-pre {
+      background: #0a0a0a; border: 1px solid #1e1e1e; border-radius: 2px;
+      color: #666; font-size: 12px; padding: 16px;
+      font-family: 'Courier New', monospace; line-height: 1.7;
+      white-space: pre-wrap; overflow-x: auto; flex: 1;
+    }
+
+    /* ── CONFIRMAR ── */
+    .confirm-body {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 24px; gap: 20px; text-align: center;
+    }
+    .confirm-icon { font-size: 40px; }
+    .confirm-titulo { font-size: 18px; color: #f0ece4; line-height: 1.5; font-family: 'Georgia', serif; }
+    .confirm-sub { font-size: 13px; color: #555; font-style: italic; font-family: 'Georgia', serif; }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+
+const CATEGORIAS = [
+  { id: "restaurante", label: "Restaurante",  emoji: "🍽" },
+  { id: "atracao",     label: "Atração",       emoji: "🗺" },
+  { id: "praia",       label: "Praia",         emoji: "🏖" },
+  { id: "natureza",    label: "Natureza",      emoji: "🌿" },
+  { id: "museu",       label: "Museu",         emoji: "🏛" },
+  { id: "hotel",       label: "Hotel",         emoji: "🏨" },
+  { id: "outro",       label: "Outro",         emoji: "✎"  },
+];
+
+const TAGS = {
+  restaurante: ["Boa comida", "Serviço rápido", "Boa relação qualidade/preço", "Ambiente agradável", "Voltaria"],
+  atracao:     ["Vale a visita", "Muito concorrida", "Boa organização", "Excelente vista", "Ideal para famílias"],
+  praia:       ["Limpa", "Pouco movimentada", "Boa para crianças", "Água agradável", "Fácil estacionamento"],
+  natureza:    ["Paisagem incrível", "Trilho fácil", "Bem sinalizado", "Vale o esforço", "Tranquilo"],
+  museu:       ["Bem organizado", "Muito informativo", "Vale a entrada", "Guia recomendado", "Pouco tempo de espera"],
+  hotel:       ["Confortável", "Boa localização", "Bom pequeno-almoço", "Staff simpático", "Voltaria"],
+  outro:       ["Recomendo", "Voltaria", "Surpreendeu", "Desiludiu", "Bom preço"],
+};
+
+const STORAGE_KEY = "travel_log_v2";
+
+let state = {
+  vista: "log",
+  entradas: [],
+  editandoId: null,
+  form: { categoria: "restaurante", estrelas: 0, tags: [], titulo: "", texto: "" },
+};
+
+function loadEntradas() {
+  try { const s = localStorage.getItem(STORAGE_KEY); return s ? JSON.parse(s) : []; } catch { return []; }
+}
+function saveEntradas() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state.entradas)); } catch {}
+}
+state.entradas = loadEntradas();
+
+function timestamp() {
+  const now = new Date();
+  const dia  = String(now.getDate()).padStart(2, "0");
+  const mes  = String(now.getMonth() + 1).padStart(2, "0");
+  const hora = String(now.getHours()).padStart(2, "0");
+  const min  = String(now.getMinutes()).padStart(2, "0");
+  return { display: `${dia}/${mes} · ${hora}:${min}`, raw: now.toISOString() };
+}
+
+function estrelasSVG(n) {
+  return "★".repeat(n) + "☆".repeat(5 - n);
+}
+
+function gerarExport() {
+  if (!state.entradas.length) return "";
+  const linhas = ["TRAVEL LOG — RELATÓRIO DE FEEDBACK", "─".repeat(40), ""];
+  [...state.entradas].reverse().forEach(e => {
+    const cat = CATEGORIAS.find(c => c.id === e.categoria);
+    linhas.push(`[${e.ts.display}] ${cat?.emoji} ${cat?.label}`);
+    if (e.titulo) linhas.push(`📍 ${e.titulo}`);
+    linhas.push(`Avaliação: ${estrelasSVG(e.estrelas || 0)} (${e.estrelas || 0}/5)`);
+    if (e.tags && e.tags.length) linhas.push(`Tags: ${e.tags.join(" · ")}`);
+    if (e.texto) linhas.push(e.texto);
+    linhas.push("");
+  });
+  return linhas.join("\n");
+}
+
+function resetForm() {
+  state.form = { categoria: "restaurante", estrelas: 0, tags: [], titulo: "", texto: "" };
+  state.editandoId = null;
+}
+
+function guardar() {
+  const { categoria, estrelas, tags, titulo, texto } = state.form;
+  if (!texto.trim() && !titulo.trim()) return;
+  if (state.editandoId) {
+    state.entradas = state.entradas.map(e =>
+      e.id === state.editandoId
+        ? { ...e, categoria, estrelas, tags: [...tags], titulo: titulo.trim(), texto: texto.trim() }
+        : e
+    );
+  } else {
+    state.entradas.unshift({
+      id: Date.now().toString(),
+      ts: timestamp(),
+      categoria, estrelas,
+      tags: [...tags],
+      titulo: titulo.trim(),
+      texto: texto.trim(),
+    });
+  }
+  saveEntradas();
+  resetForm();
+  state.vista = "log";
+  render();
+}
+
+function apagar(id) {
+  state.entradas = state.entradas.filter(e => e.id !== id);
+  saveEntradas();
+  render();
+}
+
+function abrirEditar(id) {
+  const e = state.entradas.find(e => e.id === id);
+  if (!e) return;
+  state.form = {
+    categoria: e.categoria,
+    estrelas:  e.estrelas || 0,
+    tags:      e.tags ? [...e.tags] : [],
+    titulo:    e.titulo || "",
+    texto:     e.texto || "",
+  };
+  state.editandoId = id;
+  state.vista = "nova";
+  render();
+}
+
+// ── RENDER ──────────────────────────────────────────────────────
+function render() {
+  const app = document.getElementById("app");
+  if      (state.vista === "nova")             app.innerHTML = renderNova();
+  else if (state.vista === "exportar")         app.innerHTML = renderExportar();
+  else if (state.vista === "confirmarApagar")  app.innerHTML = renderConfirmar();
+  else                                         app.innerHTML = renderLog();
+  bindEvents();
+}
+
+// ── VISTA: LOG ───────────────────────────────────────────────────
+function renderLog() {
+  const lista = state.entradas.map(e => {
+    const cat = CATEGORIAS.find(c => c.id === e.categoria);
+    const tagsHtml = e.tags && e.tags.length
+      ? `<div class="card-tags">${e.tags.map(t => `<span class="card-tag">${esc(t)}</span>`).join("")}</div>`
+      : "";
+    return `
+      <div class="card">
+        <div class="card-meta">
+          <span class="card-emoji">${cat?.emoji || ""}</span>
+          <span class="card-categoria">${cat?.label || ""}</span>
+          <span class="card-estrelas">${estrelasSVG(e.estrelas || 0)}</span>
+        </div>
+        <div class="card-meta" style="margin-top:-4px;margin-bottom:8px">
+          <span class="card-ts">${e.ts.display}</span>
+        </div>
+        ${e.titulo ? `<p class="card-titulo">${esc(e.titulo)}</p>` : ""}
+        ${e.texto  ? `<p class="card-texto">${esc(e.texto)}</p>`   : ""}
+        ${tagsHtml}
+        <div class="card-acoes">
+          <button class="acao-btn" data-action="editar" data-id="${e.id}">Editar</button>
+          <button class="acao-btn acao-btn-apagar" data-action="apagar" data-id="${e.id}">Apagar</button>
+        </div>
+      </div>`;
+  }).join("");
+
+  const limpar = state.entradas.length > 2
+    ? `<button class="limpar-btn" data-action="confirmarApagar">Limpar log</button>` : "";
+
+  const conteudo = state.entradas.length === 0
+    ? `<div class="empty-state">
+        <span class="empty-icon">✎</span>
+        <p class="empty-titulo">Log vazio</p>
+        <p class="empty-sub">Carrega em + para registar a primeira experiência.</p>
+       </div>`
+    : `<div class="lista">${lista}${limpar}</div>`;
+
+  const exportBtn = state.entradas.length > 0
+    ? `<button class="export-icon-btn" data-action="exportar">↗ Relatório</button>`
+    : `<div class="spacer"></div>`;
+
+  return `
+    <div class="header">
+      <span class="logo-mark">✦</span>
+      <span class="header-title">Travel Log</span>
+      ${exportBtn}
+    </div>
+    ${conteudo}
+    <button class="fab" data-action="novaBranca" title="Adicionar Feedback">+</button>`;
+}
+
+// ── VISTA: NOVA ENTRADA ──────────────────────────────────────────
+function renderNova() {
+  const { categoria, estrelas, tags, titulo, texto } = state.form;
+  const isEdit = !!state.editandoId;
+  const tagsDisponiveis = TAGS[categoria] || TAGS.outro;
+
+  const cats = CATEGORIAS.map(c => `
+    <button class="cat-btn${categoria === c.id ? " ativo" : ""}" data-action="setCategoria" data-value="${c.id}">
+      <span class="cat-emoji">${c.emoji}</span>
+      <span class="cat-label">${c.label}</span>
+    </button>`).join("");
+
+  const estrelasHtml = [1,2,3,4,5].map(n => `
+    <button class="estrela-btn${n <= estrelas ? " ativo" : ""}" data-action="setEstrela" data-value="${n}">★</button>
+  `).join("");
+
+  const tagsHtml = tagsDisponiveis.map(t => `
+    <button class="tag-btn${tags.includes(t) ? " ativo" : ""}" data-action="toggleTag" data-value="${esc(t)}">${esc(t)}</button>
+  `).join("");
+
+  const podeSalvar = texto.trim() || titulo.trim();
+
+  return `
+    <div class="header">
+      <button class="back-btn" data-action="voltarLog">←</button>
+      <span class="header-title">${isEdit ? "Editar entrada" : "Adicionar Feedback"}</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="form-body">
+      <div class="form-section">
+        <span class="form-label">Tipo de local</span>
+        <div class="cat-grid">${cats}</div>
+      </div>
+      <div class="form-section">
+        <span class="form-label">Classificação</span>
+        <div class="estrelas-row">${estrelasHtml}</div>
+      </div>
+      <div class="form-section">
+        <span class="form-label">Nome / Título <span class="opcional">(opcional)</span></span>
+        <input type="text" id="input-titulo"
+          placeholder="Ex: Tasca do Chico, Praia da Comporta..."
+          value="${esc(titulo)}" />
+      </div>
+      <div class="form-section">
+        <span class="form-label">Tags rápidas <span class="opcional">(opcional)</span></span>
+        <div class="tags-wrap">${tagsHtml}</div>
+      </div>
+      <div class="form-section">
+        <span class="form-label">Comentário <span class="opcional">(opcional)</span></span>
+        <textarea id="input-texto" rows="5"
+          placeholder="O que aconteceu? O que achaste?">${esc(texto)}</textarea>
+      </div>
+    </div>
+    <div class="form-footer">
+      <button class="btn-guardar" id="btn-guardar" data-action="guardar"
+        ${!podeSalvar ? "disabled" : ""}>
+        ${isEdit ? "Guardar alterações" : "Adicionar ao log"}
+      </button>
+    </div>`;
+}
+
+// ── VISTA: EXPORTAR ──────────────────────────────────────────────
+function renderExportar() {
+  const txt = gerarExport();
+  return `
+    <div class="header">
+      <button class="back-btn" data-action="voltarLog">←</button>
+      <span class="header-title">Relatório de Feedback</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="export-body">
+      <p class="export-info">Copia este relatório e cola no Claude para integrar no feedback final da viagem.</p>
+      <pre class="export-pre">${esc(txt)}</pre>
+    </div>
+    <div class="form-footer">
+      <button class="btn-guardar" data-action="copiar">Copiar relatório</button>
+    </div>`;
+}
+
+// ── VISTA: CONFIRMAR APAGAR ──────────────────────────────────────
+function renderConfirmar() {
+  return `
+    <div class="header">
+      <button class="back-btn" data-action="voltarLog">←</button>
+      <span class="header-title">Limpar log</span>
+      <div class="spacer"></div>
+    </div>
+    <div class="confirm-body">
+      <span class="confirm-icon">⚠</span>
+      <p class="confirm-titulo">Apagar todas as entradas?</p>
+      <p class="confirm-sub">Esta ação não pode ser desfeita.</p>
+    </div>
+    <div class="form-footer">
+      <div class="btn-row">
+        <button class="btn-secundario" data-action="voltarLog">Cancelar</button>
+        <button class="btn-guardar vermelho" data-action="apagarTudo">Apagar tudo</button>
+      </div>
+    </div>`;
+}
+
+// ── EVENTS ───────────────────────────────────────────────────────
+function bindEvents() {
+  const inputTitulo = document.getElementById("input-titulo");
+  const inputTexto  = document.getElementById("input-texto");
+  const btnGuardar  = document.getElementById("btn-guardar");
+
+  if (inputTitulo) {
+    inputTitulo.addEventListener("input", e => {
+      state.form.titulo = e.target.value;
+      if (btnGuardar) btnGuardar.disabled = !(e.target.value.trim() || state.form.texto.trim());
+    });
+  }
+  if (inputTexto) {
+    inputTexto.addEventListener("input", e => {
+      state.form.texto = e.target.value;
+      if (btnGuardar) btnGuardar.disabled = !(e.target.value.trim() || state.form.titulo.trim());
+    });
+    setTimeout(() => { if (inputTexto && !state.editandoId) inputTexto.focus(); }, 150);
+  }
+
+  document.getElementById("app").addEventListener("click", e => {
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+    const action = btn.dataset.action;
+    const value  = btn.dataset.value;
+    const id     = btn.dataset.id;
+
+    switch (action) {
+      case "novaBranca":
+        resetForm();
+        state.vista = "nova";
+        render();
+        break;
+      case "voltarLog":
+        resetForm();
+        state.vista = "log";
+        render();
+        break;
+      case "exportar":
+        state.vista = "exportar";
+        render();
+        break;
+      case "confirmarApagar":
+        state.vista = "confirmarApagar";
+        render();
+        break;
+      case "apagarTudo":
+        state.entradas = [];
+        saveEntradas();
+        state.vista = "log";
+        render();
+        break;
+      case "editar":
+        abrirEditar(id);
+        break;
+      case "apagar":
+        apagar(id);
+        break;
+      case "guardar":
+        guardar();
+        break;
+      case "setCategoria":
+        state.form.categoria = value;
+        state.form.tags = []; // reset tags ao mudar categoria
+        render();
+        break;
+      case "setEstrela":
+        const n = parseInt(value);
+        // clicar na mesma estrela faz reset
+        state.form.estrelas = state.form.estrelas === n ? 0 : n;
+        document.querySelectorAll(".estrela-btn").forEach((b, i) => {
+          b.classList.toggle("ativo", i < state.form.estrelas);
+        });
+        break;
+      case "toggleTag":
+        const idx = state.form.tags.indexOf(value);
+        if (idx === -1) state.form.tags.push(value);
+        else state.form.tags.splice(idx, 1);
+        document.querySelectorAll(".tag-btn").forEach(b => {
+          b.classList.toggle("ativo", state.form.tags.includes(b.dataset.value));
+        });
+        break;
+      case "copiar":
+        navigator.clipboard.writeText(gerarExport()).then(() => {
+          btn.textContent = "Copiado ✓";
+          setTimeout(() => { btn.textContent = "Copiar relatório"; }, 2000);
+        }).catch(() => {
+          const ta = document.createElement("textarea");
+          ta.value = gerarExport();
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          btn.textContent = "Copiado ✓";
+          setTimeout(() => { btn.textContent = "Copiar relatório"; }, 2000);
+        });
+        break;
+    }
+  });
+}
+
+function esc(str) {
+  if (!str) return "";
+  return str.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+
+render();
+</script>
+</body>
+</html>
