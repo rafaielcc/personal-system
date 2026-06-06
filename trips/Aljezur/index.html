@@ -1,688 +1,778 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="theme-color" content="#0d0d0d"/>
-  <title>Aljezur · Junho 2026</title>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --gold: #c8a96e;
-      --green: #7a9e7e;
-      --bg: #0d0d0d;
-      --card: #111111;
-      --card2: #161616;
-      --border: #1e1e1e;
-      --border2: #2a2a2a;
-      --text: #f0ece4;
-      --sub: #aaaaaa;
-      --muted: #888888;
-      --dim: #555555;
-      --serif: 'Georgia','Times New Roman',serif;
-    }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); font-family: var(--serif); color: var(--text); min-height:100vh; overscroll-behavior:none; -webkit-font-smoothing:antialiased; }
-    #app { max-width:480px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; }
-
-    /* ── HEADER ── */
-    .hdr { display:flex; align-items:center; justify-content:space-between; padding:18px 20px 14px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--bg); z-index:30; }
-    .hdr-mark { font-size:18px; color:var(--gold); }
-    .hdr-l { display:flex; align-items:center; gap:10px; }
-    .hdr-t { font-size:13px; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; }
-    .hdr-s { font-size:11px; color:var(--dim); font-style:italic; margin-top:1px; }
-
-    /* ── TABS ── */
-    .tabs { display:flex; overflow-x:auto; border-bottom:1px solid var(--border); background:var(--bg); position:sticky; top:57px; z-index:29; scrollbar-width:none; }
-    .tabs::-webkit-scrollbar { display:none; }
-    .tab { background:none; border:none; border-bottom:2px solid transparent; color:var(--dim); font-size:11px; padding:11px 14px; cursor:pointer; white-space:nowrap; font-family:var(--serif); letter-spacing:.07em; text-transform:uppercase; flex-shrink:0; transition:all .2s; -webkit-tap-highlight-color:transparent; }
-    .tab.on { color:var(--gold); border-bottom-color:var(--gold); }
-
-    /* ── SECTIONS ── */
-    .sec { display:none; flex:1; padding:18px 16px 100px; }
-    .sec.on { display:block; }
-
-    /* ── LABELS ── */
-    .lbl { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.12em; margin:20px 0 12px; display:flex; align-items:center; gap:8px; }
-    .lbl::after { content:''; flex:1; height:1px; background:var(--border); }
-    .lbl:first-child { margin-top:0; }
-
-    /* ── HERO ── */
-    .hero { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:22px 18px; margin-bottom:14px; }
-    .hero-dest { font-size:34px; color:var(--gold); font-weight:400; line-height:1.1; margin-bottom:3px; }
-    .hero-dates { font-size:13px; color:var(--muted); font-style:italic; margin-bottom:18px; }
-    .hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    .hg-l { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.09em; margin-bottom:3px; }
-    .hg-v { font-size:13px; color:var(--sub); line-height:1.4; }
-    .hdiv { height:1px; background:var(--border); margin:18px 0; }
-
-    /* ── HIGHLIGHT ── */
-    .hl { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px 16px; margin-bottom:10px; display:flex; gap:12px; }
-    .hl-icon { font-size:18px; flex-shrink:0; margin-top:2px; }
-    .hl-name { font-size:14px; color:var(--gold); margin-bottom:3px; }
-    .hl-desc { font-size:13px; color:var(--muted); line-height:1.5; }
-
-    /* ── ALOJAMENTO ── */
-    .aloj { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:16px; margin-bottom:14px; }
-    .aloj-name { font-size:15px; color:var(--text); margin-bottom:4px; }
-    .aloj-addr { font-size:13px; color:var(--muted); font-style:italic; line-height:1.5; margin-bottom:12px; }
-    .badges { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
-    .badge { background:transparent; border:1px solid var(--border2); border-radius:2px; color:var(--dim); font-size:11px; padding:4px 10px; font-family:var(--serif); }
-
-    /* ── CLIMA ── */
-    .clima { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:16px; margin-bottom:14px; }
-    .clima-row { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:10px; }
-    .cl-n { font-size:22px; color:var(--gold); }
-    .cl-l { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; margin-top:1px; }
-
-    /* ── COMBUSTÍVEL ── */
-    .fuel { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:16px; margin-bottom:14px; }
-    .fuel-t { font-size:12px; color:var(--gold); text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px; }
-    .fuel-fields { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-    .fuel-f { display:flex; flex-direction:column; gap:5px; }
-    .fuel-l { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.09em; }
-    .fuel-i { background:#0a0a0a; border:1px solid var(--border2); border-radius:2px; color:var(--text); font-size:16px; padding:10px 12px; outline:none; font-family:var(--serif); width:100%; }
-    .fuel-full { grid-column:1/-1; }
-    .fuel-res { background:#0a0a0a; border:1px solid var(--border); border-radius:2px; padding:12px 14px; }
-    .fuel-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--border); font-size:13px; }
-    .fuel-row:last-child { border-bottom:none; }
-    .fuel-rl { color:var(--muted); }
-    .fuel-rv { color:var(--gold); font-size:15px; }
-
-    /* ── BUTTONS ── */
-    .btn-g { display:inline-flex; align-items:center; gap:6px; background:var(--gold); border:none; border-radius:2px; color:#0d0d0d; font-size:13px; padding:11px 18px; cursor:pointer; font-family:var(--serif); text-decoration:none; -webkit-tap-highlight-color:transparent; }
-    .btn-o { display:inline-flex; align-items:center; gap:6px; background:transparent; border:1px solid var(--border2); border-radius:2px; color:var(--muted); font-size:13px; padding:11px 18px; cursor:pointer; font-family:var(--serif); text-decoration:none; -webkit-tap-highlight-color:transparent; }
-    .btn-row { display:flex; gap:8px; flex-wrap:wrap; }
-
-    /* ── ITINERÁRIO ── */
-    .itin-idx { display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
-    .idx-item { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; -webkit-tap-highlight-color:transparent; }
-    .idx-day { font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:.1em; margin-bottom:2px; }
-    .idx-title { font-size:15px; color:var(--text); }
-    .idx-arr { color:var(--dim); font-size:16px; }
-
-    .day-nav { display:flex; overflow-x:auto; gap:6px; margin-bottom:18px; scrollbar-width:none; }
-    .day-nav::-webkit-scrollbar { display:none; }
-    .dnb { background:transparent; border:1px solid var(--border2); border-radius:2px; color:var(--muted); font-size:11px; padding:7px 13px; cursor:pointer; white-space:nowrap; font-family:var(--serif); flex-shrink:0; -webkit-tap-highlight-color:transparent; transition:all .15s; }
-    .dnb.on { background:var(--gold); border-color:var(--gold); color:#0d0d0d; }
-
-    .day-block { display:none; }
-    .day-block.on { display:block; }
-    .day-num { font-size:11px; color:var(--gold); text-transform:uppercase; letter-spacing:.1em; margin-bottom:2px; }
-    .day-title { font-size:20px; color:var(--text); font-weight:400; margin-bottom:16px; }
-    .period-l { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.12em; margin:16px 0 10px; display:flex; align-items:center; gap:8px; }
-    .period-l::after { content:''; flex:1; height:1px; background:var(--border); }
-    .slot { padding-left:14px; border-left:2px solid var(--border2); margin-bottom:14px; }
-    .slot-a { font-size:14px; color:var(--text); margin-bottom:3px; }
-    .slot-time { font-size:11px; color:var(--gold); margin-bottom:3px; }
-    .slot-n { font-size:13px; color:var(--muted); line-height:1.55; font-style:italic; }
-    .slot-dur { display:inline-block; font-size:11px; color:var(--dim); margin-top:4px; border:1px solid var(--border); border-radius:2px; padding:2px 7px; }
-    .back-idx { background:none; border:none; color:var(--dim); font-size:12px; font-family:var(--serif); font-style:italic; cursor:pointer; padding:0 0 14px; -webkit-tap-highlight-color:transparent; }
-
-    /* ── CARDS ── */
-    .cat-f { display:flex; gap:6px; overflow-x:auto; margin-bottom:14px; scrollbar-width:none; }
-    .cat-f::-webkit-scrollbar { display:none; }
-    .filt { background:transparent; border:1px solid var(--border2); border-radius:2px; color:var(--muted); font-size:11px; padding:6px 13px; cursor:pointer; white-space:nowrap; font-family:var(--serif); flex-shrink:0; transition:all .15s; -webkit-tap-highlight-color:transparent; }
-    .filt.on { background:var(--gold); border-color:var(--gold); color:#0d0d0d; }
-
-    .cards { display:flex; flex-direction:column; gap:12px; }
-    .card { background:var(--card); border:1px solid var(--border); border-radius:2px; overflow:hidden; cursor:pointer; -webkit-tap-highlight-color:transparent; }
-    .card-img { width:100%; height:150px; object-fit:cover; background:#1a1a1a; display:block; }
-    .card-body { padding:13px 15px 12px; }
-    .card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:4px; }
-    .card-name { font-size:15px; color:var(--gold); font-weight:400; line-height:1.2; }
-    .card-rat { font-size:12px; color:var(--muted); white-space:nowrap; }
-    .card-cat { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px; }
-    .card-desc { font-size:13px; color:var(--muted); line-height:1.5; margin-bottom:10px; }
-    .card-price { display:flex; flex-direction:column; gap:4px; padding:10px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:10px; }
-    .cp-row { display:flex; justify-content:space-between; align-items:center; font-size:12px; }
-    .cp-l { color:var(--dim); }
-    .cp-v { color:var(--sub); }
-    .cp-v.gold { color:var(--gold); }
-    .cp-park { color:var(--dim); font-size:11px; font-style:italic; }
-    .card-tags { display:flex; gap:8px; flex-wrap:wrap; }
-    .ctag { font-size:11px; color:var(--dim); }
-    .ctag-dog { color:var(--green) !important; }
-    .ctag-host { color:var(--gold) !important; }
-    .ctag-warn { color:#c8a96e !important; opacity:.7; }
-
-    /* ── NOTA HOST ── */
-    .nota { background:rgba(200,169,110,.06); border:1px solid rgba(200,169,110,.18); border-radius:2px; padding:12px 14px; margin-bottom:14px; font-size:13px; color:var(--muted); font-style:italic; line-height:1.6; }
-    .nota strong { color:var(--gold); font-style:normal; }
-    .dog-banner { background:rgba(122,158,126,.07); border:1px solid rgba(122,158,126,.22); border-radius:2px; padding:12px 14px; margin-bottom:14px; font-size:13px; color:var(--green); line-height:1.6; }
-
-    /* ── INFO BLOCK ── */
-    .info-blk { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px 16px; margin-bottom:12px; }
-    .info-row { display:flex; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; color:var(--sub); line-height:1.5; }
-    .info-row:last-child { border-bottom:none; padding-bottom:0; }
-    .info-row:first-child { padding-top:0; }
-    .ii { color:var(--dim); flex-shrink:0; width:18px; margin-top:1px; }
-
-    /* ── ACTIVITY ── */
-    .act { background:var(--card); border:1px solid var(--border); border-radius:2px; padding:14px 16px; margin-bottom:10px; display:flex; gap:13px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
-    .act-icon { font-size:22px; flex-shrink:0; margin-top:2px; }
-    .act-name { font-size:14px; color:var(--gold); margin-bottom:4px; }
-    .act-desc { font-size:13px; color:var(--muted); line-height:1.5; }
-
-    /* ── CONTACTS ── */
-    .c-row { display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-bottom:1px solid var(--border); }
-    .c-row:last-child { border-bottom:none; }
-    .c-name { font-size:13px; color:var(--sub); }
-    .c-role { font-size:11px; color:var(--dim); margin-top:2px; }
-    a.c-tel { color:var(--gold); font-size:13px; text-decoration:none; }
-
-    /* ── MODAL ── */
-    .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.9); z-index:100; overflow-y:auto; align-items:flex-end; }
-    .overlay.on { display:flex; }
-    .modal { background:var(--card); border-radius:2px 2px 0 0; width:100%; max-width:480px; margin:0 auto; border-top:1px solid var(--border2); max-height:92vh; overflow-y:auto; padding-bottom:40px; }
-    .m-close-bar { position:sticky; top:0; display:flex; justify-content:flex-end; padding:10px 14px 6px; background:var(--card); z-index:5; }
-    .m-close { background:none; border:none; color:var(--dim); font-size:26px; cursor:pointer; padding:4px 8px; font-family:var(--serif); line-height:1; -webkit-tap-highlight-color:transparent; }
-    .m-img { width:100%; height:200px; object-fit:cover; background:#1a1a1a; display:block; }
-    .m-body { padding:18px 18px 0; }
-    .m-name { font-size:22px; color:var(--gold); font-weight:400; margin-bottom:3px; }
-    .m-cat { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.1em; margin-bottom:14px; }
-    .m-desc { font-size:14px; color:var(--sub); line-height:1.7; margin-bottom:18px; }
-    .m-section { border-top:1px solid var(--border); margin-bottom:0; }
-    .m-section-t { font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.1em; padding:12px 0 8px; }
-    .m-cost-blk { background:#0a0a0a; border:1px solid var(--border); border-radius:2px; padding:12px 14px; margin-bottom:12px; }
-    .m-cost-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:13px; }
-    .m-cost-row:last-child { border-bottom:none; padding-bottom:0; }
-    .m-cost-l { color:var(--muted); }
-    .m-cost-v { color:var(--text); }
-    .m-cost-v.big { color:var(--gold); font-size:16px; }
-    .m-cost-park { font-size:12px; color:var(--dim); font-style:italic; margin-top:6px; }
-    .m-row { display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); font-size:13px; }
-    .m-row:last-child { border-bottom:none; }
-    .m-icon { color:var(--dim); flex-shrink:0; width:20px; margin-top:1px; }
-    .m-text { color:var(--sub); line-height:1.55; }
-    .m-text strong { color:var(--gold); font-weight:400; }
-    .m-actions { display:flex; gap:8px; margin-top:18px; flex-wrap:wrap; }
-    .m-btn { flex:1; border:none; border-radius:2px; font-size:13px; padding:13px 10px; cursor:pointer; font-family:var(--serif); text-align:center; text-decoration:none; display:inline-block; min-width:70px; -webkit-tap-highlight-color:transparent; }
-    .m-btn-g { background:var(--gold); color:#0d0d0d; }
-    .m-btn-o { background:transparent; border:1px solid var(--border2) !important; color:var(--muted); }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="theme-color" content="#0d0d0d"/>
+<title>Aljezur · Junho 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#c8a96e;--green:#7a9e7e;--bg:#0d0d0d;--card:#111;--b:#1e1e1e;--b2:#2a2a2a;--text:#f0ece4;--sub:#aaa;--muted:#888;--dim:#555;--serif:'Georgia','Times New Roman',serif}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--serif);color:var(--text);min-height:100vh;overscroll-behavior:none;-webkit-font-smoothing:antialiased}
+#app{max-width:480px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.hdr{display:flex;align-items:center;gap:10px;padding:16px 18px 13px;border-bottom:1px solid var(--b);position:sticky;top:0;background:var(--bg);z-index:30}
+.hdr-mark{font-size:17px;color:var(--gold);flex-shrink:0}
+.hdr-t{font-size:12px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.hdr-s{font-size:11px;color:var(--dim);font-style:italic;margin-top:1px}
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--b);background:var(--bg);position:sticky;top:53px;z-index:29;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--dim);font-size:11px;padding:10px 13px;cursor:pointer;white-space:nowrap;font-family:var(--serif);letter-spacing:.07em;text-transform:uppercase;flex-shrink:0;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold)}
+.sec{display:none;flex:1;padding:16px 15px 100px}
+.sec.on{display:block}
+.lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin:18px 0 11px;display:flex;align-items:center;gap:8px}
+.lbl::after{content:'';flex:1;height:1px;background:var(--b)}
+.lbl:first-child{margin-top:0}
+.lbl-zone{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.lbl-zone::before{content:'';flex:0 0 3px;height:14px;background:var(--gold);border-radius:1px}
+.hero{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:20px 17px;margin-bottom:13px}
+.hero-dest{font-size:32px;color:var(--gold);font-weight:400;line-height:1.1;margin-bottom:3px}
+.hero-dates{font-size:13px;color:var(--muted);font-style:italic;margin-bottom:16px}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hg-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.09em;margin-bottom:3px}
+.hg-v{font-size:13px;color:var(--sub);line-height:1.4}
+.hdiv{height:1px;background:var(--b);margin:16px 0}
+.hl{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:13px 15px;margin-bottom:9px;display:flex;gap:11px}
+.hl-icon{font-size:17px;flex-shrink:0;margin-top:2px}
+.hl-name{font-size:14px;color:var(--gold);margin-bottom:3px}
+.hl-desc{font-size:13px;color:var(--muted);line-height:1.5}
+.aloj{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:15px;margin-bottom:13px}
+.aloj-name{font-size:15px;color:var(--text);margin-bottom:4px}
+.aloj-addr{font-size:13px;color:var(--muted);font-style:italic;line-height:1.5;margin-bottom:11px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:11px}
+.badge{background:transparent;border:1px solid var(--b2);border-radius:2px;color:var(--dim);font-size:11px;padding:3px 9px;font-family:var(--serif)}
+.clima{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:15px;margin-bottom:13px}
+.clima-row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:9px}
+.cl-n{font-size:21px;color:var(--gold)}
+.cl-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-top:1px}
+.fuel{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:15px;margin-bottom:13px}
+.fuel-t{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:13px}
+.fuel-fields{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:13px}
+.fuel-f{display:flex;flex-direction:column;gap:5px}
+.fuel-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.09em}
+.fuel-i{background:#0a0a0a;border:1px solid var(--b2);border-radius:2px;color:var(--text);font-size:16px;padding:9px 11px;outline:none;font-family:var(--serif);width:100%}
+.fuel-full{grid-column:1/-1}
+.fuel-res{background:#0a0a0a;border:1px solid var(--b);border-radius:2px;padding:11px 13px}
+.fuel-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--b);font-size:13px}
+.fuel-row:last-child{border-bottom:none}
+.fuel-rl{color:var(--muted)}
+.fuel-rv{color:var(--gold);font-size:14px}
+.btn-g{display:inline-flex;align-items:center;gap:6px;background:var(--gold);border:none;border-radius:2px;color:#0d0d0d;font-size:13px;padding:10px 17px;cursor:pointer;font-family:var(--serif);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.btn-o{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid var(--b2);border-radius:2px;color:var(--muted);font-size:13px;padding:10px 17px;cursor:pointer;font-family:var(--serif);text-decoration:none;-webkit-tap-highlight-color:transparent}
+.btn-row{display:flex;gap:8px;flex-wrap:wrap}
+.itin-idx{display:flex;flex-direction:column;gap:7px}
+.idx-item{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.idx-day{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.idx-title{font-size:14px;color:var(--text)}
+.idx-badge{font-size:10px;color:var(--gold);border:1px solid rgba(200,169,110,.3);border-radius:2px;padding:2px 7px;margin-left:8px;white-space:nowrap}
+.idx-arr{color:var(--dim);font-size:15px;flex-shrink:0}
+.day-nav{display:flex;overflow-x:auto;gap:5px;margin-bottom:16px;scrollbar-width:none}
+.day-nav::-webkit-scrollbar{display:none}
+.dnb{background:transparent;border:1px solid var(--b2);border-radius:2px;color:var(--muted);font-size:11px;padding:6px 12px;cursor:pointer;white-space:nowrap;font-family:var(--serif);flex-shrink:0;-webkit-tap-highlight-color:transparent;transition:all .15s}
+.dnb.on{background:var(--gold);border-color:var(--gold);color:#0d0d0d}
+.day-block{display:none}
+.day-block.on{display:block}
+.day-num{font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.day-title{font-size:19px;color:var(--text);font-weight:400;margin-bottom:14px}
+.bonus-banner{background:rgba(200,169,110,.07);border:1px solid rgba(200,169,110,.2);border-radius:2px;padding:10px 13px;margin-bottom:14px;font-size:12px;color:var(--gold);line-height:1.5}
+.period-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin:14px 0 9px;display:flex;align-items:center;gap:8px}
+.period-l::after{content:'';flex:1;height:1px;background:var(--b)}
+.slot{padding-left:13px;border-left:2px solid var(--b2);margin-bottom:12px}
+.slot-a{font-size:14px;color:var(--text);margin-bottom:2px}
+.slot-time{font-size:11px;color:var(--gold);margin-bottom:2px}
+.slot-n{font-size:13px;color:var(--muted);line-height:1.5;font-style:italic}
+.slot-dur{display:inline-block;font-size:11px;color:var(--dim);margin-top:3px;border:1px solid var(--b);border-radius:2px;padding:2px 6px}
+.back-idx{background:none;border:none;color:var(--dim);font-size:12px;font-family:var(--serif);font-style:italic;cursor:pointer;padding:0 0 13px;-webkit-tap-highlight-color:transparent}
+.cat-f{display:flex;gap:5px;overflow-x:auto;margin-bottom:13px;scrollbar-width:none}
+.cat-f::-webkit-scrollbar{display:none}
+.filt{background:transparent;border:1px solid var(--b2);border-radius:2px;color:var(--muted);font-size:11px;padding:5px 12px;cursor:pointer;white-space:nowrap;font-family:var(--serif);flex-shrink:0;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.filt.on{background:var(--gold);border-color:var(--gold);color:#0d0d0d}
+.cards{display:flex;flex-direction:column;gap:11px}
+.card{background:var(--card);border:1px solid var(--b);border-radius:2px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.card-img{width:100%;height:145px;object-fit:cover;background:#1a1a1a;display:block}
+.card-body{padding:12px 14px 11px}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:7px;margin-bottom:3px}
+.card-name{font-size:15px;color:var(--gold);font-weight:400;line-height:1.2}
+.card-rat{font-size:11px;color:var(--muted);white-space:nowrap}
+.card-cat{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
+.card-desc{font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:9px}
+.card-price{display:flex;flex-direction:column;gap:3px;padding:9px 0;border-top:1px solid var(--b);border-bottom:1px solid var(--b);margin-bottom:9px}
+.cp-row{display:flex;justify-content:space-between;font-size:12px}
+.cp-l{color:var(--dim)}.cp-v{color:var(--sub)}.cp-g{color:var(--gold)}
+.cp-park{font-size:11px;color:var(--dim);font-style:italic;margin-top:2px}
+.card-tags{display:flex;gap:7px;flex-wrap:wrap}
+.ctag{font-size:11px;color:var(--dim)}
+.ctag-dog{color:var(--green)!important}
+.ctag-host{color:var(--gold)!important}
+.ctag-w{color:#c8a96e!important;opacity:.7}
+.nota{background:rgba(200,169,110,.06);border:1px solid rgba(200,169,110,.18);border-radius:2px;padding:11px 13px;margin-bottom:13px;font-size:13px;color:var(--muted);font-style:italic;line-height:1.6}
+.nota strong{color:var(--gold);font-style:normal}
+.dog-banner{background:rgba(122,158,126,.07);border:1px solid rgba(122,158,126,.22);border-radius:2px;padding:11px 13px;margin-bottom:13px;font-size:13px;color:var(--green);line-height:1.6}
+.info-blk{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:13px 15px;margin-bottom:11px}
+.info-row{display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--b);font-size:13px;color:var(--sub);line-height:1.5}
+.info-row:last-child{border-bottom:none;padding-bottom:0}
+.info-row:first-child{padding-top:0}
+.ii{color:var(--dim);flex-shrink:0;width:17px;margin-top:1px}
+.act{background:var(--card);border:1px solid var(--b);border-radius:2px;padding:13px 15px;margin-bottom:9px;display:flex;gap:12px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.act-icon{font-size:21px;flex-shrink:0;margin-top:2px}
+.act-name{font-size:14px;color:var(--gold);margin-bottom:3px}
+.act-desc{font-size:13px;color:var(--muted);line-height:1.5}
+.c-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--b)}
+.c-row:last-child{border-bottom:none}
+.c-name{font-size:13px;color:var(--sub)}
+.c-role{font-size:11px;color:var(--dim);margin-top:2px}
+a.c-tel{color:var(--gold);font-size:13px;text-decoration:none}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:100;overflow-y:auto;align-items:flex-end}
+.overlay.on{display:flex}
+.modal{background:var(--card);border-radius:2px 2px 0 0;width:100%;max-width:480px;margin:0 auto;border-top:1px solid var(--b2);max-height:92vh;overflow-y:auto;padding-bottom:40px}
+.m-close-bar{position:sticky;top:0;display:flex;justify-content:flex-end;padding:9px 13px 5px;background:var(--card);z-index:5}
+.m-close{background:none;border:none;color:var(--dim);font-size:25px;cursor:pointer;padding:4px 7px;font-family:var(--serif);line-height:1;-webkit-tap-highlight-color:transparent}
+.m-img{width:100%;height:195px;object-fit:cover;background:#1a1a1a;display:block}
+.m-body{padding:16px 17px 0}
+.m-name{font-size:21px;color:var(--gold);font-weight:400;margin-bottom:3px}
+.m-cat{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:13px}
+.m-desc{font-size:14px;color:var(--sub);line-height:1.7;margin-bottom:16px}
+.m-cost-blk{background:#0a0a0a;border:1px solid var(--b);border-radius:2px;padding:11px 13px;margin-bottom:14px}
+.m-cost-t{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.m-cost-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--b);font-size:13px}
+.m-cost-row:last-child{border-bottom:none}
+.m-cost-l{color:var(--muted)}.m-cost-v{color:var(--text)}.m-cost-v.big{color:var(--gold);font-size:15px}
+.m-cost-park{font-size:12px;color:var(--dim);font-style:italic;margin-top:5px}
+.m-section{border-top:1px solid var(--b)}
+.m-section-t{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;padding:11px 0 7px}
+.m-row{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid var(--b);font-size:13px}
+.m-row:last-child{border-bottom:none}
+.m-icon{color:var(--dim);flex-shrink:0;width:19px;margin-top:1px}
+.m-text{color:var(--sub);line-height:1.55}
+.m-text strong{color:var(--gold);font-weight:400}
+.m-actions{display:flex;gap:7px;margin-top:16px;flex-wrap:wrap}
+.m-btn{flex:1;border:none;border-radius:2px;font-size:13px;padding:12px 9px;cursor:pointer;font-family:var(--serif);text-align:center;text-decoration:none;display:inline-block;min-width:65px;-webkit-tap-highlight-color:transparent}
+.m-btn-g{background:var(--gold);color:#0d0d0d}
+.m-btn-o{background:transparent;border:1px solid var(--b2)!important;color:var(--muted)}
+</style>
 </head>
 <body>
 <div id="app">
+<div class="hdr">
+  <span class="hdr-mark">✦</span>
+  <div><div class="hdr-t">Aljezur · Algarve Ocidental</div><div class="hdr-s">6–10 Junho 2026 · base Aljezur · raio 80km</div></div>
+</div>
+<div class="tabs">
+  <button class="tab on" data-tab="resumo">Resumo</button>
+  <button class="tab" data-tab="itinerario">Itinerário</button>
+  <button class="tab" data-tab="restaurantes">Comer</button>
+  <button class="tab" data-tab="praias">Praias</button>
+  <button class="tab" data-tab="atividades">Atividades</button>
+  <button class="tab" data-tab="logistica">Logística</button>
+</div>
 
-  <!-- HEADER -->
-  <div class="hdr">
-    <div class="hdr-l">
-      <span class="hdr-mark">✦</span>
-      <div>
-        <div class="hdr-t">Aljezur · Algarve Ocidental</div>
-        <div class="hdr-s">6–10 Junho 2026 · 4 noites</div>
+<!-- RESUMO -->
+<section class="sec on" id="tab-resumo">
+  <div class="hero">
+    <div class="hero-dest">Aljezur</div>
+    <div class="hero-dates">6–10 Junho 2026 · 4 noites · Costa Vicentina</div>
+    <div class="hero-grid">
+      <div><div class="hg-l">Companhia</div><div class="hg-v">Vanessa, Clara &amp; os cães</div></div>
+      <div><div class="hg-l">Transporte</div><div class="hg-v">Carro próprio</div></div>
+      <div><div class="hg-l">Orçamento</div><div class="hg-v">Sem restrições</div></div>
+      <div><div class="hg-l">Raio</div><div class="hg-v">~80km · foco a sul</div></div>
+    </div>
+    <div class="hdiv"></div>
+    <div class="btn-row">
+      <a class="btn-g" href="whatsapp://send?text=Aljezur Junho 2026">✉ Partilhar</a>
+      <a class="btn-o" href="mailto:?subject=Aljezur Junho 2026">📧 Email</a>
+    </div>
+  </div>
+  <div class="lbl">Alojamento</div>
+  <div class="aloj">
+    <div class="aloj-name">Airbnb · Host Carolina</div>
+    <div class="aloj-addr">Aljezur, Faro 8670-158 · Parque Natural Costa Vicentina<br>2km da Arrifana · 4km da Amoreira</div>
+    <div class="badges">
+      <span class="badge">4.94 ⭐ · 147 reviews</span><span class="badge">Guest Favourite</span>
+      <span class="badge">Jardim + Jacuzzi</span><span class="badge">BBQ</span>
+      <span class="badge">AC + Wi-Fi</span><span class="badge">Pet-friendly</span><span class="badge">584€ total</span>
+    </div>
+    <a class="btn-g" href="https://maps.google.com/?q=Aljezur,+Faro+8670-158" target="_blank">↗ Google Maps</a>
+  </div>
+  <div class="lbl">Clima em Junho</div>
+  <div class="clima">
+    <div class="clima-row">
+      <div><div class="cl-n">22–28°C</div><div class="cl-l">Temp. dia</div></div>
+      <div><div class="cl-n">~21:00</div><div class="cl-l">Pôr do sol</div></div>
+      <div><div class="cl-n">17–19°C</div><div class="cl-l">Água mar</div></div>
+    </div>
+    <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6">Dias quentes, noites frescas. Vento de Norte forte à tarde — levar camisola para o Cabo.</div>
+  </div>
+  <div class="lbl">Combustível</div>
+  <div class="fuel">
+    <div class="fuel-t">⛽ Calculadora</div>
+    <div class="fuel-fields">
+      <div class="fuel-f fuel-full"><div class="fuel-l">Partida</div><input class="fuel-i" id="f-p" type="text" value="Lisboa"></div>
+      <div class="fuel-f"><div class="fuel-l">Consumo (L/100km)</div><input class="fuel-i" id="f-c" type="number" value="6.5" step="0.1" oninput="calcFuel()"></div>
+      <div class="fuel-f"><div class="fuel-l">Gasolina (€/L)</div><input class="fuel-i" id="f-g" type="number" value="1.94" step="0.01" oninput="calcFuel()"></div>
+    </div>
+    <div class="fuel-res">
+      <div class="fuel-row"><span class="fuel-rl">Distância (ida)</span><span class="fuel-rv" id="fr-d">~270 km</span></div>
+      <div class="fuel-row"><span class="fuel-rl">Tempo (ida)</span><span class="fuel-rv" id="fr-t">~2h45</span></div>
+      <div class="fuel-row"><span class="fuel-rl">Litros (ida+volta)</span><span class="fuel-rv" id="fr-l">~35 L</span></div>
+      <div class="fuel-row"><span class="fuel-rl">Custo (ida+volta)</span><span class="fuel-rv" id="fr-v">~68 €</span></div>
+    </div>
+  </div>
+  <div class="lbl">Não perder</div>
+  <div class="hl"><div class="hl-icon">🐾</div><div><div class="hl-name">Praia da Carriagem com os cães</div><div class="hl-desc">Rec. especial da Carolina. Parque Natural, não concessionada — cães livres.</div></div></div>
+  <div class="hl"><div class="hl-icon">🌅</div><div><div class="hl-name">Pôr do sol no Cabo de São Vicente</div><div class="hl-desc">O fim do mundo. Sol desaparece no oceano. O momento da viagem. Ir no Dia 3 com a Clara.</div></div></div>
+  <div class="hl"><div class="hl-icon">⛵</div><div><div class="hl-name">Grutas de Benagil</div><div class="hl-desc">A gruta mais famosa do Algarve. Boat tour de Portimão (~€28/pp, 2h). Reservar antes.</div></div></div>
+  <div class="hl"><div class="hl-icon">🌊</div><div><div class="hl-name">Praia da Amoreira</div><div class="hl-desc">Rio + mar, espaço imenso, cães livres. Uma das mais especiais do Algarve Ocidental. 4km da casa.</div></div></div>
+</section>
+
+<!-- ITINERÁRIO -->
+<section class="sec" id="tab-itinerario">
+  <div id="itin-idx">
+    <div class="lbl" style="margin-top:0">Plano base — 5 dias</div>
+    <div class="itin-idx">
+      <div class="idx-item" onclick="showDay(1)"><div><div class="idx-day">Sáb · 6 Jun · Dia 1</div><div class="idx-title">Chegada + Entrar no mood</div></div><div class="idx-arr">→</div></div>
+      <div class="idx-item" onclick="showDay(2)"><div><div class="idx-day">Dom · 7 Jun · Dia 2</div><div class="idx-title">Natureza + Cães + Zero pressa</div></div><div class="idx-arr">→</div></div>
+      <div class="idx-item" onclick="showDay(3)"><div><div class="idx-day">Seg · 8 Jun · Dia 3</div><div class="idx-title">Sagres + Cabo + Clara chega</div></div><div class="idx-arr">→</div></div>
+      <div class="idx-item" onclick="showDay(4)"><div><div class="idx-day">Ter · 9 Jun · Dia 4</div><div class="idx-title">Lagos — Ponta da Piedade</div></div><div class="idx-arr">→</div></div>
+      <div class="idx-item" onclick="showDay(5)"><div><div class="idx-day">Qua · 10 Jun · Dia 5</div><div class="idx-title">Odeceixe + Despedida</div></div><div class="idx-arr">→</div></div>
+    </div>
+    <div class="lbl">Dias bónus — day trips</div>
+    <div style="font-size:13px;color:var(--muted);font-style:italic;margin-bottom:10px;line-height:1.6">Sugestões extra para explorar a região — substituem um dia base ou para viagens mais longas.</div>
+    <div class="itin-idx">
+      <div class="idx-item" onclick="showDay(6)"><div><div class="idx-day">Bónus A · Day trip</div><div class="idx-title">Sagres full day + Lagos à noite <span class="idx-badge">Extra</span></div></div><div class="idx-arr">→</div></div>
+      <div class="idx-item" onclick="showDay(7)"><div><div class="idx-day">Bónus B · Day trip</div><div class="idx-title">Portimão + Benagil + Silves <span class="idx-badge">Extra</span></div></div><div class="idx-arr">→</div></div>
+    </div>
+  </div>
+  <div id="itin-days" style="display:none">
+    <div class="day-nav">
+      <button class="dnb" onclick="showDay(1)">Dia 1</button>
+      <button class="dnb" onclick="showDay(2)">Dia 2</button>
+      <button class="dnb" onclick="showDay(3)">Dia 3</button>
+      <button class="dnb" onclick="showDay(4)">Dia 4</button>
+      <button class="dnb" onclick="showDay(5)">Dia 5</button>
+      <button class="dnb" onclick="showDay(6)">Bónus A</button>
+      <button class="dnb" onclick="showDay(7)">Bónus B</button>
+    </div>
+    <div class="day-block" id="day-1">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="day-num">Sábado · 6 Junho · Dia 1</div><div class="day-title">Chegada + Entrar no mood</div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Chegada + instalar</div><div class="slot-time">~16:00</div><div class="slot-n">Check-in com a Carolina. Jardim, jacuzzi, BBQ. Cães a ambientar-se.</div><span class="slot-dur">1–2h</span></div>
+      <div class="slot"><div class="slot-a">Praia de Monte Clérigo 🐾</div><div class="slot-time">~18:00</div><div class="slot-n">Dog-friendly, ~6km, fácil acesso. Luz bonita ao final da tarde.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Jantar descontraído</div><div class="slot-time">~20:00</div><div class="slot-n">Sea You Surf Café (Arrifana, €€) ou Alecrim (pizza excelente, €). Primeiro dia — simples.</div></div>
+    </div>
+    <div class="day-block" id="day-2">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="day-num">Domingo · 7 Junho · Dia 2</div><div class="day-title">Natureza + Cães + Zero pressa</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Praia da Amoreira 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Rio + mar, espaço enorme. Cães livres. Ir antes do vento.</div><span class="slot-dur">2–3h</span></div>
+      <div class="period-l">Almoço</div>
+      <div class="slot"><div class="slot-a">Sea You Surf Café</div><div class="slot-time">~13:00</div><div class="slot-n">Na Arrifana. Comida fresca caseira, vibe surf.</div><span class="slot-dur">~1h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Praia da Arrifana + Fortaleza</div><div class="slot-time">~15:00</div><div class="slot-n">Subir à Fortaleza árabe para vista sobre o oceano.</div><span class="slot-dur">2h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Casa + BBQ + jacuzzi</div><div class="slot-time">~19:30</div><div class="slot-n">Peixe fresco do Intermarché (7km). Grelhar no BBQ.</div></div>
+    </div>
+    <div class="day-block" id="day-3">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="day-num">Segunda · 8 Junho · Dia 3</div><div class="day-title">Sagres + Cabo + Clara chega</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Praia da Carriagem 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Rec. da Carolina. Dog-friendly, Parque Natural. ~15km.</div><span class="slot-dur">2h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Fortaleza de Sagres</div><div class="slot-time">~14:30</div><div class="slot-n">~45min. Rosa dos ventos medieval. €3/pp.</div><span class="slot-dur">45min</span></div>
+      <div class="slot"><div class="slot-a">🌅 Cabo de São Vicente</div><div class="slot-time">Chegar 19:30 · Sol ~21:00</div><div class="slot-n">O momento da viagem. Sol desaparece no oceano. Toda a gente aplaude. Levar camisola — vento forte.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Jantar · Retiro do Pescador (Sagres) ou Altura (Aljezur)</div><div class="slot-time">~21:30</div><div class="slot-n">Retiro do Pescador: melhor marisco de Sagres, reservar. Altura: carnes bio, 7km de casa.</div></div>
+    </div>
+    <div class="day-block" id="day-4">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="day-num">Terça · 9 Junho · Dia 4</div><div class="day-title">Lagos — Ponta da Piedade</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Ponta da Piedade — boardwalk + boat tour</div><div class="slot-time">~9:00</div><div class="slot-n">Boardwalk gratuito pelas falésias douradas. Boat tour pelas grutas (~75min, ~€22/pp, Marina Lagos).</div><span class="slot-dur">2–3h</span></div>
+      <div class="period-l">Almoço / Praia</div>
+      <div class="slot"><div class="slot-a">Praia do Camilo ou Dona Ana</div><div class="slot-time">~13:00</div><div class="slot-n">As mais bonitas de Lagos. Camilo: escadaria de 227 degraus. Cães não permitidos.</div><span class="slot-dur">2h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Centro histórico de Lagos</div><div class="slot-time">~16:00</div><div class="slot-n">Passeio, gelado, lojinhas. Mais movimento — encaixa bem com a Clara.</div><span class="slot-dur">2h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Jantar · O Paulo (Arrifana)</div><div class="slot-time">~20:00</div><div class="slot-n">O jantar especial. Marisco na falésia. RESERVAR: 282 997 300.</div></div>
+    </div>
+    <div class="day-block" id="day-5">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="day-num">Quarta · 10 Junho · Dia 5</div><div class="day-title">Odeceixe + Despedida</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Praia de Odeceixe 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Rio calmo + mar. Cães no rio. Última caminhada sem pressa.</div><span class="slot-dur">2–3h</span></div>
+      <div class="period-l">Almoço</div>
+      <div class="slot"><div class="slot-a">Bar da Praia Odeceixe</div><div class="slot-time">~13:00</div><div class="slot-n">Dono Pedro, tartare atum, caipirinha. 8.8/10.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Check-out + Regresso</div><div class="slot-time">~15:00</div><div class="slot-n">~3h para Lisboa.</div></div>
+    </div>
+    <div class="day-block" id="day-6">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="bonus-banner">✦ Dia bónus — sugestão extra. Substituir um dia base ou para viagem mais longa.</div>
+      <div class="day-num">Bónus A · Day trip completo</div><div class="day-title">Sagres full day + Lagos à noite</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Fortaleza de Sagres</div><div class="slot-time">~9:30</div><div class="slot-n">Rosa dos ventos medieval, museu, vista mar. €3/pp.</div><span class="slot-dur">1h</span></div>
+      <div class="slot"><div class="slot-a">Praia do Tonel</div><div class="slot-time">~11:00</div><div class="slot-n">Melhor praia de surf de Sagres. Falésia imponente, selvagem. Dog-friendly.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Almoço</div>
+      <div class="slot"><div class="slot-a">Retiro do Pescador</div><div class="slot-time">~13:00</div><div class="slot-n">Melhor marisco de Sagres. Peixe do dia grelhado na perfeição. Ambiente familiar. Reservar.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Cabo de São Vicente</div><div class="slot-time">~15:30</div><div class="slot-n">5min de Sagres. Vista para o Atlântico. Grátis. Alternativa: guardar para o pôr do sol (19:30).</div><span class="slot-dur">45min</span></div>
+      <div class="slot"><div class="slot-a">Drive para Lagos · Ponta da Piedade</div><div class="slot-time">~17:00</div><div class="slot-n">~45min de Sagres. Boardwalk na hora de ouro. Boat tour se não fizeram antes.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Jantar em Lagos · Casa do Prego</div><div class="slot-time">~20:00</div><div class="slot-n">Rooftop no centro histórico. Petiscos modernos, steaks, cocktails, vibe jovem. Perfeito para a Clara. Rua Lançarote de Freitas 18.</div></div>
+    </div>
+    <div class="day-block" id="day-7">
+      <button class="back-idx" onclick="backIdx()">← Índice</button>
+      <div class="bonus-banner">✦ Dia bónus — sugestão extra. Substituir um dia base ou para viagem mais longa.</div>
+      <div class="day-num">Bónus B · Day trip completo</div><div class="day-title">Portimão + Grutas de Benagil + Silves</div>
+      <div class="period-l">Manhã</div>
+      <div class="slot"><div class="slot-a">Grutas de Benagil — boat tour</div><div class="slot-time">~9:30</div><div class="slot-n">Marina de Portimão (~1h15 de Aljezur). Tour 2h: grutas, Praia da Marinha, costa dourada. ~€28/pp. Reservar antes.</div><span class="slot-dur">2h</span></div>
+      <div class="period-l">Almoço</div>
+      <div class="slot"><div class="slot-a">Ferragudo · Rei das Praias</div><div class="slot-time">~13:00</div><div class="slot-n">Aldeia de pescadores junto a Portimão, muito mais autêntica. Ref. desde 1976. Cataplana, peixe fresco. Reservar.</div><span class="slot-dur">1.5h</span></div>
+      <div class="period-l">Tarde</div>
+      <div class="slot"><div class="slot-a">Aldeia de Ferragudo</div><div class="slot-time">~15:00</div><div class="slot-n">Ruas brancas, castelo medieval, vista para o rio Arade. Passeio de 30–45min.</div><span class="slot-dur">45min</span></div>
+      <div class="slot"><div class="slot-a">Castelo de Silves</div><div class="slot-time">~16:00</div><div class="slot-n">~25min de Ferragudo. Maior castelo do Algarve, arenito vermelho. €3/pp. Antiga capital moura. Vista sobre o rio Arade.</div><span class="slot-dur">1.5h</span></div>
+      <div class="slot"><div class="slot-a">Praia da Marinha (opcional)</div><div class="slot-time">~18:00</div><div class="slot-n">No regresso. Uma das mais bonitas do mundo — arcos naturais duplos, falésias douradas.</div><span class="slot-dur">1h</span></div>
+      <div class="period-l">Noite</div>
+      <div class="slot"><div class="slot-a">Regresso + Altura Steakhouse ou Alecrim</div><div class="slot-time">~20:00</div><div class="slot-n">Jantar em Aljezur — Altura (carnes bio) ou Alecrim (pizza). Noite tranquila.</div></div>
+    </div>
+  </div>
+</section>
+<!-- RESTAURANTES -->
+<section class="sec" id="tab-restaurantes">
+  <div class="nota"><strong>Rec. da Carolina:</strong> O Paulo · Sea You · Arte Bianca · Altura · Sector B · Vale da Telha (José) · Mádá</div>
+  <div class="cat-f" id="rf">
+    <button class="filt on" data-f="*">Todos</button>
+    <button class="filt" data-f="alj">Aljezur</button>
+    <button class="filt" data-f="sag">Sagres</button>
+    <button class="filt" data-f="lag">Lagos</button>
+    <button class="filt" data-f="por">Portimão</button>
+    <button class="filt" data-f="alb">Albufeira</button>
+  </div>
+  <div class="cards" id="rl">
+    <div class="lbl-zone" id="z-alj">Aljezur · Costa Vicentina</div>
+    <div class="card" data-f="alj" onclick="openModal('paulo')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=75" alt="O Paulo" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">O Paulo</div><div class="card-rat">4.4 ★ · 1350 rev</div></div>
+        <div class="card-cat">Marisco · Vista falésia · Arrifana · 2km</div>
+        <div class="card-desc">Na falésia sobre a Arrifana, junto à Fortaleza. Marisco fresco do dia, cataplana, percebes. Vista oceânica deslumbrante.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa (marisco + bebida)</span><span class="cp-g">~50 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~150 €</span></div>
+          <div class="cp-park">🅿 Topo da falésia: pago em junho</div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€€</span><span class="ctag ctag-host">✦ Carolina</span><span class="ctag ctag-w">⚠ Reserva obrig.</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('seayou')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=75" alt="Sea You" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Sea You Surf Café</div><div class="card-rat">4.5 ★</div></div>
+        <div class="card-cat">Brunch · Surf café · Arrifana · 2km</div>
+        <div class="card-desc">Comida caseira fresca, açaí bowls, burgers, pancakes. Muitas opções vegan/GF. Dom: música ao vivo.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~14 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~42 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('alecrim')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=75" alt="Alecrim" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Alecrim</div><div class="card-rat">9.1 · 407 rev</div></div>
+        <div class="card-cat">Pizza · Café · Aljezur · 7km</div>
+        <div class="card-desc">#1 GastroRanking Aljezur. Pizza e lasanha excelentes, preços muito razoáveis.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~14 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~42 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('altura')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1546964124-0cce460e9c06?w=600&q=75" alt="Altura" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Altura Steakhouse &amp; Bar</div><div class="card-rat">4.6 ★</div></div>
+        <div class="card-cat">Carnes biológicas · Aljezur · 7km</div>
+        <div class="card-desc">Carnes portuguesas biológicas, costeletas, ribs, tartare atum. #8 de 65. Porções generosas.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~28 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~84 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('sectorb')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=75" alt="Sector B" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Sector B Hamburgueria</div><div class="card-rat">4.7 ★</div></div>
+        <div class="card-cat">Burgers artesanais · Vale da Telha</div>
+        <div class="card-desc">Burgers 100% artesanais, mushroom com cebola caramelizada. #6 de 65 em Aljezur.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~17 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~51 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span><span class="ctag ctag-w">Ter: fechado</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('artebianca')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=75" alt="Arte Bianca" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Arte Bianca</div><div class="card-rat">8.7 · 267 rev</div></div>
+        <div class="card-cat">Italiana · Aljezur / Vale da Telha</div>
+        <div class="card-desc">Pizza forno de pedra, focaccia, burrata. 2 unidades. Muitas opções vegetarianas.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~18 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~54 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alj" onclick="openModal('barpraia')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Bar da Praia" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Bar da Praia Odeceixe</div><div class="card-rat">8.8 · 391 rev</div></div>
+        <div class="card-cat">Bar · Petiscos · Vista praia · 25km</div>
+        <div class="card-desc">Vista para a praia. Pedro é anfitrião memorável. Tartare atum, caipirinha incrível.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~20 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~60 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span></div>
+      </div>
+    </div>
+    <div class="lbl-zone" id="z-sag">Sagres · ~55km de Aljezur</div>
+    <div class="card" data-f="sag" onclick="openModal('retido')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=75" alt="Retiro" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Retiro do Pescador</div><div class="card-rat">4.5 ★ · 1300 rev</div></div>
+        <div class="card-cat">Marisco · Peixe fresco · Sagres</div>
+        <div class="card-desc">O melhor marisco de Sagres. Ambiente familiar, peixe do dia grelhado. Cheio de locais. Esgota sempre — reservar.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~30 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~90 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-w">⚠ Reservar</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="sag" onclick="openModal('terra')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Terra" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Terra Restaurante</div><div class="card-rat">4.6 ★ · 867 rev</div></div>
+        <div class="card-cat">Italiano-Português · Vista Beliche · Sagres</div>
+        <div class="card-desc">Frente à Praia de Beliche, caminho do Cabo. Chef italiano, fusão portuguesa. Perfeito após o pôr do sol.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~28 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~84 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-w">⚠ Reservar</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="sag" onclick="openModal('nortada')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Nortada" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Nortada</div><div class="card-rat">4.4 ★</div></div>
+        <div class="card-cat">Bar · Vista marina · Sagres</div>
+        <div class="card-desc">Vista para o porto de Sagres. Esplanada grande, comida simples e boa. Ótimo fim de tarde.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~18 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~54 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span></div>
+      </div>
+    </div>
+    <div class="lbl-zone" id="z-lag">Lagos · ~55km de Aljezur</div>
+    <div class="card" data-f="lag" onclick="openModal('ocamilo')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=75" alt="O Camilo" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">O Camilo</div><div class="card-rat">4.4 ★</div></div>
+        <div class="card-cat">Peixe grelhado · Vista falésia · Lagos</div>
+        <div class="card-desc">Mesmo sobre a Praia do Camilo. Peixe fresco a carvão, vista de cortar a respiração sobre as falésias douradas.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa (peixe + bebida)</span><span class="cp-g">~35 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~105 €</span></div>
+          <div class="cp-park">🅿 Dona Ana (pago)</div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€€</span><span class="ctag ctag-w">Vista única</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="lag" onclick="openModal('casadoprego')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Casa do Prego" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Casa do Prego</div><div class="card-rat">4.5 ★</div></div>
+        <div class="card-cat">Petiscos modernos · Rooftop · Lagos</div>
+        <div class="card-desc">Rooftop no centro histórico. Petiscos criativos, steaks, cocktails. Vibe jovem — perfeito para a Clara.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~22 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~66 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="lag" onclick="openModal('alsud')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Al Sud" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Al Sud ★ Michelin</div><div class="card-rat">★ Michelin</div></div>
+        <div class="card-cat">Fine Dining · Palmares · Lagos</div>
+        <div class="card-desc">A única estrela Michelin da zona. Chef Luis Anjos. Tasting menu, ingredientes do mar e serra. Vista sobre a Baía de Lagos.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa (tasting menu)</span><span class="cp-g">~130 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~400 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€€€</span><span class="ctag ctag-w">⚠ Reservar dias antes</span></div>
+      </div>
+    </div>
+    <div class="lbl-zone" id="z-por">Portimão + Ferragudo · ~70km</div>
+    <div class="card" data-f="por" onclick="openModal('reidasprais')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=75" alt="Rei das Praias" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Rei das Praias</div><div class="card-rat">4.4 ★</div></div>
+        <div class="card-cat">Marisco · Vista praia · Ferragudo</div>
+        <div class="card-desc">Referência desde 1976, Praia dos Caneiros. Cataplana, caldeirada de rascasso. Vista mar. Reservar.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~35 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~105 €</span></div>
+          <div class="cp-park">🅿 Gratuito junto</div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€€</span><span class="ctag ctag-w">⚠ Reservar</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="por" onclick="openModal('bordadocais')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Borda do Cais" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Borda do Cais</div><div class="card-rat">4.3 ★</div></div>
+        <div class="card-cat">Marisco · Vista rio Arade · Ferragudo</div>
+        <div class="card-desc">Margem do rio Arade, vista Portimão. Peixe fresco, marisco. Aldeia de pescadores autêntica.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~28 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~84 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span></div>
+      </div>
+    </div>
+    <div class="lbl-zone" id="z-alb">Albufeira · ~80km de Aljezur</div>
+    <div class="card" data-f="alb" onclick="openModal('tabvicentina')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=75" alt="Taberna Vicentina" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Taberna Vicentina</div><div class="card-rat">4.4 ★</div></div>
+        <div class="card-cat">Portuguesa · Centro histórico · Albufeira</div>
+        <div class="card-desc">No centro histórico. Polvo à lagareiro, bacalhau com grão, arroz de marisco. Cozinha algarvia autêntica.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~22 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~66 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€</span></div>
+      </div>
+    </div>
+    <div class="card" data-f="alb" onclick="openModal('staar')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Staar" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Staar Restaurante</div><div class="card-rat">4.5 ★</div></div>
+        <div class="card-cat">Contemporâneo · Vista mar · Albufeira</div>
+        <div class="card-desc">Menu contemporâneo, bacalhau à Brás e tamboril cremoso são destaques. Vista mar.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-g">~30 €</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~90 €</span></div>
+        </div>
+        <div class="card-tags"><span class="ctag">€€€</span><span class="ctag ctag-w">⚠ Reservar</span></div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab on" data-tab="resumo">Resumo</button>
-    <button class="tab" data-tab="itinerario">Itinerário</button>
-    <button class="tab" data-tab="restaurantes">Comer</button>
-    <button class="tab" data-tab="praias">Praias</button>
-    <button class="tab" data-tab="atividades">Atividades</button>
-    <button class="tab" data-tab="logistica">Logística</button>
+<!-- PRAIAS -->
+<section class="sec" id="tab-praias">
+  <div class="dog-banner">🐾 <strong>Dog-friendly:</strong> Carriagem · Amoreira · Monte Clérigo · Odeceixe · Quebrada — não concessionadas. Trela no acesso.</div>
+  <div class="cat-f" id="pf">
+    <button class="filt on" data-pf="*">Todas</button>
+    <button class="filt" data-pf="alj">Aljezur</button>
+    <button class="filt" data-pf="lag">Lagos</button>
+    <button class="filt" data-pf="sul">Carvoeiro/Sul</button>
+    <button class="filt" data-pf="dog">🐾 Dog-friendly</button>
   </div>
-
-  <!-- ═══════════ RESUMO ═══════════ -->
-  <section class="sec on" id="tab-resumo">
-
-    <div class="hero">
-      <div class="hero-dest">Aljezur</div>
-      <div class="hero-dates">6 a 10 de Junho de 2026 · 4 noites · Costa Vicentina</div>
-      <div class="hero-grid">
-        <div><div class="hg-l">Companhia</div><div class="hg-v">Vanessa, Clara & os cães</div></div>
-        <div><div class="hg-l">Transporte</div><div class="hg-v">Carro próprio</div></div>
-        <div><div class="hg-l">Orçamento</div><div class="hg-v">Sem restrições</div></div>
-        <div><div class="hg-l">Estilo</div><div class="hg-v">Relaxado</div></div>
-      </div>
-      <div class="hdiv"></div>
-      <div class="btn-row">
-        <a class="btn-g" href="whatsapp://send?text=✦ Aljezur, Junho 2026 — guia de viagem">✉ Partilhar</a>
-        <a class="btn-o" href="mailto:?subject=Aljezur Junho 2026&body=Guia de viagem Aljezur junho 2026">📧 Email</a>
+  <div class="cards" id="pl">
+    <div class="lbl-zone" id="pz-alj">Aljezur · Costa Vicentina</div>
+    <div class="card" data-pf="alj dog" onclick="openModal('carriagem')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75" alt="Carriagem" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia da Carriagem</div></div>
+        <div class="card-cat">Parque Natural · Dog-friendly · ~15km</div>
+        <div class="card-desc">Rec. especial da Carolina. Selvagem e intocada no Parque Natural. Cães livres no areal.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Gratuito</div></div>
+        <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag ctag-host">✦ Rec. Carolina</span></div>
       </div>
     </div>
-
-    <div class="lbl">Alojamento</div>
-    <div class="aloj">
-      <div class="aloj-name">Airbnb · Host Carolina</div>
-      <div class="aloj-addr">Aljezur, Faro 8670-158 · Parque Natural Costa Vicentina<br>2km da Praia da Arrifana · 4km da Praia da Amoreira</div>
-      <div class="badges">
-        <span class="badge">4.94 ⭐ · 147 reviews</span>
-        <span class="badge">Guest Favourite</span>
-        <span class="badge">Jardim privado + Jacuzzi</span>
-        <span class="badge">BBQ</span>
-        <span class="badge">AC + Wi-Fi</span>
-        <span class="badge">Pet-friendly</span>
-        <span class="badge">584€ total</span>
-      </div>
-      <a class="btn-g" href="https://maps.google.com/?q=Aljezur,+Faro+8670-158,+Portugal" target="_blank">↗ Google Maps</a>
-    </div>
-
-    <div class="lbl">Clima em Junho</div>
-    <div class="clima">
-      <div class="clima-row">
-        <div><div class="cl-n">22–28°C</div><div class="cl-l">Temp. dia</div></div>
-        <div><div class="cl-n">16–18°C</div><div class="cl-l">Mínima noite</div></div>
-        <div><div class="cl-n">~21:00</div><div class="cl-l">Pôr do sol</div></div>
-        <div><div class="cl-n">17–19°C</div><div class="cl-l">Água mar</div></div>
-      </div>
-      <div style="font-size:13px;color:var(--muted);font-style:italic;line-height:1.6;">Dias quentes, noites frescas. Vento de Norte forte à tarde — levar camisola. Ótimo para praias de manhã.</div>
-    </div>
-
-    <div class="lbl">Custos de Combustível</div>
-    <div class="fuel">
-      <div class="fuel-t">⛽ Calculadora de viagem</div>
-      <div class="fuel-fields">
-        <div class="fuel-f fuel-full">
-          <div class="fuel-l">Local de partida</div>
-          <input class="fuel-i" id="f-partida" type="text" placeholder="Ex: Lisboa" value="Lisboa">
-        </div>
-        <div class="fuel-f">
-          <div class="fuel-l">Consumo (L/100km)</div>
-          <input class="fuel-i" id="f-consumo" type="number" placeholder="6.5" value="6.5" step="0.1" oninput="calcFuel()">
-        </div>
-        <div class="fuel-f">
-          <div class="fuel-l">Preço gasolina (€/L)</div>
-          <input class="fuel-i" id="f-preco" type="number" placeholder="1.94" value="1.94" step="0.01" oninput="calcFuel()">
-        </div>
-      </div>
-      <div class="fuel-res">
-        <div class="fuel-row"><span class="fuel-rl">Distância estimada (ida)</span><span class="fuel-rv" id="fr-dist">~270 km</span></div>
-        <div class="fuel-row"><span class="fuel-rl">Tempo de condução (ida)</span><span class="fuel-rv" id="fr-tempo">~2h45</span></div>
-        <div class="fuel-row"><span class="fuel-rl">Litros estimados (ida+volta)</span><span class="fuel-rv" id="fr-litros">~35 L</span></div>
-        <div class="fuel-row"><span class="fuel-rl">Custo estimado (ida+volta)</span><span class="fuel-rv" id="fr-custo">~68 €</span></div>
+    <div class="card" data-pf="alj dog" onclick="openModal('amoreira')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=75" alt="Amoreira" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia da Amoreira</div></div>
+        <div class="card-cat">Rio + Mar · Dog-friendly · 4km</div>
+        <div class="card-desc">Rio Aljezur + oceano. Espaço enorme. Cães livres. Uma das mais especiais do Algarve Ocidental.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Gratuito</div></div>
+        <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag">4km de casa</span></div>
       </div>
     </div>
-
-    <div class="lbl">Não perder</div>
-    <div class="hl"><div class="hl-icon">🐾</div><div><div class="hl-name">Praia da Carriagem com os cães</div><div class="hl-desc">Recomendação especial da Carolina. Parque Natural, não concessionada — cães livres no areal selvagem.</div></div></div>
-    <div class="hl"><div class="hl-icon">🌅</div><div><div class="hl-name">Pôr do sol no Cabo de São Vicente</div><div class="hl-desc">O fim do mundo. O sol desaparece diretamente no oceano. O momento da viagem — ir no Dia 3 com a Clara.</div></div></div>
-    <div class="hl"><div class="hl-icon">🌊</div><div><div class="hl-name">Praia da Amoreira</div><div class="hl-desc">Rio + mar, espaço imenso, cães livres. Uma das mais especiais do Algarve Ocidental. A 4km da casa.</div></div></div>
-    <div class="hl"><div class="hl-icon">🦞</div><div><div class="hl-name">Jantar no O Paulo</div><div class="hl-desc">Na falésia sobre a Arrifana, vista oceânica. Marisco fresco, cataplana. Reserva obrigatória: 282 997 300.</div></div></div>
-
-  </section>
-
-  <!-- ═══════════ ITINERÁRIO ═══════════ -->
-  <section class="sec" id="tab-itinerario">
-
-    <div id="itin-idx-view">
-      <div class="lbl" style="margin-top:0">Índice de dias</div>
-      <div class="itin-idx">
-        <div class="idx-item" onclick="showDay(1)"><div><div class="idx-day">Sáb · 6 Jun · Dia 1</div><div class="idx-title">Chegada + Entrar no mood</div></div><div class="idx-arr">→</div></div>
-        <div class="idx-item" onclick="showDay(2)"><div><div class="idx-day">Dom · 7 Jun · Dia 2</div><div class="idx-title">Natureza + Cães + Zero pressa</div></div><div class="idx-arr">→</div></div>
-        <div class="idx-item" onclick="showDay(3)"><div><div class="idx-day">Seg · 8 Jun · Dia 3</div><div class="idx-title">Sagres + Cabo + Clara chega</div></div><div class="idx-arr">→</div></div>
-        <div class="idx-item" onclick="showDay(4)"><div><div class="idx-day">Ter · 9 Jun · Dia 4</div><div class="idx-title">Lagos — Ponta da Piedade</div></div><div class="idx-arr">→</div></div>
-        <div class="idx-item" onclick="showDay(5)"><div><div class="idx-day">Qua · 10 Jun · Dia 5</div><div class="idx-title">Odeceixe + Despedida</div></div><div class="idx-arr">→</div></div>
+    <div class="card" data-pf="alj" onclick="openModal('arrifana')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=75" alt="Arrifana" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia da Arrifana</div></div>
+        <div class="card-cat">Surf · Falésia · 2km</div>
+        <div class="card-desc">A mais icónica da zona. Fortaleza árabe no topo, ondas de surf. Miradouro extraordinário.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Pago em época balnear</div></div>
+        <div class="card-tags"><span class="ctag">🏄 Surf</span></div>
       </div>
     </div>
-
-    <div id="itin-day-view" style="display:none">
-      <div class="day-nav">
-        <button class="dnb" onclick="showDay(1)">Dia 1</button>
-        <button class="dnb" onclick="showDay(2)">Dia 2</button>
-        <button class="dnb" onclick="showDay(3)">Dia 3</button>
-        <button class="dnb" onclick="showDay(4)">Dia 4</button>
-        <button class="dnb" onclick="showDay(5)">Dia 5</button>
-      </div>
-
-      <div class="day-block" id="day-1">
-        <button class="back-idx" onclick="backIdx()">← Índice de dias</button>
-        <div class="day-num">Sábado · 6 Junho · Dia 1</div>
-        <div class="day-title">Chegada + Entrar no mood</div>
-        <div class="period-l">Tarde</div>
-        <div class="slot"><div class="slot-a">Chegada + instalar na casa</div><div class="slot-time">~16:00</div><div class="slot-n">Check-in com a Carolina. Explorar o espaço — jardim, jacuzzi, BBQ. Cães a ambientar-se.</div><span class="slot-dur">1–2h</span></div>
-        <div class="slot"><div class="slot-a">Praia de Monte Clérigo 🐾</div><div class="slot-time">~18:00</div><div class="slot-n">Praia bonita a ~6km, fácil acesso, dog-friendly. Perfeita para começar sem esforço. Luz bonita ao final da tarde.</div><span class="slot-dur">1.5h</span></div>
-        <div class="period-l">Noite</div>
-        <div class="slot"><div class="slot-a">Jantar descontraído</div><div class="slot-time">~20:00</div><div class="slot-n">Sea You Surf Café (Arrifana, vibe leve, €€) ou Alecrim em Aljezur (pizza/lasanha excelentes, €). Primeiro dia — simples e bom.</div><span class="slot-dur">~1.5h</span></div>
-      </div>
-
-      <div class="day-block" id="day-2">
-        <button class="back-idx" onclick="backIdx()">← Índice de dias</button>
-        <div class="day-num">Domingo · 7 Junho · Dia 2</div>
-        <div class="day-title">Natureza + Cães + Zero pressa</div>
-        <div class="period-l">Manhã</div>
-        <div class="slot"><div class="slot-a">Praia da Amoreira 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Rio + mar, espaço enorme. Cães livres. Ir antes do vento. Uma das mais especiais do Ocidental.</div><span class="slot-dur">2–3h</span></div>
-        <div class="period-l">Almoço</div>
-        <div class="slot"><div class="slot-a">Sea You Surf Café</div><div class="slot-time">~13:00</div><div class="slot-n">Na Arrifana, no caminho de volta. Comida fresca caseira, vibe surf, esplanada.</div><span class="slot-dur">~1h</span></div>
-        <div class="period-l">Tarde</div>
-        <div class="slot"><div class="slot-a">Praia da Arrifana + Fortaleza</div><div class="slot-time">~15:00</div><div class="slot-n">A mais icónica da zona. Subir à Fortaleza árabe para a vista sobre o oceano.</div><span class="slot-dur">2h</span></div>
-        <div class="period-l">Noite</div>
-        <div class="slot"><div class="slot-a">Casa + BBQ + jacuzzi</div><div class="slot-time">~19:30</div><div class="slot-n">Peixe fresco do Intermarché de Aljezur (7km). Grelhar no BBQ. Noite em casa.</div></div>
-      </div>
-
-      <div class="day-block" id="day-3">
-        <button class="back-idx" onclick="backIdx()">← Índice de dias</button>
-        <div class="day-num">Segunda · 8 Junho · Dia 3</div>
-        <div class="day-title">Sagres + Cabo de São Vicente + Clara</div>
-        <div class="period-l">Manhã</div>
-        <div class="slot"><div class="slot-a">Praia da Carriagem 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Recomendação especial da Carolina. Dog-friendly no Parque Natural. ~15km de Aljezur. Selvagem, cães livres.</div><span class="slot-dur">2h</span></div>
-        <div class="period-l">Tarde</div>
-        <div class="slot"><div class="slot-a">Fortaleza de Sagres</div><div class="slot-time">~14:30</div><div class="slot-n">~45min de Aljezur. Visita de 30–45min — Rosa dos ventos medieval, vista mar. €3/pessoa.</div><span class="slot-dur">45min</span></div>
-        <div class="slot"><div class="slot-a">🌅 Cabo de São Vicente — pôr do sol</div><div class="slot-time">Chegar 19:30 · Sol ~21:00</div><div class="slot-n">O momento da viagem. Ponto mais a sudoeste da Europa. Sol desaparece diretamente no oceano. A Clara vai adorar. Levar camisola — vento forte.</div><span class="slot-dur">1.5h</span></div>
-        <div class="period-l">Noite</div>
-        <div class="slot"><div class="slot-a">Jantar · Altura Steakhouse</div><div class="slot-time">~21:30</div><div class="slot-n">Carnes biológicas portuguesas, bem avaliado. Ou jantar em Sagres antes de partir.</div><span class="slot-dur">~2h</span></div>
-      </div>
-
-      <div class="day-block" id="day-4">
-        <button class="back-idx" onclick="backIdx()">← Índice de dias</button>
-        <div class="day-num">Terça · 9 Junho · Dia 4</div>
-        <div class="day-title">Lagos — Ponta da Piedade</div>
-        <div class="period-l">Manhã</div>
-        <div class="slot"><div class="slot-a">Ponta da Piedade — boardwalk + boat tour</div><div class="slot-time">~9:00</div><div class="slot-n">Ir cedo. Boardwalk gratuito pelas falésias douradas. Considerar boat tour pelas grutas (~75min, ~€22/pp, Marina Lagos). Reservar antes.</div><span class="slot-dur">2–3h</span></div>
-        <div class="period-l">Almoço / Praia</div>
-        <div class="slot"><div class="slot-a">Praia do Camilo ou Dona Ana</div><div class="slot-time">~13:00</div><div class="slot-n">As mais bonitas de Lagos. Camilo: escadaria icónica de 227 degraus, arco natural. Atenção: cães não permitidos.</div><span class="slot-dur">2h</span></div>
-        <div class="period-l">Tarde</div>
-        <div class="slot"><div class="slot-a">Centro histórico de Lagos</div><div class="slot-time">~16:00</div><div class="slot-n">Passeio, gelado, lojinhas, zona ribeirinha. Mais movimento — encaixa bem com a Clara.</div><span class="slot-dur">2h</span></div>
-        <div class="period-l">Noite</div>
-        <div class="slot"><div class="slot-a">Jantar · O Paulo (Arrifana)</div><div class="slot-time">~20:00</div><div class="slot-n">O jantar especial da viagem. Marisco fresco na falésia. RESERVAR: 282 997 300.</div></div>
-      </div>
-
-      <div class="day-block" id="day-5">
-        <button class="back-idx" onclick="backIdx()">← Índice de dias</button>
-        <div class="day-num">Quarta · 10 Junho · Dia 5</div>
-        <div class="day-title">Odeceixe + Despedida leve</div>
-        <div class="period-l">Manhã</div>
-        <div class="slot"><div class="slot-a">Praia de Odeceixe 🐾</div><div class="slot-time">~9:30</div><div class="slot-n">Rio calmo + mar. Cães adoram o rio. Última caminhada sem pressa.</div><span class="slot-dur">2–3h</span></div>
-        <div class="period-l">Almoço</div>
-        <div class="slot"><div class="slot-a">Bar da Praia Odeceixe</div><div class="slot-time">~13:00</div><div class="slot-n">Dono Pedro, vista para a praia, tartare atum, caipirinha. 8.8/10. Encerrar bem.</div><span class="slot-dur">1.5h</span></div>
-        <div class="period-l">Tarde</div>
-        <div class="slot"><div class="slot-a">Check-out + Regresso</div><div class="slot-time">~15:00</div><div class="slot-n">~3h para Lisboa.</div></div>
+    <div class="card" data-pf="alj dog" onclick="openModal('monteclerigo')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1490122417551-6ee9691429d0?w=600&q=75" alt="Monte Clérigo" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Monte Clérigo</div></div>
+        <div class="card-cat">Família · Dog-friendly · ~6km</div>
+        <div class="card-desc">Acessível e bonita. Boa para o primeiro dia e para os cães.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Gratuito</div></div>
+        <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span></div>
       </div>
     </div>
-  </section>
-
-  <!-- ═══════════ RESTAURANTES ═══════════ -->
-  <section class="sec" id="tab-restaurantes">
-    <div class="nota"><strong>Recomendações da Carolina:</strong> O Paulo · Sea You · Arte Bianca · Altura Steakhouse · Sector B · Vale da Telha (José) · Mádá</div>
-    <div class="cat-f" id="rf">
-      <button class="filt on" data-f="*">Todos</button>
-      <button class="filt" data-f="local">Local/Peixe</button>
-      <button class="filt" data-f="casual">Casual</button>
-      <button class="filt" data-f="carne">Carne</button>
-      <button class="filt" data-f="italiano">Italiano</button>
-      <button class="filt" data-f="vista">Vista</button>
+    <div class="card" data-pf="alj dog" onclick="openModal('odeceixe')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=75" alt="Odeceixe" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia de Odeceixe</div></div>
+        <div class="card-cat">Rio + Mar · Dog-friendly · ~25km</div>
+        <div class="card-desc">Rio Seixe + Atlântico — única em Portugal. Cães adoram o rio calmo. Encerrar a viagem aqui.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Gratuito no topo</div></div>
+        <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag">Último dia</span></div>
+      </div>
     </div>
-    <div class="cards" id="rl">
-
-      <div class="card" data-f="local vista" onclick="openModal('paulo')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1559339352-11d035aa65de?w=600&q=75" alt="O Paulo" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">O Paulo</div><div class="card-rat">4.4 ★ · 1350 rev</div></div>
-          <div class="card-cat">Marisco · Vista falésia · Arrifana</div>
-          <div class="card-desc">Na falésia sobre a Arrifana, junto à Fortaleza. Marisco fresco, cataplana, percebes. Vista oceânica deslumbrante.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa (prato + bebida)</span><span class="cp-v gold">~50 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~150 €</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento topo falésia: pago em junho</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€€</span><span class="ctag">~2km</span><span class="ctag ctag-host">✦ Carolina</span><span class="ctag ctag-warn">⚠ Reserva obrig.</span></div>
-        </div>
+    <div class="lbl-zone" id="pz-lag">Lagos · ~55km</div>
+    <div class="card" data-pf="lag" onclick="openModal('camilo')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=75" alt="Camilo" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia do Camilo</div></div>
+        <div class="card-cat">Icónica · Lagos</div>
+        <div class="card-desc">Escadaria de 227 degraus, arco natural. Uma das mais fotografadas do Algarve.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Pago perto</div></div>
+        <div class="card-tags"><span class="ctag ctag-w">⚠ Cães proibidos</span></div>
       </div>
-
-      <div class="card" data-f="casual vista" onclick="openModal('seayou')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&q=75" alt="Sea You" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Sea You Surf Café</div><div class="card-rat">4.5 ★</div></div>
-          <div class="card-cat">Brunch · Surf café · Arrifana</div>
-          <div class="card-desc">Comida caseira fresca, açaí bowls, burgers, pancakes, burritos. Muitas opções vegan/GF. Dom: música ao vivo.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa (refeição)</span><span class="cp-v gold">~14 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~42 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€</span><span class="ctag">~2km</span><span class="ctag ctag-host">✦ Carolina</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="casual italiano" onclick="openModal('alecrim')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=600&q=75" alt="Alecrim" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Alecrim</div><div class="card-rat">9.1 · 407 rev</div></div>
-          <div class="card-cat">Pizza · Café · Aljezur</div>
-          <div class="card-desc">#1 GastroRanking Aljezur. Pizza e lasanha excelentes, preços muito razoáveis. Jantar casual ideal.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-v gold">~14 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~42 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€</span><span class="ctag">~7km</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="italiano" onclick="openModal('artebianca')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&q=75" alt="Arte Bianca" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Arte Bianca</div><div class="card-rat">8.7 · 267 rev</div></div>
-          <div class="card-cat">Italiana · Pizza · Aljezur / Vale da Telha</div>
-          <div class="card-desc">Pizza italiana autêntica forno de pedra, focaccia, burrata, lasanha. 2 unidades. Muitas opções vegetarianas.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-v gold">~18 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~54 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="carne" onclick="openModal('altura')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1546964124-0cce460e9c06?w=600&q=75" alt="Altura Steakhouse" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Altura Steakhouse & Bar</div><div class="card-rat">4.6 ★ · 130 rev</div></div>
-          <div class="card-cat">Carnes biológicas · Steakhouse · Aljezur</div>
-          <div class="card-desc">Carnes portuguesas biológicas, costeletas, ribs, tartare atum. #8 de 65 em Aljezur. Porções generosas.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa</span><span class="cp-v gold">~28 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~84 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€</span><span class="ctag">~7km</span><span class="ctag ctag-host">✦ Carolina</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="casual carne" onclick="openModal('sectorb')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=75" alt="Sector B" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Sector B Hamburgueria</div><div class="card-rat">4.7 ★ · 169 rev</div></div>
-          <div class="card-cat">Burgers artesanais · Vale da Telha</div>
-          <div class="card-desc">Burgers 100% artesanais sem congelados. Mushroom com cebola caramelizada é o destaque. #6 de 65 Aljezur.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa (burger + bebida)</span><span class="cp-v gold">~17 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~51 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€</span><span class="ctag ctag-host">✦ Carolina</span><span class="ctag ctag-warn">Ter: fechado</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="local vista" onclick="openModal('barpraia')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Bar da Praia Odeceixe" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Bar da Praia Odeceixe</div><div class="card-rat">8.8 · 391 rev</div></div>
-          <div class="card-cat">Bar · Petiscos · Vista praia · Odeceixe</div>
-          <div class="card-desc">Vista direta para a praia. Dono Pedro é anfitrião memorável. Tartare atum, guacamole, caipirinha incrível.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa (petiscos + bebida)</span><span class="cp-v gold">~20 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~60 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">€€</span><span class="ctag">~25km</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="local" onclick="openModal('mada')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=75" alt="Mádá" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Mádá</div><div class="card-rat">—</div></div>
-          <div class="card-cat">Restaurante · Aljezur</div>
-          <div class="card-desc">Recomendação direta da Carolina. Restaurante local em Aljezur vila. Tel: 915 581 140.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Preço</span><span class="cp-v">Não disponível — verificar no local</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-host">✦ Carolina</span></div>
-        </div>
-      </div>
-
-      <div class="card" data-f="local" onclick="openModal('jose')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=75" alt="Vale da Telha José" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Vale da Telha — José</div><div class="card-rat">—</div></div>
-          <div class="card-cat">Regional · Internacional · Vale da Telha</div>
-          <div class="card-desc">Restaurante regional e internacional em Vale da Telha. Perto da casa. Horário: 9–22:30. Dom: fechado.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Por pessoa (refeição)</span><span class="cp-v gold">~20 €</span></div>
-            <div class="cp-row"><span class="cp-l">Total do grupo (3 pax)</span><span class="cp-v gold">~60 €</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-host">✦ Carolina</span><span class="ctag ctag-warn">Dom: fechado</span></div>
-        </div>
-      </div>
-
     </div>
-  </section>
-
-  <!-- ═══════════ PRAIAS ═══════════ -->
-  <section class="sec" id="tab-praias">
-    <div class="dog-banner">🐾 <strong>Dog-friendly confirmadas:</strong> Carriagem · Amoreira · Monte Clérigo · Odeceixe · Quebrada — todas não concessionadas. Trela no acesso, saco de dejeções obrigatório.</div>
-    <div class="cards">
-
-      <div class="card" onclick="openModal('carriagem')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75" alt="Carriagem" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Praia da Carriagem</div></div>
-          <div class="card-cat">Parque Natural · Dog-friendly · ~15km</div>
-          <div class="card-desc">Recomendação especial da Carolina. Selvagem e intocada no Parque Natural. Cães livres no areal.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-v gold">Grátis</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento: Gratuito</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag ctag-host">✦ Rec. Carolina</span></div>
-        </div>
+    <div class="card" data-pf="lag" onclick="openModal('donaana')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=75" alt="Dona Ana" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia Dona Ana</div></div>
+        <div class="card-cat">Bandeira Azul · Lagos</div>
+        <div class="card-desc">Grande, infraestrutura, falésias. Ponto de partida para o boardwalk da Ponta da Piedade.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Parque grande (pago)</div></div>
+        <div class="card-tags"><span class="ctag ctag-w">⚠ Cães proibidos</span></div>
       </div>
-
-      <div class="card" onclick="openModal('amoreira')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=75" alt="Amoreira" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Praia da Amoreira</div></div>
-          <div class="card-cat">Rio + Mar · Dog-friendly · 4km de casa</div>
-          <div class="card-desc">Rio Aljezur + oceano. Espaço enorme, areia limpa. Os cães correm entre rio e mar.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-v gold">Grátis</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento: Gratuito</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag">4km de casa</span></div>
-        </div>
+    </div>
+    <div class="lbl-zone" id="pz-sul">Carvoeiro · Lagoa · ~70km</div>
+    <div class="card" data-pf="sul" onclick="openModal('marinha')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=75" alt="Marinha" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Praia da Marinha</div></div>
+        <div class="card-cat">Top mundial · Arcos naturais duplos · Lagoa</div>
+        <div class="card-desc">Considerada uma das mais bonitas do mundo. Arcos naturais duplos, águas cristalinas. Início do trilho dos 7 Vales Suspensos.</div>
+        <div class="card-price"><div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-g">Grátis</span></div><div class="cp-park">🅿 Pago em cima da falésia</div></div>
+        <div class="card-tags"><span class="ctag">🏆 Top mundial</span></div>
       </div>
-
-      <div class="card" onclick="openModal('arrifana')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1476673160081-cf065607f449?w=600&q=75" alt="Arrifana" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Praia da Arrifana</div></div>
-          <div class="card-cat">Surf · Falésia · 2km de casa</div>
-          <div class="card-desc">Icónica da Costa Vicentina. Falésia de xisto, Fortaleza árabe, ondas de surf. Miradouro incrível.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-v gold">Grátis</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento: Pago em época balnear (~€2/h)</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag">🏄 Surf</span><span class="ctag">2km de casa</span></div>
+    </div>
+    <div class="card" data-pf="sul" onclick="openModal('benagil_praia')">
+      <img class="card-img" src="https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=600&q=75" alt="Benagil" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-top"><div class="card-name">Gruta de Benagil</div></div>
+        <div class="card-cat">Icónica · Boat tour obrigatório · ~70km</div>
+        <div class="card-desc">A gruta mais famosa do Algarve. Nadar até à gruta proibido desde 2025 — apenas de barco com operadores licenciados.</div>
+        <div class="card-price">
+          <div class="cp-row"><span class="cp-l">Boat tour (gruta)</span><span class="cp-g">~28 €/pp</span></div>
+          <div class="cp-row"><span class="cp-l">Total grupo (3 pax)</span><span class="cp-g">~84 €</span></div>
         </div>
+        <div class="card-tags"><span class="ctag">⛵ Boat tour obrig.</span></div>
       </div>
-
-      <div class="card" onclick="openModal('monteclerigo')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1490122417551-6ee9691429d0?w=600&q=75" alt="Monte Clérigo" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Praia de Monte Clérigo</div></div>
-          <div class="card-cat">Família · Dog-friendly · ~6km</div>
-          <div class="card-desc">Acessível e bonita. Boa para o primeiro dia e para os cães. Restaurante junto. Fácil estacionamento.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-v gold">Grátis</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento: Gratuito</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag">Fácil acesso</span></div>
-        </div>
-      </div>
-
-      <div class="card" onclick="openModal('odeceixe')">
-        <img class="card-img" src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=75" alt="Odeceixe" loading="lazy" onerror="this.style.display='none'">
-        <div class="card-body">
-          <div class="card-top"><div class="card-name">Praia de Odeceixe</div></div>
-          <div class="card-cat">Rio + Mar · Dog-friendly · ~25km</div>
-          <div class="card-desc">Rio Seixe + Atlântico — única em Portugal. Os cães adoram o rio calmo. Encerrar a viagem aqui.</div>
-          <div class="card-price">
-            <div class="cp-row"><span class="cp-l">Entrada</span><span class="cp-v gold">Grátis</span></div>
-            <div class="cp-row cp-park"><span>🅿 Estacionamento: Gratuito no topo</span></div>
-          </div>
-          <div class="card-tags"><span class="ctag ctag-dog">🐾 Dog-friendly</span><span class="ctag">Último dia</span></div>
-        </div>
-      </div>
-
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- ═══════════ ATIVIDADES ═══════════ -->
-  <section class="sec" id="tab-atividades">
+<!-- ATIVIDADES -->
+<section class="sec" id="tab-atividades">
+  <div class="lbl" style="margin-top:0">Aljezur · Costa Vicentina</div>
+  <div class="act" onclick="openModal('arrifanabottours')"><div class="act-icon">⛵</div><div><div class="act-name">Arrifana Boat Tours</div><div class="act-desc">Passeio de barco pelas grutas e falésias selvagens de Arrifana. Vista única da costa.</div></div></div>
+  <div class="act" onclick="openModal('surf')"><div class="act-icon">🏄</div><div><div class="act-name">Surf Rentals Arrifana</div><div class="act-desc">Aluguer de pranchas e fatos. Tel: 963 942 392. Melhor onda da Costa Vicentina.</div></div></div>
+  <div class="act" onclick="openModal('rotavicentina')"><div class="act-icon">🥾</div><div><div class="act-name">Trilho dos Pescadores — Rota Vicentina</div><div class="act-desc">Troço Amoreira–Monte Clérigo (~4km). Dog-friendly. Vista oceânica constante.</div></div></div>
+  <div class="act" onclick="openModal('castelo')"><div class="act-icon">🏰</div><div><div class="act-name">Castelo de Aljezur</div><div class="act-desc">Castelo mouro século X. Gratuito. Vista sobre a vila.</div></div></div>
+  <div class="lbl">Sagres · ~55km</div>
+  <div class="act" onclick="openModal('sagres_fort')"><div class="act-icon">🏰</div><div><div class="act-name">Fortaleza de Sagres</div><div class="act-desc">Rosa dos ventos medieval. €3/pp. 30–45min antes do Cabo.</div></div></div>
+  <div class="act" onclick="openModal('cabosv')"><div class="act-icon">🌅</div><div><div class="act-name">Cabo de São Vicente</div><div class="act-desc">O fim do mundo. Gratuito. Pôr do sol ~21:00. Chegar às 19:30. Levar camisola.</div></div></div>
+  <div class="act" onclick="openModal('praiatonel')"><div class="act-icon">🏖</div><div><div class="act-name">Praia do Tonel — Sagres</div><div class="act-desc">Melhor praia de surf de Sagres. Falésia imponente, selvagem. Dog-friendly.</div></div></div>
+  <div class="lbl">Lagos · ~55km</div>
+  <div class="act" onclick="openModal('lagosbottours')"><div class="act-icon">⚓</div><div><div class="act-name">Boat Tour Ponta da Piedade</div><div class="act-desc">75min pelas grutas. ~€22/pp. Marina de Lagos. Reservar antes em junho.</div></div></div>
+  <div class="act" onclick="openModal('pontapiedade')"><div class="act-icon">🪨</div><div><div class="act-name">Ponta da Piedade — a pé</div><div class="act-desc">Boardwalk gratuito pelas falésias douradas. Ir antes das 10h.</div></div></div>
+  <div class="act" onclick="openModal('lagoscentro')"><div class="act-icon">🏛</div><div><div class="act-name">Centro histórico de Lagos</div><div class="act-desc">Muralhas medievais, Igreja de Santo António, zona ribeirinha animada.</div></div></div>
+  <div class="lbl">Portimão + Ferragudo · ~70km</div>
+  <div class="act" onclick="openModal('benagiltour')"><div class="act-icon">⛵</div><div><div class="act-name">Grutas de Benagil — Boat Tour</div><div class="act-desc">A gruta mais famosa do Algarve. ~2h, Marina Portimão. ~€28/pp. Reservar — esgota.</div></div></div>
+  <div class="act" onclick="openModal('ferragudo')"><div class="act-icon">🏘</div><div><div class="act-name">Aldeia de Ferragudo</div><div class="act-desc">Aldeia de pescadores junto ao rio Arade. Muito mais autêntica que Portimão.</div></div></div>
+  <div class="lbl">Silves · ~65km</div>
+  <div class="act" onclick="openModal('silves')"><div class="act-icon">🏰</div><div><div class="act-name">Castelo de Silves</div><div class="act-desc">Maior castelo do Algarve em arenito vermelho. €3/pp. Antiga capital moura.</div></div></div>
+  <div class="act" onclick="openModal('v7vales')"><div class="act-icon">🥾</div><div><div class="act-name">Trilho 7 Vales Suspensos</div><div class="act-desc">Um dos trilhos mais bonitos da Europa. ~6km, Carvoeiro–Praia da Marinha. Gratuito.</div></div></div>
+  <div class="lbl">Albufeira · ~80km</div>
+  <div class="act" onclick="openModal('albcentro')"><div class="act-icon">🏛</div><div><div class="act-name">Centro histórico de Albufeira</div><div class="act-desc">Orla marítima, ruas de calçada, Praia do Peneco em baixo. Animado ao final do dia.</div></div></div>
+  <div class="act" onclick="openModal('albboat')"><div class="act-icon">🐬</div><div><div class="act-name">Avistamento de Golfinhos — Albufeira</div><div class="act-desc">Tours de barco ~2h. ~€35/pp. Alta taxa de sucesso em junho. Saídas de manhã.</div></div></div>
+</section>
 
-    <div class="lbl" style="margin-top:0">Perto da casa</div>
-    <div class="act" onclick="openModal('arrifanabottours')"><div class="act-icon">⛵</div><div><div class="act-name">Arrifana Boat Tours</div><div class="act-desc">Passeio de barco pelas grutas e falésias selvagens de Arrifana. Vista única da costa a partir do mar.</div></div></div>
-    <div class="act" onclick="openModal('surf')"><div class="act-icon">🏄</div><div><div class="act-name">Surf Rentals Arrifana</div><div class="act-desc">Aluguer de pranchas e fatos. Tel: 963 942 392. Uma das melhores ondas da Costa Vicentina.</div></div></div>
-    <div class="act" onclick="openModal('rotavicentina')"><div class="act-icon">🥾</div><div><div class="act-name">Trilho dos Pescadores — Rota Vicentina</div><div class="act-desc">Troço Amoreira–Monte Clérigo (~4km), fácil e bonito. Dog-friendly. Ver rotavicentina.com.</div></div></div>
-    <div class="act" onclick="openModal('castelo')"><div class="act-icon">🏰</div><div><div class="act-name">Castelo de Aljezur</div><div class="act-desc">Castelo mouro do século X. Visita livre e gratuita. Vista sobre a vila. 10min a pé do centro.</div></div></div>
-    <div class="act" onclick="openModal('equitacao')"><div class="act-icon">🐴</div><div><div class="act-name">Equitação — Costa Vicentina</div><div class="act-desc">Horse Adventure Tours. Passeios a cavalo pelas falésias e matas do Parque Natural.</div></div></div>
-
-    <div class="lbl">Day trips</div>
-    <div class="act" onclick="openModal('sagres')"><div class="act-icon">🏰</div><div><div class="act-name">Fortaleza de Sagres</div><div class="act-desc">~45min. Rosa dos ventos medieval, museu, vista mar. €3/pessoa. Visita 30–45min antes do Cabo.</div></div></div>
-    <div class="act" onclick="openModal('cabosv')"><div class="act-icon">🌅</div><div><div class="act-name">Cabo de São Vicente</div><div class="act-desc">O fim do mundo. Gratuito. Pôr do sol ~21:00 em junho. Chegar às 19:30. Levar camisola.</div></div></div>
-    <div class="act" onclick="openModal('lagosbottours')"><div class="act-icon">⚓</div><div><div class="act-name">Boat Tour Ponta da Piedade — Lagos</div><div class="act-desc">75min pelas grutas. ~€22/pp. Marina de Lagos. Reservar com antecedência em junho.</div></div></div>
-    <div class="act" onclick="openModal('pontapiedade')"><div class="act-icon">🪨</div><div><div class="act-name">Ponta da Piedade — Percurso a pé</div><div class="act-desc">Boardwalk gratuito, falésias douradas de Lagos. Ir antes das 10h. Absolutamente impressionante.</div></div></div>
-
-  </section>
-
-  <!-- ═══════════ LOGÍSTICA ═══════════ -->
-  <section class="sec" id="tab-logistica">
-
-    <div class="lbl" style="margin-top:0">Supermercados</div>
-    <div class="info-blk">
-      <div class="info-row"><span class="ii">🛒</span><span><strong style="color:var(--gold)">Intermarché Aljezur</strong> — 7km. Talho, peixaria, tudo. Recomendado pela Carolina.</span></div>
-      <div class="info-row"><span class="ii">🛒</span><span><strong style="color:var(--gold)">Mini-mercado Vale da Telha</strong> — 2km. Sem talho/peixaria. Para urgências do dia.</span></div>
-    </div>
-
-    <div class="lbl">Serviços em Aljezur (7km)</div>
-    <div class="info-blk">
-      <div class="info-row"><span class="ii">⛽</span><span>Bombas de combustível · Gasolina 95: ~€1.94/L (junho 2026)</span></div>
-      <div class="info-row"><span class="ii">💊</span><span>Farmácia em Aljezur vila</span></div>
-      <div class="info-row"><span class="ii">🏧</span><span>Bancos e ATM em Aljezur vila</span></div>
-    </div>
-
-    <div class="lbl">Estacionamento nas praias</div>
-    <div class="info-blk">
-      <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Arrifana:</strong> Parque no topo da falésia, pago em junho. Ir antes das 10h.</span></div>
-      <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Amoreira · Monte Clérigo · Odeceixe:</strong> Gratuito.</span></div>
-      <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Lagos / Ponta da Piedade:</strong> Parque Dona Ana. Ir antes das 10h em junho.</span></div>
-    </div>
-
-    <div class="lbl">Cães na praia — regras</div>
-    <div class="info-blk">
-      <div class="info-row"><span class="ii">📋</span><span>Levar boletim de saúde e identificação eletrónica.</span></div>
-      <div class="info-row"><span class="ii">🦮</span><span>Trela obrigatória no acesso e estacionamento.</span></div>
-      <div class="info-row"><span class="ii">💧</span><span>Bebedouro + água fresca. Sol de junho é forte.</span></div>
-      <div class="info-row"><span class="ii">🚫</span><span>Camilo, Dona Ana, Arrifana (concessionadas) — cães proibidos em época balnear.</span></div>
-    </div>
-
-    <div class="lbl">Números úteis</div>
-    <div class="info-blk">
-      <div class="c-row"><div><div class="c-name">O Paulo</div><div class="c-role">Reserva obrigatória</div></div><a class="c-tel" href="tel:282997300">282 997 300</a></div>
-      <div class="c-row"><div><div class="c-name">Surf Rentals Arrifana</div><div class="c-role">Aluguer pranchas</div></div><a class="c-tel" href="tel:963942392">963 942 392</a></div>
-      <div class="c-row"><div><div class="c-name">Altura Steakhouse</div><div class="c-role">Restaurante</div></div><a class="c-tel" href="tel:965162050">965 162 050</a></div>
-      <div class="c-row"><div><div class="c-name">Sea You Surf Café</div><div class="c-role">Café · Arrifana</div></div><a class="c-tel" href="tel:282995082">282 995 082</a></div>
-      <div class="c-row"><div><div class="c-name">Sector B Hamburgueria</div><div class="c-role">Vale da Telha</div></div><a class="c-tel" href="tel:919222387">919 222 387</a></div>
-      <div class="c-row"><div><div class="c-name">Vale da Telha (José)</div><div class="c-role">Restaurante regional</div></div><a class="c-tel" href="tel:282997153">282 997 153</a></div>
-      <div class="c-row"><div><div class="c-name">Mádá Aljezur</div><div class="c-role">Restaurante</div></div><a class="c-tel" href="tel:915581140">915 581 140</a></div>
-      <div class="c-row"><div><div class="c-name">Emergência</div><div class="c-role">112</div></div><a class="c-tel" href="tel:112">Ligar</a></div>
-      <div class="c-row"><div><div class="c-name">SNS 24</div><div class="c-role">Saúde não urgente</div></div><a class="c-tel" href="tel:808242424">808 242 424</a></div>
-    </div>
-
-  </section>
-
+<!-- LOGÍSTICA -->
+<section class="sec" id="tab-logistica">
+  <div class="lbl" style="margin-top:0">Supermercados</div>
+  <div class="info-blk">
+    <div class="info-row"><span class="ii">🛒</span><span><strong style="color:var(--gold)">Intermarché Aljezur</strong> — 7km. Talho, peixaria, tudo. Rec. Carolina.</span></div>
+    <div class="info-row"><span class="ii">🛒</span><span><strong style="color:var(--gold)">Mini-mercado Vale da Telha</strong> — 2km. Para urgências.</span></div>
+  </div>
+  <div class="lbl">Serviços em Aljezur (7km)</div>
+  <div class="info-blk">
+    <div class="info-row"><span class="ii">⛽</span><span>Bombas de combustível · Gasolina 95: ~€1.94/L (junho 2026)</span></div>
+    <div class="info-row"><span class="ii">💊</span><span>Farmácia em Aljezur vila</span></div>
+    <div class="info-row"><span class="ii">🏧</span><span>Bancos e ATM em Aljezur vila</span></div>
+  </div>
+  <div class="lbl">Distâncias a partir de Aljezur</div>
+  <div class="info-blk">
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Sagres</strong> — ~45min (55km)</span></div>
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Lagos</strong> — ~50min (55km)</span></div>
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Portimão / Ferragudo</strong> — ~1h (70km)</span></div>
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Silves</strong> — ~1h (65km)</span></div>
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Albufeira</strong> — ~1h15 (80km)</span></div>
+    <div class="info-row"><span class="ii">🚗</span><span><strong style="color:var(--gold)">Odeceixe</strong> — ~25min (25km)</span></div>
+  </div>
+  <div class="lbl">Estacionamento</div>
+  <div class="info-blk">
+    <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Arrifana:</strong> Pago em época balnear. Ir antes das 10h.</span></div>
+    <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Lagos / Ponta da Piedade:</strong> Parque Dona Ana (pago). Ir antes das 10h.</span></div>
+    <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Praia da Marinha:</strong> Pago em cima da falésia.</span></div>
+    <div class="info-row"><span class="ii">🅿</span><span><strong style="color:var(--gold)">Amoreira · Monte Clérigo · Odeceixe:</strong> Gratuito.</span></div>
+  </div>
+  <div class="lbl">Cães na praia</div>
+  <div class="info-blk">
+    <div class="info-row"><span class="ii">🦮</span><span>Trela obrigatória no acesso e estacionamento.</span></div>
+    <div class="info-row"><span class="ii">💧</span><span>Bebedouro + água fresca. Sol de junho é forte.</span></div>
+    <div class="info-row"><span class="ii">🚫</span><span>Camilo, Dona Ana, Arrifana (concessionadas) — cães proibidos.</span></div>
+    <div class="info-row"><span class="ii">📋</span><span>Levar boletim de saúde e identificação eletrónica.</span></div>
+  </div>
+  <div class="lbl">Números úteis</div>
+  <div class="info-blk">
+    <div class="c-row"><div><div class="c-name">O Paulo</div><div class="c-role">Reserva obrigatória</div></div><a class="c-tel" href="tel:282997300">282 997 300</a></div>
+    <div class="c-row"><div><div class="c-name">Surf Rentals Arrifana</div><div class="c-role">Aluguer pranchas</div></div><a class="c-tel" href="tel:963942392">963 942 392</a></div>
+    <div class="c-row"><div><div class="c-name">Altura Steakhouse</div><div class="c-role">Aljezur</div></div><a class="c-tel" href="tel:965162050">965 162 050</a></div>
+    <div class="c-row"><div><div class="c-name">Sea You Surf Café</div><div class="c-role">Arrifana</div></div><a class="c-tel" href="tel:282995082">282 995 082</a></div>
+    <div class="c-row"><div><div class="c-name">Sector B</div><div class="c-role">Vale da Telha</div></div><a class="c-tel" href="tel:919222387">919 222 387</a></div>
+    <div class="c-row"><div><div class="c-name">Vale da Telha (José)</div><div class="c-role">Regional</div></div><a class="c-tel" href="tel:282997153">282 997 153</a></div>
+    <div class="c-row"><div><div class="c-name">Mádá Aljezur</div><div class="c-role">Restaurante</div></div><a class="c-tel" href="tel:915581140">915 581 140</a></div>
+    <div class="c-row"><div><div class="c-name">Emergência</div><div class="c-role">112</div></div><a class="c-tel" href="tel:112">Ligar</a></div>
+    <div class="c-row"><div><div class="c-name">SNS 24</div><div class="c-role">Saúde</div></div><a class="c-tel" href="tel:808242424">808 242 424</a></div>
+  </div>
+</section>
 </div><!-- #app -->
 
-<!-- ═══════════ MODAL ═══════════ -->
+<!-- MODAL -->
 <div class="overlay" id="overlay" onclick="closeOverlay(event)">
   <div class="modal" id="modal">
     <div class="m-close-bar"><button class="m-close" onclick="closeModal()">×</button></div>
@@ -699,311 +789,149 @@
 </div>
 
 <script>
-// ─── TABS ───────────────────────────────────────────────────────
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
-    document.querySelectorAll('.sec').forEach(x => x.classList.remove('on'));
+// TABS
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.sec').forEach(x=>x.classList.remove('on'));
     t.classList.add('on');
-    document.getElementById('tab-' + t.dataset.tab).classList.add('on');
+    document.getElementById('tab-'+t.dataset.tab).classList.add('on');
   });
 });
 
-// ─── COMBUSTÍVEL ────────────────────────────────────────────────
-function calcFuel() {
-  const c = parseFloat(document.getElementById('f-consumo').value) || 6.5;
-  const p = parseFloat(document.getElementById('f-preco').value) || 1.94;
-  const dist = 270, mins = 165;
-  const litros = (dist * 2 * c) / 100;
-  const custo = litros * p;
-  const h = Math.floor(mins/60), m = mins%60;
-  document.getElementById('fr-dist').textContent = `~${dist} km`;
-  document.getElementById('fr-tempo').textContent = `~${h}h${m}min`;
-  document.getElementById('fr-litros').textContent = `~${litros.toFixed(1)} L`;
-  document.getElementById('fr-custo').textContent = `~${custo.toFixed(0)} €`;
+// FUEL
+function calcFuel(){
+  const c=parseFloat(document.getElementById('f-c').value)||6.5;
+  const p=parseFloat(document.getElementById('f-g').value)||1.94;
+  const dist=270,mins=165;
+  const litros=(dist*2*c)/100,custo=litros*p;
+  const h=Math.floor(mins/60),m=mins%60;
+  document.getElementById('fr-d').textContent='~'+dist+' km';
+  document.getElementById('fr-t').textContent='~'+h+'h'+m+'min';
+  document.getElementById('fr-l').textContent='~'+litros.toFixed(1)+' L';
+  document.getElementById('fr-v').textContent='~'+custo.toFixed(0)+' €';
 }
 calcFuel();
 
-// ─── ITINERÁRIO ─────────────────────────────────────────────────
-function showDay(n) {
-  document.getElementById('itin-idx-view').style.display = 'none';
-  document.getElementById('itin-day-view').style.display = 'block';
-  document.querySelectorAll('.day-block').forEach(d => d.classList.remove('on'));
-  document.getElementById('day-' + n).classList.add('on');
-  document.querySelectorAll('.dnb').forEach((b,i) => b.classList.toggle('on', i===n-1));
-  document.getElementById('tab-itinerario').scrollTop = 0;
+// ITINERÁRIO
+function showDay(n){
+  document.getElementById('itin-idx').style.display='none';
+  document.getElementById('itin-days').style.display='block';
+  document.querySelectorAll('.day-block').forEach(d=>d.classList.remove('on'));
+  document.getElementById('day-'+n).classList.add('on');
+  document.querySelectorAll('.dnb').forEach((b,i)=>b.classList.toggle('on',i===n-1));
+  document.getElementById('tab-itinerario').scrollTop=0;
 }
-function backIdx() {
-  document.getElementById('itin-idx-view').style.display = 'block';
-  document.getElementById('itin-day-view').style.display = 'none';
+function backIdx(){
+  document.getElementById('itin-idx').style.display='block';
+  document.getElementById('itin-days').style.display='none';
 }
 
-// ─── CARD FILTER ────────────────────────────────────────────────
-document.querySelectorAll('#rf .filt').forEach(b => {
-  b.addEventListener('click', () => {
-    document.querySelectorAll('#rf .filt').forEach(x => x.classList.remove('on'));
+// RESTAURANT FILTER
+document.querySelectorAll('#rf .filt').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#rf .filt').forEach(x=>x.classList.remove('on'));
     b.classList.add('on');
-    const f = b.dataset.f;
-    document.querySelectorAll('#rl .card').forEach(c => {
-      c.style.display = (f==='*' || c.dataset.f.includes(f)) ? '' : 'none';
-    });
+    const f=b.dataset.f;
+    document.querySelectorAll('#rl .lbl-zone').forEach(l=>l.style.display='flex');
+    document.querySelectorAll('#rl .card').forEach(c=>{c.style.display=(f==='*'||c.dataset.f===f)?'':'none';});
+    if(f!=='*'){
+      document.querySelectorAll('#rl .lbl-zone').forEach(l=>{
+        let s=l.nextElementSibling,show=false;
+        while(s&&!s.classList.contains('lbl-zone')){if(s.classList.contains('card')&&s.style.display!=='none')show=true;s=s.nextElementSibling;}
+        l.style.display=show?'flex':'none';
+      });
+    }
   });
 });
 
-// ─── MODAL DATA ─────────────────────────────────────────────────
-const MD = {
-  paulo: {
-    name:'O Paulo', cat:'Marisco · Vista falésia · Arrifana',
-    img:'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=700&q=80',
-    desc:'Na falésia sobre a Praia da Arrifana, junto à Fortaleza árabe em ruínas. Vista deslumbrante para o oceano e para a "Agulha" — a rocha icónica. Marisco vivo do dia, cataplana, percebes, tamboril. Uma das melhores experiências gastronómicas do Algarve Ocidental. Recomendado pela Carolina.',
-    cost:{ pp:'~50 €', pp_detail:'prato principal de marisco + bebida', total:'~150 €', pax:3, park:'Parque no topo da falésia (pago em época balnear)' },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> 9:30–00:00 todos os dias'},{i:'📍',t:'<strong>Morada:</strong> Ponte de Arrifana, ~2km da casa'},{i:'📞',t:'<strong>Reserva obrigatória:</strong> <a href="tel:282997300" style="color:var(--gold)">282 997 300</a>'},{i:'★',t:'<strong>Reviews:</strong> 4.4★ Google · 4.0 TripAdvisor · 1350+ opiniões. Vista e localização perfeitas. Esperas longas em pico de época.'},{i:'💡',t:'<strong>Dica:</strong> Pedir mesa com vista para o mar. Ir ao jantar. Cataplana de marisco é o prato de eleição.'}],
-    maps:'https://maps.google.com/?q=O+Paulo+Restaurante+Arrifana+Aljezur', site:'http://restauranteopaulo.com',
-    wa:'O Paulo — Aljezur\nMarisco e vista falésia. Reserva: 282 997 300\n📍 https://maps.google.com/?q=O+Paulo+Restaurante+Arrifana'
-  },
-  seayou: {
-    name:'Sea You Surf Café', cat:'Brunch · Surf café · Arrifana',
-    img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80',
-    desc:'Favorito absoluto de Arrifana. Comida caseira e fresca: açaí bowls, burgers, pancakes, burritos, tostadas de atum, milkshakes. Muitas opções vegan, vegetariana e gluten-free. Esplanada e interior. Domingos com música ao vivo. Também alugam pranchas.',
-    cost:{ pp:'~14 €', pp_detail:'refeição completa + bebida', total:'~42 €', pax:3 },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> Manhã até final de tarde (confirmar no dia)'},{i:'📍',t:'<strong>Morada:</strong> CX Postal 808-A, 8670-111 Praia da Arrifana'},{i:'📞',t:'<strong>Tel:</strong> <a href="tel:282995082" style="color:var(--gold)">282 995 082</a>'},{i:'★',t:'<strong>Reviews:</strong> 4.5★ · favorito da comunidade surf local.'},{i:'💡',t:'<strong>Dica:</strong> Brunch ou almoço. Chegar cedo — enche. Dom: música ao vivo.'},{i:'🏄',t:'<strong>Extra:</strong> Aluguer de pranchas e fatos no local.'}],
-    maps:'https://maps.google.com/?q=Sea+You+Surf+Cafe+Arrifana',
-    wa:'Sea You Surf Café — Arrifana\nBrunch fresco, vibe surf.\n📍 https://maps.google.com/?q=Sea+You+Surf+Cafe+Arrifana'
-  },
-  alecrim: {
-    name:'Alecrim', cat:'Pizza · Café · Aljezur',
-    img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&q=80',
-    desc:'#1 no GastroRanking de Aljezur com 9.1/10 e 407 opiniões. Pizza italiana excelente, lasanha que toda a gente recomenda, bacalhau muito bom. Serviço simpático, preços muito razoáveis. Perfeito para jantar casual em Aljezur.',
-    cost:{ pp:'~14 €', pp_detail:'pizza ou prato + bebida', total:'~42 €', pax:3 },
-    rows:[{i:'📍',t:'<strong>Localização:</strong> Aljezur vila, ~7km da casa'},{i:'★',t:'<strong>Reviews:</strong> 9.1/10 GastroRanking · 407 opiniões. "Melhor lugar para uma pizza depois de caminhada."'},{i:'💡',t:'<strong>Dica:</strong> Pedir lasanha e pizza. Excelente relação qualidade-preço.'}],
-    maps:'https://maps.google.com/?q=Alecrim+Aljezur',
-    wa:'Alecrim — Aljezur\n#1 de Aljezur. Pizza e lasanha.\n📍 https://maps.google.com/?q=Alecrim+Aljezur'
-  },
-  artebianca: {
-    name:'Arte Bianca', cat:'Italiana · Pizza · Aljezur / Vale da Telha',
-    img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80',
-    desc:'Pizza italiana autêntica em forno de pedra. Focaccia, burrata, lasanha fantástica. Duas unidades: Aljezur vila e Vale da Telha (mais perto da casa). Muitas opções vegetarianas. Recomendada pela Carolina.',
-    cost:{ pp:'~18 €', pp_detail:'pizza ou pasta + bebida', total:'~54 €', pax:3 },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> 12:00–23:00'},{i:'📍',t:'<strong>Unidade Vale da Telha:</strong> mais próxima da casa'},{i:'★',t:'<strong>Reviews:</strong> 8.7/10 · 267 opiniões. "Pizza italiana autêntica e excelente."'},{i:'💡',t:'<strong>Dica:</strong> Burrata + focaccia como entrada.'},{i:'🌐',t:'<strong>Site:</strong> artebianca.pt'}],
-    maps:'https://maps.google.com/?q=Arte+Bianca+Vale+da+Telha+Aljezur', site:'https://artebianca.pt',
-    wa:'Arte Bianca — Aljezur\nPizza italiana, focaccia, burrata.\n📍 https://artebianca.pt'
-  },
-  altura: {
-    name:'Altura Steakhouse & Bar', cat:'Carnes biológicas · Steakhouse · Aljezur',
-    img:'https://images.unsplash.com/photo-1546964124-0cce460e9c06?w=700&q=80',
-    desc:'Carnes portuguesas biológicas. Costeletas, tartare de atum, ribs, mixed grill. #8 de 65 em Aljezur, 4.6★ com 130 reviews. Ambiente rústico-moderno. Porções generosas. Serviço atento.',
-    cost:{ pp:'~28 €', pp_detail:'prato de carne + bebida', total:'~84 €', pax:3 },
-    rows:[{i:'📞',t:'<strong>Reserva:</strong> <a href="tel:965162050" style="color:var(--gold)">965 162 050</a>'},{i:'📍',t:'<strong>Morada:</strong> Estrada Nacional 120, Sítio da Aldeia Velha, Aljezur'},{i:'★',t:'<strong>Reviews:</strong> 4.6★ TripAdvisor · "O melhor steakhouse da área."'},{i:'💡',t:'<strong>Dica:</strong> Tartare de atum e costeletas são os destaques. Reservar em junho.'}],
-    maps:'https://maps.google.com/?q=Altura+Steakhouse+Bar+Aljezur',
-    wa:'Altura Steakhouse — Aljezur\nCarnes biológicas.\n📍 https://maps.google.com/?q=Altura+Steakhouse+Bar+Aljezur'
-  },
-  sectorb: {
-    name:'Sector B Hamburgueria', cat:'Burgers artesanais · Vale da Telha',
-    img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80',
-    desc:'Burgers 100% artesanais, sem congelados, ingredientes locais. Mushroom com cebola caramelizada é o mais famoso. Pão caseiro, batata doce frita. #6 de 65 em Aljezur, 4.7★. Esplanada exterior, atmosfera familiar. Muito perto da casa.',
-    cost:{ pp:'~17 €', pp_detail:'burger + batatas + bebida', total:'~51 €', pax:3 },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> 12–15h + 17–22h · Fechado às Terças'},{i:'📞',t:'<strong>Tel:</strong> <a href="tel:919222387" style="color:var(--gold)">919 222 387</a>'},{i:'★',t:'<strong>Reviews:</strong> 4.7★ · "100% recomendado." · #6 de 65 em Aljezur.'},{i:'💡',t:'<strong>Dica:</strong> Chegar antes das 20h — enche muito depois disso.'}],
-    maps:'https://maps.google.com/?q=Sector+B+Hamburgueria+Vale+da+Telha+Aljezur',
-    wa:'Sector B Hamburgueria — Vale da Telha\nBurgers artesanais, #6 de Aljezur.\n📍 https://maps.google.com/?q=Sector+B+Hamburgueria'
-  },
-  barpraia: {
-    name:'Bar da Praia Odeceixe', cat:'Bar · Petiscos · Vista praia · Odeceixe',
-    img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',
-    desc:'Vista direta para a Praia de Odeceixe. Dono Pedro é um anfitrião memorável. Tartare de atum, azeitonas deliciosas, guacamole, caipirinha incrível. 8.8/10 com 391 opiniões. Perfeito para o último almoço da viagem.',
-    cost:{ pp:'~20 €', pp_detail:'petiscos + bebida', total:'~60 €', pax:3 },
-    rows:[{i:'📍',t:'<strong>Localização:</strong> Praia de Odeceixe, ~25km de Aljezur'},{i:'★',t:'<strong>Reviews:</strong> 8.8/10 GastroRanking · "Um bar autêntico com comida excelente. O Pedro é ótimo anfitrião."'},{i:'💡',t:'<strong>Dica:</strong> Tartare de atum + caipirinha do Pedro. Ir depois da praia no Dia 5.'}],
-    maps:'https://maps.google.com/?q=Bar+da+Praia+Odeceixe',
-    wa:'Bar da Praia Odeceixe\nPetiscos, caipirinha, vista praia.\n📍 https://maps.google.com/?q=Bar+da+Praia+Odeceixe'
-  },
-  mada: {
-    name:'Mádá', cat:'Restaurante · Aljezur',
-    img:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80',
-    desc:'Recomendação direta da Carolina. Restaurante local em Aljezur vila.',
-    cost:{ pp:'Preço não disponível', pp_detail:'verificar no local', total:'—', pax:3 },
-    rows:[{i:'📞',t:'<strong>Tel:</strong> <a href="tel:915581140" style="color:var(--gold)">915 581 140</a>'},{i:'📍',t:'<strong>Localização:</strong> Aljezur vila'},{i:'💡',t:'Recomendação da Carolina — confirmar horários antes de ir.'}],
-    maps:'https://maps.google.com/?q=Mada+Aljezur',
-    wa:'Mádá — Aljezur\nRecomendação da Carolina.\n📍 https://maps.google.com/?q=Mada+Aljezur'
-  },
-  jose: {
-    name:'Vale da Telha — José', cat:'Regional · Internacional · Vale da Telha',
-    img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',
-    desc:'Restaurante de cozinha regional e internacional em Vale da Telha, muito perto da casa. Horário amplo — boa opção de backup. Recomendado pela Carolina.',
-    cost:{ pp:'~20 €', pp_detail:'prato + bebida', total:'~60 €', pax:3 },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> 9:00–22:30 · Domingo fechado'},{i:'📞',t:'<strong>Tel:</strong> <a href="tel:282997153" style="color:var(--gold)">282 997 153</a>'},{i:'📍',t:'<strong>Localização:</strong> Vale da Telha, muito perto da casa'}],
-    maps:'https://maps.google.com/?q=Vale+da+Telha+Restaurante+Aljezur',
-    wa:'Vale da Telha (José) — Aljezur\nRegional e internacional.\n📍 https://maps.google.com/?q=Vale+da+Telha+Restaurante+Aljezur'
-  },
-  carriagem: {
-    name:'Praia da Carriagem', cat:'Parque Natural · Dog-friendly · ~15km',
-    img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700&q=80',
-    desc:'Recomendação especial da Carolina para ir com os cães. No coração do Parque Natural. Não concessionada — cães bem-vindos. Rochosa na baixa-mar, nascentes naturais, zona naturista. Ambiente selvagem e intocado.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3, park:'Estacionamento gratuito junto ao acesso' },
-    rows:[{i:'🐾',t:'<strong>Dog-friendly:</strong> Sim. Trela no acesso, soltar no areal.'},{i:'📍',t:'<strong>Localização:</strong> ~15km a norte de Aljezur, sentido Rogil'},{i:'💡',t:'<strong>Dica:</strong> Ir de manhã cedo. Baixa-mar expõe rochas e nascentes. Levar água.'}],
-    maps:'https://maps.google.com/?q=Praia+da+Carriagem+Aljezur',
-    wa:'🐾 Praia da Carriagem — Aljezur\nDog-friendly no Parque Natural.\n📍 https://maps.google.com/?q=Praia+da+Carriagem+Aljezur'
-  },
-  amoreira: {
-    name:'Praia da Amoreira', cat:'Rio + Mar · Dog-friendly · 4km',
-    img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=700&q=80',
-    desc:'Uma das mais especiais do Algarve Ocidental. Rio Aljezur desagua no mar — dois ambientes distintos. Espaço enorme, areia limpa. Os cães adoram correr entre rio e mar. A 4km da casa.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3, park:'Estacionamento gratuito' },
-    rows:[{i:'🐾',t:'<strong>Dog-friendly:</strong> Sim. Espaço imenso, cães livres no rio.'},{i:'📍',t:'<strong>Localização:</strong> ~4km da casa'},{i:'💡',t:'<strong>Dica:</strong> Ir de manhã antes do vento. Rio mais calmo — ideal para cães.'}],
-    maps:'https://maps.google.com/?q=Praia+da+Amoreira+Aljezur',
-    wa:'🐾 Praia da Amoreira — Aljezur\nRio + mar, espaço imenso.\n📍 https://maps.google.com/?q=Praia+da+Amoreira+Aljezur'
-  },
-  arrifana: {
-    name:'Praia da Arrifana', cat:'Surf · Falésia · 2km de casa',
-    img:'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=700&q=80',
-    desc:'A praia icónica da zona. Falésia de xisto negro, Fortaleza árabe do século XVIII em ruínas no topo, ondas de surf consistentes. O miradouro oferece uma das vistas mais impressionantes da Costa Vicentina.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3, park:'Estacionamento pago no topo em época balnear (~€2/h)' },
-    rows:[{i:'📍',t:'<strong>Localização:</strong> ~2km da casa. Abaixo do restaurante O Paulo.'},{i:'🏄',t:'<strong>Surf:</strong> Aluguer de pranchas. Tel: 963 942 392'},{i:'💡',t:'<strong>Dica:</strong> Subir à Fortaleza para a vista — especialmente ao pôr do sol.'}],
-    maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',
-    wa:'🌊 Praia da Arrifana — Aljezur\nA mais icónica da Costa Vicentina.\n📍 https://maps.google.com/?q=Praia+da+Arrifana+Aljezur'
-  },
-  monteclerigo: {
-    name:'Praia de Monte Clérigo', cat:'Família · Dog-friendly · ~6km',
-    img:'https://images.unsplash.com/photo-1490122417551-6ee9691429d0?w=700&q=80',
-    desc:'Praia extensa e acessível, sem ondas grandes. Boa para o primeiro dia e para os cães. Restaurante com comida portuguesa típica junto à praia. Dog-friendly.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3, park:'Estacionamento gratuito' },
-    rows:[{i:'🐾',t:'<strong>Dog-friendly:</strong> Sim — não concessionada.'},{i:'📍',t:'<strong>Localização:</strong> ~6km da casa'},{i:'💡',t:'<strong>Dica:</strong> Boa para final de tarde no primeiro dia — luz bonita.'}],
-    maps:'https://maps.google.com/?q=Praia+Monte+Clerigo+Aljezur',
-    wa:'🐾 Praia Monte Clérigo — Aljezur\nDog-friendly, fácil acesso.\n📍 https://maps.google.com/?q=Praia+Monte+Clerigo+Aljezur'
-  },
-  odeceixe: {
-    name:'Praia de Odeceixe', cat:'Rio + Mar · Dog-friendly · ~25km',
-    img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=700&q=80',
-    desc:'Absolutamente singular: Rio Seixe de um lado, Atlântico do outro. Os cães adoram o rio calmo. Aldeia de Odeceixe em cima. Perfeita para encerrar a viagem — última caminhada sem pressa.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3, park:'Estacionamento gratuito no topo, descer a pé' },
-    rows:[{i:'🐾',t:'<strong>Dog-friendly:</strong> Sim. Rio calmo ideal para cães.'},{i:'📍',t:'<strong>Localização:</strong> ~25km a norte de Aljezur'},{i:'💡',t:'<strong>Dica:</strong> Ir de manhã no Dia 5. Almoçar no Bar da Praia depois.'}],
-    maps:'https://maps.google.com/?q=Praia+de+Odeceixe',
-    wa:'🐾 Praia de Odeceixe\nRio + mar. Dog-friendly.\n📍 https://maps.google.com/?q=Praia+de+Odeceixe'
-  },
-  arrifanabottours: {
-    name:'Arrifana Boat Tours', cat:'Passeio de barco · Atividade',
-    img:'https://images.unsplash.com/photo-1527004013197-933b3b6aebc4?w=700&q=80',
-    desc:'Passeio de barco pelas grutas, arcos e formações rochosas da costa selvagem de Arrifana. Vista única das falésias e da Fortaleza a partir do mar.',
-    cost:{ pp:'Preço não disponível', pp_detail:'contactar diretamente', total:'—', pax:3 },
-    rows:[{i:'📍',t:'<strong>Partida:</strong> Praia da Arrifana'},{i:'💡',t:'<strong>Reserva:</strong> Contactar na praia ou pedir à Carolina.'}],
-    maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',
-    wa:'⛵ Arrifana Boat Tours\nGrutas e falésias selvagens.\n📍 Praia da Arrifana'
-  },
-  surf: {
-    name:'Surf Rentals Arrifana', cat:'Surf · Aluguer · Arrifana',
-    img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=700&q=80',
-    desc:'Aluguer de pranchas e fatos de surf na Praia da Arrifana. Onda consistente, boa para vários níveis. Também disponível no Sea You Surf Café.',
-    cost:{ pp:'~20–30 €', pp_detail:'prancha + fato por dia', total:'~60–90 €', pax:3 },
-    rows:[{i:'📞',t:'<strong>Tel:</strong> <a href="tel:963942392" style="color:var(--gold)">963 942 392</a>'},{i:'📍',t:'<strong>Localização:</strong> Praia da Arrifana, ~2km da casa'}],
-    maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',
-    wa:'🏄 Surf Rentals Arrifana · Tel: 963 942 392'
-  },
-  rotavicentina: {
-    name:'Trilho dos Pescadores', cat:'Caminhada · Rota Vicentina · Dog-friendly',
-    img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',
-    desc:'Parte da Rota Vicentina — 226km da costa selvagem. O troço Amoreira–Monte Clérigo (~4km) é fácil, bonito e dog-friendly. Vista oceânica constante. Sinalizado.',
-    cost:{ pp:'Grátis', pp_detail:'percurso livre', total:'Grátis', pax:3 },
-    rows:[{i:'🐾',t:'<strong>Cães:</strong> Permitidos com trela.'},{i:'💡',t:'<strong>Dica:</strong> Troço Amoreira–Monte Clérigo (~4km, ~2h) — fácil e muito bonito.'},{i:'🌐',t:'rotavicentina.com/trilho-dos-pescadores'}],
-    maps:'https://maps.google.com/?q=Praia+da+Amoreira+Aljezur', site:'https://rotavicentina.com/trilho-dos-pescadores/',
-    wa:'🥾 Trilho dos Pescadores\nFalésias e vista oceânica. Dog-friendly.'
-  },
-  castelo: {
-    name:'Castelo de Aljezur', cat:'História · Medieval · Aljezur',
-    img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',
-    desc:'Castelo mouro do século X, reconquistado em 1249. Vista sobre a vila e o vale. Visita livre e gratuita. Combinar com jantar em Aljezur ao final da tarde.',
-    cost:{ pp:'Grátis', pp_detail:'entrada livre', total:'Grátis', pax:3 },
-    rows:[{i:'💶',t:'<strong>Entrada:</strong> Gratuita'},{i:'📍',t:'<strong>Localização:</strong> Aljezur vila, ~7km'},{i:'💡',t:'<strong>Dica:</strong> Fazer ao final da tarde — combinar com jantar em Aljezur.'}],
-    maps:'https://maps.google.com/?q=Castelo+de+Aljezur',
-    wa:'🏰 Castelo de Aljezur\nCastelo mouro, entrada gratuita.\n📍 https://maps.google.com/?q=Castelo+de+Aljezur'
-  },
-  equitacao: {
-    name:'Equitação — Costa Vicentina', cat:'Natureza · Atividade · Parque Natural',
-    img:'https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=700&q=80',
-    desc:'Passeios a cavalo pelas falésias, matas e trilhos do Parque Natural. Horse Adventure Tours é a empresa referência na zona de Aljezur.',
-    cost:{ pp:'Preço não disponível', pp_detail:'contactar Horse Adventure Tours', total:'—', pax:3 },
-    rows:[{i:'💡',t:'<strong>Reserva:</strong> Horse Adventure Tours — pesquisar em Aljezur'},{i:'📍',t:'<strong>Zona:</strong> Aljezur e arredores'}],
-    maps:'https://maps.google.com/?q=Horse+Adventure+Tours+Aljezur',
-    wa:'🐴 Equitação — Costa Vicentina\nHorse Adventure Tours · Aljezur'
-  },
-  sagres: {
-    name:'Fortaleza de Sagres', cat:'História · Sagres · ~45min de carro',
-    img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',
-    desc:'A Fortaleza do Infante D. Henrique, onde se planeou a Era dos Descobrimentos. A Rosa dos Ventos medieval gravada no chão. Pátio enorme com vista mar. Museu e loja.',
-    cost:{ pp:'3 €', pp_detail:'bilhete de entrada', total:'9 €', pax:3, park:'Estacionamento gratuito junto à entrada' },
-    rows:[{i:'⏰',t:'<strong>Horário:</strong> 9:30–20:00 (jun–set)'},{i:'📍',t:'<strong>Localização:</strong> Sagres, ~45min de Aljezur'},{i:'💡',t:'<strong>Dica:</strong> Visita de 30–45min. Seguir logo para o Cabo de São Vicente.'}],
-    maps:'https://maps.google.com/?q=Fortaleza+de+Sagres',
-    wa:'🏰 Fortaleza de Sagres · €3\n📍 https://maps.google.com/?q=Fortaleza+de+Sagres'
-  },
-  cabosv: {
-    name:'Cabo de São Vicente', cat:'Pôr do sol · Fim do Mundo · ~55km',
-    img:'https://images.unsplash.com/photo-1478827536114-da961b7f86d2?w=700&q=80',
-    desc:'O ponto mais a sudoeste da Europa. Farol mais potente da Europa. Em junho o sol poente às ~21:00 mergulha diretamente no Atlântico. Centenas de pessoas reúnem-se — e applaudem quando o sol desaparece. É imperdível.',
-    cost:{ pp:'Grátis', pp_detail:'acesso livre', total:'Grátis', pax:3, park:'Estacionamento gratuito junto ao farol' },
-    rows:[{i:'⏰',t:'<strong>Pôr do sol junho:</strong> ~21:00. Chegar às 19:30 para lugar.'},{i:'📍',t:'<strong>Localização:</strong> ~55km de Aljezur, ~1h de carro'},{i:'💡',t:'<strong>Dica:</strong> Levar camisola — vento muito forte. O momento da viagem — ir no Dia 3 com a Clara.'}],
-    maps:'https://maps.google.com/?q=Cabo+de+Sao+Vicente+Sagres',
-    wa:'🌅 Cabo de São Vicente\nO fim do mundo. Entrada gratuita.\n📍 https://maps.google.com/?q=Cabo+de+Sao+Vicente+Sagres'
-  },
-  lagosbottours: {
-    name:'Boat Tour Ponta da Piedade', cat:'Passeio de barco · Marina Lagos · 75min',
-    img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700&q=80',
-    desc:'Uma das experiências mais impressionantes do Algarve. Barco pequeno pelas grutas, arcos e formações rochosas — a Catedral, a Cozinha, o Elefante. Vista das praias Dona Ana e Camilo a partir do mar.',
-    cost:{ pp:'~22 €', pp_detail:'bilhete boat tour (75min)', total:'~66 €', pax:3 },
-    rows:[{i:'⏰',t:'<strong>Duração:</strong> 75 minutos'},{i:'📍',t:'<strong>Partida:</strong> Marina de Lagos'},{i:'💡',t:'<strong>Dica:</strong> Reservar antes em junho — esgota. lagosboattours.com'}],
-    maps:'https://maps.google.com/?q=Marina+de+Lagos+Portugal', site:'https://lagosboattours.com',
-    wa:'⚓ Boat Tour Ponta da Piedade — Lagos\nGrutas incríveis. ~€22/pp.\n📍 Marina de Lagos'
-  },
-  pontapiedade: {
-    name:'Ponta da Piedade — a pé', cat:'Natureza · Boardwalk · Lagos',
-    img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',
-    desc:'Boardwalk entre Praia Dona Ana e Ponta da Piedade. Falésias douradas, coves, arcos naturais. A Praia do Camilo com a escadaria de 227 degraus é icónica.',
-    cost:{ pp:'Grátis', pp_detail:'percurso livre', total:'Grátis', pax:3, park:'Parque Dona Ana, Lagos (pago em junho)' },
-    rows:[{i:'📍',t:'<strong>Início:</strong> Parque Dona Ana, Lagos'},{i:'💡',t:'<strong>Dica:</strong> Ir antes das 10h — calor e multidão depois disso.'},{i:'🐾',t:'<strong>Cães:</strong> Permitidos no percurso. Proibidos nas praias concessionadas.'}],
-    maps:'https://maps.google.com/?q=Ponta+da+Piedade+Lagos+Portugal',
-    wa:'🪨 Ponta da Piedade — Lagos\nFalésias douradas, gratuito.\n📍 https://maps.google.com/?q=Ponta+da+Piedade+Lagos'
-  },
+// PRAIA FILTER
+document.querySelectorAll('#pf .filt').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('#pf .filt').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const f=b.dataset.pf;
+    document.querySelectorAll('#pl .lbl-zone').forEach(l=>l.style.display='flex');
+    document.querySelectorAll('#pl .card').forEach(c=>{c.style.display=(f==='*'||c.dataset.pf.includes(f))?'':'none';});
+    if(f!=='*'){
+      document.querySelectorAll('#pl .lbl-zone').forEach(l=>{
+        let s=l.nextElementSibling,show=false;
+        while(s&&!s.classList.contains('lbl-zone')){if(s.classList.contains('card')&&s.style.display!=='none')show=true;s=s.nextElementSibling;}
+        l.style.display=show?'flex':'none';
+      });
+    }
+  });
+});
+
+// MODAL DATA
+const MD={
+  paulo:{name:'O Paulo',cat:'Marisco · Vista falésia · Arrifana',img:'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=700&q=80',desc:'Na falésia sobre a Praia da Arrifana, junto à Fortaleza árabe. Vista deslumbrante para o oceano e a Agulha. Marisco vivo do dia, cataplana, percebes. O restaurante de eleição da zona.',cost:{pp:'~50 €',det:'prato de marisco + bebida',tot:'~150 €',park:'Parque no topo da falésia (pago em época balnear)'},rows:[{i:'⏰',t:'<strong>Horário:</strong> 9:30–00:00 todos os dias'},{i:'📞',t:'<strong>Reserva obrig.:</strong> <a href="tel:282997300" style="color:var(--gold)">282 997 300</a>'},{i:'★',t:'<strong>Reviews:</strong> 4.4★ Google · 1350+ opiniões.'},{i:'💡',t:'<strong>Dica:</strong> Pedir mesa com vista. Cataplana de marisco é o prato de eleição.'}],maps:'https://maps.google.com/?q=O+Paulo+Arrifana+Aljezur',site:'http://restauranteopaulo.com',wa:'O Paulo — Aljezur\nMarisco e vista falésia. Tel: 282 997 300'},
+  seayou:{name:'Sea You Surf Café',cat:'Brunch · Surf café · Arrifana',img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=700&q=80',desc:'Favorito absoluto de Arrifana. Açaí bowls, burgers, pancakes, burritos, tostadas de atum. Muitas opções vegan/GF. Domingos com música ao vivo.',cost:{pp:'~14 €',det:'refeição + bebida',tot:'~42 €'},rows:[{i:'⏰',t:'<strong>Horário:</strong> Manhã até final de tarde'},{i:'📞',t:'<strong>Tel:</strong> <a href="tel:282995082" style="color:var(--gold)">282 995 082</a>'},{i:'💡',t:'Brunch ou almoço. Dom: música ao vivo.'}],maps:'https://maps.google.com/?q=Sea+You+Surf+Cafe+Arrifana',wa:'Sea You — Arrifana\nBrunch fresco, vibe surf.'},
+  alecrim:{name:'Alecrim',cat:'Pizza · Café · Aljezur',img:'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=700&q=80',desc:'#1 GastroRanking Aljezur com 9.1/10 e 407 opiniões. Pizza italiana excelente, lasanha que toda a gente recomenda. Preços muito razoáveis.',cost:{pp:'~14 €',det:'pizza ou prato + bebida',tot:'~42 €'},rows:[{i:'★',t:'<strong>Reviews:</strong> 9.1/10 · 407 opiniões.'},{i:'💡',t:'Pedir lasanha e pizza.'}],maps:'https://maps.google.com/?q=Alecrim+Aljezur',wa:'Alecrim — Aljezur\n#1 de Aljezur.'},
+  altura:{name:'Altura Steakhouse & Bar',cat:'Carnes biológicas · Aljezur',img:'https://images.unsplash.com/photo-1546964124-0cce460e9c06?w=700&q=80',desc:'Carnes portuguesas biológicas. Costeletas, tartare de atum, ribs. #8 de 65 em Aljezur. Ambiente rústico-moderno, porções generosas.',cost:{pp:'~28 €',det:'prato de carne + bebida',tot:'~84 €'},rows:[{i:'📞',t:'<strong>Tel:</strong> <a href="tel:965162050" style="color:var(--gold)">965 162 050</a>'},{i:'★',t:'<strong>Reviews:</strong> 4.6★ · "O melhor steakhouse da área."'}],maps:'https://maps.google.com/?q=Altura+Steakhouse+Aljezur',wa:'Altura Steakhouse — Aljezur\nCarnes biológicas.'},
+  sectorb:{name:'Sector B Hamburgueria',cat:'Burgers artesanais · Vale da Telha',img:'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80',desc:'Burgers 100% artesanais, sem congelados. Mushroom com cebola caramelizada é o mais famoso. #6 de 65 em Aljezur, 4.7★.',cost:{pp:'~17 €',det:'burger + batatas + bebida',tot:'~51 €'},rows:[{i:'⏰',t:'12–15h + 17–22h · Fechado Terças'},{i:'📞',t:'<a href="tel:919222387" style="color:var(--gold)">919 222 387</a>'},{i:'💡',t:'Chegar antes das 20h — enche muito.'}],maps:'https://maps.google.com/?q=Sector+B+Vale+da+Telha',wa:'Sector B — Vale da Telha\nBurgers artesanais.'},
+  artebianca:{name:'Arte Bianca',cat:'Italiana · Aljezur / Vale da Telha',img:'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=700&q=80',desc:'Pizza italiana autêntica em forno de pedra. Focaccia, burrata, lasanha. Duas unidades. Muitas opções vegetarianas.',cost:{pp:'~18 €',det:'pizza + bebida',tot:'~54 €'},rows:[{i:'⏰',t:'12:00–23:00'},{i:'🌐',t:'artebianca.pt'}],maps:'https://maps.google.com/?q=Arte+Bianca+Aljezur',site:'https://artebianca.pt',wa:'Arte Bianca — Aljezur\nPizza italiana.'},
+  barpraia:{name:'Bar da Praia Odeceixe',cat:'Bar · Petiscos · Odeceixe',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Vista direta para a Praia de Odeceixe. Dono Pedro é anfitrião memorável. Tartare de atum, caipirinha incrível. 8.8/10 com 391 opiniões.',cost:{pp:'~20 €',det:'petiscos + bebida',tot:'~60 €'},rows:[{i:'💡',t:'Tartare de atum + caipirinha do Pedro. Ir depois da praia.'}],maps:'https://maps.google.com/?q=Bar+da+Praia+Odeceixe',wa:'Bar da Praia Odeceixe\nPetiscos e caipirinha com vista.'},
+  retido:{name:'Retiro do Pescador',cat:'Marisco · Peixe fresco · Sagres',img:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&q=80',desc:'O melhor marisco de Sagres. Ambiente familiar, peixe do dia grelhado na perfeição. Cheio de locais — a melhor prova de qualidade. Esgota sempre.',cost:{pp:'~30 €',det:'peixe/marisco + bebida',tot:'~90 €'},rows:[{i:'📍',t:'Estrada Nacional 268, Sagres'},{i:'★',t:'4.5★ · 1300+ opiniões.'},{i:'💡',t:'Escolher o peixe fresco antes de sentar.'}],maps:'https://maps.google.com/?q=Retiro+do+Pescador+Sagres',site:'https://www.retirodopescador.com',wa:'Retiro do Pescador — Sagres\nO melhor marisco de Sagres.'},
+  terra:{name:'Terra Restaurante',cat:'Italiano-Português · Vista Beliche · Sagres',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Frente à Praia de Beliche, caminho para o Cabo de São Vicente. Chef italiano, fusão com portuguesa. Vista incrível. Perfeito para jantar após o pôr do sol.',cost:{pp:'~28 €',det:'prato + bebida',tot:'~84 €'},rows:[{i:'📍',t:'Curva do Beliche, aldeamento São Vicente, Sagres'},{i:'★',t:'4.6★ · 867 opiniões. "Favorito em Sagres."'},{i:'💡',t:'Reservar via TripAdvisor. Ir ao jantar após o Cabo.'}],maps:'https://maps.google.com/?q=Terra+Restaurante+Sagres',wa:'Terra Restaurante — Sagres\nItaliano-Português frente ao Beliche.'},
+  nortada:{name:'Nortada',cat:'Bar · Vista marina · Sagres',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Vista para o porto de Sagres. Esplanada grande, ambiente descontraído. Boa seleção de comida simples. Perfeito para um fim de tarde.',cost:{pp:'~18 €',det:'refeição ligeira + bebida',tot:'~54 €'},rows:[{i:'📍',t:'Avenida Infante Dom Henrique, Sagres'}],maps:'https://maps.google.com/?q=Nortada+Sagres',wa:'Nortada — Sagres\nBar com vista marina.'},
+  ocamilo:{name:'O Camilo',cat:'Peixe grelhado · Vista falésia · Lagos',img:'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=700&q=80',desc:'Mesmo sobre a Praia do Camilo. Peixe fresco grelhado a carvão, vista de cortar a respiração sobre as falésias douradas de Lagos.',cost:{pp:'~35 €',det:'peixe grelhado + bebida',tot:'~105 €',park:'Estacionamento Dona Ana (pago)'},rows:[{i:'💡',t:'Reservar mesa com vista. Ir ao almoço para melhor luz.'}],maps:'https://maps.google.com/?q=O+Camilo+Lagos',wa:'O Camilo — Lagos\nPeixe grelhado sobre a Praia do Camilo.'},
+  casadoprego:{name:'Casa do Prego',cat:'Petiscos modernos · Rooftop · Lagos',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Rooftop no centro histórico de Lagos. Petiscos criativos, steaks, cocktails, vistas do pôr do sol. Vibe jovem e animada — perfeito para a Clara.',cost:{pp:'~22 €',det:'petiscos + bebida',tot:'~66 €'},rows:[{i:'📍',t:'Rua Lançarote de Freitas 18, 1º Andar, Lagos'},{i:'💡',t:'Reservar para jantar. Pedir sugestões de vinho ao proprietário.'}],maps:'https://maps.google.com/?q=Casa+do+Prego+Lagos',wa:'Casa do Prego — Lagos\nRooftop, petiscos modernos.'},
+  alsud:{name:'Al Sud ★ Michelin',cat:'Fine Dining · Estrela Michelin · Lagos',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'A única estrela Michelin da zona oeste do Algarve. Chef Luis Anjos. Tasting menu multi-momentos, ingredientes do mar e serra. Vista panorâmica sobre a Baía de Lagos.',cost:{pp:'~130 €',det:'menu de degustação',tot:'~400 €'},rows:[{i:'📍',t:'Palmares Ocean Living & Golf, Lagos'},{i:'★',t:'Estrela Michelin · experiência de 3h+'},{i:'💡',t:'Reservar dias a semanas antes.'}],maps:'https://maps.google.com/?q=Al+Sud+Palmares+Lagos',wa:'Al Sud ★ Michelin — Lagos\nFine dining, tasting menu.'},
+  reidasprais:{name:'Rei das Praias',cat:'Marisco · Praia dos Caneiros · Ferragudo',img:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=700&q=80',desc:'Referência em Ferragudo desde 1976. Na Praia dos Caneiros, vista para o mar. Cataplana de peixe e marisco, caldeirada de rascasso.',cost:{pp:'~35 €',det:'cataplana/peixe + bebida',tot:'~105 €',park:'Gratuito junto'},rows:[{i:'📍',t:'Praia dos Caneiros, Ferragudo'},{i:'★',t:'4.4★ · Referência desde 1976.'},{i:'💡',t:'Reservar. Pedir cataplana de marisco para 2.'}],maps:'https://maps.google.com/?q=Rei+das+Praias+Ferragudo',wa:'Rei das Praias — Ferragudo\nRef. desde 1976.'},
+  bordadocais:{name:'Borda do Cais',cat:'Marisco · Rio Arade · Ferragudo',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Margem do rio Arade em Ferragudo, vista para Portimão. Peixe fresco, marisco. Aldeia de pescadores muito autêntica.',cost:{pp:'~28 €',det:'peixe/petiscos + bebida',tot:'~84 €'},rows:[{i:'📍',t:'Rua Vasco da Gama, Ferragudo'}],maps:'https://maps.google.com/?q=Borda+do+Cais+Ferragudo',wa:'Borda do Cais — Ferragudo\nMarisco e vista rio.'},
+  tabvicentina:{name:'Taberna Vicentina',cat:'Portuguesa · Centro histórico · Albufeira',img:'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=700&q=80',desc:'No centro histórico de Albufeira. Polvo à lagareiro, bacalhau com grão, arroz de marisco. Cozinha algarvia autêntica, ambiente honesto.',cost:{pp:'~22 €',det:'prato português + bebida',tot:'~66 €'},rows:[{i:'⏰',t:'12h–22:30 todos os dias'},{i:'💡',t:'Polvo à lagareiro e arroz de marisco são os destaques.'}],maps:'https://maps.google.com/?q=Taberna+Vicentina+Albufeira',wa:'Taberna Vicentina — Albufeira\nCozinha algarvia autêntica.'},
+  staar:{name:'Staar Restaurante',cat:'Contemporâneo · Vista mar · Albufeira',img:'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=700&q=80',desc:'Menu contemporâneo com raízes algarvias. Bacalhau à Brás e tamboril cremoso são pratos de eleição. Vista para o mar.',cost:{pp:'~30 €',det:'prato + bebida',tot:'~90 €'},rows:[{i:'💡',t:'Reservar — especialmente fins de semana de junho.'}],maps:'https://maps.google.com/?q=Staar+Restaurante+Albufeira',wa:'Staar — Albufeira\nContemporâneo, vista mar.'},
+  carriagem:{name:'Praia da Carriagem',cat:'Parque Natural · Dog-friendly · ~15km',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700&q=80',desc:'Recomendação especial da Carolina. No Parque Natural, não concessionada. Rochosa na baixa-mar, nascentes naturais, ambiente selvagem.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Estacionamento gratuito'},rows:[{i:'🐾',t:'Dog-friendly. Trela no acesso.'},{i:'💡',t:'Ir de manhã cedo. Levar água.'}],maps:'https://maps.google.com/?q=Praia+da+Carriagem+Aljezur',wa:'🐾 Praia da Carriagem\nDog-friendly no Parque Natural.'},
+  amoreira:{name:'Praia da Amoreira',cat:'Rio + Mar · Dog-friendly · 4km',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=700&q=80',desc:'Rio Aljezur desagua no mar. Espaço enorme, areia limpa. Os cães adoram correr entre rio e mar. 4km da casa.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Gratuito'},rows:[{i:'🐾',t:'Dog-friendly. Rio calmo ideal.'},{i:'💡',t:'Ir de manhã antes do vento.'}],maps:'https://maps.google.com/?q=Praia+da+Amoreira+Aljezur',wa:'🐾 Praia da Amoreira\nRio + mar, espaço imenso.'},
+  arrifana:{name:'Praia da Arrifana',cat:'Surf · Falésia · 2km',img:'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=700&q=80',desc:'A praia icónica da zona. Falésia de xisto negro, Fortaleza árabe do século XVIII em ruínas. Miradouro extraordinário.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Pago no topo em época balnear'},rows:[{i:'🏄',t:'Surf: Tel 963 942 392'},{i:'💡',t:'Subir à Fortaleza para a vista ao pôr do sol.'}],maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',wa:'🌊 Praia da Arrifana\nA mais icónica da Costa Vicentina.'},
+  monteclerigo:{name:'Praia de Monte Clérigo',cat:'Família · Dog-friendly · ~6km',img:'https://images.unsplash.com/photo-1490122417551-6ee9691429d0?w=700&q=80',desc:'Praia extensa e acessível. Boa para o primeiro dia e para os cães. Dog-friendly.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Gratuito'},rows:[{i:'🐾',t:'Dog-friendly.'}],maps:'https://maps.google.com/?q=Praia+Monte+Clerigo+Aljezur',wa:'🐾 Monte Clérigo\nDog-friendly.'},
+  odeceixe:{name:'Praia de Odeceixe',cat:'Rio + Mar · Dog-friendly · ~25km',img:'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=700&q=80',desc:'Rio Seixe + Atlântico — única em Portugal. Cães adoram o rio calmo. Perfeita para encerrar a viagem.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Gratuito no topo'},rows:[{i:'🐾',t:'Dog-friendly. Rio calmo.'}],maps:'https://maps.google.com/?q=Praia+de+Odeceixe',wa:'🐾 Praia de Odeceixe\nRio + mar. Dog-friendly.'},
+  camilo:{name:'Praia do Camilo',cat:'Icónica · Lagos',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',desc:'Escadaria de 227 degraus, arco natural, falésia dourada. Uma das mais fotografadas do Algarve.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Pago perto'},rows:[{i:'💡',t:'Ir de manhã. Estacionamento enche rápido.'},{i:'🚫',t:'Cães não permitidos.'}],maps:'https://maps.google.com/?q=Praia+do+Camilo+Lagos',wa:'🌊 Praia do Camilo — Lagos\n227 degraus icónicos.'},
+  donaana:{name:'Praia Dona Ana',cat:'Bandeira Azul · Lagos',img:'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=700&q=80',desc:'Grande, infraestrutura completa, falésias. Ponto de partida para o boardwalk da Ponta da Piedade.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Parque grande (pago)'},rows:[{i:'🚫',t:'Cães não permitidos.'}],maps:'https://maps.google.com/?q=Praia+Dona+Ana+Lagos',wa:'🌊 Praia Dona Ana — Lagos.'},
+  marinha:{name:'Praia da Marinha',cat:'Top mundial · Arcos naturais · Lagoa',img:'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=700&q=80',desc:'Considerada uma das mais bonitas do mundo. Arcos naturais duplos, águas cristalinas. Início do trilho dos 7 Vales Suspensos.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis',park:'Pago em cima da falésia'},rows:[{i:'💡',t:'Ir de manhã cedo. Combinar com boat tour Benagil.'}],maps:'https://maps.google.com/?q=Praia+da+Marinha+Lagoa',wa:'🏆 Praia da Marinha — Lagoa\nUma das mais bonitas do mundo.'},
+  benagil_praia:{name:'Gruta de Benagil',cat:'Boat tour obrigatório · Lagoa',img:'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?w=700&q=80',desc:'A gruta mais famosa do Algarve. Nadar até à gruta proibido desde 2025. Acesso apenas de barco com operadores licenciados.',cost:{pp:'~28 €',det:'boat tour (~2h)',tot:'~84 €'},rows:[{i:'💡',t:'Partir de Portimão ou Carvoeiro. Reservar antes.'}],maps:'https://maps.google.com/?q=Praia+de+Benagil',wa:'⛵ Grutas de Benagil\nApenas de barco. ~€28/pp.'},
+  arrifanabottours:{name:'Arrifana Boat Tours',cat:'Passeio de barco · Arrifana',img:'https://images.unsplash.com/photo-1527004013197-933b3b6aebc4?w=700&q=80',desc:'Passeio de barco pelas grutas, arcos e formações rochosas da costa selvagem de Arrifana.',cost:{pp:'Contactar',det:'pedir à Carolina',tot:'—'},rows:[{i:'💡',t:'Contactar na praia ou pedir à Carolina.'}],maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',wa:'⛵ Arrifana Boat Tours\nGrutas e falésias selvagens.'},
+  surf:{name:'Surf Rentals Arrifana',cat:'Surf · Aluguer · Arrifana',img:'https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=700&q=80',desc:'Aluguer de pranchas e fatos de surf na Praia da Arrifana.',cost:{pp:'~20–30 €',det:'prancha + fato por dia',tot:'~60–90 €'},rows:[{i:'📞',t:'<a href="tel:963942392" style="color:var(--gold)">963 942 392</a>'}],maps:'https://maps.google.com/?q=Praia+da+Arrifana+Aljezur',wa:'🏄 Surf Rentals Arrifana\nTel: 963 942 392'},
+  rotavicentina:{name:'Trilho dos Pescadores',cat:'Caminhada · Rota Vicentina · Dog-friendly',img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',desc:'Troço Amoreira–Monte Clérigo (~4km). Fácil e bonito, dog-friendly. Vista oceânica constante.',cost:{pp:'Grátis',det:'percurso livre',tot:'Grátis'},rows:[{i:'🐾',t:'Dog-friendly com trela.'},{i:'🌐',t:'rotavicentina.com'}],maps:'https://maps.google.com/?q=Praia+da+Amoreira+Aljezur',site:'https://rotavicentina.com/trilho-dos-pescadores/',wa:'🥾 Trilho dos Pescadores\nDog-friendly.'},
+  castelo:{name:'Castelo de Aljezur',cat:'História · Medieval · Aljezur',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'Castelo mouro do século X. Visita livre e gratuita. Vista sobre a vila e o vale.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis'},rows:[{i:'💡',t:'Combinar com jantar em Aljezur.'}],maps:'https://maps.google.com/?q=Castelo+de+Aljezur',wa:'🏰 Castelo de Aljezur\nGratuito.'},
+  sagres_fort:{name:'Fortaleza de Sagres',cat:'História · Sagres',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'Fortaleza do Infante D. Henrique. Rosa dos ventos medieval gravada no chão. Pátio enorme com vista mar.',cost:{pp:'3 €',det:'bilhete entrada',tot:'9 €',park:'Gratuito'},rows:[{i:'⏰',t:'9:30–20:00 (jun–set)'},{i:'💡',t:'30–45min. Seguir para o Cabo.'}],maps:'https://maps.google.com/?q=Fortaleza+de+Sagres',wa:'🏰 Fortaleza de Sagres · €3'},
+  cabosv:{name:'Cabo de São Vicente',cat:'Pôr do sol · Fim do Mundo · ~55km',img:'https://images.unsplash.com/photo-1478827536114-da961b7f86d2?w=700&q=80',desc:'O ponto mais a sudoeste da Europa. Em junho o sol poente às ~21:00 mergulha diretamente no Atlântico. Toda a gente aplaude.',cost:{pp:'Grátis',det:'acesso livre',tot:'Grátis',park:'Gratuito junto ao farol'},rows:[{i:'⏰',t:'Pôr do sol junho: ~21:00. Chegar às 19:30.'},{i:'💡',t:'Levar camisola — vento muito forte.'}],maps:'https://maps.google.com/?q=Cabo+de+Sao+Vicente+Sagres',wa:'🌅 Cabo de São Vicente\nO fim do mundo. Gratuito.'},
+  praiatonel:{name:'Praia do Tonel',cat:'Surf · Selvagem · Sagres',img:'https://images.unsplash.com/photo-1476673160081-cf065607f449?w=700&q=80',desc:'Melhor praia de surf de Sagres. Falésia imponente, ondas consistentes, ambiente selvagem. Dog-friendly.',cost:{pp:'Grátis',det:'entrada livre',tot:'Grátis'},rows:[{i:'🐾',t:'Dog-friendly.'}],maps:'https://maps.google.com/?q=Praia+do+Tonel+Sagres',wa:'🏖 Praia do Tonel — Sagres\nSurf e paisagem selvagem.'},
+  lagosbottours:{name:'Boat Tour Ponta da Piedade',cat:'Lagos · Marina · 75min',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700&q=80',desc:'75min pelas grutas, arcos e formações rochosas de Lagos. Vista das praias Dona Ana e Camilo a partir do mar.',cost:{pp:'~22 €',det:'bilhete boat tour',tot:'~66 €'},rows:[{i:'📍',t:'Marina de Lagos'},{i:'💡',t:'Reservar antes — esgota em junho.'}],maps:'https://maps.google.com/?q=Marina+de+Lagos',site:'https://lagosboattours.com',wa:'⚓ Boat Tour Lagos\n~€22/pp. Marina Lagos.'},
+  pontapiedade:{name:'Ponta da Piedade — a pé',cat:'Natureza · Boardwalk · Lagos',img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&q=80',desc:'Boardwalk pelas falésias douradas entre Dona Ana e Ponta da Piedade. Coves, arcos, escadaria da Camilo.',cost:{pp:'Grátis',det:'percurso livre',tot:'Grátis',park:'Parque Dona Ana (pago)'},rows:[{i:'💡',t:'Ir antes das 10h.'},{i:'🐾',t:'Cães permitidos no percurso.'}],maps:'https://maps.google.com/?q=Ponta+da+Piedade+Lagos',wa:'🪨 Ponta da Piedade\nFalésias douradas. Gratuito.'},
+  lagoscentro:{name:'Centro histórico de Lagos',cat:'História · Cultura · Lagos',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'Muralhas medievais, ruas de calçada, Igreja de Santo António, zona ribeirinha animada. Gelados, lojinhas, cafés.',cost:{pp:'Grátis',det:'passeio livre',tot:'Grátis'},rows:[{i:'💡',t:'Igreja de Santo António: €1. Combinar com jantar.'}],maps:'https://maps.google.com/?q=Centro+Historico+Lagos',wa:'🏛 Centro Lagos\nRuas medievais e ribeirinha.'},
+  benagiltour:{name:'Grutas de Benagil — Boat Tour',cat:'Marina Portimão · ~2h',img:'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=700&q=80',desc:'A gruta mais famosa do Algarve. Tour de ~2h a partir da Marina de Portimão pelas grutas, Praia da Marinha e costa dourada. Nadar até à gruta proibido desde 2025.',cost:{pp:'~28 €',det:'boat tour 2h',tot:'~84 €'},rows:[{i:'📍',t:'Marina de Portimão'},{i:'⏰',t:'Tours de manhã (9–11h) — mar mais calmo.'},{i:'💡',t:'Reservar com antecedência — esgota em junho.'}],maps:'https://maps.google.com/?q=Marina+de+Portimao',wa:'⛵ Grutas de Benagil\n~€28/pp. Reservar antes.'},
+  ferragudo:{name:'Aldeia de Ferragudo',cat:'Pescadores · Rio Arade · ~70km',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'Aldeia de pescadores junto ao rio Arade, frente a Portimão. Ruas brancas, castelo medieval, esplanadas com vista para o rio. Muito mais autêntica que Portimão.',cost:{pp:'Grátis',det:'passeio livre',tot:'Grátis'},rows:[{i:'💡',t:'Passeio 1h + almoço no Rei das Praias = tarde perfeita.'}],maps:'https://maps.google.com/?q=Ferragudo+Portugal',wa:'🏘 Aldeia de Ferragudo\nAldeia de pescadores autêntica.'},
+  silves:{name:'Castelo de Silves',cat:'História · Medieval · ~65km',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'O maior castelo do Algarve em arenito vermelho. Antiga capital moura. Vista sobre o rio Arade. Combinar com passeio pela vila histórica.',cost:{pp:'3 €',det:'bilhete entrada',tot:'9 €'},rows:[{i:'⏰',t:'9:00–17:30 (junho)'},{i:'💡',t:'~1.5h no total. Combinar com passeio pela vila.'}],maps:'https://maps.google.com/?q=Castelo+de+Silves',wa:'🏰 Castelo de Silves\nMaior castelo do Algarve. €3.'},
+  v7vales:{name:'Trilho 7 Vales Suspensos',cat:'Caminhada · Carvoeiro–Marinha · ~70km',img:'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',desc:'Um dos trilhos mais bonitos da Europa. ~6km entre Carvoeiro e Praia da Marinha. Falésias, vistas de cortar a respiração.',cost:{pp:'Grátis',det:'trilho livre',tot:'Grátis',park:'Carvoeiro (estacionamento)'},rows:[{i:'⏰',t:'~2–3h. Ir de manhã cedo.'},{i:'💡',t:'Da Praia da Marinha para Carvoeiro — vento a favor.'}],maps:'https://maps.google.com/?q=Sete+Vales+Suspensos+Carvoeiro',wa:'🥾 7 Vales Suspensos\nUm dos trilhos mais bonitos da Europa.'},
+  albcentro:{name:'Centro histórico de Albufeira',cat:'Cultura · Vida noturna · Albufeira',img:'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=700&q=80',desc:'Orla marítima, ruas de calçada, Praia do Peneco em baixo. Animado ao final do dia. Mirante do Pau da Bandeira com vista para a praia central.',cost:{pp:'Grátis',det:'passeio livre',tot:'Grátis'},rows:[{i:'💡',t:'Ir ao final da tarde. Combinar com jantar.'}],maps:'https://maps.google.com/?q=Centro+Historico+Albufeira',wa:'🏛 Centro de Albufeira\nOrla e vida noturna.'},
+  albboat:{name:'Avistamento de Golfinhos',cat:'Mar · Experiência · Albufeira',img:'https://images.unsplash.com/photo-1527004013197-933b3b6aebc4?w=700&q=80',desc:'Tours de barco para ver golfinhos no Atlântico. ~2h. Alta taxa de sucesso em junho. Saídas de manhã cedo.',cost:{pp:'~35 €',det:'boat tour ~2h',tot:'~105 €'},rows:[{i:'💡',t:'Reservar online. Manhã = melhor taxa de sucesso.'}],maps:'https://maps.google.com/?q=Marina+de+Albufeira',wa:'🐬 Golfinhos — Albufeira\n~€35/pp.'}
 };
 
-// ─── MODAL OPEN/CLOSE ───────────────────────────────────────────
-function openModal(id) {
-  const d = MD[id]; if (!d) return;
-  document.getElementById('m-img').src = d.img;
-  document.getElementById('m-img').alt = d.name;
-  document.getElementById('m-name').textContent = d.name;
-  document.getElementById('m-cat').textContent = d.cat;
-  document.getElementById('m-desc').textContent = d.desc;
-
-  // cost block
-  const c = d.cost;
-  let costHtml = '';
-  if (c) {
-    costHtml = `<div class="m-section"><div class="m-section-t">Custos</div>
-    <div class="m-cost-blk">
-      <div class="m-cost-row"><span class="m-cost-l">Por pessoa (${c.pp_detail})</span><span class="m-cost-v big">${c.pp}</span></div>
-      <div class="m-cost-row"><span class="m-cost-l">Total para o grupo (3 pessoas)</span><span class="m-cost-v big">${c.total}</span></div>
-      ${c.park ? `<div class="m-cost-park">🅿 ${c.park}</div>` : ''}
-    </div></div>`;
-  }
-  document.getElementById('m-cost').innerHTML = costHtml;
-
-  // details
-  const rows = d.rows.map(r =>
-    `<div class="m-row"><span class="m-icon">${r.i}</span><span class="m-text">${r.t}</span></div>`
-  ).join('');
-  document.getElementById('m-details').innerHTML = rows ? `<div class="m-section-t">Detalhes</div>${rows}` : '';
-
-  // actions
-  const wa = encodeURIComponent(d.wa || d.name + ' — Aljezur');
-  const em_s = encodeURIComponent(d.name + ' — Aljezur Junho 2026');
-  const em_b = encodeURIComponent((d.desc || '') + '\n\nGoogle Maps: ' + d.maps);
-  let acts = `<a class="m-btn m-btn-g" href="${d.maps}" target="_blank">↗ Google Maps</a>`;
-  acts += `<a class="m-btn m-btn-o" href="whatsapp://send?text=${wa}">✉ WhatsApp</a>`;
-  if (d.site) acts += `<a class="m-btn m-btn-o" href="${d.site}" target="_blank">🌐 Site</a>`;
-  acts += `<a class="m-btn m-btn-o" href="mailto:?subject=${em_s}&body=${em_b}">📧</a>`;
-  document.getElementById('m-actions').innerHTML = acts;
-
+function openModal(id){
+  const d=MD[id];if(!d)return;
+  document.getElementById('m-img').src=d.img;
+  document.getElementById('m-img').alt=d.name;
+  document.getElementById('m-name').textContent=d.name;
+  document.getElementById('m-cat').textContent=d.cat;
+  document.getElementById('m-desc').textContent=d.desc;
+  const c=d.cost;
+  document.getElementById('m-cost').innerHTML=c?'<div class="m-cost-blk"><div class="m-cost-t">Custos</div><div class="m-cost-row"><span class="m-cost-l">Por pessoa ('+c.det+')</span><span class="m-cost-v big">'+c.pp+'</span></div><div class="m-cost-row"><span class="m-cost-l">Total grupo (3 pax)</span><span class="m-cost-v big">'+c.tot+'</span></div>'+(c.park?'<div class="m-cost-park">🅿 '+c.park+'</div>':'')+'</div>':'';
+  document.getElementById('m-details').innerHTML=d.rows?'<div class="m-section-t">Detalhes</div>'+d.rows.map(r=>'<div class="m-row"><span class="m-icon">'+r.i+'</span><span class="m-text">'+r.t+'</span></div>').join(''):'';
+  const wa=encodeURIComponent(d.wa||d.name);
+  const es=encodeURIComponent(d.name+' — Aljezur Junho 2026');
+  const eb=encodeURIComponent((d.desc||'')+'\n\nMaps: '+d.maps);
+  let a='<a class="m-btn m-btn-g" href="'+d.maps+'" target="_blank">↗ Google Maps</a>';
+  a+='<a class="m-btn m-btn-o" href="whatsapp://send?text='+wa+'">✉ WhatsApp</a>';
+  if(d.site)a+='<a class="m-btn m-btn-o" href="'+d.site+'" target="_blank">🌐 Site</a>';
+  a+='<a class="m-btn m-btn-o" href="mailto:?subject='+es+'&body='+eb+'">📧</a>';
+  document.getElementById('m-actions').innerHTML=a;
   document.getElementById('overlay').classList.add('on');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closeModal() { document.getElementById('overlay').classList.remove('on'); document.body.style.overflow = ''; }
-function closeOverlay(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function closeModal(){document.getElementById('overlay').classList.remove('on');document.body.style.overflow='';}
+function closeOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
 </script>
 </body>
 </html>
