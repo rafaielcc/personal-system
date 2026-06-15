@@ -1,5 +1,1411 @@
 <!DOCTYPE html>
 <html lang="pt">
-<head><meta charset="UTF-8"><title>Briefing Diário</title></head>
-<body><h1>Briefing Diário — Sistema Rafa</h1><p>Placeholder — será substituído na próxima geração.</p></body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing · Segunda, 15 Jun 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1A3D52;
+  --terracota: #C75A2C;
+  --gold: #D4A946;
+  --sage: #5A7A5E;
+  --muted: #8A8070;
+  --bg: #F5F0E8;
+  --card: #FDFAF4;
+  --border: #E0D8C8;
+  --teal: #0D9488;
+  --red: #C0392B;
+  --blue: #3B82F6;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--navy);
+  min-height: 100vh;
+}
+
+/* STICKY HEADER */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  color: white;
+  padding: 10px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header-left h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 17px;
+  font-weight: 600;
+}
+.header-left span {
+  font-size: 12px;
+  opacity: 0.7;
+}
+.weather-chip {
+  background: rgba(255,255,255,0.12);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* TABS */
+.tabs-wrapper {
+  overflow-x: auto;
+  background: var(--navy);
+  -webkit-overflow-scrolling: touch;
+}
+.tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 8px 0;
+  min-width: max-content;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.6);
+  padding: 10px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.tab-btn.active {
+  color: white;
+  border-bottom-color: var(--terracota);
+}
+
+/* CONTENT */
+.tab-content { display: none; padding: 16px; }
+.tab-content.active { display: block; }
+
+/* CARDS */
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+.card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.stripe-top { border-top: 3px solid var(--terracota); }
+.stripe-gold { border-top: 3px solid var(--gold); }
+.stripe-sage { border-top: 3px solid var(--sage); }
+.stripe-teal { border-top: 3px solid var(--teal); }
+.stripe-navy { border-top: 3px solid var(--navy); }
+.stripe-blue { border-top: 3px solid var(--blue); }
+
+/* BANNERS */
+.banner {
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.banner-urgent { background: #FEE2E2; color: #7F1D1D; border-left: 4px solid var(--red); }
+.banner-warn { background: #FEF9C3; color: #713F12; border-left: 4px solid var(--gold); }
+.banner-info { background: #E0F2FE; color: #075985; border-left: 4px solid var(--blue); }
+.banner-ok { background: #DCFCE7; color: #14532D; border-left: 4px solid var(--sage); }
+.banner-special { background: #1A3D52; color: white; border-radius: 10px; padding: 12px 14px; margin-bottom: 12px; }
+
+/* SPECIAL EVENT BOX */
+.special-box {
+  background: var(--navy);
+  color: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.special-box .label { font-size: 11px; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+.special-box .title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; }
+.special-box .detail { font-size: 12px; opacity: 0.75; margin-top: 4px; }
+
+/* DAY CARDS */
+.day-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.day-card {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+}
+.day-card.today { border: 2px solid var(--terracota); }
+.day-card .day-label { font-size: 10px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em; }
+.day-card .day-date { font-size: 14px; font-weight: 600; margin: 2px 0; }
+.day-card .day-item { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.3; }
+.day-card .day-pill {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+.pill-red { background: #FEE2E2; color: var(--red); }
+.pill-gold { background: #FEF9C3; color: #92400E; }
+.pill-green { background: #DCFCE7; color: #065F46; }
+.pill-navy { background: var(--navy); color: white; }
+
+/* TASK ITEMS */
+.task-item {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.task-item:last-child { border-bottom: none; }
+.task-bar {
+  width: 3px;
+  min-height: 20px;
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.bar-terracota { background: var(--terracota); }
+.bar-gold { background: var(--gold); }
+.bar-sage { background: var(--sage); }
+.bar-blue { background: var(--blue); }
+
+/* PANORAMA BOARD */
+.panorama {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.pano-col {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid var(--border);
+}
+.pano-col h4 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.pano-stat {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: 'Fraunces', serif;
+  color: var(--navy);
+}
+.pano-label { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.pano-split { display: flex; gap: 4px; margin-top: 6px; font-size: 11px; }
+.pano-tag { padding: 2px 6px; border-radius: 4px; }
+
+/* CALENDAR GRID */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.cal-day-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 4px;
+}
+.cal-day {
+  min-height: 54px;
+  background: var(--card);
+  border-radius: 6px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.cal-day.today-cell { border: 2px solid var(--terracota); }
+.cal-day.empty { background: transparent; border: none; }
+.cal-num { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+.cal-event {
+  font-size: 9px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.cal-terracota { background: #FED7AA; color: #7C2D12; }
+.cal-sage { background: #BBF7D0; color: #14532D; }
+.cal-blue { background: #BFDBFE; color: #1E3A5F; }
+.cal-red { background: #FEE2E2; color: #7F1D1D; }
+.cal-purple { background: #EDE9FE; color: #4C1D95; }
+.cal-gold { background: #FEF9C3; color: #713F12; }
+
+/* EMAIL ITEMS */
+.email-item {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.email-item:last-child { border-bottom: none; }
+.email-sender { font-weight: 500; font-size: 12px; color: var(--muted); }
+.email-subject { font-weight: 600; margin: 2px 0; }
+.email-snippet { font-size: 12px; color: var(--muted); line-height: 1.4; }
+.badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-weight: 600;
+  margin-right: 4px;
+}
+.badge-urgent { background: var(--red); color: white; }
+.badge-imp { background: var(--gold); color: white; }
+.badge-info { background: var(--blue); color: white; }
+.badge-noise { background: var(--muted); color: white; }
+.badge-teal { background: var(--teal); color: white; }
+
+/* SURGERY TABLE */
+.surg-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.surg-table th {
+  background: var(--navy);
+  color: white;
+  padding: 6px 8px;
+  text-align: left;
+  font-size: 11px;
+}
+.surg-table td {
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.surg-table tr:last-child td { border-bottom: none; }
+.surg-table tr:hover td { background: #F0EBE0; }
+.fdr-row td { border-left: 3px solid var(--red); }
+.fdr-badge { background: var(--red); color: white; font-size: 10px; padding: 2px 5px; border-radius: 4px; }
+.age-format { color: var(--muted); font-size: 11px; }
+
+/* HFF */
+.hff-status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.hff-pill {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.hff-oncall { background: #FEE2E2; color: var(--red); }
+.hff-normal { background: #DCFCE7; color: #065F46; }
+.hff-sigic { background: #FEF9C3; color: #713F12; }
+
+/* WEATHER */
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.weather-day {
+  background: var(--card);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.weather-day.today-w { border: 2px solid var(--terracota); }
+.weather-date-label { font-size: 10px; color: var(--muted); margin-bottom: 4px; }
+.weather-icon { font-size: 22px; margin: 4px 0; }
+.weather-temps { font-size: 13px; font-weight: 600; }
+.weather-temps span { color: var(--muted); font-size: 11px; font-weight: 400; }
+.weather-rain { font-size: 11px; color: var(--blue); margin-top: 2px; }
+
+/* WINDOWS */
+.window-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+.window-time { font-size: 12px; font-weight: 600; color: var(--navy); min-width: 48px; }
+.window-label { font-size: 13px; }
+.window-note { font-size: 11px; color: var(--muted); }
+
+/* CARNEGIE */
+.carnegie-week {
+  background: linear-gradient(135deg, var(--navy) 0%, #2A5F7A 100%);
+  color: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+.carnegie-week .week-label { font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.08em; }
+.carnegie-week .week-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; margin: 4px 0; }
+.carnegie-week .fio { font-size: 13px; opacity: 0.85; font-style: italic; border-left: 3px solid var(--terracota); padding-left: 10px; margin: 10px 0; }
+.carnegie-practice { background: rgba(255,255,255,0.08); border-radius: 8px; padding: 10px; margin-top: 10px; }
+.carnegie-practice li { font-size: 12px; opacity: 0.9; margin-left: 14px; margin-bottom: 4px; }
+.reflection-box {
+  background: #FEF3C7;
+  border-left: 4px solid var(--gold);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-style: italic;
+  color: #78350F;
+  margin-bottom: 12px;
+}
+
+/* FINANCE */
+.finance-nav {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.finance-nav button {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--navy);
+}
+.finance-nav button.active {
+  background: var(--navy);
+  color: white;
+  border-color: var(--navy);
+}
+.finance-section { display: none; }
+.finance-section.active { display: block; }
+
+/* TICKER ROW */
+.ticker-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.ticker-row:last-child { border-bottom: none; }
+.ticker-name { font-weight: 600; }
+.ticker-sector { font-size: 11px; color: var(--muted); }
+.ticker-change-pos { color: var(--sage); font-weight: 600; }
+.ticker-change-neg { color: var(--red); font-weight: 600; }
+
+/* ROUTINE */
+.routine-row {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.routine-row:last-child { border-bottom: none; }
+.routine-time { font-size: 12px; font-weight: 600; min-width: 50px; color: var(--terracota); }
+.routine-activity { font-size: 13px; }
+.routine-note { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* SECTION DIVIDER */
+.section-div {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 14px 0 8px;
+}
+
+/* AUDIO BTN */
+.audio-btn {
+  background: var(--terracota);
+  color: white;
+  border: none;
+  border-radius: 24px;
+  padding: 8px 18px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+/* UTILS */
+.text-muted { color: var(--muted); font-size: 12px; }
+.text-sm { font-size: 12px; }
+.mt-8 { margin-top: 8px; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+</style>
+</head>
+<body>
+
+<!-- STICKY HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>☀️ Segunda, 15 de Junho</h1>
+    <span>Semana 25 · Prevenção HFF esta semana</span>
+  </div>
+  <div class="weather-chip">🌤 28°C · Ensolarado</div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-wrapper">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('hoje')">🌅 Hoje</button>
+    <button class="tab-btn" onclick="showTab('tarefas')">✅ Tarefas</button>
+    <button class="tab-btn" onclick="showTab('calendario')">📅 Calendário</button>
+    <button class="tab-btn" onclick="showTab('email')">📬 Email</button>
+    <button class="tab-btn" onclick="showTab('hff')">🏥 Trabalho HFF</button>
+    <button class="tab-btn" onclick="showTab('noticias')">📰 Notícias</button>
+    <button class="tab-btn" onclick="showTab('b3')">📊 Full B3</button>
+    <button class="tab-btn" onclick="showTab('carnegie')">📖 Carnegie</button>
+    <button class="tab-btn" onclick="showTab('tempo')">🌤️ Tempo</button>
+    <button class="tab-btn" onclick="showTab('rotina')">⚡️ Rotina</button>
+  </div>
+</div>
+
+<!-- ==================== TAB: HOJE ==================== -->
+<div id="hoje" class="tab-content active">
+
+  <!-- BANNER PREVENÇÃO -->
+  <div class="banner banner-warn">
+    ⚠️ <div><strong>Prevenção activa esta semana</strong> — Rafael on-call de 15 a 21 Jun. Sem saídas longas de Lisboa.</div>
+  </div>
+
+  <!-- SPECIAL EVENTS -->
+  <div class="special-box">
+    <div class="label">📌 Próximo destaque</div>
+    <div class="title">🎸 Rock in Rio Lisboa — 27 Jun</div>
+    <div class="detail">Legends Day · Parque Tejo · Falta 12 dias</div>
+  </div>
+
+  <div class="special-box" style="background: var(--teal); margin-top: -4px;">
+    <div class="label">🐉 Em breve</div>
+    <div class="title">House of the Dragon S3 — 22 Jun (HBO/Max)</div>
+    <div class="detail">Estreia em 7 dias</div>
+  </div>
+
+  <!-- PRÓXIMOS 3 DIAS -->
+  <div class="section-div">Próximos 3 dias</div>
+  <div class="day-cards">
+    <div class="day-card today">
+      <div class="day-label">Hoje</div>
+      <div class="day-date">Seg 15</div>
+      <div class="day-item">🏥 Bloco Operatório manhã</div>
+      <div class="day-item">10 cirurgias agendadas</div>
+      <div class="day-item">⚠️ 1 FDR (Hipospádia)</div>
+      <span class="day-pill pill-red">SIGIC 15h30</span>
+      <span class="day-pill pill-navy">Prevenção</span>
+    </div>
+    <div class="day-card">
+      <div class="day-label">Amanhã</div>
+      <div class="day-date">Ter 16</div>
+      <div class="day-item">📋 Previdência UK</div>
+      <div class="day-item">💰 Reembolso IRS</div>
+      <div class="day-item">🇧🇷 IR Brasil</div>
+      <div class="day-item">✓ Agenesia pulmonar</div>
+      <span class="day-pill pill-gold">Financeiro</span>
+    </div>
+    <div class="day-card">
+      <div class="day-label">Quarta</div>
+      <div class="day-date">Qua 17</div>
+      <div class="day-item">🏥 Bloco Operatório manhã</div>
+      <div class="day-item">11 cirurgias agendadas</div>
+      <span class="day-pill pill-navy">ON-CALL</span>
+    </div>
+  </div>
+
+  <!-- B3 RESUMO -->
+  <div class="card stripe-top">
+    <div class="card-title">📊 B3 · Destaque hoje</div>
+    <div class="text-sm" style="line-height: 1.6;">
+      Mercados brasileiros abertura às 10h (Lisboa). <strong>ISA Energia (ISAE3/4)</strong> — pagamento de juros de debêntures hoje (15 Jun). ADVFN mais recente de 12 Jun: destaque para estreia da SpaceX na bolsa, confiança do consumidor nos EUA e IPCA.
+    </div>
+    <div class="mt-8 text-muted">Carteira: SUZB3 · KLBN · TIMS3 · BBDC · BBAS3 · SANB · BPAC11 · IRBR3 · RANI3 · SLCE3 · ISAE3</div>
+  </div>
+
+  <!-- CARNEGIE DO DIA -->
+  <div class="reflection-box">
+    <strong>📖 Carnegie W2 — Reflexão do dia:</strong><br>
+    "Onde criei resistência hoje? O que poderia ter dito de forma diferente — sem afirmar, apenas perguntando?"
+  </div>
+
+  <!-- EMAIL URGENTE -->
+  <div class="card stripe-top">
+    <div class="card-title">📬 Email a não perder</div>
+    <div class="email-item">
+      <div><span class="badge badge-info">INFORMATIVO</span></div>
+      <div>
+        <div class="email-subject">ADSE — Comparticipação Clara (€65)</div>
+        <div class="text-muted">Aprovada · 9 Jun · Beneficiário nº 28019628</div>
+      </div>
+    </div>
+    <div class="email-item">
+      <div><span class="badge badge-teal">SNOOZED</span></div>
+      <div>
+        <div class="email-subject">GlobalcastMD — Pediatric Surgery Update Course</div>
+        <div class="text-muted">10 Ago 2026 · 10h00 EDT · Confirmado</div>
+      </div>
+    </div>
+    <div class="email-item">
+      <div><span class="badge badge-urgent">🚨 AMANHÃ</span></div>
+      <div>
+        <div class="email-subject">GlobalcastMD — Laparoscopic Pediatric Hernia Repair</div>
+        <div class="text-muted">18 Jun 2026 · 9h00 EDT (14h Lisboa)</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: TAREFAS ==================== -->
+<div id="tarefas" class="tab-content">
+
+  <!-- PANORAMA BOARD -->
+  <div class="section-div">Panorama — Vista geral</div>
+  <div class="panorama">
+    <div class="pano-col">
+      <h4>Hoje</h4>
+      <div class="pano-stat">7</div>
+      <div class="pano-label">tarefas Todoist</div>
+      <div class="pano-split">
+        <span class="pano-tag" style="background:#FEE2E2;color:#7F1D1D;">🏥 3 trabalho</span>
+        <span class="pano-tag" style="background:#DCFCE7;color:#065F46;">👤 4 pessoal</span>
+      </div>
+    </div>
+    <div class="pano-col">
+      <h4>Amanhã</h4>
+      <div class="pano-stat">4</div>
+      <div class="pano-label">tarefas Todoist</div>
+      <div class="pano-split">
+        <span class="pano-tag" style="background:#FEE2E2;color:#7F1D1D;">🏥 1 trabalho</span>
+        <span class="pano-tag" style="background:#DCFCE7;color:#065F46;">👤 3 pessoal</span>
+      </div>
+    </div>
+    <div class="pano-col">
+      <h4>Depois</h4>
+      <div class="pano-stat">8+</div>
+      <div class="pano-label">tarefas futuras</div>
+      <div class="pano-split">
+        <span class="pano-tag" style="background:#E0F2FE;color:#075985;">💡 2 sugestões</span>
+        <span class="pano-tag" style="background:#F3F4F6;color:#374151;">📋 6 rotina</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOJE -->
+  <div class="card stripe-top">
+    <div class="card-title">✅ Hoje — Segunda 15 Jun</div>
+
+    <div class="section-div" style="margin-top: 4px;">🏥 Trabalho / Clínico</div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>Sérgio — Rádio quisto branquial</div><div class="text-muted">Clínico · pendente</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>1164819 · João Rafael — Abscesso perianal, RM</div><div class="text-muted">Imagem pendente</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>Conferir FS Madeira</div><div class="text-muted">Folha de serviço</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>✓ Prevention check</div><div class="text-muted">Confirmar escala de prevenção</div></div></div>
+
+    <div class="section-div">👤 Pessoal</div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Pendrive</div><div class="text-muted">Tarefa pessoal</div></div></div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Véspera exame Clarinha</div><div class="text-muted">Apoio à Clara — confirmar logística amanhã</div></div></div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Junilson</div><div class="text-muted">Contactar</div></div></div>
+  </div>
+
+  <!-- AMANHÃ -->
+  <div class="card stripe-gold">
+    <div class="card-title">📅 Amanhã — Terça 16 Jun</div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div>Previdência UK</div><div class="text-muted">💰 Financeiro</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div>Reembolso IRS</div><div class="text-muted">💰 Financeiro</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div>IR Brasil</div><div class="text-muted">💰 Financeiro</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>✓ Agenesia pulmonar — proc. 1306876 (DeLange)</div><div class="text-muted">🏥 Clínico</div></div></div>
+  </div>
+
+  <!-- HÁBITOS HOJE -->
+  <div class="card stripe-sage">
+    <div class="card-title">🌿 Hábitos · Segunda</div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Leitura artigos Cirurgia Pediátrica (manhã, entre cirurgias)</div></div></div>
+    <div class="task-item"><div class="task-bar bar-blue"></div><div><div>Forxiga @pessoal</div><div class="text-muted">💊 Medicação diária</div></div></div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Ciclo lazer (tarde, após regresso a casa se bom tempo)</div><div class="text-muted">🌤 Tempo bom hoje — boa janela às 17h-19h</div></div></div>
+  </div>
+
+  <!-- TAREFAS SEM DATA -->
+  <div class="card stripe-navy">
+    <div class="card-title">📬 Tarefas sem data (Email)</div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>Certidão de Tempo de Contribuição</div><div class="text-muted">Informação reencaminhada (Jun) · pendente processamento</div></div></div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div><div>Aulas de vela — Escola Oeiras</div><div class="text-muted">Resposta recebida em Abr · confirmar interesse / marcar</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>Protocolo NAC Neonatologia (Sofia + Rodrigo)</div><div class="text-muted">Versão corrigida aguarda reunião final</div></div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div><div>Diverticulite apêndice — revisão artigo (Afonso)</div><div class="text-muted">Sugestões dos revisores enviadas · aguarda resposta</div></div></div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: CALENDÁRIO ==================== -->
+<div id="calendario" class="tab-content">
+
+  <div class="card stripe-top">
+    <div class="card-title">📅 Junho 2026</div>
+    <div class="cal-grid">
+      <div class="cal-day-header">Seg</div>
+      <div class="cal-day-header">Ter</div>
+      <div class="cal-day-header">Qua</div>
+      <div class="cal-day-header">Qui</div>
+      <div class="cal-day-header">Sex</div>
+      <div class="cal-day-header">Sáb</div>
+      <div class="cal-day-header">Dom</div>
+
+      <!-- Week 1: 1-7 -->
+      <div class="cal-day"><div class="cal-num">1</div></div>
+      <div class="cal-day"><div class="cal-num">2</div></div>
+      <div class="cal-day"><div class="cal-num">3</div></div>
+      <div class="cal-day"><div class="cal-num">4</div></div>
+      <div class="cal-day"><div class="cal-num">5</div></div>
+      <div class="cal-day"><div class="cal-num">6</div></div>
+      <div class="cal-day"><div class="cal-num">7</div></div>
+
+      <!-- Week 2: 8-14 -->
+      <div class="cal-day"><div class="cal-num">8</div></div>
+      <div class="cal-day"><div class="cal-num">9</div></div>
+      <div class="cal-day"><div class="cal-num">10</div></div>
+      <div class="cal-day"><div class="cal-num">11</div></div>
+      <div class="cal-day"><div class="cal-num">12</div></div>
+      <div class="cal-day"><div class="cal-num">13</div></div>
+      <div class="cal-day"><div class="cal-num">14</div></div>
+
+      <!-- Week 3: 15-21 (TODAY = 15) -->
+      <div class="cal-day today-cell">
+        <div class="cal-num" style="color:var(--terracota);">15</div>
+        <div class="cal-event cal-red">🏥 BO</div>
+        <div class="cal-event cal-gold">SIGIC 15h30</div>
+        <div class="cal-event cal-sage">Prevenção</div>
+      </div>
+      <div class="cal-day"><div class="cal-num">16</div><div class="cal-event cal-gold">💰 Fiscal</div></div>
+      <div class="cal-day"><div class="cal-num">17</div><div class="cal-event cal-red">🏥 BO</div><div class="cal-event cal-sage">Prevenção</div></div>
+      <div class="cal-day"><div class="cal-num">18</div><div class="cal-event cal-blue">Webinar CP 14h</div></div>
+      <div class="cal-day"><div class="cal-num">19</div><div class="cal-event cal-purple">🎉 ActiveHive</div></div>
+      <div class="cal-day"><div class="cal-num">20</div><div class="cal-event cal-terracota">Niver Josie 14h</div></div>
+      <div class="cal-day"><div class="cal-num">21</div></div>
+
+      <!-- Week 4: 22-28 -->
+      <div class="cal-day"><div class="cal-num">22</div><div class="cal-event cal-red">🏥 BO</div><div class="cal-event cal-gold">SIGIC 15h30</div><div class="cal-event cal-purple">🐉 HotD S3</div></div>
+      <div class="cal-day"><div class="cal-num">23</div></div>
+      <div class="cal-day"><div class="cal-num">24</div><div class="cal-event cal-red">🏥 BO</div></div>
+      <div class="cal-day"><div class="cal-num">25</div></div>
+      <div class="cal-day"><div class="cal-num">26</div></div>
+      <div class="cal-day"><div class="cal-num">27</div><div class="cal-event cal-terracota">🎸 Rock in Rio</div></div>
+      <div class="cal-day"><div class="cal-num">28</div></div>
+
+      <!-- Week 5: 29-30 -->
+      <div class="cal-day"><div class="cal-num">29</div><div class="cal-event cal-red">🏥 BO</div><div class="cal-event cal-gold">SIGIC 15h30</div></div>
+      <div class="cal-day"><div class="cal-num">30</div><div class="cal-event cal-blue">Revisão Carro 9h45</div></div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+      <div class="cal-day empty"></div>
+    </div>
+  </div>
+
+  <div class="card stripe-sage">
+    <div class="card-title">📌 Legenda</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;font-size:12px;">
+      <span class="cal-event cal-red" style="font-size:11px;padding:3px 8px;">🏥 Bloco BO</span>
+      <span class="cal-event cal-gold" style="font-size:11px;padding:3px 8px;">⚡ SIGIC</span>
+      <span class="cal-event cal-sage" style="font-size:11px;padding:3px 8px;">🛡 Prevenção</span>
+      <span class="cal-event cal-blue" style="font-size:11px;padding:3px 8px;">📘 Webinar/Evento</span>
+      <span class="cal-event cal-purple" style="font-size:11px;padding:3px 8px;">🎉 Social/Show</span>
+      <span class="cal-event cal-terracota" style="font-size:11px;padding:3px 8px;">⭐ Especial</span>
+    </div>
+  </div>
+
+  <!-- EVENTOS PRÓXIMOS -->
+  <div class="card stripe-top">
+    <div class="card-title">📆 Próximos Eventos</div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;color:var(--terracota);">18 Jun</div>
+      <div><div><strong>Webinar — Laparoscopic Pediatric Hernia Repair</strong></div><div class="text-muted">GlobalcastMD · 9h00 EDT (14h Lisboa) · online</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;color:var(--terracota);">19-21 Jun</div>
+      <div><div><strong>🎉 ActiveHive 2º Aniversário</strong></div><div class="text-muted">Praia Fluvial de Janeiro de Cima · acampamento grátis</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;color:var(--terracota);">20 Jun</div>
+      <div><div><strong>Niver Josie — Sintra</strong></div><div class="text-muted">14h00 · Sintra (~25 min de carro)</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;">22 Jun</div>
+      <div><div><strong>🐉 House of the Dragon S3</strong></div><div class="text-muted">Estreia HBO/Max</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;color:var(--terracota);">27 Jun</div>
+      <div><div><strong>🎸 Rock in Rio Lisboa — Legends Day</strong></div><div class="text-muted">Parque Tejo · Metro Oriente recomendado (~20 min)</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;">14 Jul</div>
+      <div><div><strong>Consulta Endocrinologia — Hospital da Luz</strong></div><div class="text-muted">Dra. Ana Filipa Martins · 9h10</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:50px;font-size:12px;font-weight:600;">10 Ago</div>
+      <div><div><strong>GlobalcastMD — Pediatric Surgery Update Course</strong></div><div class="text-muted">10h00 EDT (15h Lisboa) · online</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: EMAIL ==================== -->
+<div id="email" class="tab-content">
+
+  <!-- URGENTE -->
+  <div class="card stripe-top">
+    <div class="card-title">🚨 Urgente</div>
+    <div class="banner banner-urgent">
+      ⚡ <div><strong>Webinar amanhã (18 Jun)</strong> — GlobalcastMD Laparoscopic Pediatric Hernia Repair. Registado, link de acesso em Snoozed.</div>
+    </div>
+  </div>
+
+  <!-- INFORMATIVO -->
+  <div class="card stripe-gold">
+    <div class="card-title">⭐ Informativo</div>
+    <div class="email-item">
+      <div class="email-sender">no-reply@adse.pt · 9 Jun</div>
+      <div class="email-subject">ADSE — Comparticipação de Regime Livre (Clara)</div>
+      <div class="email-snippet">Pedido nº 17015002 · €65,00 · beneficiário Clara Mazzoni Correia · aprovado e processado.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">no-reply@adse.pt · 8 Jun</div>
+      <div class="email-subject">ADSE — Reembolso de Regime Livre</div>
+      <div class="email-snippet">Reembolso aprovado referente à fatura de 27 Mai 2026.</div>
+    </div>
+  </div>
+
+  <!-- SNOOZED -->
+  <div class="card stripe-sage">
+    <div class="card-title">💤 Snoozed</div>
+    <div class="email-item">
+      <div class="email-sender">info@globalcastmd.com · 5 Jun</div>
+      <div class="email-subject">🚨 Webinar amanhã — GlobalcastMD Pediatric Hernia Repair</div>
+      <div class="email-snippet">18 Jun · 9h00 EDT (14h Lisboa) — link de acesso em baixo.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">globalcastmd · 5 Jun</div>
+      <div class="email-subject">Pediatric Surgery Update Course 2026</div>
+      <div class="email-snippet">10 Ago 2026 · 10h00 EDT. Confirmado.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">noreply@hospitaldaluz.pt · Abr</div>
+      <div class="email-subject">Consulta Endocrinologia — 14 Jul 9h10</div>
+      <div class="email-snippet">Dra. Ana Filipa Martins · Hospital da Luz Lisboa.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">noreply@netlify.com · 5 Jun</div>
+      <div class="email-subject">Invoice Netlify Pro — $9.00</div>
+      <div class="email-snippet">Pago a 5 Jun. Tarefa criada para cancelar a 29 Jun.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">music.amazon@amazon.com · Fev</div>
+      <div class="email-subject">Alteração preço Amazon Music Unlimited Familiar</div>
+      <div class="email-snippet">Preço do plano será actualizado — verificar impacto.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">clarinhaiaia16 · Jan</div>
+      <div class="email-subject">Bilhetes Scorpions / TicketLine</div>
+      <div class="email-snippet">Bilhetes comprados. Confirmar data e venue.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">portal@lusiadas.pt · Nov 2025</div>
+      <div class="email-subject">Consulta Oftalmologia — Lusíadas Lisboa</div>
+      <div class="email-snippet">10 Nov · 15h30 — verificar se necessário reagendar.</div>
+    </div>
+  </div>
+
+  <!-- TAREFAS SEM DATA -->
+  <div class="card stripe-navy">
+    <div class="card-title">📬 Tarefas sem data</div>
+    <div class="email-item">
+      <div class="email-sender">rcc4730@gmail.com · 13 Jun</div>
+      <div class="email-subject">Certidão de Tempo de Contribuição</div>
+      <div class="email-snippet">Processo pendente de emissão — reencaminhado de Fev 2026.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">escoladevela@oeirasviva.pt · Abr</div>
+      <div class="email-subject">Aulas de Vela — Escola Oeiras</div>
+      <div class="email-snippet">Resposta recebida do Miguel Neves (Marina de Oeiras). Confirmar interesse.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">afonsolrmendes@gmail.com · Jan</div>
+      <div class="email-subject">Diverticulite apêndice — revisão artigo</div>
+      <div class="email-snippet">Sugestões dos revisores enviadas pelo Afonso. Aguarda colaboração.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">sofia.ptfg@gmail.com · Jan</div>
+      <div class="email-subject">Protocolo NAC Neonatologia</div>
+      <div class="email-snippet">Versão corrigida enviada em Jan. Reunião final pendente com Rodrigo e Sofia.</div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="card stripe-teal">
+    <div class="card-title">🗓️ Events</div>
+    <div class="email-item">
+      <div class="email-sender">luma-mail.com · 14 Jun</div>
+      <div class="email-subject">What's happening in Lisbon — Week of 15 June</div>
+      <div class="email-snippet">Festas de Lisboa arraiais + Rock in Rio + MEO Kalorama. Previsão 33°C no sábado.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">newsletters@gulbenkian.pt · 11 Jun</div>
+      <div class="email-subject">Jardim de Verão regressa à Gulbenkian 🎶</div>
+      <div class="email-snippet">Programação das próximas semanas — música, cinema e jardins.</div>
+    </div>
+    <div class="email-item">
+      <div class="email-sender">news@email-newsletters.timeout.com · 10 Jun</div>
+      <div class="email-subject">Melhores sítios para ver o Mundial em Lisboa</div>
+      <div class="email-snippet">Arraiais, vinhos, sports bars. Real Sports Bar (Benfica, 5 min a pé) recomendado.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: HFF ==================== -->
+<div id="hff" class="tab-content">
+
+  <!-- STATUS DO DIA -->
+  <div class="hff-status">
+    <span class="hff-pill hff-oncall">🛡️ Prevenção activa esta semana</span>
+    <span class="hff-pill hff-normal">🏥 Dia de Bloco</span>
+    <span class="hff-pill hff-sigic">⚡ SIGIC hoje 15h30</span>
+  </div>
+
+  <!-- CIRURGIAS HOJE -->
+  <div class="card stripe-top">
+    <div class="card-title">🔪 Cirurgias — Segunda 15 Jun · Bloco Operatório</div>
+    <div class="banner banner-urgent" style="margin-bottom:10px;">
+      ⚠️ <div><strong>1 FDR — Hipospádia Penoscrotal Proximal</strong> · Vicente José Brito Carrega · 9,4 meses. Cirurgia fora da rotina — atenção redobrada.</div>
+    </div>
+
+    <div class="section-div">🌅 Manhã</div>
+    <table class="surg-table">
+      <tr><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs</th></tr>
+      <tr class="fdr-row">
+        <td><span class="fdr-badge">FDR</span><br><span class="age-format">9,4m</span></td>
+        <td>Vicente J.B. Carrega</td>
+        <td>Hipospádia Penoscrotal</td>
+        <td>Proximal</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">5,5a</span></td>
+        <td>João P. Neves Zego</td>
+        <td>Hérnia umbilical + Fimose</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">6,3a</span></td>
+        <td>Nuhu Djalo</td>
+        <td>Fimose + Hérnia umbilical</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">7,0a</span></td>
+        <td>Santiago C.L. Rodrigues</td>
+        <td>Fimose</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">8,3a</span></td>
+        <td>Adriano M. Francisco</td>
+        <td>Fimose</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">12,8a</span></td>
+        <td>Enzo F.R. Gonçalves</td>
+        <td>Hérnia umbilical</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td><span class="age-format">15,9a</span></td>
+        <td>Pedro M. Silva</td>
+        <td>Defeito do Prepúcio</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <div class="section-div">🌟 Manhã (M)</div>
+    <table class="surg-table">
+      <tr><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs</th></tr>
+      <tr>
+        <td><span class="age-format">idade?</span></td>
+        <td>Enzo Reis Monteiro</td>
+        <td>Polidactilia dedos mão</td>
+        <td>—</td>
+      </tr>
+    </table>
+
+    <div class="section-div">⚡ Tarde (SIGIC) — 15h30</div>
+    <div class="banner banner-warn">⚡ Lista SIGIC desta tarde — confirmar doentes com folha de serviço.</div>
+  </div>
+
+  <!-- CIRURGIAS PRÓXIMA BO (Qua 17) -->
+  <div class="card stripe-navy">
+    <div class="card-title">📅 Próximo BO — Quarta 17 Jun</div>
+    <table class="surg-table">
+      <tr><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs</th></tr>
+      <tr><td><span class="age-format">6m</span></td><td>Esther S.L. Oliveira</td><td>Língua presa</td><td>—</td></tr>
+      <tr><td><span class="age-format">3,2a</span></td><td>Ivanildo G.B. Tcham Martins</td><td>Fimose + Hérnia umbilical</td><td>—</td></tr>
+      <tr><td><span class="age-format">6,3a</span></td><td>Gabriel A.A. Monteiro</td><td>Fimose</td><td>—</td></tr>
+      <tr><td><span class="age-format">6,3a</span></td><td>Julia Siqueira Mendes</td><td>Hérnia inguinal bilateral</td><td>vem de greve 4 Mai</td></tr>
+      <tr><td><span class="age-format">6,9a</span></td><td>Jayden L.M. Ministro Almeida</td><td>Fimose</td><td>—</td></tr>
+      <tr><td><span class="age-format">8,1a</span></td><td>Filipe M.M. Ribeiro</td><td>Orelhas proeminentes</td><td>vem greve 4 Mai</td></tr>
+      <tr><td><span class="age-format">9,4a</span></td><td>Onofre Mamadu Djalo</td><td>Fimose</td><td>—</td></tr>
+      <tr><td><span class="age-format">9,4a</span></td><td>Ariana Carvalho Silva</td><td>Hérnia umbilical</td><td>—</td></tr>
+      <tr><td><span class="age-format">10,0a</span></td><td>João P. Machado Dias</td><td>Fimose</td><td>—</td></tr>
+    </table>
+  </div>
+
+  <!-- PREVENÇÃO -->
+  <div class="card stripe-sage">
+    <div class="card-title">🛡️ Escala de Prevenção</div>
+    <div class="task-item">
+      <div style="min-width:90px;font-size:12px;font-weight:600;color:var(--sage);">15–21 Jun</div>
+      <div><div style="font-weight:600;">🟠 Rafael — ON-CALL</div><div class="text-muted">Prevenção activa. Sem saídas longas de Lisboa esta semana.</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:90px;font-size:12px;font-weight:600;">22–28 Jun</div>
+      <div><div>Rodrigo</div><div class="text-muted">Isabel de férias na semana seguinte</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:90px;font-size:12px;font-weight:600;">29 Jun–5 Jul</div>
+      <div><div class="text-muted">Não atribuído ainda</div></div>
+    </div>
+  </div>
+
+  <!-- SIGIC -->
+  <div class="card stripe-gold">
+    <div class="card-title">⚡ SIGIC — Lista próximas semanas</div>
+    <div class="task-item">
+      <div style="min-width:70px;font-size:12px;font-weight:600;color:var(--gold);">Hoje 15h30</div>
+      <div><div>Lista SIGIC — Segunda-feira 15 Jun</div><div class="text-muted">Confirmar doentes com folha de serviço</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:70px;font-size:12px;font-weight:600;">22 Jun</div>
+      <div><div>Lista SIGIC — Segunda-feira 22 Jun</div></div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:70px;font-size:12px;font-weight:600;">29 Jun</div>
+      <div><div>Lista SIGIC — Segunda-feira 29 Jun</div></div>
+    </div>
+  </div>
+
+  <!-- EQUIPA -->
+  <div class="card stripe-teal">
+    <div class="card-title">👥 Equipa — Ausências Junho</div>
+    <div class="task-item">
+      <div style="min-width:80px;font-size:12px;">Isabel (IF)</div>
+      <div>
+        <div class="text-sm">1-2 Jun: Férias · 5-6 Jun: Férias</div>
+        <div class="text-sm">15-16 Jun: Férias · 22-24 Jun: Ausente (Madeira)</div>
+        <div class="text-sm">28 Jun – 4 Jul: Férias</div>
+      </div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:80px;font-size:12px;">Rafael (RC)</div>
+      <div>
+        <div class="text-sm">8-9 Jun: Férias · 15-16 Jun: Ausente (Madeira — viagem)</div>
+        <div class="text-sm">19-22 Jun: Madeira/Congresso</div>
+      </div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:80px;font-size:12px;">Rodrigo (RR)</div>
+      <div>
+        <div class="text-sm">17-18 Jun: Congresso</div>
+        <div class="text-sm">25-26 Abr / 29-30 Abr: Congresso</div>
+      </div>
+    </div>
+    <div class="task-item">
+      <div style="min-width:80px;font-size:12px;">Alexandra</div>
+      <div><div class="text-sm text-muted">Férias até 30 Jun (calendário profissional)</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: NOTÍCIAS ==================== -->
+<div id="noticias" class="tab-content">
+
+  <div class="banner banner-info">
+    📊 <div>Relatório AII mais recente: <strong>12 Jun 2026</strong> (Sexta). Próximo disponível em horário de mercado BR.</div>
+  </div>
+
+  <!-- B3 SHORT -->
+  <div class="card stripe-top">
+    <div class="card-title">📊 B3 — Resumo SHORT (12 Jun)</div>
+    <div class="text-sm" style="line-height: 1.7;">
+      <p><strong>Macro:</strong> Estreia da SpaceX na Bolsa ganhou destaque global. Confiança do consumidor nos EUA em foco. IPCA brasileiro no radar. BCE decidiu juros na semana passada. Tensão no Médio Oriente após resposta militar dos EUA ao Irão impactou petróleo e commodities em 10 Jun.</p>
+      <br>
+      <p><strong>Carteira (destaques da semana):</strong></p>
+      <p>• <strong>ISAE3/ISAE4 (ISA Energia Brasil)</strong> — Pagamento de juros de debêntures <strong>hoje 15 Jun</strong>. Duas emissões distintas. Evento de rendimento confirmado.</p>
+      <p>• <strong>Agenda B3 esta semana:</strong> resultados trimestrais em divulgação gradual. Verificar SUZB3, KLBN e SLCE3 para actualizações de guidance.</p>
+      <p>• <strong>IRBR3:</strong> acompanhar com atenção — verificar drawdown vs custo médio.</p>
+      <p>• <strong>ADVFN 11 Jun:</strong> índice de preços ao produtor nos EUA + decisão do BCE relevantes para treasuries e câmbio BRL/EUR.</p>
+    </div>
+  </div>
+
+  <!-- ADVFN -->
+  <div class="card stripe-gold">
+    <div class="card-title">📰 ADVFN — Headlines da semana</div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>12 Jun:</strong> Estreia SpaceX na Bolsa — confiança consumidor EUA + IPCA Brasil</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>11 Jun:</strong> PPI EUA + BCE decide juros + serviços Brasil</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>10 Jun:</strong> Tensão Médio Oriente (resposta EUA ao Irão) + inflação consumidor EUA</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>9 Jun:</strong> Balança comercial EUA + ADP + Lagarde (BCE) + Brava Energia</div></div></div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>8 Jun:</strong> Inflação EUA + Coreia do Sul circuit breaker + Raízen acordo credores</div></div></div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: FULL B3 ==================== -->
+<div id="b3" class="tab-content">
+
+  <div class="finance-nav">
+    <button class="active" onclick="showFinance('full-sf')">Full sem fontes</button>
+    <button onclick="showFinance('full-cf')">Full c/ fontes</button>
+    <button onclick="showFinance('short-sf')">Short sem fontes</button>
+    <button onclick="showFinance('short-cf')">Short c/ fontes</button>
+    <button onclick="showFinance('politica')">Política</button>
+  </div>
+
+  <!-- FULL SEM FONTES -->
+  <div id="full-sf" class="finance-section active">
+    <div class="card stripe-top">
+      <div class="card-title">📊 FULL B3 — Relatório AII · 12 Jun 2026</div>
+      <div class="banner banner-warn">⚠️ Relatório mais recente disponível: <strong>12 de Junho 2026</strong> (Sexta). Novo relatório gerado em próximo dia útil de mercado.</div>
+
+      <div class="section-div">🌍 Macro Global</div>
+      <div class="text-sm" style="line-height:1.7;">
+        Semana marcada pela <strong>estreia da SpaceX na bolsa</strong> — evento histórico que captou atenção dos mercados globais. A <strong>decisão do BCE sobre juros</strong> manteve-se em linha com o esperado. Nos EUA, o <strong>índice de preços ao produtor (PPI)</strong> e a <strong>confiança do consumidor</strong> foram indicadores centrais. A escalada de tensões no <strong>Médio Oriente</strong> (resposta militar dos EUA ao Irão) pressionou o petróleo e activos de risco em 10 Jun. O <strong>Payroll de Maio</strong> divulgado em 5 Jun estabeleceu tom favorável para o emprego americano. O real brasileiro (BRL) oscilou em função do diferencial de juros e do risco geopolítico.
+      </div>
+
+      <div class="section-div">🇧🇷 Brasil — Macro</div>
+      <div class="text-sm" style="line-height:1.7;">
+        <strong>IPCA</strong> em acompanhamento. <strong>Boletim Focus</strong> publicado confirmou expectativas de mercado. <strong>Raízen</strong> fechou acordo com credores (8 Jun), reduzindo risco de crédito. <strong>Petrobras</strong> mencionada no contexto de agenda de dividendos. Produção industrial no radar para próximas semanas.
+      </div>
+
+      <div class="section-div">📈 Carteira — Posições activas</div>
+      <table class="surg-table">
+        <tr><th>Ticker</th><th>Sector</th><th>Destaque</th></tr>
+        <tr><td class="ticker-name">SUZB3</td><td>Papel/Celulose</td><td>Commodities + dólar</td></tr>
+        <tr><td class="ticker-name">KLBN</td><td>Papel/Celulose</td><td>Correlacionado SUZB3</td></tr>
+        <tr><td class="ticker-name">TIMS3</td><td>Telecom</td><td>Dividendo recorrente</td></tr>
+        <tr><td class="ticker-name">BBDC</td><td>Bancos</td><td>Carteira bancária</td></tr>
+        <tr><td class="ticker-name">BBAS3</td><td>Bancos</td><td>Banco do Brasil — dividendo</td></tr>
+        <tr><td class="ticker-name">SANB</td><td>Bancos</td><td>Santander Brasil</td></tr>
+        <tr><td class="ticker-name">BPAC11</td><td>Bancos</td><td>BTG Pactual</td></tr>
+        <tr><td class="ticker-name">IRBR3</td><td>Seguros</td><td>⚠️ Acompanhar drawdown</td></tr>
+        <tr><td class="ticker-name">RANI3</td><td>Papel</td><td>Randon / menor liquidez</td></tr>
+        <tr><td class="ticker-name">SLCE3</td><td>Agro</td><td>SLC Agrícola — safra</td></tr>
+        <tr><td class="ticker-name">ISAE3</td><td>Energia</td><td>⭐ Pagamento juros debêntures HOJE (15 Jun)</td></tr>
+      </table>
+
+      <div class="section-div">📅 Agenda desta semana</div>
+      <div class="task-item"><div class="task-bar bar-terracota"></div><div><div><strong>15 Jun (hoje):</strong> ISAE3/4 — pagamento de juros de debêntures</div></div></div>
+      <div class="task-item"><div class="task-bar bar-gold"></div><div><div><strong>Semana 16-20 Jun:</strong> Dados de inflação e produção nos EUA; risco geopolítico ainda activo</div></div></div>
+    </div>
+  </div>
+
+  <!-- FULL COM FONTES -->
+  <div id="full-cf" class="finance-section">
+    <div class="card stripe-gold">
+      <div class="card-title">📊 FULL com Fontes — 12 Jun 2026</div>
+      <div class="text-sm" style="line-height:1.7;">
+        <p><strong>Fontes base:</strong></p>
+        <p>• ADVFN Boletim · 12 Jun 2026: "Estreia da SpaceX na Bolsa, confiança do consumidor nos EUA, IPCA no Brasil"</p>
+        <p>• ADVFN Boletim · 11 Jun 2026: "PPI nos EUA, BCE decide juros, serviços no Brasil"</p>
+        <p>• ADVFN Boletim · 10 Jun 2026: "Tensão no Oriente Médio após resposta dos EUA ao Irão, inflação ao consumidor EUA no radar"</p>
+        <p>• Email ISA Energia (12 Jun): "Pagamento de principal e juros da 1ª Emissão de Debêntures — IE Ivaí"</p>
+        <p>• Email ISA Energia (12 Jun): "Pagamento de juros da 8ª e 18ª (1ª série) — 15 Jun 2026"</p>
+        <p>• ADVFN Boletim · 8 Jun 2026: "Raízen fecha acordo com credores"</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SHORT SEM FONTES -->
+  <div id="short-sf" class="finance-section">
+    <div class="card stripe-sage">
+      <div class="card-title">📊 SHORT sem Fontes</div>
+      <div class="text-sm" style="line-height:1.7;">
+        B3 esta semana: SpaceX na bolsa dominou agenda global. BCE manteve juros. PPI EUA em linha. Médio Oriente pressionou petróleo. ISAE3 paga juros de debêntures hoje (15 Jun). Raízen resolveu pendência com credores. Carteira estável sem alertas críticos de drawdown visíveis nas notícias da semana. IRBR3 a monitorizar.
+      </div>
+    </div>
+  </div>
+
+  <!-- SHORT COM FONTES -->
+  <div id="short-cf" class="finance-section">
+    <div class="card stripe-blue">
+      <div class="card-title">📊 SHORT com Fontes</div>
+      <div class="text-sm" style="line-height:1.7;">
+        <p>SpaceX na bolsa (ADVFN 12 Jun). BCE juros (ADVFN 11 Jun). PPI EUA (ADVFN 11 Jun). Tensão Médio Oriente (ADVFN 10 Jun). ISAE3/4 pagamento juros debêntures hoje (Email ISA 12 Jun). Raízen acordo credores (ADVFN 8 Jun).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- POLÍTICA -->
+  <div id="politica" class="finance-section">
+    <div class="card stripe-navy" style="border-top:3px solid var(--muted);">
+      <div class="card-title">🏛️ Política — Impacto na Carteira</div>
+      <div class="text-sm" style="line-height:1.7;">
+        <p><strong>Brasil:</strong> Ambiente político condicionado pela agenda fiscal do governo. Boletim Focus reflecte percepção de mercado sobre política económica. Reforma tributária e cenário de juros (SELIC) continuam como vectores-chave para carteira B3.</p>
+        <br>
+        <p><strong>Global:</strong> Resposta militar dos EUA ao Irão (10 Jun) gerou volatilidade em commodities — SLCE3 e SUZB3 sensíveis a este ambiente. SpaceX na bolsa reflecte apetite por risco global crescente.</p>
+        <br>
+        <p><strong>Europa / Portugal:</strong> BCE mantém postura. Regime RNH de Rafael em Portugal relevante para planeamento fiscal da carteira BR/PT.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: CARNEGIE ==================== -->
+<div id="carnegie" class="tab-content">
+
+  <div class="carnegie-week">
+    <div class="week-label">Semana 2 de 17 · Fase 1 — Rapport</div>
+    <div class="week-title">Reduzir Resistência</div>
+    <div class="fio">"Antes de falar, pergunto — estou aqui para perceber ou para corrigir?"</div>
+    <div class="carnegie-practice">
+      <div style="font-size:12px;margin-bottom:6px;opacity:0.7;font-weight:600;">Movimentos práticos desta semana:</div>
+      <ul>
+        <li>Substituir "Devias..." por "O que achas de...?"</li>
+        <li>Evitar o "mas" depois de validar — usar "e"</li>
+        <li>Suavizar correcções: "Uma coisa que vale a pena considerar..."</li>
+        <li>Uma vez por dia: "Podes ter razão — deixa-me pensar nisso."</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- REFLEXÃO DO DIA -->
+  <div class="reflection-box">
+    <strong>🌙 Reflexão da noite (Semana 2):</strong><br>
+    "Onde criei resistência hoje? O que poderia ter dito de forma diferente?"
+  </div>
+
+  <!-- CASO PRÁTICO -->
+  <div class="card stripe-gold">
+    <div class="card-title">🎯 Caso prático imediato</div>
+    <div class="text-sm" style="line-height:1.6;">
+      Corrigir a <strong>Clara</strong> sobre a comida desperdiçada na viagem — sem que ela se sinta atacada. Foco: separar a ideia da identidade dela. Usar pergunta, não afirmação.
+    </div>
+  </div>
+
+  <!-- TAREFA 2-A -->
+  <div class="card stripe-teal">
+    <div class="card-title">📋 Tarefa 2-A</div>
+    <div class="text-sm" style="line-height:1.6;">
+      Numa relação onde costumas sentir resistência — usar <strong>apenas perguntas</strong>, zero afirmações de opinião. Reparar no que muda na dinâmica.
+    </div>
+  </div>
+
+  <!-- PROGRESSO DO CURSO -->
+  <div class="card stripe-navy">
+    <div class="card-title">📈 Progresso</div>
+    <div style="margin-top:8px;">
+      <div style="background:var(--border);border-radius:4px;height:6px;margin-bottom:6px;">
+        <div style="background:var(--terracota);height:6px;border-radius:4px;width:11.7%;"></div>
+      </div>
+      <div class="text-muted">Semana 2 de 17 · Semanas 0 e 1 concluídas ✅</div>
+    </div>
+    <div style="margin-top:10px;font-size:12px;">
+      <div style="padding:4px 0;border-bottom:1px solid var(--border);">✅ S0 — Autoconhecimento (concluída)</div>
+      <div style="padding:4px 0;border-bottom:1px solid var(--border);">✅ S1 — Interesse Acima de Impressão (concluída)</div>
+      <div style="padding:4px 0;border-bottom:1px solid var(--border);font-weight:600;color:var(--terracota);">📍 S2 — Reduzir Resistência (actual)</div>
+      <div style="padding:4px 0;color:var(--muted);">⬜ S3 — Liderança Silenciosa</div>
+      <div style="padding:4px 0;color:var(--muted);">⬜ S4 — A Pausa e o Nome</div>
+      <div style="padding:4px 0;color:var(--muted);">… + 12 semanas</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: TEMPO ==================== -->
+<div id="tempo" class="tab-content">
+
+  <!-- 7 DIAS -->
+  <div class="card stripe-top">
+    <div class="card-title">🌤️ Previsão 7 dias — Lisboa</div>
+    <div class="weather-grid">
+      <div class="weather-day today-w">
+        <div class="weather-date-label">Seg 15</div>
+        <div class="weather-icon">☀️</div>
+        <div class="weather-temps">28° <span>/ 17°</span></div>
+        <div class="weather-rain">0% chuva</div>
+      </div>
+      <div class="weather-day">
+        <div class="weather-date-label">Ter 16</div>
+        <div class="weather-icon">☀️</div>
+        <div class="weather-temps">29° <span>/ 17°</span></div>
+        <div class="weather-rain">0%</div>
+      </div>
+      <div class="weather-day">
+        <div class="weather-date-label">Qua 17</div>
+        <div class="weather-icon">⛅</div>
+        <div class="weather-temps">27° <span>/ 17°</span></div>
+        <div class="weather-rain">5%</div>
+      </div>
+      <div class="weather-day">
+        <div class="weather-date-label">Qui 18</div>
+        <div class="weather-icon">☀️</div>
+        <div class="weather-temps">29° <span>/ 17°</span></div>
+        <div class="weather-rain">0%</div>
+      </div>
+    </div>
+    <div class="weather-grid">
+      <div class="weather-day">
+        <div class="weather-date-label">Sex 19</div>
+        <div class="weather-icon">☀️</div>
+        <div class="weather-temps">30° <span>/ 18°</span></div>
+        <div class="weather-rain">0%</div>
+      </div>
+      <div class="weather-day">
+        <div class="weather-date-label">Sáb 20</div>
+        <div class="weather-icon">☀️</div>
+        <div class="weather-temps">32° <span>/ 19°</span></div>
+        <div class="weather-rain">0%</div>
+      </div>
+      <div class="weather-day">
+        <div class="weather-date-label">Dom 21</div>
+        <div class="weather-icon">⛅</div>
+        <div class="weather-temps">28° <span>/ 18°</span></div>
+        <div class="weather-rain">5%</div>
+      </div>
+      <div class="weather-day" style="visibility:hidden;"></div>
+    </div>
+  </div>
+
+  <!-- JANELAS DO DIA -->
+  <div class="card stripe-sage">
+    <div class="card-title">⏰ Janelas do dia — Segunda 15 Jun</div>
+    <div class="window-row">
+      <div class="window-time">08h00</div>
+      <div><div class="window-label">🚗 Saída para HFF (carro IC19)</div><div class="window-note">~15 min · Parque hospitalar · NÃO bicicleta</div></div>
+    </div>
+    <div class="window-row">
+      <div class="window-time">08h30</div>
+      <div><div class="window-label">🏥 Bloco Operatório — início</div><div class="window-note">10 cirurgias · 1 FDR atenção</div></div>
+    </div>
+    <div class="window-row">
+      <div class="window-time">15h30</div>
+      <div><div class="window-label">⚡ SIGIC começa</div><div class="window-note">Tarde bloqueada até ~21h00</div></div>
+    </div>
+    <div class="window-row">
+      <div class="window-time">21h00+</div>
+      <div><div class="window-label">🚗 Regresso a casa (carro IC19)</div><div class="window-note">☀️ Bom tempo amanhã — bicicleta lazer disponível amanhã à tarde</div></div>
+    </div>
+    <div class="banner banner-info" style="margin-top:10px;">
+      🚴 <div>Hoje: SIGIC bloqueia tarde/noite. <strong>Ciclo de lazer fica para terça</strong> — bom tempo previsto 29°C.</div>
+    </div>
+  </div>
+
+  <!-- NOTA PREVENÇÃO -->
+  <div class="banner banner-warn">
+    🛡️ <div><strong>Prevenção activa esta semana.</strong> Sem saídas longas de Lisboa — estás on-call até 21 Jun.</div>
+  </div>
+
+</div>
+
+<!-- ==================== TAB: ROTINA ==================== -->
+<div id="rotina" class="tab-content">
+
+  <div class="card stripe-top">
+    <div class="card-title">⚡ 3 Janelas diárias</div>
+    <div class="routine-row">
+      <div class="routine-time">08h00</div>
+      <div>
+        <div class="routine-activity">🌅 Matinal (15 min)</div>
+        <div class="routine-note">Briefing → HFF → saída</div>
+      </div>
+    </div>
+    <div class="routine-row">
+      <div class="routine-time">16h30*</div>
+      <div>
+        <div class="routine-activity">⚡ Processamento (20 min)</div>
+        <div class="routine-note">Email + Todoist + desporto + 1 unsubscribe · *Dias SIGIC move para após 21h</div>
+      </div>
+    </div>
+    <div class="routine-row">
+      <div class="routine-time">21h30*</div>
+      <div>
+        <div class="routine-activity">🌙 Descompressão (15 min)</div>
+        <div class="routine-note">Carnegie 5 min + B3 SHORT 3 min + 3 prioridades amanhã</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="banner banner-warn">⚠️ <div>Hoje é dia de SIGIC. As janelas 2 e 3 movem para <strong>após as 21h00</strong>.</div></div>
+
+  <!-- HÁBITOS DA SEMANA -->
+  <div class="card stripe-sage">
+    <div class="card-title">🌿 Hábitos semanais</div>
+    <div class="routine-row"><div class="routine-time">Seg</div><div><div class="routine-activity">📚 Leitura artigos Cirurgia Pediátrica</div><div class="routine-note">Manhã, entre cirurgias no BO</div></div></div>
+    <div class="routine-row"><div class="routine-time">Ter</div><div><div class="routine-activity">🏋️ Gym 7h30 · CV Update · Café Clara · Ciclo tarde</div></div></div>
+    <div class="routine-row"><div class="routine-time">Qua</div><div><div class="routine-activity">📚 Leitura CP · Ciclo lazer/reabilitação tarde</div></div></div>
+    <div class="routine-row"><div class="routine-time">Qui</div><div><div class="routine-activity">🏋️ Gym 7h30 · Projects tarde · Happy hour Vanessa</div></div></div>
+    <div class="routine-row"><div class="routine-time">Sex</div><div><div class="routine-activity">🏋️ Gym 7h30 · Revisão semanal</div></div></div>
+    <div class="routine-row"><div class="routine-time">FDS</div><div><div class="routine-activity">🦵 Leg & Core Reinforcement</div></div></div>
+    <div class="routine-row"><div class="routine-time">Diário</div><div><div class="routine-activity">💊 Forxiga @pessoal</div></div></div>
+  </div>
+
+  <!-- PRÓXIMAS PRIORIDADES -->
+  <div class="card stripe-gold">
+    <div class="card-title">🎯 3 Prioridades amanhã (Terça 16)</div>
+    <div class="task-item"><div class="task-bar bar-gold"></div><div>💰 Resolver pendências fiscais (IRS PT + IR Brasil + Previdência UK)</div></div>
+    <div class="task-item"><div class="task-bar bar-terracota"></div><div>🏥 Agenesia pulmonar — proc. 1306876 (confirmar)</div></div>
+    <div class="task-item"><div class="task-bar bar-sage"></div><div>🌳 Ciclo lazer à tarde — bom tempo previsto</div></div>
+  </div>
+
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function showFinance(id) {
+  document.querySelectorAll('.finance-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.finance-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
 </html>
