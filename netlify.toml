@@ -3,5 +3,5 @@
 
 [[redirects]]
   from = "/"
-  to = "/agendas/briefing/index.html"
-  status = 302
+  to = "/home/index.html"
+    status = 302
