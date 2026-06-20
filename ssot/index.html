@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SSOT — Registo de Experiências</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2B5CFF">
+<style>
+*{box-sizing:border-box;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI";
+  margin:0;
+  background:linear-gradient(180deg,#EFE7DB,#F5EEE5);
+  color:#1F2937;
+}
+.container{max-width:520px;margin:auto;padding:16px;padding-bottom:90px;}
+.header{padding:10px;display:flex;justify-content:space-between;align-items:center;}
+.header h1{margin:0;font-size:26px;}
+.header .pending{
+  background:#2B5CFF;color:white;font-size:13px;font-weight:700;
+  padding:6px 12px;border-radius:14px;cursor:pointer;border:none;
+}
+.card{
+  background:white;padding:18px;margin-bottom:14px;border-radius:20px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.06);
+}
+.label{font-size:13px;font-weight:700;margin-bottom:10px;color:#374151;}
+input,textarea{
+  width:100%;padding:14px;background:#F7F8FA;border:none;
+  border-radius:14px;font-size:16px;font-family:inherit;
+}
+input:focus,textarea:focus{outline:none;box-shadow:0 0 0 2px #2B5CFF;background:white;}
+.icon-row{display:flex;flex-wrap:wrap;gap:10px;}
+.icon-row-nowrap{display:flex;flex-wrap:nowrap;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.icon-btn{
+  height:52px;min-width:52px;padding:0 14px;background:white;border:none;
+  border-radius:16px;box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  font-weight:600;transition:.15s;white-space:nowrap;cursor:pointer;
+}
+.icon-btn.active{background:linear-gradient(90deg,#2B5CFF,#4A74FF);color:white;}
+.time-row{display:flex;flex-wrap:wrap;gap:10px;}
+.time-btn{
+  height:48px;padding:0 16px;background:white;border:none;border-radius:16px;
+  font-size:14px;font-weight:600;box-shadow:0 3px 10px rgba(0,0,0,0.08);cursor:pointer;
+}
+.time-btn.active{background:linear-gradient(90deg,#2B5CFF,#4A74FF);color:white;}
+.help{font-size:13px;margin-top:8px;color:#777;}
+.actions{display:flex;gap:12px;position:fixed;bottom:0;left:0;right:0;
+  max-width:520px;margin:auto;padding:14px 16px;background:linear-gradient(180deg,rgba(245,238,229,0),#F5EEE5 30%);}
+.secondary{height:58px;flex:1;background:white;border:none;border-radius:18px;font-size:22px;box-shadow:0 3px 10px rgba(0,0,0,0.08);}
+.primary{height:58px;flex:2;background:linear-gradient(90deg,#2B5CFF,#4A74FF);color:white;border:none;
+  border-radius:18px;font-size:18px;font-weight:700;box-shadow:0 8px 22px rgba(43,92,255,0.3);}
+.toast{
+  position:fixed;top:16px;left:16px;right:16px;max-width:488px;margin:auto;
+  background:#1F2937;color:white;padding:14px 18px;border-radius:14px;
+  font-size:14px;text-align:center;opacity:0;transition:opacity .25s;z-index:50;
+}
+.toast.show{opacity:1;}
+.pending-list{display:none;flex-direction:column;gap:8px;margin-top:10px;}
+.pending-list.open{display:flex;}
+.pending-item{display:flex;justify-content:space-between;align-items:center;
+  background:#F7F8FA;padding:10px 12px;border-radius:12px;font-size:14px;}
+.pending-item button{border:none;background:none;font-size:16px;cursor:pointer;}
+.sync-actions{display:flex;gap:10px;margin-top:10px;}
+.sync-actions button{flex:1;padding:12px;border:none;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer;}
+.sync-copy{background:#2B5CFF;color:white;}
+.sync-clear{background:#FEE2E2;color:#991B1B;}
+.cat-label{font-size:12px;color:#6B7280;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>🧠 SSOT</h1>
+    <button class="pending" id="pendingBtn" onclick="togglePending()">0 por sincronizar</button>
+  </div>
+
+  <div class="pending-list" id="pendingList"></div>
+
+  <!-- IDENTIDADE -->
+  <div class="card">
+    <div class="label">O que foi?</div>
+    <input id="title" placeholder="Ex: Mamma Mia, Parque Bela Vista...">
+  </div>
+
+  <!-- CATEGORIA -->
+  <div class="card">
+    <div class="label">Categoria</div>
+    <div class="icon-row" id="categoryRow">
+      <button class="icon-btn active" data-cat="restaurant">🍝</button>
+      <button class="icon-btn" data-cat="movie">🎬</button>
+      <button class="icon-btn" data-cat="series">📺</button>
+      <button class="icon-btn" data-cat="book">📚</button>
+      <button class="icon-btn" data-cat="travel">✈️</button>
+      <button class="icon-btn" data-cat="drink">🍷</button>
+      <button class="icon-btn" data-cat="place">📍</button>
+      <button class="icon-btn" data-cat="activity">🏃</button>
+      <button class="icon-btn" data-cat="other">⭐</button>
+    </div>
+    <div class="cat-label" id="catLabel">restaurant</div>
+  </div>
+
+  <!-- QUANDO -->
+  <div class="card">
+    <div class="label">Quando?</div>
+    <div class="time-row" id="timeRow">
+      <button class="time-btn active" data-offset="0">Hoje</button>
+      <button class="time-btn" data-offset="-1">Ontem</button>
+    </div>
+    <input type="date" id="dateInput" style="margin-top:12px">
+  </div>
+
+  <!-- COM QUEM -->
+  <div class="card">
+    <div class="label">Com quem?</div>
+    <div class="icon-row-nowrap" id="companionsRow">
+      <button class="icon-btn" data-comp="Vanessa">Vanessa</button>
+      <button class="icon-btn" data-comp="Clara">Clara</button>
+      <button class="icon-btn" data-comp="Pub,Dexter">🐶</button>
+      <button class="icon-btn" data-comp="alone">🙋 Sozinho</button>
+      <button class="icon-btn" id="addCompanionBtn">＋</button>
+    </div>
+    <input id="customCompanion" placeholder="Nome..." style="display:none;margin-top:10px">
+  </div>
+
+  <!-- AVALIAÇÃO -->
+  <div class="card">
+    <div class="label">Avaliação</div>
+    <div class="icon-row" id="ratingRow">
+      <button class="icon-btn" data-rating="1">😞</button>
+      <button class="icon-btn" data-rating="2">🙁</button>
+      <button class="icon-btn" data-rating="3">😐</button>
+      <button class="icon-btn" data-rating="4">🙂</button>
+      <button class="icon-btn" data-rating="5">😍</button>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="card">
+    <div class="label">Estado</div>
+    <div class="icon-row-nowrap" id="statusRow">
+      <button class="icon-btn" data-status="suggested">Sugestão</button>
+      <button class="icon-btn" data-status="planned">Planeado</button>
+      <button class="icon-btn active" data-status="tested">Testado</button>
+      <button class="icon-btn" data-status="approved">Aprovado</button>
+      <button class="icon-btn" data-status="favorite">Favorito</button>
+      <button class="icon-btn" data-status="excluded">Excluído</button>
+      <button class="icon-btn" data-status="archived">Arquivado</button>
+    </div>
+  </div>
+
+  <!-- CONSUMO -->
+  <div class="card">
+    <div class="label">Consumo</div>
+    <input id="consumption" placeholder="carbonara, vinho... (separar por vírgula)">
+  </div>
+
+  <!-- PREÇO -->
+  <div class="card">
+    <div class="label">Preço total (€)</div>
+    <input type="number" id="costTotal" placeholder="0">
+    <div class="help" id="costHelp">Preço por pessoa será calculado automaticamente</div>
+  </div>
+
+  <!-- OBSERVAÇÕES -->
+  <div class="card">
+    <div class="label">Observações</div>
+    <textarea id="notes" rows="4"></textarea>
+  </div>
+
+  <div style="height:20px"></div>
+</div>
+
+<div class="actions">
+  <button class="secondary" onclick="clearForm()">❌</button>
+  <button class="primary" onclick="saveEntry()">💾 Guardar</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ---------- STATE ----------
+let selectedCategory = 'restaurant';
+let selectedRating = 0;
+let selectedStatus = 'tested';
+let selectedCompanions = [];
+let dateOffset = 0;
+
+// ---------- INDEXEDDB ----------
+let db;
+const DB_NAME = 'ssot_experiences';
+const STORE = 'entries';
+
+function openDB(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = (e) => {
+      const database = e.target.result;
+      if (!database.objectStoreNames.contains(STORE)) {
+        database.createObjectStore(STORE, { keyPath: 'id' });
+      }
+    };
+    req.onsuccess = (e) => { db = e.target.result; resolve(db); };
+    req.onerror = (e) => reject(e);
+  });
+}
+
+function dbAdd(entry){
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).add(entry);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+function dbGetAll(){
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readonly');
+    const req = tx.objectStore(STORE).getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = (e) => reject(e);
+  });
+}
+
+function dbDelete(id){
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).delete(id);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+function dbClear(){
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE, 'readwrite');
+    tx.objectStore(STORE).clear();
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e);
+  });
+}
+
+// ---------- UI HELPERS ----------
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+function todayOffset(offsetDays){
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().slice(0,10);
+}
+
+document.getElementById('dateInput').value = todayOffset(0);
+
+// Category selection
+document.getElementById('categoryRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.icon-btn');
+  if (!btn) return;
+  document.querySelectorAll('#categoryRow .icon-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedCategory = btn.dataset.cat;
+  document.getElementById('catLabel').textContent = selectedCategory;
+});
+
+// Time buttons
+document.getElementById('timeRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.time-btn');
+  if (!btn) return;
+  document.querySelectorAll('#timeRow .time-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  dateOffset = parseInt(btn.dataset.offset, 10);
+  document.getElementById('dateInput').value = todayOffset(dateOffset);
+});
+document.getElementById('dateInput').addEventListener('input', () => {
+  document.querySelectorAll('#timeRow .time-btn').forEach(b => b.classList.remove('active'));
+});
+
+// Companions (multi-select)
+document.getElementById('companionsRow').addEventListener('click', (e) => {
+  const addBtn = e.target.closest('#addCompanionBtn');
+  if (addBtn) {
+    const input = document.getElementById('customCompanion');
+    input.style.display = input.style.display === 'none' ? 'block' : 'none';
+    input.focus();
+    return;
+  }
+  const btn = e.target.closest('.icon-btn');
+  if (!btn) return;
+  btn.classList.toggle('active');
+  updateCompanions();
+});
+document.getElementById('customCompanion').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.value.trim()) {
+    const row = document.getElementById('companionsRow');
+    const newBtn = document.createElement('button');
+    newBtn.className = 'icon-btn active';
+    newBtn.dataset.comp = e.target.value.trim();
+    newBtn.textContent = e.target.value.trim();
+    row.insertBefore(newBtn, document.getElementById('addCompanionBtn'));
+    e.target.value = '';
+    e.target.style.display = 'none';
+    updateCompanions();
+  }
+});
+function updateCompanions(){
+  selectedCompanions = [];
+  document.querySelectorAll('#companionsRow .icon-btn.active').forEach(b => {
+    if (b.dataset.comp) selectedCompanions.push(...b.dataset.comp.split(','));
+  });
+  updateCostHelp();
+}
+
+// Rating (single select)
+document.getElementById('ratingRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.icon-btn');
+  if (!btn) return;
+  document.querySelectorAll('#ratingRow .icon-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedRating = parseInt(btn.dataset.rating, 10);
+});
+
+// Status (single select)
+document.getElementById('statusRow').addEventListener('click', (e) => {
+  const btn = e.target.closest('.icon-btn');
+  if (!btn) return;
+  document.querySelectorAll('#statusRow .icon-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  selectedStatus = btn.dataset.status;
+});
+
+// Cost auto-calc per person
+function updateCostHelp(){
+  const total = parseFloat(document.getElementById('costTotal').value);
+  const people = selectedCompanions.length + 1;
+  if (!isNaN(total) && total > 0) {
+    const perPerson = (total / people).toFixed(2);
+    document.getElementById('costHelp').textContent = `${people} pessoa(s) · €${perPerson} por pessoa`;
+  } else {
+    document.getElementById('costHelp').textContent = 'Preço por pessoa será calculado automaticamente';
+  }
+}
+document.getElementById('costTotal').addEventListener('input', updateCostHelp);
+
+// ---------- SAVE ----------
+async function saveEntry(){
+  const title = document.getElementById('title').value.trim();
+  if (!title) { showToast('⚠️ Falta o título'); return; }
+
+  const total = parseFloat(document.getElementById('costTotal').value);
+  const people = selectedCompanions.length + 1;
+  const cost = (!isNaN(total) && total > 0)
+    ? { total: total, per_person: Math.round((total / people) * 100) / 100 }
+    : {};
+
+  const consumptionRaw = document.getElementById('consumption').value.trim();
+  const consumption = consumptionRaw ? consumptionRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+  const entry = {
+    id: 'ent_' + Date.now(),
+    date: document.getElementById('dateInput').value,
+    title: title,
+    category: selectedCategory,
+    subcategory: '',
+    status: selectedStatus,
+    rating: selectedRating,
+    companions: selectedCompanions,
+    context: {},
+    cost: cost,
+    consumption: consumption,
+    experience: {},
+    notes: document.getElementById('notes').value.trim(),
+    flags: {},
+    source: 'self',
+    origin: { platform: '' }
+  };
+
+  await dbAdd(entry);
+  showToast('💾 Guardado localmente');
+  clearForm();
+  refreshPending();
+}
+
+function clearForm(){
+  document.getElementById('title').value = '';
+  document.getElementById('consumption').value = '';
+  document.getElementById('costTotal').value = '';
+  document.getElementById('notes').value = '';
+  document.querySelectorAll('#companionsRow .icon-btn.active').forEach(b => b.classList.remove('active'));
+  selectedCompanions = [];
+  updateCostHelp();
+  document.querySelectorAll('#ratingRow .icon-btn').forEach(b => b.classList.remove('active'));
+  selectedRating = 0;
+}
+
+// ---------- PENDING / SYNC ----------
+async function refreshPending(){
+  const entries = await dbGetAll();
+  document.getElementById('pendingBtn').textContent = `${entries.length} por sincronizar`;
+  const list = document.getElementById('pendingList');
+  list.innerHTML = '';
+  entries.forEach(en => {
+    const row = document.createElement('div');
+    row.className = 'pending-item';
+    row.innerHTML = `<span>${en.title} · ${en.date} · ${en.status}</span>`;
+    const del = document.createElement('button');
+    del.textContent = '🗑️';
+    del.onclick = async () => { await dbDelete(en.id); refreshPending(); };
+    row.appendChild(del);
+    list.appendChild(row);
+  });
+  if (entries.length > 0) {
+    const syncDiv = document.createElement('div');
+    syncDiv.className = 'sync-actions';
+    syncDiv.innerHTML = `
+      <button class="sync-copy" id="copyBtn">📋 Copiar JSON</button>
+      <button class="sync-clear" id="clearBtn">Limpar tudo</button>`;
+    list.appendChild(syncDiv);
+    document.getElementById('copyBtn').onclick = async () => {
+      const all = await dbGetAll();
+      const json = JSON.stringify(all, null, 2);
+      try {
+        await navigator.clipboard.writeText(json);
+        showToast('📋 Copiado! Cola na conversa com o Claude para sincronizar com o Feedback_log.json');
+      } catch (e) {
+        showToast('Não foi possível copiar automaticamente — abre a consola.');
+        console.log(json);
+      }
+    };
+    document.getElementById('clearBtn').onclick = async () => {
+      await dbClear();
+      refreshPending();
+      showToast('Lista local limpa');
+    };
+  }
+}
+
+function togglePending(){
+  document.getElementById('pendingList').classList.toggle('open');
+}
+
+// ---------- INIT ----------
+(async () => {
+  await openDB();
+  refreshPending();
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  }
+})();
+</script>
+
+</body>
+</html>
