@@ -1,0 +1,10 @@
+{
+  "name": "SSOT - Registo de Experiências",
+  "short_name": "SSOT",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F5EEE5",
+  "theme_color": "#2B5CFF",
+  "orientation": "portrait",
+  "icons": []
+}
