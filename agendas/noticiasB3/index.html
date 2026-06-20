@@ -1,2 +1,462 @@
-print 'test'
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__PAGE_TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f6f8; --bg2:#ffffff; --bg3:#eef0f4; --line:#e1e4ea;
+  --txt:#161a22; --mut:#5a6372; --dim:#8b93a1;
+  --accent:#2554e8; --grn:#15803d; --red:#dc2626; --amb:#b45309; --pur:#7c3aed;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Manrope',sans-serif;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;line-height:1.2}
+.mono{font-family:'JetBrains Mono',monospace}
 
+/* HEADER */
+header.hero{padding:30px 0 20px;border-bottom:1px solid var(--line);background:var(--bg2)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+header.hero h1{font-size:clamp(22px,3.6vw,32px);font-weight:600;letter-spacing:-.01em;margin-bottom:10px;color:var(--txt)}
+header.hero h1 .sub{color:var(--mut);font-weight:400;font-style:italic;display:block;font-size:.58em;margin-top:4px}
+.lede{font-size:15px;color:var(--mut);max-width:680px;margin-top:6px}
+.metarow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.04em;color:var(--mut);background:var(--bg3);border:1px solid var(--line);padding:6px 12px;border-radius:20px}
+.chip b{color:var(--txt);font-weight:700}
+
+/* TAB BAR (2 blocos de botoes pequenos, fixos no topo ao rolar) */
+nav.tabbar{position:sticky;top:0;z-index:20;background:var(--bg2);border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(20,30,50,.05)}
+.tabbar-inner{max-width:1000px;margin:0 auto;padding:9px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.tabgroup{display:flex;flex-wrap:wrap;gap:5px}
+.tabgroup+.tabgroup{padding-left:14px;border-left:1px solid var(--line)}
+.tabbtn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.02em;color:var(--mut);background:var(--bg3);border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;line-height:1.3}
+.tabbtn:hover{color:var(--txt);border-color:var(--accent)}
+.tabbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(max-width:760px){
+  .tabbar-inner{padding:8px 16px;gap:10px}
+  .tabgroup+.tabgroup{padding-left:10px}
+  .tabbtn{font-size:10.5px;padding:5px 8px}
+}
+
+/* CONTEUDO (uma so seccao visivel por vez, trocada pelas abas) */
+main.content{max-width:1000px;margin:0 auto;padding:24px 22px 64px}
+.collabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:0 2px 10px}
+
+/* BOX (cada seccao e uma caixa propria; so a activa fica visivel) */
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 26px 26px;box-shadow:0 1px 3px rgba(20,30,50,.04)}
+.box[hidden]{display:none}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);letter-spacing:.16em;margin-bottom:8px;font-weight:600}
+.sec-num:empty{display:none}
+.box h2{font-size:clamp(19px,2.2vw,24px);margin-bottom:8px;letter-spacing:-.01em;color:var(--txt)}
+.box h2:empty{display:none}
+.sec-intro{color:var(--mut);font-size:14.5px;margin-bottom:18px}
+.sec-intro:empty{display:none}
+p{margin-bottom:14px;color:#2b313c}
+p.tight{margin-bottom:8px}
+strong,b{color:var(--txt);font-weight:700}
+em.tag{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-right:6px;vertical-align:middle;font-weight:600}
+.t-facto{background:#dbeafe;color:#1d4ed8}
+.t-leitura{background:#f3e8ff;color:#7c3aed}
+.t-opiniao{background:#fef3c7;color:#b45309}
+.t-cenario{background:#f3e8ff;color:#7c3aed}
+.t-accao{background:#dcfce7;color:#15803d}
+
+/* RICH TEXT */
+.richtext:empty{display:none}
+
+/* TABLES */
+.tablewrap{overflow-x:auto;margin:4px 0 20px;border:1px solid var(--line);border-radius:12px}
+.tablewrap[hidden]{display:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:420px}
+th{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:right;padding:12px 12px;background:var(--bg3);border-bottom:1px solid var(--line);font-weight:600}
+th:first-child{text-align:left}
+td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#2b313c}
+td:first-child{text-align:left;font-family:'Manrope',sans-serif;font-weight:700;color:var(--txt)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.pos{color:var(--grn);font-weight:600} .neg{color:var(--red);font-weight:600}
+.status-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.st-manter{background:var(--bg3);color:var(--mut)}
+.st-acumular{background:#dcfce7;color:#15803d}
+.st-reduzir{background:#fef3c7;color:#b45309}
+.st-vender{background:#fee2e2;color:#dc2626}
+.st-sim{background:#dcfce7;color:#15803d}
+.st-nao{background:var(--bg3);color:var(--mut)}
+.st-atingido{background:#dcfce7;color:#15803d}
+.st-proximo{background:#fef3c7;color:#b45309}
+.st-longe{background:var(--bg3);color:var(--mut)}
+
+/* CALLOUT */
+.callout{background:#eff4ff;border:1px solid #c9dafc;border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px;margin:4px 0 20px}
+.callout[hidden]{display:none}
+.callout .ct{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-weight:700}
+.callout p{margin-bottom:0;color:#1d2b4f}
+
+/* LISTS */
+ul.clean{list-style:none;margin:4px 0 20px}
+ul.clean:empty{display:none}
+ul.clean li{padding:9px 0 9px 24px;position:relative;color:#2b313c;border-bottom:1px solid var(--line)}
+ul.clean li:last-child{border-bottom:none}
+ul.clean li::before{content:"";position:absolute;left:3px;top:17px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+ul.clean li b{color:var(--txt)}
+
+/* TWO-COL PANELS (dentro de uma box, sem graficos) */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 20px}
+.two:empty{display:none}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+.panel{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.panel h4{font-size:14.5px;margin-bottom:8px;color:var(--txt)}
+.panel.good{border-top:2px solid var(--grn)}
+.panel.bad{border-top:2px solid var(--red)}
+
+.footnote{font-size:12.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-top:-6px}
+.footnote:empty{display:none}
+
+footer{padding:30px 0 56px;color:var(--dim);font-size:13px;font-family:'JetBrains Mono',monospace}
+footer .wrap{border-top:1px solid var(--line);padding-top:20px}
+.disc{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow" id="hdrEyebrow"></div>
+    <h1 id="hdrTitle"></h1>
+    <p class="lede" id="hdrLede"></p>
+    <div class="metarow" id="hdrChips"></div>
+  </div>
+</header>
+
+<nav class="tabbar">
+  <div class="tabbar-inner">
+    <div class="tabgroup" data-group="news">
+      <button class="tabbtn active" data-tab="inicio" type="button">Início</button>
+      <button class="tabbtn" data-tab="full" type="button">Full</button>
+      <button class="tabbtn" data-tab="full_fontes" type="button">Full c/ Fontes</button>
+      <button class="tabbtn" data-tab="categorias" type="button">Categorias</button>
+      <button class="tabbtn" data-tab="insiders_b3" type="button">Insiders &amp; B3</button>
+      <button class="tabbtn" data-tab="origem" type="button">Origem</button>
+    </div>
+    <div class="tabgroup" data-group="carteira">
+      <button class="tabbtn" data-tab="portfolio" type="button">Portfolio</button>
+      <button class="tabbtn" data-tab="gatilhos" type="button">Gatilhos</button>
+      <button class="tabbtn" data-tab="indices" type="button">Índices</button>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+
+  <section class="box" data-section="inicio">
+    <div class="sec-num" data-f="num">01</div>
+    <h2 data-f="heading">Início</h2>
+    <p class="sec-intro" data-f="intro">Mercado em 30 segundos.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="full" hidden>
+    <div class="sec-num" data-f="num">02</div>
+    <h2 data-f="heading">Full</h2>
+    <p class="sec-intro" data-f="intro">Leitura corrida, sem citações inline.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="full_fontes" hidden>
+    <div class="sec-num" data-f="num">05</div>
+    <h2 data-f="heading">Full com Fontes</h2>
+    <p class="sec-intro" data-f="intro">Versão densa, com citação inline de cada afirmação.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="categorias" hidden>
+    <div class="sec-num" data-f="num">03</div>
+    <h2 data-f="heading">Categorias</h2>
+    <p class="sec-intro" data-f="intro">Email, Telegram e Web Search combinados.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="insiders_b3" hidden>
+    <div class="sec-num" data-f="num">04</div>
+    <h2 data-f="heading">Insiders &amp; B3</h2>
+    <p class="sec-intro" data-f="intro">Movimentos de insiders e recompras.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="origem" hidden>
+    <div class="sec-num" data-f="num">06</div>
+    <h2 data-f="heading">Origem / Fontes</h2>
+    <p class="sec-intro" data-f="intro">Visão geral de proveniência das fontes processadas hoje.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="portfolio" hidden>
+    <div class="sec-num" data-f="num">07</div>
+    <h2 data-f="heading">Portfolio</h2>
+    <p class="sec-intro" data-f="intro">Espelho da carteira com status sugerido e prioridade.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="gatilhos" hidden>
+    <div class="sec-num" data-f="num">08</div>
+    <h2 data-f="heading">Gatilhos</h2>
+    <p class="sec-intro" data-f="intro">Cruzamento de cotações verificadas hoje contra preços-alvo de entrada.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="indices" hidden>
+    <div class="sec-num" data-f="num">09</div>
+    <h2 data-f="heading">Índices</h2>
+    <p class="sec-intro" data-f="intro">Painel de Mercado expandido (Moedas, Commodities, Índices, Juros, Volatilidade).</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="footerLine"></span>
+    <div class="disc" id="footerDisc"></div>
+  </div>
+</footer>
+
+<script type="application/json" id="report-data">{"meta":{"eyebrow":"AII — Briefing Diário","titleMain":"Notícias do Dia","titleSub":"20 de junho de 2026 (sábado — edição fim de semana)","lede":"Mercado fechado no fim de semana. Foco em notícias corporativas, eventos e macro desde o fechamento de sexta (19/jun). Verificação de cotação ao vivo e seção Gatilhos omitidas nesta edição — ver nota na seção Gatilhos.","chips":[{"label":"Sentimento","value":"Neutro"},{"label":"Impacto na carteira","value":"Baixo–médio (EGIE3 com decisão até 2/jul)"},{"label":"Fontes processadas","value":"11"}],"footerLine":"AII — Notícias do Dia — gerado automaticamente","footerDisclaimer":"Edição de fim de semana: sem verificação de cotação ao vivo nem seção Gatilhos (B3 fechada). Demais conteúdos baseados em e-mail ADVFN (19/jun), pesquisa web e contexto da Análise de Carteira (17/jun). Telegram indisponível nesta edição (gap de exportação). Este documento não constitui aconselhamento financeiro.","pageTitle":"AII — Notícias do Dia — 20jun2026 (fim de semana)"},"sections":{"inicio":{"num":"01","heading":"Início","intro":"Mercado em 30 segundos — edição de fim de semana, sem pregão hoje.","panels":[{"title":"Sentimento","text":"Neutro. Sem catalisadores fortes no fim de semana; foco em eventos corporativos e macro.","tone":""},{"title":"Impacto na carteira","text":"Baixo a médio. EGIE3 tem decisão urgente até 2/jul (oferta Jirau, R$8,4 bi); demais posições sem novidade que altere teses.","tone":""}],"bullets":[{"strong":"EGIE3","text":"Conselho aprovou oferta primária de ~R$8,4 bi para incorporar 40% de Jirau; AGE em 2/jul. Decisão urgente já mapeada na Análise de Carteira."},{"strong":"CPFE3","text":"Pagou 2ª parcela de dividendos (R$150 mi) em 18/jun; yield 12m em 8,62%. UBS BB rebaixou recomendação após a alta recente."},{"strong":"CMIN3","text":"Recompra de até 50 milhões de ações aprovada; minério em queda na China continua pressionando a tese de acumulação condicionada."},{"strong":"SANB3 / SOJA3 / ROMI3","text":"Resultados do 1T26 confirmam as teses de saída/redução já decididas na Análise de Carteira."},{"strong":"Macro","text":"Selic em 14,25% após corte de 0,25 p.p.; IPCA de maio em 0,58% (12 meses: 4,72%). Liquidez baixa na sexta por feriados (Juneteenth, Barco-Dragão)."}],"paragraphs":[{"tag":"cenario","text":"B3 fechada (sábado). Edição sem verificação de cotação ao vivo nem seção Gatilhos — foco em notícias, eventos corporativos e macro do fim de semana."},{"tag":"accao","text":"Acompanhar AGE da Engie em 2/jul (EGIE3) — decisão sobre subscrição da oferta primária ligada à incorporação de 40% de Jirau."}],"table":null,"callout":{"title":"Edição de fim de semana","text":"Sem novo fechamento de mercado hoje. Próxima verificação de cotações e Gatilhos: segunda-feira, 22/jun/2026."},"footnote":"Seção Início = SHORT + alertas críticos do relatório markdown."},"full":{"num":"02","heading":"Full","intro":"Leitura corrida, sem citações inline (mapeia FULL SEM FONTES).","panels":[],"bullets":[],"paragraphs":[{"text":"EGIE3 — manter, decisão urgente até 2/jul. O conselho da Engie Brasil aprovou uma oferta pública primária de ações que pode levantar cerca de R$8,4 bi, vinculada à incorporação de uma fatia de 40% da hidrelétrica de Jirau — hoje em poder da controladora, avaliada em torno de R$5,74 bi. A proposta vai à Assembleia Geral Extraordinária em 2/jul/2026. A companhia suspendeu suas projeções financeiras até a operação se definir. É o gatilho de decisão já identificado na Análise de Carteira, agora com data certa e tamanho confirmado da oferta."},{"text":"CPFE3 — acumular, abaixo de R$46. Pagou a 2ª parcela do dividendo de 2026 em 18/jun (R$150 mi). Reportou impacto de R$558 mi por curtailment de energia eólica/solar em 2025, o que pressionou a ação, mas ainda aprovou R$4,3 bi em dividendos no período — yield de 12 meses em 8,62%. UBS BB rebaixou a recomendação após a valorização recente, mas ainda vê espaço para mais dividendos. Nada aqui contradiz a tese de acumulação abaixo do alvo."},{"text":"CMIN3 — acumular, condicionado a minério acima de US$100/t. Aprovou programa de recompra de até 50 milhões de ações ordinárias, vigente de 19/mai/26 a 19/nov/27. Em contrapartida, o minério de ferro segue pressionado, com futuros em yuan em queda no mês. Lucro do 1T26 veio afetado por sazonalidade, câmbio e chuvas. A tese de acumulação permanece condicionada ao preço do minério."},{"text":"RANI3 — acumular nas quedas. Sem notícia corporativa nova relevante em junho; a empresa avalia um novo ciclo de investimento em celulose e papelão ondulado. Último dividendo de R$0,02/cota em 29/mai. Nenhum gatilho novo, tese inalterada."},{"text":"KLBN4 — acumular, em torno de R$3,40. Ação acumula queda de mais de 11% em 2026. EBITDA ajustado do 1T26 levemente menor por dólar médio mais baixo. Leverage caindo de 4,5x em 2024 para 3,3x projetado em 2026, com dívida majoritariamente alongada a custo médio de 5,1% em dólares. Fundamentos sólidos, preço ainda descontado — reforça a tese de acumulação."},{"text":"VULC3 — aumentar, abaixo de R$15. Foi incluída em rotação recente de portfólio de uma casa de research, citando sinergias comerciais, valuation atrativo (~8x P/L 2026) e dividend yield com boa cobertura. Confirma a tese de aumento de posição."},{"text":"SANB3 — sair (concluir). Lucro líquido recorrente do 1T26 em queda de 1,9% a/a e 7,3% t/t — confirma o enfraquecimento de resultados já citado na Análise de Carteira. Nada aqui muda a decisão de saída."},{"text":"SOJA3 — liquidar. Ação caiu de R$8,94 (início do ano) para R$6,14. Duas casas de research rebaixaram recomendação e cortaram preço-alvo. Alavancagem do 1T26 ficou acima do esperado. A tese de saída permanece válida."},{"text":"ROMI3 — decidir/reduzir. Aprovou JCP de R$5,59 mi (R$0,06/ação) em 9/jun, evento já consumado. Lucro do 1T26 de apenas R$2,4 mi, queda de 76,6% a/a, com receita -19,1%. O cenário fraco que motivou a decisão de reduzir/decidir está confirmado pelos números do trimestre."},{"text":"Resto da carteira: BBSE3, BBAS3, BBDC3, VALE3, LEVE3, KEPL3, CXSE3, GRND3, LREN3 e TAEE11 não tiveram notícia corporativa relevante nas fontes consultadas para esta edição. Mantidas as posições/teses já descritas na Análise de Carteira de 17/jun."},{"text":"Eventos corporativos de sexta-feira, fora do portfólio: JCP anunciado por Embraer, Copasa e Cemig; programa de recompra da Aura Minerals; Oncoclínicas deve protocolar recuperação extrajudicial em até 3 semanas; Braskem segue sem quórum para aprovar plano de recuperação extrajudicial; guerra de preços entre Eurofarma e EMS em canetas emagrecedoras."},{"text":"Política: governo tenta conter propostas que somam cerca de R$170 bi em novas despesas na próxima década. EUA-Irã: rodada de negociações sobre o programa nuclear iraniano foi adiada em meio à escalada de confrontos no sul do Líbano. Reino Unido: prefeito trabalhista de Manchester vence eleição especial, pressionando a liderança de Keir Starmer. Feriados de Juneteenth (EUA) e Barco-Dragão (China) reduziram a liquidez de sexta."}],"table":null,"callout":null,"footnote":""},"categorias":{"num":"03","heading":"Categorias","intro":"Email, Telegram e Web Search combinados (rolagem interna por fonte).","panels":[],"bullets":[{"strong":"Email","text":"Newsletter ADVFN \"Bom dia, Investidor\" de 19/jun/2026 — painel de mercado, eventos corporativos (JCP, recompras) e contexto de política."},{"strong":"Telegram","text":"Gap de exportação: único ficheiro disponível cobre até 12/jun. Conteúdo do Telegram não pôde ser usado nesta edição."},{"strong":"Web Search","text":"Cerca de 10 buscas dedicadas aos tickers em watchlist/decisão ativa (EGIE3, CPFE3, CMIN3, RANI3, KLBN4, VULC3, SANB3, SOJA3, ROMI3) e a indicadores macro (IPCA, Selic, volatilidade)."}],"paragraphs":[],"table":null,"callout":null,"footnote":""},"insiders_b3":{"num":"04","heading":"Insiders & B3","intro":"Movimentos de insiders e eventos corporativos B3 (mapeia FONTE: INSIDERS & B3).","panels":[],"bullets":[{"strong":"Varredura individual","text":"Não realizada nesta edição — mercado fechado no fim de semana, sem expectativa de filings novos de Formulário 358."},{"strong":"Embraer / Copasa / Cemig","text":"JCP anunciado por todas as três (nenhuma faz parte do portfólio acompanhado)."},{"strong":"Aura Minerals","text":"Programa de recompra de até US$200 mi (18/jun/2026 a 18/jun/2027)."},{"strong":"CMIN3","text":"Recompra de até 50 milhões de ações aprovada (19/mai/26 a 19/nov/27) — única recompra relevante dentro do portfólio acompanhado."}],"paragraphs":[],"table":null,"callout":null,"footnote":""},"full_fontes":{"num":"05","heading":"Full com Fontes","intro":"Versão densa, com citação de fonte em cada afirmação (mapeia FULL).","panels":[],"bullets":[],"paragraphs":[{"text":"EGIE3 — manter, decisão urgente até 2/jul. Conselho aprovou oferta primária de ~R$8,4 bi para incorporar 40% de Jirau (avaliada em R$5,74 bi), com AGE em 2/jul/2026; companhia suspendeu o guidance financeiro. [Fonte: Money Times, Seu Dinheiro, Visno Invest, Análise de Ações]"},{"text":"CPFE3 — acumular, abaixo de R$46. Pagou 2ª parcela de dividendos (R$150 mi) em 18/jun; impacto de R$558 mi por curtailment em 2025; ainda assim aprovou R$4,3 bi em dividendos, yield 12m de 8,62%. UBS BB rebaixou recomendação após a alta. [Fonte: BPMoney, Análise de Ações, Seu Dinheiro]"},{"text":"CMIN3 — acumular, condicionado a minério acima de US$100/t. Recompra de até 50 milhões de ações aprovada; minério em queda na China continua pressionando a tese; lucro do 1T26 em R$222,1 mi. [Fonte: A Revista, EBC Financial Group]"},{"text":"RANI3 — acumular nas quedas. Sem notícia nova relevante; avaliação de novo ciclo de investimento em celulose e papelão ondulado. [Fonte: Infomoney]"},{"text":"KLBN4 — acumular, em torno de R$3,40. Leverage caindo de 4,5x para 3,3x projetado; EQI Research vê potencial de alta de 42%. [Fonte: A Revista, EQI Research via Eu Quero Investir]"},{"text":"VULC3 — aumentar, abaixo de R$15. Incluída em rotação de portfólio da EQI Research, citando sinergias comerciais e valuation atrativo. [Fonte: BTG Pactual Content Research, Eu Quero Investir]"},{"text":"SANB3 — sair (concluir). Lucro líquido recorrente do 1T26 em queda de 1,9% a/a e 7,3% t/t. [Fonte: Seu Dinheiro, TradingView News]"},{"text":"SOJA3 — liquidar. Itaú BBA rebaixou para neutro e cortou preço-alvo; Citi também cortou o alvo. [Fonte: Seu Dinheiro, Investing.com]"},{"text":"ROMI3 — decidir/reduzir. JCP de R$5,59 mi aprovado em 9/jun; lucro do 1T26 cai 76,6% a/a. [Fonte: Investidor10, Euquero Investir, A Revista]"},{"text":"Eventos corporativos de sexta: JCP de Embraer, Copasa e Cemig; recompra da Aura Minerals; Oncoclínicas e Braskem em processos de recuperação extrajudicial. [Fonte: e-mail ADVFN \"Bom dia, Investidor\", 19/jun/2026]"}],"table":null,"callout":null,"footnote":""},"origem":{"num":"06","heading":"Origem / Fontes","intro":"Visão geral de proveniência das fontes processadas hoje.","panels":[{"title":"Emails","text":"1 e-mail processado (ADVFN, 19/jun).","tone":""},{"title":"Telegram","text":"0 exports válidos — gap identificado (último export cobre até 12/jun).","tone":"bad"}],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"tipo","label":"Tipo","align":"left"},{"key":"quantidade","label":"Quantidade","format":"num0"}],"rows":[{"tipo":"Emails","quantidade":1},{"tipo":"Canais Telegram (válidos)","quantidade":0},{"tipo":"Grupos de busca web","quantidade":10}]},"callout":null,"footnote":"Aba separada de Full com Fontes, conforme confirmado."},"portfolio":{"num":"07","heading":"Portfolio","intro":"Espelho da carteira com status sugerido e prioridade (Etapa 3A, fonte: Análise de Carteira 17/jun).","panels":[],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"ticker","label":"Ticker","align":"left"},{"key":"peso","label":"% Carteira","format":"pct1"},{"key":"status","label":"Status","format":"statusPill"},{"key":"prioridade","label":"Prioridade","align":"left"},{"key":"nota","label":"Nota","align":"left"}],"rows":[{"ticker":"BBSE3","peso":18.6,"status":"manter","prioridade":"—","nota":"maior posição, sem ação imediata"},{"ticker":"CPFE3","peso":13.2,"status":"acumular","prioridade":"alta","nota":"entrada <R$46"},{"ticker":"BBAS3","peso":12.3,"status":"manter","prioridade":"—","nota":"evitar acrescentar"},{"ticker":"BBDC3","peso":10.7,"status":"manter","prioridade":"—","nota":"evitar acrescentar"},{"ticker":"VALE3","peso":7.6,"status":"manter","prioridade":"—","nota":"sem ação imediata"},{"ticker":"EGIE3","peso":6.9,"status":"manter","prioridade":"alta","nota":"decisão urgente — subscrição da oferta Jirau, AGE 2/jul"},{"ticker":"KEPL3","peso":4.4,"status":"manter","prioridade":"—","nota":"esperar"},{"ticker":"LEVE3","peso":4.4,"status":"manter","prioridade":"—","nota":"evitar acrescentar"},{"ticker":"KLBN4","peso":4.4,"status":"acumular","prioridade":"média-alta","nota":"entrada ~R$3,40"},{"ticker":"CXSE3","peso":3.8,"status":"manter","prioridade":"—","nota":"caro para acrescentar"},{"ticker":"ROMI3","peso":2.7,"status":"reduzir","prioridade":"alta","nota":"decidir — resultado 1T26 fraco confirma a tese"},{"ticker":"RANI3","peso":2.7,"status":"acumular","prioridade":"alta","nota":"nas quedas"},{"ticker":"SANB3","peso":2.6,"status":"vender","prioridade":"alta","nota":"saída em andamento"},{"ticker":"TAEE11","peso":1.9,"status":"reduzir","prioridade":"média","nota":"—"},{"ticker":"CMIN3","peso":1.2,"status":"acumular","prioridade":"alta","nota":"condicionado a minério >US$100/t"},{"ticker":"LREN3","peso":0.9,"status":"reduzir","prioridade":"média-baixa","nota":"—"},{"ticker":"GRND3","peso":0.7,"status":"reduzir","prioridade":"média","nota":"—"},{"ticker":"VULC3","peso":0.5,"status":"acumular","prioridade":"média","nota":"aumentar — entrada <R$15"},{"ticker":"SOJA3","peso":0.4,"status":"vender","prioridade":"alta","nota":"liquidar — tese de saída confirmada pelo trimestre fraco"}]},"callout":null,"footnote":"Fonte: Análise de Carteira mais recente (Etapa 3A). NUNCA inclui quantidade de ações nem capital total — página pública (regra de privacidade, Etapa 4B)."},"gatilhos":{"num":"08","heading":"Gatilhos","intro":"Cruzamento de cotações verificadas hoje contra preços-alvo de entrada (Projeções Consolidadas).","panels":[],"bullets":[],"paragraphs":[],"table":null,"callout":{"title":"Seção omitida nesta edição","text":"Hoje é sábado, sem fechamento novo de mercado para comparar contra os preços-alvo. Verificação será refeita na próxima edição com pregão (segunda-feira, 22/jun/2026). Preços-alvo já confirmados: CPFE3 <R$46, EGIE3 <R$30 (pós-oferta), KLBN4 ~R$3,40, VULC3 <R$15, CMIN3 condicionado a minério >US$100/t, RANI3 nas quedas."},"footnote":"Cotação = verificada hoje (Etapa 1A). Preço-alvo = ficheiros de referência (Projeções Consolidadas / Análise de Carteira)."},"indices":{"num":"09","heading":"Índices","intro":"Painel de Mercado expandido (fechamento de sexta, 19/jun/2026).","panels":[],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"indicador","label":"Indicador","align":"left"},{"key":"valor","label":"Valor","align":"left"},{"key":"variacao","label":"Variação","format":"pctSigned1"}],"rows":[{"indicador":"Ibovespa","valor":"168.277 pts","variacao":-0.1},{"indicador":"Ifix","valor":"3.799 pts","variacao":-0.3},{"indicador":"Dólar (USD/BRL)","valor":"R$5,16–5,18","variacao":1.32},{"indicador":"Euro/BRL","valor":"R$5,91","variacao":-0.41},{"indicador":"Libra/BRL","valor":"R$6,83","variacao":-0.14},{"indicador":"Petróleo WTI","valor":"US$78,15","variacao":2.02},{"indicador":"Petróleo Brent","valor":"US$79,65","variacao":-0.25},{"indicador":"Ouro","valor":"US$4.153,02/oz","variacao":-1.35},{"indicador":"Minério de ferro (China, ref. 4/jun)","valor":"767,50 CNY/t","variacao":-1.6},{"indicador":"Bitcoin","valor":"US$62.417–62.578"},{"indicador":"Selic","valor":"14,25% a.a."},{"indicador":"IPCA (mai/26)","valor":"0,58% no mês / 4,72% em 12m"},{"indicador":"Tesouro Prefixado 2029/2032/2037","valor":"14,75% / 14,76% / 14,62% a.a."},{"indicador":"Tesouro IPCA+ 2032/2040/2050","valor":"8,51% / 7,61% / 7,26% a.a."}]},"callout":null,"footnote":"Fonte: e-mail ADVFN \"Bom dia, Investidor\", 19/jun/2026; web search complementar para IPCA e VIBR."}}}</script>
+
+<script id="aii-renderer">
+(function () {
+  'use strict';
+
+  var DATA = {};
+  try {
+    var raw = document.getElementById('report-data').textContent.trim();
+    DATA = raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    console.error('AII: falha ao interpretar report-data JSON', err);
+    DATA = {};
+  }
+
+  var TAG_CLASS = { facto: 't-facto', leitura: 't-leitura', opiniao: 't-opiniao', cenario: 't-cenario', accao: 't-accao' };
+  var STATUS_CLASS = {
+    manter: 'st-manter', acumular: 'st-acumular', reduzir: 'st-reduzir', vender: 'st-vender',
+    sim: 'st-sim', nao: 'st-nao', atingido: 'st-atingido', proximo: 'st-proximo', longe: 'st-longe'
+  };
+
+  function esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function numFmt(v, d) {
+    if (v === null || v === undefined || isNaN(v)) return '—';
+    return Number(v).toLocaleString('pt-PT', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+
+  function renderHeader(meta) {
+    if (!meta) return;
+    var eyebrow = document.getElementById('hdrEyebrow');
+    var title = document.getElementById('hdrTitle');
+    var lede = document.getElementById('hdrLede');
+    var chips = document.getElementById('hdrChips');
+    if (eyebrow) eyebrow.textContent = meta.eyebrow || '';
+    if (title) {
+      title.innerHTML = esc(meta.titleMain || '') +
+        (meta.titleSub ? '<span class="sub">' + esc(meta.titleSub) + '</span>' : '');
+    }
+    if (lede) lede.textContent = meta.lede || '';
+    if (chips) {
+      chips.innerHTML = (meta.chips || []).map(function (c) {
+        return '<span class="chip">' + esc(c.label) + ' <b>' + esc(c.value) + '</b></span>';
+      }).join('');
+    }
+    if (meta.pageTitle) document.title = meta.pageTitle;
+  }
+
+  function renderFooter(meta) {
+    if (!meta) return;
+    var line = document.getElementById('footerLine');
+    var disc = document.getElementById('footerDisc');
+    if (line) line.textContent = meta.footerLine || '';
+    if (disc) disc.innerHTML = meta.footerDisclaimer || '';
+  }
+
+  function renderParagraphs(el, items) {
+    if (!items || !items.length) { el.innerHTML = ''; return; }
+    el.innerHTML = items.map(function (p) {
+      var tag = p.tag ? '<em class="tag ' + (TAG_CLASS[p.tag] || 't-opiniao') + '">' + esc(p.tag) + '</em> ' : '';
+      return '<p>' + tag + (p.html || esc(p.text || '')) + '</p>';
+    }).join('');
+  }
+
+  function renderBullets(el, items) {
+    if (!items || !items.length) { el.innerHTML = ''; return; }
+    el.innerHTML = items.map(function (it) {
+      var body = it.html || esc(it.text || '');
+      if (it.strong) return '<li><b>' + esc(it.strong) + '.</b> ' + body + '</li>';
+      return '<li>' + body + '</li>';
+    }).join('');
+  }
+
+  function renderCallout(el, c) {
+    if (!c) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = '<div class="ct">' + esc(c.title || '') + '</div><p>' + (c.html || esc(c.text || '')) + '</p>';
+  }
+
+  function renderPanels(el, panels) {
+    if (!panels || !panels.length) { el.innerHTML = ''; return; }
+    el.innerHTML = panels.map(function (p) {
+      var toneClass = (p.tone === 'good' || p.tone === 'bad') ? ' ' + p.tone : '';
+      return '<div class="panel' + toneClass + '"><h4>' + esc(p.title) + '</h4><p class="tight">' +
+        (p.html || esc(p.text || '')) + '</p></div>';
+    }).join('');
+  }
+
+  function formatCell(value, format, align) {
+    var alignStyle = align === 'left' ? ' style="text-align:left"' : '';
+    switch (format) {
+      case 'num0':
+        return '<td' + alignStyle + '>' + numFmt(value, 0) + '</td>';
+      case 'price2':
+        return '<td' + alignStyle + '>' + numFmt(value, 2) + '</td>';
+      case 'pct1':
+        return '<td' + alignStyle + '>' + numFmt(value, 1) + '%</td>';
+      case 'pctSigned1': {
+        var cls = (value >= 0) ? 'pos' : 'neg';
+        return '<td class="' + cls + '"' + alignStyle + '>' + (value >= 0 ? '+' : '') + numFmt(value, 1) + '%</td>';
+      }
+      case 'statusPill': {
+        var key = String(value || '').toLowerCase();
+        return '<td' + alignStyle + '><span class="status-pill ' + (STATUS_CLASS[key] || 'st-manter') + '">' + esc(value) + '</span></td>';
+      }
+      default:
+        return '<td' + alignStyle + '>' + esc(value === null || value === undefined ? '' : value) + '</td>';
+    }
+  }
+
+  function renderTable(el, spec) {
+    if (!spec || !spec.columns || !spec.rows) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    var cols = spec.columns;
+    var thead = cols.map(function (c) {
+      return '<th' + (c.align === 'left' ? ' style="text-align:left"' : '') + '>' + esc(c.label) + '</th>';
+    }).join('');
+    var bodyRows = spec.rows.map(function (r) {
+      var tds = cols.map(function (c) {
+        return formatCell(r[c.key], c.format, c.align);
+      }).join('');
+      return '<tr>' + tds + '</tr>';
+    }).join('');
+    el.innerHTML = '<table><thead><tr>' + thead + '</tr></thead><tbody>' + bodyRows + '</tbody></table>';
+  }
+
+  var FIELD_RENDERERS = {
+    num: function (el, v) { if (v) el.textContent = v; },
+    heading: function (el, v) { if (v) el.textContent = v; },
+    intro: function (el, v) { if (v) el.innerHTML = v; },
+    panels: renderPanels,
+    bullets: renderBullets,
+    paragraphs: renderParagraphs,
+    table: renderTable,
+    callout: renderCallout,
+    footnote: function (el, v) { el.innerHTML = v || ''; }
+  };
+
+  function renderSection(sectionEl, sectionData) {
+    var data = sectionData || {};
+    var fields = sectionEl.querySelectorAll('[data-f]');
+    fields.forEach(function (fieldEl) {
+      var key = fieldEl.getAttribute('data-f');
+      var renderer = FIELD_RENDERERS[key];
+      if (!renderer) return;
+      renderer(fieldEl, data[key]);
+    });
+  }
+
+  function initTabs() {
+    var buttons = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.box[data-section]'));
+
+    function activate(key) {
+      buttons.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === key); });
+      boxes.forEach(function (s) { s.hidden = (s.getAttribute('data-section') !== key); });
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () { activate(b.getAttribute('data-tab')); });
+    });
+
+    var initial = document.querySelector('.tabbtn.active');
+    activate(initial ? initial.getAttribute('data-tab') : 'inicio');
+  }
+
+  function init() {
+    renderHeader(DATA.meta);
+    renderFooter(DATA.meta);
+    var sections = DATA.sections || {};
+    document.querySelectorAll('[data-section]').forEach(function (sectionEl) {
+      var key = sectionEl.getAttribute('data-section');
+      renderSection(sectionEl, sections[key]);
+    });
+    initTabs();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
