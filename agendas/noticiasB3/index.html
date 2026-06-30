@@ -1,846 +1,452 @@
-{
-  "meta": {
-    "name": "SSOT Feedback Log - Registo de Experiências",
-    "version": "2.0",
-    "created": "2026-06-03",
-    "migrated_v2_em": "2026-06-20",
-    "type": "append-only-memory",
-    "schema_ref": "Estrutura prj feedbacklog.md.md (ID: 1P5XzVxQK0yuQp_7ImAQuhqB9QiA-_qMo)",
-    "notas_migracao": "v2: corrigida sintaxe (vírgula em falta entre ent_010/ent_011, True->true), todas as entries re-taggeadas para o schema novo (category/subcategory/context/experience/flags/origin). Nenhuma entrada ou dado foi apagado.",
-    "ultima_entrada_em": "2026-06-24"
-  },
-  "profile": {
-    "movies_preferences": {
-      "likes": [
-        "historical narratives",
-        "biographical intellectual stories",
-        "UK historical/political context",
-        "human emotional depth"
-      ],
-      "dislikes": [
-        "overly heroic individual protagonist narratives"
-      ],
-      "favorites": [
-        "The Pianist",
-        "Schindler's List",
-        "A Beautiful Mind",
-        "The Imitation Game",
-        "The Dig"
-      ]
-    },
-    "series_preferences": {
-      "likes": [
-        "British crime/thriller",
-        "political drama",
-        "human relationships",
-        "historical context"
-      ],
-      "dislikes": [
-        "slow pacing (context-dependent)",
-        "Marriage Story style"
-      ],
-      "favorites": [
-        "Bodyguard",
-        "The Night Manager",
-        "Line of Duty",
-        "The Crown",
-        "The Tudors",
-        "Mare of Easttown"
-      ]
-    },
-    "books_preferences": {
-      "likes": [
-        "historical fiction",
-        "long immersive narratives",
-        "strong character development"
-      ],
-      "favorites": [
-        "The Pillars of the Earth",
-        "All the Light We Cannot See"
-      ]
-    },
-    "sports_preferences": {
-      "activities": [
-        "cycling",
-        "tennis",
-        "volleyball",
-        "kung fu (past)"
-      ],
-      "goals": [
-        "strength",
-        "injury prevention",
-        "mobility",
-        "balance",
-        "functional fitness"
-      ]
-    },
-    "health_context": {
-      "notes": [
-        "metabolic syndrome risk",
-        "glucose intolerance",
-        "histamine sensitivity interest",
-        "weight loss goal ~9kg in 4-5 months"
-      ]
-    }
-  },
-  "categorias_legado": [
-    "gastronomy",
-    "travel",
-    "lifestyle",
-    "cinema",
-    "health",
-    "finance",
-    "work",
-    "social",
-    "learning",
-    "bebidas"
-  ],
-  "categorias": [
-    "restaurant",
-    "movie",
-    "series",
-    "book",
-    "travel",
-    "drink",
-    "place",
-    "activity",
-    "other"
-  ],
-  "estados_oficiais": {
-    "suggested": "sugestão ainda não realizada",
-    "planned": "planeado",
-    "tested": "realizado mas sem decisão",
-    "approved": "positivo",
-    "favorite": "preferência forte",
-    "excluded": "nunca mais",
-    "archived": "manter histórico mas remover destaque"
-  },
-  "schema_entrada": {
-    "id": "",
-    "date": "",
-    "title": "",
-    "category": "",
-    "subcategory": "",
-    "status": "",
-    "rating": 0,
-    "companions": [],
-    "context": {},
-    "cost": {
-      "total": "",
-      "per_person": ""
-    },
-    "consumption": [],
-    "experience": {},
-    "notes": "",
-    "flags": {},
-    "source": "self",
-    "origin": {
-      "platform": ""
-    }
-  },
-  "entries": [
-    {
-      "id": "ent_001",
-      "date": "2026-06",
-      "title": "Pasta Non Basta",
-      "category": "restaurant",
-      "subcategory": "italian",
-      "location": "Saldanha",
-      "status": "favorite",
-      "rating": 4,
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {
-        "meal_type": "",
-        "company": "couple"
-      },
-      "cost": {
-        "total": 28,
-        "per_person": 14
-      },
-      "consumption": [
-        "spaghetti all'amatriciana",
-        "linguini al tartufo",
-        "tiramisu"
-      ],
-      "experience": {},
-      "notes": "Excelente relação qualidade-preço com TheFork 50%",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_002",
-      "date": "2026-06",
-      "title": "Masala Kraft",
-      "category": "restaurant",
-      "subcategory": "indian",
-      "location": "Alvalade",
-      "status": "approved",
-      "rating": 3,
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {
-        "meal_type": "",
-        "company": "couple"
-      },
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Restaurante indiano preferido da Vanessa. TheFork 30%",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_003",
-      "date": "2026",
-      "title": "Taberna Soão",
-      "category": "restaurant",
-      "subcategory": "asian",
-      "status": "excluded",
-      "rating": 4,
-      "companions": [],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Experiência negativa. Nunca sugerir novamente.",
-      "flags": {
-        "never_again": true
-      },
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_004",
-      "date": "2026",
-      "title": "Jardim da Luz",
-      "category": "restaurant",
-      "subcategory": "",
-      "status": "favorite",
-      "rating": 0,
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {
-        "company": "couple"
-      },
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Restaurante favorito da Vanessa. Ideal para ocasiões especiais.",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_005",
-      "date": "2026",
-      "title": "Taberna Londrina",
-      "category": "restaurant",
-      "subcategory": "portuguese",
-      "status": "favorite",
-      "rating": 0,
-      "companions": [],
-      "context": {},
-      "cost": {},
-      "consumption": [
-        "francesinha"
-      ],
-      "experience": {},
-      "notes": "Francesinha. Repetidamente apreciado.",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_006",
-      "date": "2026-06",
-      "title": "Colete Velho Premium",
-      "category": "drink",
-      "subcategory": "wine",
-      "status": "approved",
-      "rating": 0,
-      "companions": [],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Vinho branco Tejo 2022 premium aprovado",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_007",
-      "date": "2026-06",
-      "title": "Nuremberga",
-      "category": "movie",
-      "subcategory": "historical drama",
-      "location": "Cinema UCI",
-      "status": "approved",
-      "rating": 0,
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Drama histórico, experiência positiva",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_008",
-      "date": "",
-      "title": "Parque Bela Vista",
-      "category": "place",
-      "subcategory": "park",
-      "status": "favorite",
-      "rating": 0,
-      "companions": [
-        "Pub",
-        "Dexter"
-      ],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Passeios frequentes com cães",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_009",
-      "date": "",
-      "title": "Quinta das Conchas + Garden Baltazar",
-      "category": "place",
-      "subcategory": "park/cafe",
-      "status": "favorite",
-      "rating": 0,
-      "companions": [
-        "Clara",
-        "dogs"
-      ],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Família + cães + café favorito da Clara",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_010",
-      "date": "2026-06-19",
-      "title": "Adega de Carnide",
-      "category": "restaurant",
-      "subcategory": "portuguese",
-      "status": "tested",
-      "rating": 3,
-      "companions": [
-        "alone"
-      ],
-      "context": {
-        "meal_type": "lunch",
-        "company": "solo"
-      },
-      "cost": {
-        "total": "28",
-        "per_person": "28"
-      },
-      "consumption": [
-        "bacalhau à adega"
-      ],
-      "experience": {
-        "restaurant": "good atmosphere and service",
-        "dish": "disappointing",
-        "details": "very oily fried cod, small portion of cod, poor quality balance with potatoes"
-      },
-      "notes": "Good restaurant overall, but cod dish ('bacalhau à adega') was very poor. Too oily, low fish quantity. Strong negative experience with this dish. Do not repeat this dish again.",
-      "flags": {
-        "never_again": true,
-        "dish_blacklist": [
-          "bacalhau à adega"
-        ]
-      },
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_011",
-      "date": "2026-06-19",
-      "title": "Cose di Mama",
-      "category": "restaurant",
-      "subcategory": "italian",
-      "location": "Estrada da Luz",
-      "status": "approved",
-      "rating": 4,
-      "rating_label": "Gostei",
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {
-        "meal_type": "",
-        "company": "couple"
-      },
-      "cost": {
-        "total": 42.3,
-        "currency": "EUR",
-        "per_person": 21.15
-      },
-      "consumption": [
-        {
-          "person": "Rafa",
-          "items": [
-            "spaghetti carbonara"
-          ]
-        },
-        {
-          "person": "Vanessa",
-          "items": [
-            "pizza de presunto"
-          ]
-        },
-        {
-          "shared": true,
-          "items": [
-            "pizzetta",
-            "mel",
-            "nozes",
-            "alecrim"
-          ]
-        }
-      ],
-      "experience": {
-        "overall": "good",
-        "food": "",
-        "service": "",
-        "environment": ""
-      },
-      "notes": "Experiência positiva. Restaurante italiano. Boa avaliação geral (4 estrelas).",
-      "flags": {},
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_012",
-      "date": "2026-05-02",
-      "title": "Davi da Buraca",
-      "category": "restaurant",
-      "subcategory": "portuguese",
-      "location": "Buraca",
-      "status": "approved",
-      "rating": 4,
-      "companions": [
-        "Vanessa"
-      ],
-      "context": {
-        "meal_type": "",
-        "company": "couple"
-      },
-      "cost": {
-        "total": 40,
-        "per_person": 20
-      },
-      "consumption": [
-        "arroz de polvo"
-      ],
-      "experience": {
-        "food": "muito bom",
-        "service": "bom",
-        "details": "bom atendimento porque chegaram cedo; o lugar enche rapidamente"
-      },
-      "notes": "Gostaram bastante. Arroz de polvo muito bom para os dois. Atendimento bom porque chegaram cedo (o lugar lota). Querem voltar para experimentar outros pratos.",
-      "flags": {
-        "want_to_return": true
-      },
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_013",
-      "date": "2026-05-02",
-      "title": "O Pança",
-      "category": "restaurant",
-      "subcategory": "",
-      "location": "Buraca (em frente ao Davi da Buraca)",
-      "status": "suggested",
-      "rating": 0,
-      "companions": [],
-      "context": {},
-      "cost": {},
-      "consumption": [],
-      "experience": {},
-      "notes": "Recomendação recebida no Davi da Buraca (terceiros). Ainda não testado — não conta para promoção de padrão até ser experimentado pessoalmente.",
-      "flags": {},
-      "source": "third_party_recommendation",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_014",
-      "date": "2026-06-21",
-      "title": "Pasta Non Basta",
-      "category": "restaurant",
-      "subcategory": "italian",
-      "location": "Avenidas Novas",
-      "status": "approved",
-      "rating": 4,
-      "rating_label": "Gostei",
-      "companions": [
-        "Vanessa",
-        "Clara"
-      ],
-      "context": {
-        "meal_type": "dinner",
-        "company": "family"
-      },
-      "cost": {
-        "total": 29.95,
-        "currency": "EUR",
-        "per_person": 9.98
-      },
-      "consumption": [
-        {
-          "shared": true,
-          "items": [
-            "pizza de tartufo (mozzarella com trufa)",
-            "pizza de presunto e funghi",
-            "entrada de berinjela com molho de tomate e queijo"
-          ]
-        },
-        {
-          "shared": true,
-          "items": [
-            "tiramisu"
-          ],
-          "note": "Vanessa e Clara adoraram"
-        }
-      ],
-      "experience": {
-        "food": "muito bom",
-        "details": "Pizza fina, borda bem crocante. Clara (e família) só comem o centro da pizza, deixam a borda.",
-        "overall": "positivo, todos gostaram"
-      },
-      "notes": "Filial Avenidas Novas (diferente da filial Saldanha do ent_001). Jantar em família com Vanessa e Clara — duas pizzas (tartufo; presunto e funghi) divididas em 3, mais entrada de berinjela com molho de tomate e queijo. Vanessa comentou que prefere sempre massas a pizzas, embora ache a pizza boa (1ª menção deste sinal — monitorizar). Desconto TheFork 50% aplicado; valor final cobrado 29,95 (moeda assumida EUR — Rafa mencionou 'R$' mas está em Lisboa, provavelmente lapso de transcrição); sugestão de gratificação de 1,50 à parte, não incluída no total. Vanessa e Clara adoraram o tiramisu de sobremesa.",
-      "flags": {
-        "signal_tracking": "Vanessa prefere massa a pizza — 1ª ocorrência registada, monitorizar para eventual padrão (limiar 4+)"
-      },
-      "source": "self",
-      "origin": {
-        "platform": ""
-      }
-    },
-    {
-      "id": "ent_015",
-      "date": "2026-06-24",
-      "title": "O Velho Farelo",
-      "category": "restaurant",
-      "subcategory": "portuguese",
-      "location": "Carnaxide",
-      "status": "suggested",
-      "rating": 0,
-      "companions": [],
-      "context": {},
-      "cost": {},
-      "consumption": [
-        "arroz de cabidela"
-      ],
-      "experience": {},
-      "notes": "Recomendação recebida de enfermeira do hospital (terceiros). Prato recomendado: arroz de cabidela. Ainda não testado — não conta para promoção de padrão até ser experimentado pessoalmente.",
-      "flags": {},
-      "source": "third_party_recommendation",
-      "origin": {
-        "platform": ""
-      }
-    }
-  ]
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__PAGE_TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f6f8; --bg2:#ffffff; --bg3:#eef0f4; --line:#e1e4ea;
+  --txt:#161a22; --mut:#5a6372; --dim:#8b93a1;
+  --accent:#2554e8; --grn:#15803d; --red:#dc2626; --amb:#b45309; --pur:#7c3aed;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--txt);font-family:'Manrope',sans-serif;line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+h1,h2,h3,h4{font-family:'Fraunces',serif;font-weight:600;line-height:1.2}
+.mono{font-family:'JetBrains Mono',monospace}
+
+/* HEADER */
+header.hero{padding:30px 0 20px;border-bottom:1px solid var(--line);background:var(--bg2)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;font-weight:600}
+header.hero h1{font-size:clamp(22px,3.6vw,32px);font-weight:600;letter-spacing:-.01em;margin-bottom:10px;color:var(--txt)}
+header.hero h1 .sub{color:var(--mut);font-weight:400;font-style:italic;display:block;font-size:.58em;margin-top:4px}
+.metarow{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:.04em;color:var(--mut);background:var(--bg3);border:1px solid var(--line);padding:6px 12px;border-radius:20px}
+.chip b{color:var(--txt);font-weight:700}
+
+/* TAB BAR (2 blocos de botoes pequenos, fixos no topo ao rolar) */
+nav.tabbar{position:sticky;top:0;z-index:20;background:var(--bg2);border-bottom:1px solid var(--line);box-shadow:0 1px 3px rgba(20,30,50,.05)}
+.tabbar-inner{max-width:1000px;margin:0 auto;padding:9px 22px;display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.tabgroup{display:flex;flex-wrap:wrap;gap:5px}
+.tabgroup+.tabgroup{padding-left:14px;border-left:1px solid var(--line)}
+.tabbtn{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.02em;color:var(--mut);background:var(--bg3);border:1px solid var(--line);border-radius:7px;padding:5px 10px;cursor:pointer;transition:background .15s,color .15s,border-color .15s;white-space:nowrap;line-height:1.3}
+.tabbtn:hover{color:var(--txt);border-color:var(--accent)}
+.tabbtn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media(max-width:760px){
+  .tabbar-inner{padding:8px 16px;gap:10px}
+  .tabgroup+.tabgroup{padding-left:10px}
+  .tabbtn{font-size:10.5px;padding:5px 8px}
 }
 
+/* CONTEUDO (uma so seccao visivel por vez, trocada pelas abas) */
+main.content{max-width:1000px;margin:0 auto;padding:24px 22px 64px}
+.collabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:0 2px 10px}
 
-{
-  "want_to_try": [
-    {
-      "name": "Queda d'Água",
-      "location": "Odivelas",
-      "notes": ""
-    },
-    {
-      "name": "Restaurante Terra e Fogo",
-      "location": "Odivelas",
-      "notes": ""
-    },
-    {
-      "name": "Cantina do Barão",
-      "location": "Barcarena",
-      "notes": ""
-    },
-    {
-      "name": "X Inválido Fish Saldanha by Fullest",
-      "location": "Lisboa (Saldanha)",
-      "notes": ""
-    },
-    {
-      "name": "Palácio Chiado",
-      "location": "Lisboa",
-      "notes": ""
-    },
-    {
-      "name": "Fusão",
-      "location": "Fernando (precisar confirmar localização exata)",
-      "notes": ""
-    },
-    {
-      "name": "DegustAR",
-      "location": "Lisboa",
-      "notes": ""
-    },
-    {
-      "name": "Orixás",
-      "location": "Sintra",
-      "notes": "Já fui 1x sozinho, gostei bastante; comida brasileira buffet. Quero levar o primo Raul"
-    },
-    {
-      "name": "Maria Azeitona",
-      "location": "Tires / Amadora",
-      "notes": "Fui com colegas de trabalho, 4 estrelas. Quero levar a Vanessa"
-    },
-    {
-      "name": "Local Your Healthy Kitchen",
-      "location": "Cascais",
-      "notes": ""
-    },
-    {
-      "name": "Ponto Perfeito Restaurante",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Sky Bar Oriente",
-      "location": "Lisboa (Oriente)",
-      "notes": "Rooftop com vista"
-    },
-    {
-      "name": "Zambeze",
-      "location": "Lisboa",
-      "notes": "Comida africana e portuguesa; recomendação do Rodrigo; vista bonita, elegante"
-    },
-    {
-      "name": "Indomável Restaurante & Bar",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Downunder by Justin Jennings",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Páteo 51",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Way to India",
-      "location": "Paço de Arcos",
-      "notes": ""
-    },
-    {
-      "name": "Roots Experience",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Lumbini",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Royal Spice",
-      "location": "",
-      "notes": ""
-    },
-    {
-      "name": "Restaurante Maizakura",
-      "location": "",
-      "notes": "Único japonês da lista; não gosto muito de japonês, mas quero conhecer"
-    }
-  ],
+/* BOX (cada seccao e uma caixa propria; so a activa fica visivel) */
+.box{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 26px 26px;box-shadow:0 1px 3px rgba(20,30,50,.04)}
+.box[hidden]{display:none}
+.sec-num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);letter-spacing:.16em;margin-bottom:8px;font-weight:600}
+.sec-num:empty{display:none}
+.box h2{font-size:clamp(19px,2.2vw,24px);margin-bottom:8px;letter-spacing:-.01em;color:var(--txt)}
+.box h2:empty{display:none}
+.sec-intro{color:var(--mut);font-size:14.5px;margin-bottom:18px}
+.sec-intro:empty{display:none}
+p{margin-bottom:14px;color:#2b313c}
+p.tight{margin-bottom:8px}
+strong,b{color:var(--txt);font-weight:700}
+em.tag{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-right:6px;vertical-align:middle;font-weight:600}
+.t-facto{background:#dbeafe;color:#1d4ed8}
+.t-leitura{background:#f3e8ff;color:#7c3aed}
+.t-opiniao{background:#fef3c7;color:#b45309}
+.t-cenario{background:#f3e8ff;color:#7c3aed}
+.t-accao{background:#dcfce7;color:#15803d}
 
-  "already_tried_no_return": [
-    {
-      "name": "Pizzaria Luzzo Laranjeiras",
-      "location": "Lisboa",
-      "notes": "3–4 estrelas; ambiente bom; perto de casa; pouca variação no menu"
-    },
-    {
-      "name": "TLALOC - Un Rincón Mexicano",
-      "location": "",
-      "notes": "Clara gostou; ir apenas com ela"
-    },
-    {
-      "name": "Bardó",
-      "location": "",
-      "notes": "Francês; caro; boa experiência; foi com desconto TheFork"
-    }
-  ],
+/* RICH TEXT */
+.richtext:empty{display:none}
 
-  "already_tried_repeat": [
-    {
-      "name": "Jardim da Luz",
-      "location": "",
-      "notes": "Favorito da Vanessa; caro; ir com desconto TheFork"
-    },
-    {
-      "name": "Big Bowl Telheiras",
-      "location": "",
-      "notes": "Clara adora; raramente há desconto TheFork"
-    },
-    {
-      "name": "Garden Balthazar Café (Qt Lambert)",
-      "location": "",
-      "notes": "Vamos bastante com os cães; depois parque ao lado"
-    }
-  ],
+/* TABLES */
+.tablewrap{overflow-x:auto;margin:4px 0 20px;border:1px solid var(--line);border-radius:12px}
+.tablewrap[hidden]{display:none}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:420px}
+th{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--dim);text-align:right;padding:12px 12px;background:var(--bg3);border-bottom:1px solid var(--line);font-weight:600}
+th:first-child{text-align:left}
+td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line);font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#2b313c}
+td:first-child{text-align:left;font-family:'Manrope',sans-serif;font-weight:700;color:var(--txt)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.pos{color:var(--grn);font-weight:600} .neg{color:var(--red);font-weight:600}
+.status-pill{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.st-manter{background:var(--bg3);color:var(--mut)}
+.st-acumular{background:#dcfce7;color:#15803d}
+.st-reduzir{background:#fef3c7;color:#b45309}
+.st-vender{background:#fee2e2;color:#dc2626}
+.st-sim{background:#dcfce7;color:#15803d}
+.st-nao{background:var(--bg3);color:var(--mut)}
+.st-atingido{background:#dcfce7;color:#15803d}
+.st-proximo{background:#fef3c7;color:#b45309}
+.st-longe{background:var(--bg3);color:var(--mut)}
 
-  "data_quality_flags": [
-    "Fusão - Fernando: localização ambígua (precisa clarificação)",
-    "Alguns restaurantes sem localização exata (pode ser refinado depois)",
-    "Algumas entradas duplicam experiência prévia (ex: Taberna Londrina e Gurkha aparecem como 'quero conhecer' mas também como já conhecidos em notas anteriores)"
-  ]
-}
+/* CALLOUT */
+.callout{background:#eff4ff;border:1px solid #c9dafc;border-left:3px solid var(--accent);border-radius:10px;padding:16px 18px;margin:4px 0 20px}
+.callout[hidden]{display:none}
+.callout .ct{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;font-weight:700}
+.callout p{margin-bottom:0;color:#1d2b4f}
 
+/* LISTS */
+ul.clean{list-style:none;margin:4px 0 20px}
+ul.clean:empty{display:none}
+ul.clean li{padding:9px 0 9px 24px;position:relative;color:#2b313c;border-bottom:1px solid var(--line)}
+ul.clean li:last-child{border-bottom:none}
+ul.clean li::before{content:"";position:absolute;left:3px;top:17px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+ul.clean li b{color:var(--txt)}
 
-{
-  "restaurant": "Chefe Guiga",
-  "date": "2026-06-26",
-  "people": ["Rafa", "Vanessa"],
-  "order": {
-    "starters": [
-      {
-        "item": "croquete",
-        "notes": "bom, ligeiramente oleoso"
-      }
-    ],
-    "mains": [
-      {
-        "item": "entrecôte",
-        "notes": "muito bom"
-      },
-      {
-        "item": "bife da vazia",
-        "accompaniments": "legumes e espargos",
-        "notes": "excelente"
-      }
-    ],
-    "drinks": [
-      "2 imperiais médias"
-    ]
-  },
-  "bill": {
-    "total_eur": 49,
-    "discount": "30% TheFork"
-  },
-  "review_summary": "Muito bom no geral, comida excelente e bem executada."
-}
+/* TWO-COL PANELS (dentro de uma box, sem graficos) */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 20px}
+.two:empty{display:none}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+.panel{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.panel h4{font-size:14.5px;margin-bottom:8px;color:var(--txt)}
+.panel.good{border-top:2px solid var(--grn)}
+.panel.bad{border-top:2px solid var(--red)}
 
-{
-  "type": "wine_feedback",
-  "date": "2026-06-26",
-  "wines": [
-    {
-      "name": "João Pires Branco de Setúbal",
-      "type": "white",
-      "region": "Setúbal, Portugal",
-      "rating": 4.2,
-      "rated_by": "user",
-      "context": {
-        "company": "Vanessa liked it",
-        "notes": "Well received, balanced white wine"
-      }
-    },
-    {
-      "name": "Cancelos Branco",
-      "type": "white",
-      "region": null,
-      "rating": 4.0,
-      "rated_by": "user",
-      "context": {
-        "notes": "Good white wine, slightly below João Pires in preference"
-      }
-    }
-  ]
-}
+.footnote{font-size:12.5px;color:var(--dim);font-family:'JetBrains Mono',monospace;margin-top:-6px}
+.footnote:empty{display:none}
 
-{
-  "entry": {
-    "timestamp": "2026-06-28T00:00:00+01:00",
-    "type": "experience",
-    "category": "restaurant",
-    "subcategory": "dinner",
-    "content": "Jantar na Adega das Gravatas com Vanessa. O utilizador pediu naco de novilho na pedra e Vanessa pediu arroz com gambas. Experiência considerada excelente.",
-    "structured_data": {
-      "name_input": "Adega das Gravatas",
-      "name_resolved": "Adega das Gravatas",
-      "category_cuisine": "portuguesa",
-      "rating": 5.0,
-      "address": "",
-      "location": {
-        "lat": "",
-        "lng": ""
-      },
-      "distance_km": "",
-      "travel_time_car_min": "",
-      "visit_context": {
-        "people": 2,
-        "companions": ["Vanessa"],
-        "total_bill_eur": 49.30
-      },
-      "order": {
-        "rafa": [
-          "naco de novilho na pedra"
-        ],
-        "vanessa": [
-          "arroz com gambas"
-        ]
-      }
-    },
-    "notes": "Tudo descrito como maravilhoso. Avaliação máxima: 5/5.",
-    "confidence": 0.99,
-    "source": "manual_append",
-    "flags": []
+footer{padding:30px 0 56px;color:var(--dim);font-size:13px;font-family:'JetBrains Mono',monospace}
+footer .wrap{border-top:1px solid var(--line);padding-top:20px}
+.disc{font-size:12px;color:var(--dim);margin-top:10px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow" id="hdrEyebrow"></div>
+    <h1 id="hdrTitle"></h1>
+  </div>
+</header>
+
+<nav class="tabbar">
+  <div class="tabbar-inner">
+    <div class="tabgroup" data-group="news">
+      <button class="tabbtn active" data-tab="inicio" type="button">Início</button>
+      <button class="tabbtn" data-tab="full" type="button">Full</button>
+      <button class="tabbtn" data-tab="full_fontes" type="button">Full c/ Fontes</button>
+      <button class="tabbtn" data-tab="categorias" type="button">Categorias</button>
+      <button class="tabbtn" data-tab="insiders_b3" type="button">Insiders &amp; B3</button>
+      <button class="tabbtn" data-tab="origem" type="button">Origem</button>
+    </div>
+    <div class="tabgroup" data-group="carteira">
+      <button class="tabbtn" data-tab="portfolio" type="button">Portfolio</button>
+      <button class="tabbtn" data-tab="gatilhos" type="button">Gatilhos</button>
+      <button class="tabbtn" data-tab="indices" type="button">Índices</button>
+    </div>
+  </div>
+</nav>
+
+<main class="content">
+
+  <section class="box" data-section="inicio">
+    <div class="sec-num" data-f="num">01</div>
+    <h2 data-f="heading">Início</h2>
+    <p class="sec-intro" data-f="intro">Mercado em 30 segundos.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="full" hidden>
+    <div class="sec-num" data-f="num">02</div>
+    <h2 data-f="heading">Full</h2>
+    <p class="sec-intro" data-f="intro">Leitura corrida, sem citações inline.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="full_fontes" hidden>
+    <div class="sec-num" data-f="num">05</div>
+    <h2 data-f="heading">Full com Fontes</h2>
+    <p class="sec-intro" data-f="intro">Versão densa, com citação inline de cada afirmação.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="categorias" hidden>
+    <div class="sec-num" data-f="num">03</div>
+    <h2 data-f="heading">Categorias</h2>
+    <p class="sec-intro" data-f="intro">O que veio de cada fonte, item a item (Email / Telegram / Web Search).</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="insiders_b3" hidden>
+    <div class="sec-num" data-f="num">04</div>
+    <h2 data-f="heading">Insiders &amp; B3</h2>
+    <p class="sec-intro" data-f="intro">Movimentos de insiders e recompras.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="origem" hidden>
+    <div class="sec-num" data-f="num">06</div>
+    <h2 data-f="heading">Origem / Fontes</h2>
+    <p class="sec-intro" data-f="intro">Visão geral de proveniência das fontes processadas hoje.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="portfolio" hidden>
+    <div class="sec-num" data-f="num">07</div>
+    <h2 data-f="heading">Portfolio</h2>
+    <p class="sec-intro" data-f="intro">Espelho da carteira com status sugerido e prioridade.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="gatilhos" hidden>
+    <div class="sec-num" data-f="num">08</div>
+    <h2 data-f="heading">Gatilhos</h2>
+    <p class="sec-intro" data-f="intro">Cruzamento de cotações verificadas hoje contra preços-alvo de entrada.</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+
+  <section class="box" data-section="indices" hidden>
+    <div class="sec-num" data-f="num">09</div>
+    <h2 data-f="heading">Índices</h2>
+    <p class="sec-intro" data-f="intro">Painel de Mercado expandido (Moedas, Commodities, Índices, Juros, Volatilidade).</p>
+    <div class="two" data-f="panels"></div>
+    <ul class="clean" data-f="bullets"></ul>
+    <div class="richtext" data-f="paragraphs"></div>
+    <div class="tablewrap" data-f="table" hidden></div>
+    <div class="callout" data-f="callout" hidden></div>
+    <p class="footnote" data-f="footnote"></p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span id="footerLine"></span>
+    <div class="disc" id="footerDisc"></div>
+  </div>
+</footer>
+
+<script type="application/json" id="report-data">{"meta":{"eyebrow":"AII — Briefing Diario","titleMain":"Noticias do Dia","titleSub":"30 de junho de 2026","footerLine":"AII_0_NOTICIAS_DO_DIA_30jun2026_0011 — gerado automaticamente","footerDisclaimer":"Cotacoes verificadas por pesquisa web (StatusInvest/Investidor10) no momento da geracao, nivel completo apenas para tickers com gatilho definido. Restantes posicoes usam a cotacao mais recente do Espelho carteira. Varredura das 19 fontes web parcial nesta sessao (ver aba Origem). Este documento nao constitui aconselhamento financeiro.","pageTitle":"AII — Noticias do Dia — 30jun2026"},"sections":{"inicio":{"num":"01","heading":"Inicio","intro":"Mercado em 30 segundos.","panels":[{"title":"Sentimento","text":"Neutro a ligeiramente otimista — cessar-fogo Ira-EUA segurando, Dow Jones em recorde, Ibovespa lateral.","tone":""},{"title":"Impacto na carteira","text":"Medio. JCP do Bradesco confirmado, dividendos da BBSE3 aprovados, tres gatilhos de entrada atingidos.","tone":""}],"bullets":[{"strong":"1","text":"BBSE3 aprovou R$3,85 bilhoes em dividendos intercalares (1S26) — confirma a tese de qualidade/yield da maior posicao da carteira."},{"strong":"2","text":"BBDC3 anunciou JCP intermediario de R$3,5bi; data-base 03/07, ex-direito 06/07 — reforca o padrao de ineficiencia fiscal ja identificado."},{"strong":"3","text":"CPFE3, KLBN4 e VULC3 atingiram os respectivos precos-alvo de entrada hoje."}],"paragraphs":[{"tag":"facto","text":"CMIN3: -2,12% no pregao de ontem, fechando a R$4,16 (ADVFN); StatusInvest/Investidor10 mostram R$4,25."},{"tag":"leitura","text":"Movimento moderado sem catalisador negativo identificado; minerio segue acima do gatilho de US$100/t."},{"tag":"accao","text":"Sem alteracao a tese de acumulacao em CMIN3."},{"tag":"facto","text":"BBAS3: TCU aprovou repactuacao do cronograma de devolucao do IHCD ao Tesouro (R$4,1bi reescalonado)."},{"tag":"leitura","text":"Medida prudencial alinhada ao plano de capital (payout 30% em 2025-2026), preserva capital regulatorio."},{"tag":"accao","text":"Confirma a leitura das Projecoes: vigiar payout, sem reforcar a posicao."}],"table":{"columns":[{"key":"prioridade","label":"Prioridade","align":"left"},{"key":"accao","label":"Accao","align":"left"}],"rows":[{"prioridade":"Alta","accao":"Nenhuma compra nova urgente — seguir disciplina de tranches ja em curso"},{"prioridade":"Media","accao":"Continuar a monitorizar SANB3 (saida em curso)"},{"prioridade":"Baixa","accao":"Acompanhar AGE da EGIE3 (2/jul) sobre a oferta primaria dilutiva"}]},"callout":null,"footnote":"Seccao Inicio = SHORT + Alertas criticos do relatorio markdown."},"full":{"num":"02","heading":"Full","intro":"Leitura corrida, sem citacoes inline.","panels":[],"bullets":[],"paragraphs":[{"text":"Dia de confirmacoes fiscais (JCP do Bradesco, dividendos da BBSE3) e tres gatilhos de entrada atingidos (CPFE3, KLBN4, VULC3) sem novidade que altere teses estabelecidas."},{"text":"CPFE3: cotacao R$45,50. Gatilho (<R$46) atingido. Tese de top eficiencia permanece intacta, sem facto novo especifico hoje."},{"text":"CMIN3: cotacao R$4,25 (divergencia de fonte sinalizada, ADVFN reportou R$4,16). Minerio em US$109,95/t, acima do gatilho de acumulacao. Queda no pregao de ontem sem catalisador identificado."},{"text":"RANI3: cotacao R$7,80, em zona razoavel de acumulacao face aos precos medios de compra recentes. Moody's reafirmou o rating 'AA.br', perspectiva estavel, reforcando a qualidade de credito subjacente."},{"text":"KLBN4: cotacao R$3,40, no nivel exacto do alvo de acumulacao. Sem facto novo hoje."},{"text":"VULC3: cotacao R$14,42, alvo (<R$15) atingido com folga."},{"text":"EGIE3: cotacao R$34,16, alvo (<R$30 pos-oferta) ainda longe (~14% acima). AGE sobre a oferta primaria dilutiva agendada para 2/jul."},{"text":"BBSE3: cotacao R$39,17. Dividendos intercalares de R$3,85 bilhoes aprovados — confirma directamente a tese de qualidade e yield maioritariamente em dividendo."},{"text":"BBDC3: cotacao aproximada R$15,81 (divergencia de fonte sinalizada). JCP intermediario de R$3,5bi aprovado — confirma o padrao de ineficiencia fiscal ja identificado para este activo na holding."},{"text":"BBAS3: cotacao R$20,34. TCU aprovou repactuacao do IHCD junto ao Tesouro — medida prudencial, sem alteracao a tese."},{"text":"Restantes tickers da carteira (CXSE3, TAEE11, LEVE3, KEPL3, VALE3, ROMI3, SANB3, LREN3, GRND3) sem facto relevante hoje — teses inalteradas. SOJA3 foi integralmente liquidada em 02/06/2026, saida prioritaria concluida."},{"text":"Macro: cessar-fogo fragil entre EUA e Ira segura o petroleo perto de niveis pre-conflito. Dow Jones renovou recorde de fecho. Sem canal de transmissao directo identificavel para a carteira, que e majoritariamente domestica e orientada a dividendos."}],"table":null,"callout":null,"footnote":""},"full_fontes":{"num":"05","heading":"Full com Fontes","intro":"Versao densa, com citacao inline de cada afirmacao.","panels":[],"bullets":[],"paragraphs":[{"text":"CPFE3: cotacao R$45,50 [StatusInvest, 30/jun; Investidor10 R$45,07]. Gatilho (<R$46) atingido. Tese intacta."},{"text":"CMIN3: cotacao R$4,25 [StatusInvest/Investidor10, 30/jun; ADVFN reportou R$4,16 no fecho de 29/jun]. Minerio em US$109,95/t [ADVFN/Gmail, 30/jun], acima do gatilho."},{"text":"RANI3: cotacao R$7,80 [StatusInvest, 30/jun]. Moody's Local BR reafirmou rating 'AA.br', perspectiva estavel [ADVFN/Gmail, 30/jun]."},{"text":"KLBN4: cotacao R$3,40 [StatusInvest/Investidor10, concordancia exacta, 30/jun]. Alvo atingido no nivel exacto."},{"text":"VULC3: cotacao R$14,42 [StatusInvest, dados ~26/jun; Investidor10 R$14,34]. Alvo atingido com folga."},{"text":"EGIE3: cotacao R$34,16 [StatusInvest/Investidor10, concordancia exacta, 30/jun]. Alvo ainda longe."},{"text":"BBSE3: cotacao R$39,17 [StatusInvest; Investidor10 R$39,28]. Dividendos intercalares de R$3,85 bilhoes aprovados [ADVFN/Gmail, 25/jun]."},{"text":"BBDC3: cotacao aproximada R$15,81 [Investidor10; BTG mostrou R$15,33 em 26/jun]. JCP intermediario de R$3,5bi aprovado [ADVFN/Gmail, 24/jun; Telegram, 24/jun]."},{"text":"BBAS3: cotacao R$20,34 [StatusInvest; Investidor10 R$20,26]. TCU aprovou repactuacao do IHCD [ADVFN/Gmail, 29/jun]."}],"table":null,"callout":null,"footnote":""},"categorias":{"num":"03","heading":"Categorias","intro":"O que veio de cada fonte, item a item.","panels":[],"bullets":[{"strong":"Email — BBDC3","text":"JCP intermediario de R$3,5bi aprovado, data-base 03/07, ex-direito 06/07. [ADVFN/Gmail, 24/jun]"},{"strong":"Email — BBSE3","text":"R$3,85 bilhoes em dividendos intercalares (1S26) aprovados. [ADVFN/Gmail, 25/jun]"},{"strong":"Email — VALE3","text":"Comunicado de esclarecimento sobre investimentos na Bahia Mineracao e contratos ferroviarios, sem impacto material directo. [ADVFN/Gmail, 25/jun]"},{"strong":"Email — BBAS3","text":"TCU aprova repactuacao do cronograma de devolucao do IHCD ao Tesouro (R$4,1bi). [ADVFN/Gmail, 29/jun]"},{"strong":"Email — RANI3","text":"Moody's Local BR reafirma rating 'AA.br', perspectiva estavel. [ADVFN/Gmail, 30/jun]"},{"strong":"Email — CMIN3","text":"-2,12% no pregao, fechando a R$4,16 (destaque de baixa do dia). [ADVFN/Gmail, 30/jun]"},{"strong":"Telegram — BBDC3","text":"Confirmacao do JCP de R$3,5bi, R$0,3469/acao PN. [Telegram/Dica de Hoje, 24/jun]"},{"strong":"Telegram — Macro/IBOV","text":"Discussao sobre mudanca da composicao do IBOV para incluir BDRs (Nubank, JBS, XP, MELI). [Telegram, 26/jun]"},{"strong":"Web Search — Cotacoes","text":"Verificacao nivel completo via StatusInvest/Investidor10 para CPFE3, CMIN3, RANI3, KLBN4, VULC3, EGIE3."}],"paragraphs":[],"table":null,"callout":null,"footnote":"Cada item indica de que fonte veio a informacao. Distinto da aba Origem, que e apenas um sumario quantitativo."},"insiders_b3":{"num":"04","heading":"Insiders & B3","intro":"Movimentos de insiders e recompras — arquivo de 7 dias.","panels":[],"bullets":[{"strong":"BBAS3","text":"TCU aprova repactuacao do IHCD junto ao Tesouro Nacional (R$4,1bi). [B3/CVM via ADVFN, 26/jun, publicado 29/jun]"},{"strong":"BBDC3","text":"Aprovacao de JCP intermediario R$3,5bi. [B3/CVM via ADVFN, 23/jun]"},{"strong":"BBSE3","text":"Aprovacao de dividendos intercalares R$3,85bi. [B3/CVM via ADVFN, 24/jun]"},{"strong":"RANI3","text":"Moody's Local BR reafirma rating 'AA.br'. [Moody's via ADVFN, 29/jun]"}],"paragraphs":[{"text":"Sem movimentacoes de insiders (compra/venda por directores/conselheiros) identificadas nesta janela — apenas factos relevantes corporativos. Varredura individual de Formulario 358 nao foi feita de forma dedicada nesta sessao."}],"table":null,"callout":null,"footnote":""},"origem":{"num":"06","heading":"Origem / Fontes","intro":"Visao geral de proveniencia das fontes processadas hoje.","panels":[{"title":"Emails","text":"5 emails ADVFN processados na integra (janela de 7 dias).","tone":"good"},{"title":"Telegram","text":"1 ficheiro consolidado, 4 canais, cobertura 22-29/jun.","tone":"good"},{"title":"Varredura 19 fontes","text":"Execucao parcial nesta sessao — apenas cobertura organica via ADVFN/Telegram.","tone":"bad"}],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"tipo","label":"Tipo","align":"left"},{"key":"quantidade","label":"Quantidade","format":"num0"}],"rows":[{"tipo":"Emails lidos na integra","quantidade":5},{"tipo":"Canais Telegram","quantidade":4},{"tipo":"Tickers verificados nivel completo","quantidade":6},{"tipo":"Fontes das 19 consultadas (organico)","quantidade":2}]},"callout":null,"footnote":"Varredura das 19 fontes ficou abaixo do padrao da rotina nesta sessao — desvio declarado nos METADADOS do relatorio markdown."},"portfolio":{"num":"07","heading":"Portfolio","intro":"Espelho da carteira com status e prioridade (fonte: Analise de Carteira 17/jun/2026, 13 dias).","panels":[],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"ticker","label":"Ticker","align":"left"},{"key":"peso","label":"% Carteira","format":"pct1"},{"key":"status","label":"Status","format":"statusPill"},{"key":"nota","label":"Nota"}],"rows":[{"ticker":"BBSE3","peso":18.6,"status":"manter","nota":"Qualidade, ROE alto"},{"ticker":"CPFE3","peso":13.2,"status":"acumular","nota":"Top eficiencia, gatilho atingido"},{"ticker":"BBAS3","peso":12.3,"status":"manter","nota":"Valor profundo; vigiar payout"},{"ticker":"BBDC3","peso":10.7,"status":"manter","nota":"Turnaround em curso; JCP"},{"ticker":"VALE3","peso":7.6,"status":"manter","nota":"Hedge cambial"},{"ticker":"EGIE3","peso":6.9,"status":"manter","nota":"Aguardar AGE 2/jul"},{"ticker":"KEPL3","peso":4.4,"status":"manter","nota":"Ciclo agro fraco"},{"ticker":"LEVE3","peso":4.4,"status":"manter","nota":"JCP-pesado"},{"ticker":"KLBN4","peso":4.4,"status":"acumular","nota":"Gatilho atingido"},{"ticker":"CXSE3","peso":3.8,"status":"manter","nota":"Cara para acrescentar"},{"ticker":"ROMI3","peso":2.7,"status":"reduzir","nota":"Maior perda do livro"},{"ticker":"RANI3","peso":2.7,"status":"acumular","nota":"Rating reafirmado hoje"},{"ticker":"SANB3","peso":2.6,"status":"vender","nota":"Saida em curso"},{"ticker":"TAEE11","peso":1.9,"status":"reduzir","nota":"JCP pesa"},{"ticker":"VULC3","peso":0.5,"status":"acumular","nota":"Gatilho atingido com folga"},{"ticker":"LREN3","peso":0.9,"status":"reduzir","nota":"Saida via calls"},{"ticker":"GRND3","peso":0.7,"status":"reduzir","nota":"DY otico, JCP"}]},"callout":null,"footnote":"SOJA3 ja nao consta — liquidada em 02/06/2026. CMIN3 reforcada substancialmente desde 17/jun."},"gatilhos":{"num":"08","heading":"Gatilhos","intro":"Cruzamento de cotacoes verificadas hoje contra precos-alvo de entrada.","panels":[],"bullets":[],"paragraphs":[],"table":{"columns":[{"key":"ticker","label":"Ticker","align":"left"},{"key":"alvo","label":"Alvo","align":"left"},{"key":"cotacao","label":"Cotacao hoje","align":"left"},{"key":"estado","label":"Estado","format":"statusPill"}],"rows":[{"ticker":"CPFE3","alvo":"<R$46","cotacao":"R$45,50","estado":"atingido"},{"ticker":"CMIN3","alvo":"Minerio >US$100/t","cotacao":"US$109,95/t","estado":"atingido"},{"ticker":"KLBN4","alvo":"~R$3,40","cotacao":"R$3,40","estado":"atingido"},{"ticker":"VULC3","alvo":"<R$15","cotacao":"R$14,42","estado":"atingido"},{"ticker":"RANI3","alvo":"Nas quedas (qualitativo)","cotacao":"R$7,80","estado":"atingido"},{"ticker":"EGIE3","alvo":"<R$30 pos-oferta","cotacao":"R$34,16","estado":"longe"}]},"callout":null,"footnote":"Cotacao = verificada hoje, nivel completo. Preco-alvo = ficheiros de referencia (Projecoes Consolidadas 16/jun)."},"indices":{"num":"09","heading":"Indices","intro":"Painel de Mercado expandido.","panels":[{"title":"BRL/USD","text":"R$5,17 (-0,29%)","tone":""},{"title":"BRL/EUR","text":"R$5,90 (-0,47%)","tone":""},{"title":"Minerio de ferro","text":"US$109,95/t (+0,61%)","tone":"good"},{"title":"Brent","text":"US$73,13 (-0,03%)","tone":""},{"title":"Ibovespa","text":"173.205 pontos (-0,05%)","tone":""},{"title":"Dow Jones","text":">52.000 pts, recorde (+0,59%)","tone":"good"}],"bullets":[],"paragraphs":[{"text":"Selic: 14,50% (ultimo valor confirmado, nao reverificado hoje). IPCA 12m: ~4,72%. BCE: 2,25%."}],"table":null,"callout":null,"footnote":"Varios campos do painel (S&P 500, DAX, FTSE 100, celulose) nao obtidos com frescura de hoje nesta sessao."}}}</script>
+
+<script id="aii-renderer">
+(function () {
+  'use strict';
+
+  var DATA = {};
+  try {
+    var raw = document.getElementById('report-data').textContent.trim();
+    DATA = raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    console.error('AII: falha ao interpretar report-data JSON', err);
+    DATA = {};
   }
-}
+
+  var TAG_CLASS = { facto: 't-facto', leitura: 't-leitura', opiniao: 't-opiniao', cenario: 't-cenario', accao: 't-accao' };
+  var STATUS_CLASS = {
+    manter: 'st-manter', acumular: 'st-acumular', reduzir: 'st-reduzir', vender: 'st-vender',
+    sim: 'st-sim', nao: 'st-nao', atingido: 'st-atingido', proximo: 'st-proximo', longe: 'st-longe'
+  };
+
+  function esc(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function numFmt(v, d) {
+    if (v === null || v === undefined || isNaN(v)) return '—';
+    return Number(v).toLocaleString('pt-PT', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+
+  function renderHeader(meta) {
+    if (!meta) return;
+    var eyebrow = document.getElementById('hdrEyebrow');
+    var title = document.getElementById('hdrTitle');
+    if (eyebrow) eyebrow.textContent = meta.eyebrow || '';
+    if (title) {
+      title.innerHTML = esc(meta.titleMain || '') +
+        (meta.titleSub ? '<span class="sub">' + esc(meta.titleSub) + '</span>' : '');
+    }
+    if (meta.pageTitle) document.title = meta.pageTitle;
+  }
+
+  function renderFooter(meta) {
+    if (!meta) return;
+    var line = document.getElementById('footerLine');
+    var disc = document.getElementById('footerDisc');
+    if (line) line.textContent = meta.footerLine || '';
+    if (disc) disc.innerHTML = meta.footerDisclaimer || '';
+  }
+
+  function renderParagraphs(el, items) {
+    if (!items || !items.length) { el.innerHTML = ''; return; }
+    el.innerHTML = items.map(function (p) {
+      var tag = p.tag ? '<em class="tag ' + (TAG_CLASS[p.tag] || 't-opiniao') + '">' + esc(p.tag) + '</em> ' : '';
+      return '<p>' + tag + (p.html || esc(p.text || '')) + '</p>';
+    }).join('');
+  }
+
+  function renderBullets(el, items) {
+    if (!items || !items.length) { el.innerHTML = ''; return; }
+    el.innerHTML = items.map(function (it) {
+      var body = it.html || esc(it.text || '');
+      if (it.strong) return '<li><b>' + esc(it.strong) + '.</b> ' + body + '</li>';
+      return '<li>' + body + '</li>';
+    }).join('');
+  }
+
+  function renderCallout(el, c) {
+    if (!c) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    el.innerHTML = '<div class="ct">' + esc(c.title || '') + '</div><p>' + (c.html || esc(c.text || '')) + '</p>';
+  }
+
+  function renderPanels(el, panels) {
+    if (!panels || !panels.length) { el.innerHTML = ''; return; }
+    el.innerHTML = panels.map(function (p) {
+      var toneClass = (p.tone === 'good' || p.tone === 'bad') ? ' ' + p.tone : '';
+      return '<div class="panel' + toneClass + '"><h4>' + esc(p.title) + '</h4><p class="tight">' +
+        (p.html || esc(p.text || '')) + '</p></div>';
+    }).join('');
+  }
+
+  function formatCell(value, format, align) {
+    var alignStyle = align === 'left' ? ' style="text-align:left"' : '';
+    switch (format) {
+      case 'num0':
+        return '<td' + alignStyle + '>' + numFmt(value, 0) + '</td>';
+      case 'price2':
+        return '<td' + alignStyle + '>' + numFmt(value, 2) + '</td>';
+      case 'pct1':
+        return '<td' + alignStyle + '>' + numFmt(value, 1) + '%</td>';
+      case 'pctSigned1': {
+        var cls = (value >= 0) ? 'pos' : 'neg';
+        return '<td class="' + cls + '"' + alignStyle + '>' + (value >= 0 ? '+' : '') + numFmt(value, 1) + '%</td>';
+      }
+      case 'statusPill': {
+        var key = String(value || '').toLowerCase();
+        return '<td' + alignStyle + '><span class="status-pill ' + (STATUS_CLASS[key] || 'st-manter') + '">' + esc(value) + '</span></td>';
+      }
+      default:
+        return '<td' + alignStyle + '>' + esc(value === null || value === undefined ? '' : value) + '</td>';
+    }
+  }
+
+  function renderTable(el, spec) {
+    if (!spec || !spec.columns || !spec.rows) { el.hidden = true; el.innerHTML = ''; return; }
+    el.hidden = false;
+    var cols = spec.columns;
+    var thead = cols.map(function (c) {
+      return '<th' + (c.align === 'left' ? ' style="text-align:left"' : '') + '>' + esc(c.label) + '</th>';
+    }).join('');
+    var bodyRows = spec.rows.map(function (r) {
+      var tds = cols.map(function (c) {
+        return formatCell(r[c.key], c.format, c.align);
+      }).join('');
+      return '<tr>' + tds + '</tr>';
+    }).join('');
+    el.innerHTML = '<table><thead><tr>' + thead + '</tr></thead><tbody>' + bodyRows + '</tbody></table>';
+  }
+
+  var FIELD_RENDERERS = {
+    num: function (el, v) { if (v) el.textContent = v; },
+    heading: function (el, v) { if (v) el.textContent = v; },
+    intro: function (el, v) { if (v) el.innerHTML = v; },
+    panels: renderPanels,
+    bullets: renderBullets,
+    paragraphs: renderParagraphs,
+    table: renderTable,
+    callout: renderCallout,
+    footnote: function (el, v) { el.innerHTML = v || ''; }
+  };
+
+  function renderSection(sectionEl, sectionData) {
+    var data = sectionData || {};
+    var fields = sectionEl.querySelectorAll('[data-f]');
+    fields.forEach(function (fieldEl) {
+      var key = fieldEl.getAttribute('data-f');
+      var renderer = FIELD_RENDERERS[key];
+      if (!renderer) return;
+      renderer(fieldEl, data[key]);
+    });
+  }
+
+  function initTabs() {
+    var buttons = Array.prototype.slice.call(document.querySelectorAll('.tabbtn'));
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.box[data-section]'));
+
+    function activate(key) {
+      buttons.forEach(function (b) { b.classList.toggle('active', b.getAttribute('data-tab') === key); });
+      boxes.forEach(function (s) { s.hidden = (s.getAttribute('data-section') !== key); });
+    }
+
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () { activate(b.getAttribute('data-tab')); });
+    });
+
+    var initial = document.querySelector('.tabbtn.active');
+    activate(initial ? initial.getAttribute('data-tab') : 'inicio');
+  }
+
+  function init() {
+    renderHeader(DATA.meta);
+    renderFooter(DATA.meta);
+    var sections = DATA.sections || {};
+    document.querySelectorAll('[data-section]').forEach(function (sectionEl) {
+      var key = sectionEl.getAttribute('data-section');
+      renderSection(sectionEl, sections[key]);
+    });
+    initTabs();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
+
