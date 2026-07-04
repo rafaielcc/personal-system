@@ -1,1 +1,1406 @@
-<h1>Agenda de lazer</h1>
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda de Lazer — 4 – 19 Jul 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5F0E8;
+    --navy:#1A3D52;
+    --terracota:#C75A2C;
+    --tv-bg:#EFF6FF;
+    --escape-bg:#F0FDF4;
+    --whatsapp:#25D366;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'DM Sans',sans-serif;
+    color:var(--navy);
+  }
+  h1,h2,h3,.titulo{font-family:'Fraunces',serif;}
+  .header-sticky{
+    position:sticky;top:0;z-index:40;
+    background:var(--navy);color:#fff;
+    padding:16px 20px;
+  }
+  .header-sticky h1{margin:0;font-size:1.4rem;}
+  .header-sticky .periodo{font-size:0.85rem;opacity:0.85;margin-top:2px;}
+
+  .banner-urgente{
+    background:var(--terracota);color:#fff;
+    padding:10px 20px;font-size:0.9rem;font-weight:600;
+    display:none;
+  }
+  .banner-urgente.show{display:block;}
+
+  .filtros-sticky{
+    position:sticky;top:64px;z-index:30;
+    background:var(--cream);
+    padding:10px 16px;
+    display:flex;gap:8px;overflow-x:auto;
+    border-bottom:1px solid rgba(26,61,82,0.1);
+  }
+  .pill{
+    flex:0 0 auto;
+    padding:6px 14px;border-radius:999px;
+    background:#fff;border:1px solid rgba(26,61,82,0.2);
+    font-size:0.82rem;font-weight:600;cursor:pointer;
+    white-space:nowrap;
+  }
+  .pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .dashboard{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
+    gap:8px;padding:14px 16px;
+  }
+  .dash-item{
+    background:#fff;border-radius:12px;padding:10px;text-align:center;
+  }
+  .dash-item .num{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
+  .dash-item .label{font-size:0.7rem;opacity:0.7;}
+
+  .banner-viagem{
+    margin:0 16px 14px;padding:12px 14px;border-radius:10px;
+    background:#FEF3C7;color:#92400E;font-size:0.85rem;font-weight:600;
+    display:none;
+  }
+  .banner-viagem.show{display:block;}
+
+  .secao{padding:0 16px 24px;}
+  .secao-titulo{
+    font-size:1.1rem;font-weight:600;margin:0 0 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .grid-cards{
+    display:grid;gap:12px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:640px){
+    .grid-cards{grid-template-columns:repeat(2,1fr);}
+  }
+
+  .card{
+    background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(26,61,82,0.08);
+    position:relative;padding-left:12px;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  }
+  .card-inner{padding:14px 14px 14px 4px;}
+  .card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+  .card-titulo{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600;margin:0;}
+  .card-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+  .badge{
+    font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:999px;
+    background:rgba(26,61,82,0.08);color:var(--navy);
+  }
+  .card-meta{font-size:0.8rem;opacity:0.75;margin-top:6px;}
+  .card-desc{font-size:0.85rem;margin-top:8px;line-height:1.4;}
+  .card-with{font-size:0.78rem;opacity:0.7;margin-top:6px;}
+  .card-logistica{
+    font-size:0.78rem;margin-top:8px;opacity:0.85;
+  }
+  .card-acoes{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .btn{
+    font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:999px;
+    text-decoration:none;cursor:pointer;border:1.5px solid transparent;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+  .btn-mais{border-color:var(--navy);color:var(--navy);background:transparent;}
+  .btn-whatsapp{background:var(--whatsapp);color:#fff;}
+  .btn-email{border-color:#2563EB;color:#2563EB;background:transparent;}
+
+  .card.bg-tv{background:var(--tv-bg);}
+  .card.bg-escape{background:var(--escape-bg);}
+
+  .secao-vazia{display:none;}
+</style>
+</head>
+<body>
+
+<div class="header-sticky">
+  <h1>🗓️ Agenda de Lazer</h1>
+  <div class="periodo">4 – 19 Jul 2026</div>
+</div>
+
+<div class="banner-urgente show">Iron Maiden (7 Jul) e Scorpions (8 Jul) — já com bilhete. FINAL do Mundial: Dom 19 Jul, 20h.</div>
+
+<div class="filtros-sticky">
+  <div class="pill active" data-filtro="todos">Todos</div>
+  <div class="pill" data-filtro="tv">📺 TV</div>
+  <div class="pill" data-filtro="streaming">🎬 Streaming</div>
+  <div class="pill" data-filtro="cinema_indoor">🎟️ Cinema</div>
+  <div class="pill" data-filtro="cinema_outdoor">🌙 Cinema ar livre</div>
+  <div class="pill" data-filtro="meetup">🤝 Meetups</div>
+  <div class="pill" data-filtro="culture">🎭 Cultura</div>
+  <div class="pill" data-filtro="books">📚 Livros</div>
+  <div class="pill" data-filtro="gastro">🍽️ Gastro</div>
+  <div class="pill" data-filtro="escape">🧭 Escapadinhas</div>
+  <div class="pill" data-filtro="radar">📡 Radar</div>
+</div>
+
+<div class="dashboard">
+  <div class="dash-item"><div class="num">57</div><div class="label">Total</div></div>
+<div class="dash-item"><div class="num">📺 7</div><div class="label">Televisão</div></div>
+<div class="dash-item"><div class="num">🎬 4</div><div class="label">Streaming</div></div>
+<div class="dash-item"><div class="num">🎟️ 3</div><div class="label">Cinema</div></div>
+<div class="dash-item"><div class="num">🌙 4</div><div class="label">Cinema ao ar livre</div></div>
+<div class="dash-item"><div class="num">🤝 9</div><div class="label">Meetup</div></div>
+<div class="dash-item"><div class="num">🎭 9</div><div class="label">Cultura</div></div>
+<div class="dash-item"><div class="num">📚 3</div><div class="label">Livro</div></div>
+<div class="dash-item"><div class="num">🍽️ 9</div><div class="label">Gastronomia</div></div>
+<div class="dash-item"><div class="num">🧭 6</div><div class="label">Escapadinha</div></div>
+<div class="dash-item"><div class="num">📡 3</div><div class="label">Radar</div></div>
+</div>
+
+<div class="banner-viagem "></div>
+
+
+<div class="secao" data-secao="tv">
+  <div class="secao-titulo">📺 Televisão</div>
+  <div class="grid-cards">
+    
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Brasil x Noruega — Mundial (Oitavos)</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Oitavos</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">Dom 5 Jul · 21:00 · Real Sports Bar, Benfica</div>
+    <div class="card-desc">Oitavos de final do Mundial. Domingo livre — ideal ver no Real Sports Bar, a 5 min de casa.</div>
+    
+    <div class="card-logistica">🚗 5 min via Av. Lusiada | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Brasil%20x%20Noruega%20%E2%80%94%20Mundial%20%28Oitavos%29%20%E2%80%94%20Dom%205%20Jul%20%40%20Real%20Sports%20Bar%2C%20Benfica" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Brasil%20x%20Noruega%20%E2%80%94%20Mundial%20%28Oitavos%29&body=Brasil%20x%20Noruega%20%E2%80%94%20Mundial%20%28Oitavos%29%0ADom%205%20Jul%0AReal%20Sports%20Bar%2C%20Benfica%0AOitavos%20de%20final%20do%20Mundial.%20Domingo%20livre%20%E2%80%94%20ideal%20ver%20no%20Real%20Sports%20Bar%2C%20a%205%20min%20de%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Portugal x Espanha — Mundial (Oitavos)</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Oitavos</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">Seg 6 Jul · 20:00</div>
+    <div class="card-desc">Oitavos de final. Estas no Sigic ate ~21h — apanhas a 2a parte ao chegar a casa ou num bar perto do HFF.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Portugal%20x%20Espanha%20%E2%80%94%20Mundial%20%28Oitavos%29%20%E2%80%94%20Seg%206%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Portugal%20x%20Espanha%20%E2%80%94%20Mundial%20%28Oitavos%29&body=Portugal%20x%20Espanha%20%E2%80%94%20Mundial%20%28Oitavos%29%0ASeg%206%20Jul%0AOitavos%20de%20final.%20Estas%20no%20Sigic%20ate%20~21h%20%E2%80%94%20apanhas%20a%202a%20parte%20ao%20chegar%20a%20casa%20ou%20num%20bar%20perto%20do%20HFF.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Wimbledon — Quartos (masculino)</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Quartos</span><span class="badge">Eurosport / HBO Max</span></div>
+    <div class="card-meta">Ter 7 e Qua 8 Jul</div>
+    <div class="card-desc">Quartos masculinos de Wimbledon, de tarde. So masculino.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Wimbledon%20%E2%80%94%20Quartos%20%28masculino%29%20%E2%80%94%20Ter%207%20e%20Qua%208%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Wimbledon%20%E2%80%94%20Quartos%20%28masculino%29&body=Wimbledon%20%E2%80%94%20Quartos%20%28masculino%29%0ATer%207%20e%20Qua%208%20Jul%0AQuartos%20masculinos%20de%20Wimbledon%2C%20de%20tarde.%20So%20masculino.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Mundial — Quartos de final</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Quartos</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">Qui 9 a Sab 11 Jul</div>
+    <div class="card-desc">Quartos do Mundial. Portugal e/ou Brasil se avancarem dos oitavos. Confirmar adversario e hora exata.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%20%E2%80%94%20Quartos%20de%20final%20%E2%80%94%20Qui%209%20a%20Sab%2011%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%20%E2%80%94%20Quartos%20de%20final&body=Mundial%20%E2%80%94%20Quartos%20de%20final%0AQui%209%20a%20Sab%2011%20Jul%0AQuartos%20do%20Mundial.%20Portugal%20e/ou%20Brasil%20se%20avancarem%20dos%20oitavos.%20Confirmar%20adversario%20e%20hora%20exata.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Wimbledon — Final masculina</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Final</span><span class="badge">Eurosport / HBO Max</span></div>
+    <div class="card-meta">Dom 12 Jul</div>
+    <div class="card-desc">Final masculina de Wimbledon, de tarde. Domingo de Prevencao — ve em casa.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Wimbledon%20%E2%80%94%20Final%20masculina%20%E2%80%94%20Dom%2012%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Wimbledon%20%E2%80%94%20Final%20masculina&body=Wimbledon%20%E2%80%94%20Final%20masculina%0ADom%2012%20Jul%0AFinal%20masculina%20de%20Wimbledon%2C%20de%20tarde.%20Domingo%20de%20Prevencao%20%E2%80%94%20ve%20em%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Mundial — Meias-finais</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Meias</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">Ter 14 e Qua 15 Jul · ~20:00</div>
+    <div class="card-desc">As duas meias-finais do Mundial, cerca das 20h (hora de Lisboa a confirmar).</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%20%E2%80%94%20Meias-finais%20%E2%80%94%20Ter%2014%20e%20Qua%2015%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%20%E2%80%94%20Meias-finais&body=Mundial%20%E2%80%94%20Meias-finais%0ATer%2014%20e%20Qua%2015%20Jul%0AAs%20duas%20meias-finais%20do%20Mundial%2C%20cerca%20das%2020h%20%28hora%20de%20Lisboa%20a%20confirmar%29.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">FINAL do Mundial 2026</h3>
+    </div>
+    <div class="card-badges"><span class="badge">FINAL</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">Dom 19 Jul · 20:00 · Real Sports Bar, Benfica</div>
+    <div class="card-desc">A final do Mundial, 20h (hora de Lisboa). Domingo livre — no bar a 5 min de casa ou em casa.</div>
+    
+    <div class="card-logistica">🚗 5 min via Av. Lusiada | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=FINAL%20do%20Mundial%202026%20%E2%80%94%20Dom%2019%20Jul%20%40%20Real%20Sports%20Bar%2C%20Benfica" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20FINAL%20do%20Mundial%202026&body=FINAL%20do%20Mundial%202026%0ADom%2019%20Jul%0AReal%20Sports%20Bar%2C%20Benfica%0AA%20final%20do%20Mundial%2C%2020h%20%28hora%20de%20Lisboa%29.%20Domingo%20livre%20%E2%80%94%20no%20bar%20a%205%20min%20de%20casa%20ou%20em%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="streaming">
+  <div class="secao-titulo">🎬 Streaming</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Enola Holmes 3</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Netflix</span></div>
+    <div class="card-meta">1 Jul</div>
+    <div class="card-desc">Misterio de epoca britanico com Millie Bobby Brown — leve, mas dentro do registo.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Enola%20Holmes%203%20%E2%80%94%201%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Enola%20Holmes%203&body=Enola%20Holmes%203%0A1%20Jul%0AMisterio%20de%20epoca%20britanico%20com%20Millie%20Bobby%20Brown%20%E2%80%94%20leve%2C%20mas%20dentro%20do%20registo.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">House of the Dragon — T3</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Em exibicao</span><span class="badge">HBO Max</span></div>
+    <div class="card-meta">Julho · novos episodios</div>
+    <div class="card-desc">A terceira temporada de A Casa do Dragao, com novos episodios ao longo de Julho.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=House%20of%20the%20Dragon%20%E2%80%94%20T3%20%E2%80%94%20Julho%20%C2%B7%20novos%20episodios" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20House%20of%20the%20Dragon%20%E2%80%94%20T3&body=House%20of%20the%20Dragon%20%E2%80%94%20T3%0AJulho%20%C2%B7%20novos%20episodios%0AA%20terceira%20temporada%20de%20A%20Casa%20do%20Dragao%2C%20com%20novos%20episodios%20ao%20longo%20de%20Julho.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">I Will Find You</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Netflix</span></div>
+    <div class="card-meta">Disponivel</div>
+    <div class="card-desc">Thriller de Harlan Coben, com suspense e reviravoltas.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=I%20Will%20Find%20You%20%E2%80%94%20Disponivel" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20I%20Will%20Find%20You&body=I%20Will%20Find%20You%0ADisponivel%0AThriller%20de%20Harlan%20Coben%2C%20com%20suspense%20e%20reviravoltas.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Amadeo</h3>
+    </div>
+    <div class="card-badges"><span class="badge">RTP Play</span><span class="badge">RTP1</span></div>
+    <div class="card-meta">6 Jul</div>
+    <div class="card-desc">Minisserie biografica portuguesa. Bom match historico (sinal aberto).</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Amadeo%20%E2%80%94%206%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Amadeo&body=Amadeo%0A6%20Jul%0AMinisserie%20biografica%20portuguesa.%20Bom%20match%20historico%20%28sinal%20aberto%29.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="cinema_indoor">
+  <div class="secao-titulo">🎟️ Cinema</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="cinema_indoor" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="cinema_indoor"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Letras Roubadas</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Em cartaz · NOS Colombo · 13h35 · 16h20 · NOS Colombo</div>
+    <div class="card-desc">Drama musical de John Carney (Sing Street), com Paul Rudd e Nick Jonas.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Letras%20Roubadas%20%E2%80%94%20Em%20cartaz%20%C2%B7%20NOS%20Colombo%20%40%20NOS%20Colombo" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Letras%20Roubadas&body=Letras%20Roubadas%0AEm%20cartaz%20%C2%B7%20NOS%20Colombo%0ANOS%20Colombo%0ADrama%20musical%20de%20John%20Carney%20%28Sing%20Street%29%2C%20com%20Paul%20Rudd%20e%20Nick%20Jonas.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_indoor" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="cinema_indoor"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">O Dia da Revelacao</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Estreia</span></div>
+    <div class="card-meta">Em cartaz · NOS Colombo · 13h50 · 17h20 · 20h30 · 23h40 · NOS Colombo</div>
+    <div class="card-desc">Spielberg: um especialista em ciberseguranca torna-se delator para revelar que os extraterrestres existem. Com Emily Blunt e Colin Firth.</div>
+    
+    <div class="card-logistica">🚗 5 min via a pe | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Dia%20da%20Revelacao%20%E2%80%94%20Em%20cartaz%20%C2%B7%20NOS%20Colombo%20%40%20NOS%20Colombo" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Dia%20da%20Revelacao&body=O%20Dia%20da%20Revelacao%0AEm%20cartaz%20%C2%B7%20NOS%20Colombo%0ANOS%20Colombo%0ASpielberg%3A%20um%20especialista%20em%20ciberseguranca%20torna-se%20delator%20para%20revelar%20que%20os%20extraterrestres%20existem.%20Com%20Emily%20Blunt%20e%20Colin%20Firth.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_indoor" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="cinema_indoor"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Dia D: Sob Pressao</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Em cartaz · NOS Colombo · 21h40 · 00h20 · NOS Colombo</div>
+    <div class="card-desc">Thriller de tensao de Anthony Maras (Hotel Mumbai), com Brendan Fraser e Andrew Scott.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Dia%20D%3A%20Sob%20Pressao%20%E2%80%94%20Em%20cartaz%20%C2%B7%20NOS%20Colombo%20%40%20NOS%20Colombo" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Dia%20D%3A%20Sob%20Pressao&body=Dia%20D%3A%20Sob%20Pressao%0AEm%20cartaz%20%C2%B7%20NOS%20Colombo%0ANOS%20Colombo%0AThriller%20de%20tensao%20de%20Anthony%20Maras%20%28Hotel%20Mumbai%29%2C%20com%20Brendan%20Fraser%20e%20Andrew%20Scott.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="cinema_outdoor">
+  <div class="secao-titulo">🌙 Cinema ao ar livre</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="cinema_outdoor" style="--stripe:#EA580C">
+  <style>.card[data-categoria="cinema_outdoor"]::before{background:#EA580C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">CineConchas: 13 Dias, 13 Noites</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Sab 4 Jul · 21h45 · Quinta das Conchas, Lumiar</div>
+    <div class="card-desc">Baseado em factos reais (evacuacao de Cabul, 2021). Site sinaliza possivel cancelamento das sessoes 3–4 Jul.</div>
+    
+    <div class="card-logistica">🚗 8 min via Lumiar | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=CineConchas%3A%2013%20Dias%2C%2013%20Noites%20%E2%80%94%20Sab%204%20Jul%20%C2%B7%2021h45%20%40%20Quinta%20das%20Conchas%2C%20Lumiar" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20CineConchas%3A%2013%20Dias%2C%2013%20Noites&body=CineConchas%3A%2013%20Dias%2C%2013%20Noites%0ASab%204%20Jul%20%C2%B7%2021h45%0AQuinta%20das%20Conchas%2C%20Lumiar%0ABaseado%20em%20factos%20reais%20%28evacuacao%20de%20Cabul%2C%202021%29.%20Site%20sinaliza%20possivel%20cancelamento%20das%20sessoes%203%E2%80%934%20Jul.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_outdoor" style="--stripe:#EA580C">
+  <style>.card[data-categoria="cinema_outdoor"]::before{background:#EA580C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">CineConchas: Valor Sentimental</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Qui 9 Jul · 21h45 · Quinta das Conchas, Lumiar</div>
+    <div class="card-desc">Joachim Trier. Oscar de Melhor Filme Internacional. Drama de grande folego.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=CineConchas%3A%20Valor%20Sentimental%20%E2%80%94%20Qui%209%20Jul%20%C2%B7%2021h45%20%40%20Quinta%20das%20Conchas%2C%20Lumiar" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20CineConchas%3A%20Valor%20Sentimental&body=CineConchas%3A%20Valor%20Sentimental%0AQui%209%20Jul%20%C2%B7%2021h45%0AQuinta%20das%20Conchas%2C%20Lumiar%0AJoachim%20Trier.%20Oscar%20de%20Melhor%20Filme%20Internacional.%20Drama%20de%20grande%20folego.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_outdoor" style="--stripe:#EA580C">
+  <style>.card[data-categoria="cinema_outdoor"]::before{background:#EA580C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">CineConchas: Marty Supreme</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Sex 10 Jul · 21h45 · Quinta das Conchas, Lumiar</div>
+    <div class="card-desc">Drama de Josh Safdie.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=CineConchas%3A%20Marty%20Supreme%20%E2%80%94%20Sex%2010%20Jul%20%C2%B7%2021h45%20%40%20Quinta%20das%20Conchas%2C%20Lumiar" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20CineConchas%3A%20Marty%20Supreme&body=CineConchas%3A%20Marty%20Supreme%0ASex%2010%20Jul%20%C2%B7%2021h45%0AQuinta%20das%20Conchas%2C%20Lumiar%0ADrama%20de%20Josh%20Safdie.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_outdoor" style="--stripe:#EA580C">
+  <style>.card[data-categoria="cinema_outdoor"]::before{background:#EA580C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">CineConchas: Saltitoes</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Sab 11 Jul · 21h45 · Quinta das Conchas, Lumiar</div>
+    <div class="card-desc">Animacao — fora do teu perfil, listado para programacao completa.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=CineConchas%3A%20Saltitoes%20%E2%80%94%20Sab%2011%20Jul%20%C2%B7%2021h45%20%40%20Quinta%20das%20Conchas%2C%20Lumiar" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20CineConchas%3A%20Saltitoes&body=CineConchas%3A%20Saltitoes%0ASab%2011%20Jul%20%C2%B7%2021h45%0AQuinta%20das%20Conchas%2C%20Lumiar%0AAnimacao%20%E2%80%94%20fora%20do%20teu%20perfil%2C%20listado%20para%20programacao%20completa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="meetup">
+  <div class="secao-titulo">🤝 Meetups</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Grass Volleyball — Jardim Vasco da Gama</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Confirmado</span></div>
+    <div class="card-meta">Recorrente (Belem) · Belem</div>
+    <div class="card-desc">Sports &amp; Social Lisbon — ja confirmaste presenca. Voleibol de relva em Belem.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Grass%20Volleyball%20%E2%80%94%20Jardim%20Vasco%20da%20Gama%20%E2%80%94%20Recorrente%20%28Belem%29%20%40%20Belem" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Grass%20Volleyball%20%E2%80%94%20Jardim%20Vasco%20da%20Gama&body=Grass%20Volleyball%20%E2%80%94%20Jardim%20Vasco%20da%20Gama%0ARecorrente%20%28Belem%29%0ABelem%0ASports%20%26%20Social%20Lisbon%20%E2%80%94%20ja%20confirmaste%20presenca.%20Voleibol%20de%20relva%20em%20Belem.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Voleibol de relva — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Tercas · 18h · Ribeirinho, Alges</div>
+    <div class="card-desc">Sessao recorrente ActiveHive. Confirmar lugar em lu.ma/activehive.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Voleibol%20de%20relva%20%E2%80%94%20ActiveHive%20%E2%80%94%20Tercas%20%C2%B7%2018h%20%40%20Ribeirinho%2C%20Alges" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Voleibol%20de%20relva%20%E2%80%94%20ActiveHive&body=Voleibol%20de%20relva%20%E2%80%94%20ActiveHive%0ATercas%20%C2%B7%2018h%0ARibeirinho%2C%20Alges%0ASessao%20recorrente%20ActiveHive.%20Confirmar%20lugar%20em%20lu.ma/activehive.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Meditacao — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Quartas · 18h30 · Alges</div>
+    <div class="card-desc">Sessao de meditacao recorrente.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Meditacao%20%E2%80%94%20ActiveHive%20%E2%80%94%20Quartas%20%C2%B7%2018h30%20%40%20Alges" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Meditacao%20%E2%80%94%20ActiveHive&body=Meditacao%20%E2%80%94%20ActiveHive%0AQuartas%20%C2%B7%2018h30%0AAlges%0ASessao%20de%20meditacao%20recorrente.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Voleibol indoor — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Quartas · 19h · Olivais</div>
+    <div class="card-desc">Nivel 3+. Qua 15 livre — bom dia para jogar.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Voleibol%20indoor%20%E2%80%94%20ActiveHive%20%E2%80%94%20Quartas%20%C2%B7%2019h%20%40%20Olivais" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Voleibol%20indoor%20%E2%80%94%20ActiveHive&body=Voleibol%20indoor%20%E2%80%94%20ActiveHive%0AQuartas%20%C2%B7%2019h%0AOlivais%0ANivel%203%2B.%20Qua%2015%20livre%20%E2%80%94%20bom%20dia%20para%20jogar.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Voleibol de relva — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Quintas · 17h45 · Campo Grande</div>
+    <div class="card-desc">Sessao recorrente. Qui 16 livre.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Voleibol%20de%20relva%20%E2%80%94%20ActiveHive%20%E2%80%94%20Quintas%20%C2%B7%2017h45%20%40%20Campo%20Grande" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Voleibol%20de%20relva%20%E2%80%94%20ActiveHive&body=Voleibol%20de%20relva%20%E2%80%94%20ActiveHive%0AQuintas%20%C2%B7%2017h45%0ACampo%20Grande%0ASessao%20recorrente.%20Qui%2016%20livre.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Game Night in Lisbon</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Quintas · 19h · Marvila</div>
+    <div class="card-desc">Jogos de Julho: Fit to print e La cuenta.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Game%20Night%20in%20Lisbon%20%E2%80%94%20Quintas%20%C2%B7%2019h%20%40%20Marvila" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Game%20Night%20in%20Lisbon&body=Game%20Night%20in%20Lisbon%0AQuintas%20%C2%B7%2019h%0AMarvila%0AJogos%20de%20Julho%3A%20Fit%20to%20print%20e%20La%20cuenta.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Beach Tennis — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sextas · 18h · Carcavelos</div>
+    <div class="card-desc">Sessao recorrente. Sex 17 livre.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Beach%20Tennis%20%E2%80%94%20ActiveHive%20%E2%80%94%20Sextas%20%C2%B7%2018h%20%40%20Carcavelos" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Beach%20Tennis%20%E2%80%94%20ActiveHive&body=Beach%20Tennis%20%E2%80%94%20ActiveHive%0ASextas%20%C2%B7%2018h%0ACarcavelos%0ASessao%20recorrente.%20Sex%2017%20livre.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Bowling — ActiveHive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sextas · 20h · Colombo</div>
+    <div class="card-desc">A 5 min de casa. Sex 17 livre.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Bowling%20%E2%80%94%20ActiveHive%20%E2%80%94%20Sextas%20%C2%B7%2020h%20%40%20Colombo" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Bowling%20%E2%80%94%20ActiveHive&body=Bowling%20%E2%80%94%20ActiveHive%0ASextas%20%C2%B7%2020h%0AColombo%0AA%205%20min%20de%20casa.%20Sex%2017%20livre.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">GBS — Voleibol de praia</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sabados · manha · Carcavelos</div>
+    <div class="card-desc">Sab 18 livre — manha de praia e voleibol.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=GBS%20%E2%80%94%20Voleibol%20de%20praia%20%E2%80%94%20Sabados%20%C2%B7%20manha%20%40%20Carcavelos" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20GBS%20%E2%80%94%20Voleibol%20de%20praia&body=GBS%20%E2%80%94%20Voleibol%20de%20praia%0ASabados%20%C2%B7%20manha%0ACarcavelos%0ASab%2018%20livre%20%E2%80%94%20manha%20de%20praia%20e%20voleibol.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="culture">
+  <div class="secao-titulo">🎭 Cultura</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Gulbenkian — Jardim de Verao</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Fins-de-semana de Julho · Fundacao Gulbenkian</div>
+    <div class="card-desc">Anfiteatro ao ar livre. 4–5 Jul: Alex D Alva, Nancy Vieira, Soraia Ramos. Continua nos fds seguintes.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Gulbenkian%20%E2%80%94%20Jardim%20de%20Verao%20%E2%80%94%20Fins-de-semana%20de%20Julho%20%40%20Fundacao%20Gulbenkian" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Gulbenkian%20%E2%80%94%20Jardim%20de%20Verao&body=Gulbenkian%20%E2%80%94%20Jardim%20de%20Verao%0AFins-de-semana%20de%20Julho%0AFundacao%20Gulbenkian%0AAnfiteatro%20ao%20ar%20livre.%204%E2%80%935%20Jul%3A%20Alex%20D%20Alva%2C%20Nancy%20Vieira%2C%20Soraia%20Ramos.%20Continua%20nos%20fds%20seguintes.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Millennium Festival ao Largo</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">3 a 25 Jul · noites · CCB, Belem</div>
+    <div class="card-desc">Opera em versao concerto, danca e concertos sinfonicos, ao ar livre.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Millennium%20Festival%20ao%20Largo%20%E2%80%94%203%20a%2025%20Jul%20%C2%B7%20noites%20%40%20CCB%2C%20Belem" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Millennium%20Festival%20ao%20Largo&body=Millennium%20Festival%20ao%20Largo%0A3%20a%2025%20Jul%20%C2%B7%20noites%0ACCB%2C%20Belem%0AOpera%20em%20versao%20concerto%2C%20danca%20e%20concertos%20sinfonicos%2C%20ao%20ar%20livre.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Somersby Out Jazz</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Gratis</span></div>
+    <div class="card-meta">Domingos · tarde · Miraflores / Alges</div>
+    <div class="card-desc">Jazz, soul e funk ao ar livre nos parques. Match com o teu gosto musical.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Somersby%20Out%20Jazz%20%E2%80%94%20Domingos%20%C2%B7%20tarde%20%40%20Miraflores%20/%20Alges" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Somersby%20Out%20Jazz&body=Somersby%20Out%20Jazz%0ADomingos%20%C2%B7%20tarde%0AMiraflores%20/%20Alges%0AJazz%2C%20soul%20e%20funk%20ao%20ar%20livre%20nos%20parques.%20Match%20com%20o%20teu%20gosto%20musical.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Iron Maiden</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Confirmado</span><span class="badge">Com bilhete</span></div>
+    <div class="card-meta">Ter 7 Jul · 19:30 · Estadio da Luz</div>
+    <div class="card-desc">Run For Your Lives Tour (50 anos), Anthrax a abrir (portas 18h). A 5 min de casa.</div>
+    
+    <div class="card-logistica">🚗 5 min via Benfica | 🟡 Parking: dificil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Iron%20Maiden%20%E2%80%94%20Ter%207%20Jul%20%40%20Estadio%20da%20Luz" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Iron%20Maiden&body=Iron%20Maiden%0ATer%207%20Jul%0AEstadio%20da%20Luz%0ARun%20For%20Your%20Lives%20Tour%20%2850%20anos%29%2C%20Anthrax%20a%20abrir%20%28portas%2018h%29.%20A%205%20min%20de%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Scorpions</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Confirmado</span><span class="badge">Com bilhete</span></div>
+    <div class="card-meta">Qua 8 Jul · 21:00 · MEO Arena</div>
+    <div class="card-desc">Coming Home 2026 Tour (portas 19h30). Metro Oriente, ~20 min.</div>
+    
+    <div class="card-logistica">🚗 20 min via Oriente | 🔵 Parking: pago</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Scorpions%20%E2%80%94%20Qua%208%20Jul%20%40%20MEO%20Arena" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Scorpions&body=Scorpions%0AQua%208%20Jul%0AMEO%20Arena%0AComing%20Home%202026%20Tour%20%28portas%2019h30%29.%20Metro%20Oriente%2C%20~20%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">NOS Alive</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">9 a 11 Jul · Passeio Maritimo de Alges</div>
+    <div class="card-desc">Nick Cave, Florence + The Machine, Pixies, Wolf Alice. Coincide com a tua Prevencao.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=NOS%20Alive%20%E2%80%94%209%20a%2011%20Jul%20%40%20Passeio%20Maritimo%20de%20Alges" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20NOS%20Alive&body=NOS%20Alive%0A9%20a%2011%20Jul%0APasseio%20Maritimo%20de%20Alges%0ANick%20Cave%2C%20Florence%20%2B%20The%20Machine%2C%20Pixies%2C%20Wolf%20Alice.%20Coincide%20com%20a%20tua%20Prevencao.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Conferencia: Novos nacionalismos e a negacao da historia</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Entrada livre</span></div>
+    <div class="card-meta">Sex 10 Jul · 18:00 · Gulbenkian, Aud. 3</div>
+    <div class="card-desc">Orlando Serrano e Marta Lanca sobre nacionalismos e a negacao da historia. Mesmo a teu gosto.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Conferencia%3A%20Novos%20nacionalismos%20e%20a%20negacao%20da%20historia%20%E2%80%94%20Sex%2010%20Jul%20%40%20Gulbenkian%2C%20Aud.%203" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Conferencia%3A%20Novos%20nacionalismos%20e%20a%20negacao%20da%20historia&body=Conferencia%3A%20Novos%20nacionalismos%20e%20a%20negacao%20da%20historia%0ASex%2010%20Jul%0AGulbenkian%2C%20Aud.%203%0AOrlando%20Serrano%20e%20Marta%20Lanca%20sobre%20nacionalismos%20e%20a%20negacao%20da%20historia.%20Mesmo%20a%20teu%20gosto.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Jamiroquai — Ageas CoolJazz</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Destaque</span></div>
+    <div class="card-meta">Sab 18 Jul · Hipodromo, Cascais</div>
+    <div class="card-desc">CoolJazz em Cascais. Sab 18 livre — ideal a dois, encaixa com escapadinha a Cascais/Guincho.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Jamiroquai%20%E2%80%94%20Ageas%20CoolJazz%20%E2%80%94%20Sab%2018%20Jul%20%40%20Hipodromo%2C%20Cascais" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Jamiroquai%20%E2%80%94%20Ageas%20CoolJazz&body=Jamiroquai%20%E2%80%94%20Ageas%20CoolJazz%0ASab%2018%20Jul%0AHipodromo%2C%20Cascais%0ACoolJazz%20em%20Cascais.%20Sab%2018%20livre%20%E2%80%94%20ideal%20a%20dois%2C%20encaixa%20com%20escapadinha%20a%20Cascais/Guincho.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Feira da Bagageira — Telheiras</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sab 18 Jul · manha · Telheiras</div>
+    <div class="card-desc">Vintage e segunda mao, junto a casa.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Feira%20da%20Bagageira%20%E2%80%94%20Telheiras%20%E2%80%94%20Sab%2018%20Jul%20%C2%B7%20manha%20%40%20Telheiras" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Feira%20da%20Bagageira%20%E2%80%94%20Telheiras&body=Feira%20da%20Bagageira%20%E2%80%94%20Telheiras%0ASab%2018%20Jul%20%C2%B7%20manha%0ATelheiras%0AVintage%20e%20segunda%20mao%2C%20junto%20a%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="books">
+  <div class="secao-titulo">📚 Livros</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="books" style="--stripe:#92400E">
+  <style>.card[data-categoria="books"]::before{background:#92400E;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">O Adversario — Emmanuel Carrere</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sugestao de leitura</div>
+    <div class="card-desc">Suspense real e perturbador, baseado em factos reais — o teu registo de casos veridicos.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Adversario%20%E2%80%94%20Emmanuel%20Carrere%20%E2%80%94%20Sugestao%20de%20leitura" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Adversario%20%E2%80%94%20Emmanuel%20Carrere&body=O%20Adversario%20%E2%80%94%20Emmanuel%20Carrere%0ASugestao%20de%20leitura%0ASuspense%20real%20e%20perturbador%2C%20baseado%20em%20factos%20reais%20%E2%80%94%20o%20teu%20registo%20de%20casos%20veridicos.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="books" style="--stripe:#92400E">
+  <style>.card[data-categoria="books"]::before{background:#92400E;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">O Despertar de Tudo — Graeber e Wengrow</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sugestao de leitura</div>
+    <div class="card-desc">Um novo olhar sobre a historia da humanidade: desigualdade, democracia e liberdade desde a agricultura.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Despertar%20de%20Tudo%20%E2%80%94%20Graeber%20e%20Wengrow%20%E2%80%94%20Sugestao%20de%20leitura" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Despertar%20de%20Tudo%20%E2%80%94%20Graeber%20e%20Wengrow&body=O%20Despertar%20de%20Tudo%20%E2%80%94%20Graeber%20e%20Wengrow%0ASugestao%20de%20leitura%0AUm%20novo%20olhar%20sobre%20a%20historia%20da%20humanidade%3A%20desigualdade%2C%20democracia%20e%20liberdade%20desde%20a%20agricultura.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="books" style="--stripe:#92400E">
+  <style>.card[data-categoria="books"]::before{background:#92400E;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Maua — Empresario do Imperio</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Sugestao de leitura</div>
+    <div class="card-desc">Biografia e historia economica do sec. XIX, com um retrato notavel do Brasil Imperial.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Maua%20%E2%80%94%20Empresario%20do%20Imperio%20%E2%80%94%20Sugestao%20de%20leitura" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Maua%20%E2%80%94%20Empresario%20do%20Imperio&body=Maua%20%E2%80%94%20Empresario%20do%20Imperio%0ASugestao%20de%20leitura%0ABiografia%20e%20historia%20economica%20do%20sec.%20XIX%2C%20com%20um%20retrato%20notavel%20do%20Brasil%20Imperial.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="gastro">
+  <div class="secao-titulo">🍽️ Gastronomia</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Cose di Mama</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Aprovado</span></div>
+    <div class="card-meta">Aprovado · muito perto · Estrada da Luz</div>
+    <div class="card-desc">Italiano que ja aprovaste, a poucos minutos de casa.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Cose%20di%20Mama%20%E2%80%94%20Aprovado%20%C2%B7%20muito%20perto%20%40%20Estrada%20da%20Luz" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Cose%20di%20Mama&body=Cose%20di%20Mama%0AAprovado%20%C2%B7%20muito%20perto%0AEstrada%20da%20Luz%0AItaliano%20que%20ja%20aprovaste%2C%20a%20poucos%20minutos%20de%20casa.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Pasta Non Basta</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Favorito</span></div>
+    <div class="card-meta">Favorito</div>
+    <div class="card-desc">Massas — favorito teu.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Pasta%20Non%20Basta%20%E2%80%94%20Favorito" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Pasta%20Non%20Basta&body=Pasta%20Non%20Basta%0AFavorito%0AMassas%20%E2%80%94%20favorito%20teu.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Davi da Buraca</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Voltar</span></div>
+    <div class="card-meta">Voltar · Buraca</div>
+    <div class="card-desc">Arroz de polvo — querias voltar.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Davi%20da%20Buraca%20%E2%80%94%20Voltar%20%40%20Buraca" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Davi%20da%20Buraca&body=Davi%20da%20Buraca%0AVoltar%0ABuraca%0AArroz%20de%20polvo%20%E2%80%94%20querias%20voltar.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Taberna Londrina</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Aprovado</span></div>
+    <div class="card-meta">Aprovado</div>
+    <div class="card-desc">Francesinha.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Taberna%20Londrina%20%E2%80%94%20Aprovado" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Taberna%20Londrina&body=Taberna%20Londrina%0AAprovado%0AFrancesinha.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Zambeze</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Por testar</span></div>
+    <div class="card-meta">Rec. Rodrigo</div>
+    <div class="card-desc">Vista sobre a cidade — recomendado pelo Rodrigo.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Zambeze%20%E2%80%94%20Rec.%20Rodrigo" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Zambeze&body=Zambeze%0ARec.%20Rodrigo%0AVista%20sobre%20a%20cidade%20%E2%80%94%20recomendado%20pelo%20Rodrigo.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">O Velho Farelo</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Por testar</span></div>
+    <div class="card-meta">Rec. terceiro · Carnaxide</div>
+    <div class="card-desc">Arroz de cabidela — recomendacao de terceiro.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Velho%20Farelo%20%E2%80%94%20Rec.%20terceiro%20%40%20Carnaxide" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Velho%20Farelo&body=O%20Velho%20Farelo%0ARec.%20terceiro%0ACarnaxide%0AArroz%20de%20cabidela%20%E2%80%94%20recomendacao%20de%20terceiro.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Maria Azeitona</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Por testar</span></div>
+    <div class="card-meta">A dois · por testar</div>
+    <div class="card-desc">Para levar a Vanessa — recomendacao de terceiro.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Maria%20Azeitona%20%E2%80%94%20A%20dois%20%C2%B7%20por%20testar" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Maria%20Azeitona&body=Maria%20Azeitona%0AA%20dois%20%C2%B7%20por%20testar%0APara%20levar%20a%20Vanessa%20%E2%80%94%20recomendacao%20de%20terceiro.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">O Panca</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Por testar</span></div>
+    <div class="card-meta">Rec. terceiro · Buraca</div>
+    <div class="card-desc">Recomendacao de terceiro, na Buraca.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Panca%20%E2%80%94%20Rec.%20terceiro%20%40%20Buraca" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Panca&body=O%20Panca%0ARec.%20terceiro%0ABuraca%0ARecomendacao%20de%20terceiro%2C%20na%20Buraca.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Jardim da Luz</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Caro mas vale</span></div>
+    <div class="card-meta">A dois</div>
+    <div class="card-desc">Favorito da Vanessa — para um jantar especial (17–19 Jul).</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Jardim%20da%20Luz%20%E2%80%94%20A%20dois" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Jardim%20da%20Luz&body=Jardim%20da%20Luz%0AA%20dois%0AFavorito%20da%20Vanessa%20%E2%80%94%20para%20um%20jantar%20especial%20%2817%E2%80%9319%20Jul%29.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="escape">
+  <div class="secao-titulo">🧭 Escapadinhas</div>
+  <div class="grid-cards">
+    
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Sesimbra + Arrabida</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Fim-de-semana</div>
+    <div class="card-desc">Praia da Figueirinha/Galapos, agua calma, almoco de peixe. ~40 min.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    <div class="card-logistica">🚗 40 min via A2/IC20 | 🟡 Parking: dificil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Sesimbra%20%2B%20Arrabida%20%E2%80%94%20Fim-de-semana" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sesimbra%20%2B%20Arrabida&body=Sesimbra%20%2B%20Arrabida%0AFim-de-semana%0APraia%20da%20Figueirinha/Galapos%2C%20agua%20calma%2C%20almoco%20de%20peixe.%20~40%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Comporta / Melides</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Fim-de-semana</div>
+    <div class="card-desc">Praia, pinhal e arroz de lingueirao. ~1h15.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    <div class="card-logistica">🚗 75 min via A2/A12 | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Comporta%20/%20Melides%20%E2%80%94%20Fim-de-semana" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Comporta%20/%20Melides&body=Comporta%20/%20Melides%0AFim-de-semana%0APraia%2C%20pinhal%20e%20arroz%20de%20lingueirao.%20~1h15.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Costa da Caparica</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Bate-e-volta</div>
+    <div class="card-desc">Transat na praia, mais perto. ~25 min.</div>
+    
+    <div class="card-logistica">🚗 25 min via Ponte 25 Abril | 🟡 Parking: dificil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Costa%20da%20Caparica%20%E2%80%94%20Bate-e-volta" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Costa%20da%20Caparica&body=Costa%20da%20Caparica%0ABate-e-volta%0ATransat%20na%20praia%2C%20mais%20perto.%20~25%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Sintra</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Bate-e-volta</div>
+    <div class="card-desc">Mais fresco no calor. Almoco no Orixas (buffet brasileiro, rec.). ~30 min.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    <div class="card-logistica">🚗 30 min via IC19 | 🟡 Parking: dificil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Sintra%20%E2%80%94%20Bate-e-volta" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sintra&body=Sintra%0ABate-e-volta%0AMais%20fresco%20no%20calor.%20Almoco%20no%20Orixas%20%28buffet%20brasileiro%2C%20rec.%29.%20~30%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Cascais / Guincho</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Fim-de-semana</div>
+    <div class="card-desc">Praia e jantar; encaixa com o Jamiroquai no CoolJazz (18 Jul) e pernoita. ~30 min.</div>
+    <div class="card-with">👥 Com: Vanessa</div>
+    <div class="card-logistica">🚗 30 min via A5 | 🟡 Parking: dificil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Cascais%20/%20Guincho%20%E2%80%94%20Fim-de-semana" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Cascais%20/%20Guincho&body=Cascais%20/%20Guincho%0AFim-de-semana%0APraia%20e%20jantar%3B%20encaixa%20com%20o%20Jamiroquai%20no%20CoolJazz%20%2818%20Jul%29%20e%20pernoita.%20~30%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Ericeira</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Bate-e-volta</div>
+    <div class="card-desc">Vila, marisco e por-do-sol. ~40 min.</div>
+    
+    <div class="card-logistica">🚗 40 min via A21 | 🟢 Parking: facil</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Ericeira%20%E2%80%94%20Bate-e-volta" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Ericeira&body=Ericeira%0ABate-e-volta%0AVila%2C%20marisco%20e%20por-do-sol.%20~40%20min.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+<div class="secao" data-secao="radar">
+  <div class="secao-titulo">📡 Radar (a confirmar)</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="radar" style="--stripe:#6B7280">
+  <style>.card[data-categoria="radar"]::before{background:#6B7280;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">President Curtis</h3>
+    </div>
+    <div class="card-badges"><span class="badge">HBO Max</span></div>
+    <div class="card-meta">27 Jul</div>
+    <div class="card-desc">Drama politico — estreia no fim de Julho.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=President%20Curtis%20%E2%80%94%2027%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20President%20Curtis&body=President%20Curtis%0A27%20Jul%0ADrama%20politico%20%E2%80%94%20estreia%20no%20fim%20de%20Julho.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="radar" style="--stripe:#6B7280">
+  <style>.card[data-categoria="radar"]::before{background:#6B7280;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Solomun @ Brunch Electronik</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">22 Ago · Belem</div>
+    <div class="card-desc">Edicao especial ao ar livre — 10 anos de Brunch.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Solomun%20%40%20Brunch%20Electronik%20%E2%80%94%2022%20Ago%20%40%20Belem" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Solomun%20%40%20Brunch%20Electronik&body=Solomun%20%40%20Brunch%20Electronik%0A22%20Ago%0ABelem%0AEdicao%20especial%20ao%20ar%20livre%20%E2%80%94%2010%20anos%20de%20Brunch.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="radar" style="--stripe:#6B7280">
+  <style>.card[data-categoria="radar"]::before{background:#6B7280;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Primavera Sound Porto 2027</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Bilhetes a venda</div>
+    <div class="card-desc">Bilhetes ja a venda ao preco mais baixo do ano.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Primavera%20Sound%20Porto%202027%20%E2%80%94%20Bilhetes%20a%20venda" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Primavera%20Sound%20Porto%202027&body=Primavera%20Sound%20Porto%202027%0ABilhetes%20a%20venda%0ABilhetes%20ja%20a%20venda%20ao%20preco%20mais%20baixo%20do%20ano.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+
+
+<script>
+  var EVENTOS = [{"id": "ev_tv01", "category": "tv", "title": "Brasil x Noruega — Mundial (Oitavos)", "date": "2026-07-05"}, {"id": "ev_tv02", "category": "tv", "title": "Portugal x Espanha — Mundial (Oitavos)", "date": "2026-07-06"}, {"id": "ev_tv03", "category": "tv", "title": "Mundial — Quartos de final", "date": "2026-07-09"}, {"id": "ev_tv04", "category": "tv", "title": "Mundial — Meias-finais", "date": "2026-07-14"}, {"id": "ev_tv05", "category": "tv", "title": "Wimbledon — Quartos (masculino)", "date": "2026-07-07"}, {"id": "ev_tv06", "category": "tv", "title": "Wimbledon — Final masculina", "date": "2026-07-12"}, {"id": "ev_tv07", "category": "tv", "title": "FINAL do Mundial 2026", "date": "2026-07-19"}, {"id": "ev_str01", "category": "streaming", "title": "House of the Dragon — T3", "date": "2026-07-04"}, {"id": "ev_str02", "category": "streaming", "title": "Enola Holmes 3", "date": "2026-07-01"}, {"id": "ev_str03", "category": "streaming", "title": "I Will Find You", "date": "2026-07-04"}, {"id": "ev_str04", "category": "streaming", "title": "Amadeo", "date": "2026-07-06"}, {"id": "ev_ci01", "category": "cinema_indoor", "title": "O Dia da Revelacao", "date": "2026-07-04"}, {"id": "ev_ci02", "category": "cinema_indoor", "title": "Dia D: Sob Pressao", "date": "2026-07-04"}, {"id": "ev_ci03", "category": "cinema_indoor", "title": "Letras Roubadas", "date": "2026-07-04"}, {"id": "ev_co01", "category": "cinema_outdoor", "title": "CineConchas: 13 Dias, 13 Noites", "date": "2026-07-04"}, {"id": "ev_co02", "category": "cinema_outdoor", "title": "CineConchas: Valor Sentimental", "date": "2026-07-09"}, {"id": "ev_co03", "category": "cinema_outdoor", "title": "CineConchas: Marty Supreme", "date": "2026-07-10"}, {"id": "ev_co04", "category": "cinema_outdoor", "title": "CineConchas: Saltitoes", "date": "2026-07-11"}, {"id": "ev_mu01", "category": "meetup", "title": "Grass Volleyball — Jardim Vasco da Gama", "date": "2026-07-05"}, {"id": "ev_mu02", "category": "meetup", "title": "Voleibol de relva — ActiveHive", "date": "2026-07-07"}, {"id": "ev_mu08", "category": "meetup", "title": "Meditacao — ActiveHive", "date": "2026-07-15"}, {"id": "ev_mu03", "category": "meetup", "title": "Voleibol indoor — ActiveHive", "date": "2026-07-15"}, {"id": "ev_mu04", "category": "meetup", "title": "Voleibol de relva — ActiveHive", "date": "2026-07-16"}, {"id": "ev_mu05", "category": "meetup", "title": "Game Night in Lisbon", "date": "2026-07-16"}, {"id": "ev_mu06", "category": "meetup", "title": "Beach Tennis — ActiveHive", "date": "2026-07-17"}, {"id": "ev_mu09", "category": "meetup", "title": "Bowling — ActiveHive", "date": "2026-07-17"}, {"id": "ev_mu07", "category": "meetup", "title": "GBS — Voleibol de praia", "date": "2026-07-18"}, {"id": "ev_cu01", "category": "culture", "title": "Iron Maiden", "date": "2026-07-07"}, {"id": "ev_cu02", "category": "culture", "title": "Scorpions", "date": "2026-07-08"}, {"id": "ev_cu05", "category": "culture", "title": "NOS Alive", "date": "2026-07-09"}, {"id": "ev_cu05b", "category": "culture", "title": "Conferencia: Novos nacionalismos e a negacao da historia", "date": "2026-07-10"}, {"id": "ev_cu03", "category": "culture", "title": "Gulbenkian — Jardim de Verao", "date": "2026-07-04"}, {"id": "ev_cu06", "category": "culture", "title": "Millennium Festival ao Largo", "date": "2026-07-04"}, {"id": "ev_cu07", "category": "culture", "title": "Somersby Out Jazz", "date": "2026-07-05"}, {"id": "ev_cu08", "category": "culture", "title": "Jamiroquai — Ageas CoolJazz", "date": "2026-07-18"}, {"id": "ev_cu09", "category": "culture", "title": "Feira da Bagageira — Telheiras", "date": "2026-07-18"}, {"id": "ev_bk01", "category": "books", "title": "O Adversario — Emmanuel Carrere", "date": "2026-07-04"}, {"id": "ev_bk02", "category": "books", "title": "O Despertar de Tudo — Graeber e Wengrow", "date": "2026-07-04"}, {"id": "ev_bk03", "category": "books", "title": "Maua — Empresario do Imperio", "date": "2026-07-04"}, {"id": "ev_ga01", "category": "gastro", "title": "Cose di Mama", "date": "2026-07-04"}, {"id": "ev_ga02", "category": "gastro", "title": "Pasta Non Basta", "date": "2026-07-04"}, {"id": "ev_ga03", "category": "gastro", "title": "Davi da Buraca", "date": "2026-07-04"}, {"id": "ev_ga04", "category": "gastro", "title": "Taberna Londrina", "date": "2026-07-04"}, {"id": "ev_ga05", "category": "gastro", "title": "Jardim da Luz", "date": "2026-07-17"}, {"id": "ev_ga06", "category": "gastro", "title": "Zambeze", "date": "2026-07-04"}, {"id": "ev_ga07", "category": "gastro", "title": "O Velho Farelo", "date": "2026-07-04"}, {"id": "ev_ga08", "category": "gastro", "title": "Maria Azeitona", "date": "2026-07-04"}, {"id": "ev_ga09", "category": "gastro", "title": "O Panca", "date": "2026-07-04"}, {"id": "ev_es01", "category": "escape", "title": "Sesimbra + Arrabida", "date": "2026-07-18"}, {"id": "ev_es02", "category": "escape", "title": "Comporta / Melides", "date": "2026-07-18"}, {"id": "ev_es03", "category": "escape", "title": "Costa da Caparica", "date": "2026-07-18"}, {"id": "ev_es04", "category": "escape", "title": "Sintra", "date": "2026-07-18"}, {"id": "ev_es05", "category": "escape", "title": "Cascais / Guincho", "date": "2026-07-18"}, {"id": "ev_es06", "category": "escape", "title": "Ericeira", "date": "2026-07-18"}, {"id": "ev_ra01", "category": "radar", "title": "Solomun @ Brunch Electronik", "date": "2026-08-22"}, {"id": "ev_ra03", "category": "radar", "title": "President Curtis", "date": "2026-07-27"}, {"id": "ev_ra02", "category": "radar", "title": "Primavera Sound Porto 2027", "date": "2027-06-01"}];
+  document.querySelectorAll('.pill').forEach(function(p){
+    p.addEventListener('click', function(){
+      document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('active');});
+      p.classList.add('active');
+      var f = p.getAttribute('data-filtro');
+      document.querySelectorAll('.secao').forEach(function(s){
+        if(f === 'todos' || s.getAttribute('data-secao') === f){
+          s.style.display = '';
+        } else {
+          s.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
