@@ -262,10 +262,14 @@ def extrair_numero_da_linha(linha: str, chave: str):
     linha = TEMPO_DATA_PATTERN.sub(" ", linha)
     esperado = MOEDA_ESPERADA.get(chave)
 
+    # se o indice tem um formato esperado (R$ para cambio, separador de
+    # milhar para o Ibovespa, etc.) e ele nao aparece na linha, NAO cair
+    # para um numero generico qualquer: essas frases costumam citar varios
+    # numeros de assuntos diferentes juntos (ex.: "dolar" mencionado de
+    # passagem numa frase cujo unico numero "limpo" e o nivel do Nikkei) —
+    # e melhor nao capturar nada do que capturar o numero errado.
     if esperado:
-        token = _primeiro_valido(esperado, linha)
-        if token:
-            return token
+        return _primeiro_valido(esperado, linha)
 
     token = _primeiro_valido(NUM_BRL, linha) or _primeiro_valido(NUM_USD, linha)
     if token:
