@@ -57,6 +57,10 @@ INDICE_PATTERNS = {
 
 # numero com simbolo de moeda explicito (preferido: e o que distingue o
 # preco real de uma variacao percentual ou de outro numero solto na frase).
+# NAO tem exclusoes embutidas no padrao (ver _candidato_valido) — colocar
+# lookaheads de rejeicao aqui faz o regex "encolher" o numero so para escapar
+# da rejeicao (ex.: rejeitar "R$ 6,7" seguido de "bilhoes" faz o motor
+# recuar para "R$ 6", que ja nao e seguido de "bilh" e passa).
 NUM_BRL = re.compile(r"R\$\s?-?\d{1,3}(?:\.\d{3})*(?:,\d{1,4})?")
 NUM_USD = re.compile(r"(?:US\$|U\$|\$)\s?-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?")
 
@@ -65,11 +69,37 @@ NUM_USD = re.compile(r"(?:US\$|U\$|\$)\s?-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?
 NUM_PONTOS = re.compile(r"\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?")
 
 # numero solto, sem simbolo de moeda: exige que nao esteja colado a uma letra
-# (evita pegar digitos de ticker, tipo GOLD11) e que nao seja uma
-# percentagem (a variacao %, quando e o unico numero da frase, nao serve
-# como valor de indice).
-NUM_GENERICO = re.compile(
-    r"(?<![A-Za-z0-9])-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?(?!\s?%)"
+# (evita pegar digitos de ticker, tipo GOLD11). O lookbehind e seguro aqui
+# porque olha para TRAS do inicio do numero — nao ha como o motor recuar
+# para escapar dele encolhendo o numero por trás.
+NUM_GENERICO = re.compile(r"(?<![A-Za-z0-9])-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?")
+
+# rejeita o candidato se, logo depois dele, vier: uma percentagem (variacao,
+# nao valor); uma barra (fragmento de data, tipo "02/07" ou "26/jun"); ou
+# "bilh(ao/oes)"/"milh(ao/oes)"/"trilh(ao/oes)" (quase sempre o tamanho de
+# uma transaccao/negocio, nao uma cotacao — ex. "R$ 6,7 bilhoes" no valor de
+# uma fusao/aquisicao). Verificado em Python, DEPOIS de achar o numero
+# inteiro, para nao sofrer o problema do recuo do regex descrito acima.
+SUFIXO_REJEITADO = re.compile(r"\s*(?:%|/|bilh|milh|trilh)")
+
+
+def _candidato_valido(linha: str, match) -> bool:
+    return SUFIXO_REJEITADO.match(linha, match.end()) is None
+
+
+def _primeiro_valido(padrao, linha: str):
+    for match in padrao.finditer(linha):
+        if _candidato_valido(linha, match):
+            return match.group()
+    return None
+
+
+# hora ("05h00", "11:30") e data numerica ("02/07", "02/07/2026") sao
+# removidas da linha antes de procurar o valor: senao a hora/dia vira um
+# "valor" falso quando a linha nao tem nenhuma cotacao de verdade (comum em
+# entradas de agenda economica, ex. "05h00 - Zona do euro: PMI industrial").
+TEMPO_DATA_PATTERN = re.compile(
+    r"\d{1,2}h\d{2}\b|\b\d{1,2}:\d{2}\b|\b\d{1,2}/\d{1,2}(?:/\d{2,4})?\b"
 )
 
 # indices cuja unidade de referencia esperada e conhecida — usada para
@@ -229,19 +259,19 @@ def normalizar_numero(token: str):
 
 
 def extrair_numero_da_linha(linha: str, chave: str):
+    linha = TEMPO_DATA_PATTERN.sub(" ", linha)
     esperado = MOEDA_ESPERADA.get(chave)
 
     if esperado:
-        match = esperado.search(linha)
-        if match:
-            return match.group()
+        token = _primeiro_valido(esperado, linha)
+        if token:
+            return token
 
-    match = NUM_BRL.search(linha) or NUM_USD.search(linha)
-    if match:
-        return match.group()
+    token = _primeiro_valido(NUM_BRL, linha) or _primeiro_valido(NUM_USD, linha)
+    if token:
+        return token
 
-    match = NUM_GENERICO.search(linha)
-    return match.group() if match else None
+    return _primeiro_valido(NUM_GENERICO, linha)
 
 
 def extrair_indices(texto: str) -> dict:
