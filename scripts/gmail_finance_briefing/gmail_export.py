@@ -213,6 +213,24 @@ def montar_query_gmail(label: str, dias: int) -> str:
     return '"' + query.replace('"', '\\"') + '"'
 
 
+def encontrar_pasta_todos_emails(imap) -> str:
+    status, pastas = imap.list()
+    if status != "OK":
+        raise RuntimeError("Não foi possível listar as pastas da conta (comando LIST falhou).")
+
+    for pasta in pastas:
+        linha = pasta.decode("utf-8", errors="replace") if isinstance(pasta, bytes) else pasta
+        if "\\All" not in linha:
+            continue
+        match = re.search(r'"([^"]+)"\s*$', linha)
+        return match.group(1) if match else linha.split()[-1]
+
+    raise RuntimeError(
+        "Não encontrei a pasta 'Todos os e-mails' (All Mail) na conta. "
+        "Confirme que o IMAP está ativado nas configurações do Gmail."
+    )
+
+
 def export():
     print("BASE_DIR:", BASE_DIR)
 
@@ -221,7 +239,11 @@ def export():
 
     imap = imaplib.IMAP4_SSL("imap.gmail.com")
     imap.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
-    imap.select('"[Gmail]/All Mail"', readonly=True)
+
+    pasta_all = encontrar_pasta_todos_emails(imap)
+    status, _ = imap.select(f'"{pasta_all}"', readonly=True)
+    if status != "OK":
+        raise RuntimeError(f"Não consegui abrir a pasta '{pasta_all}' (status: {status}).")
 
     criterio = montar_query_gmail(LABEL, WINDOW_DAYS)
     status, dados = imap.search(None, "X-GM-RAW", criterio)
