@@ -1,380 +1,385 @@
 <!DOCTYPE html>
 <!--
-AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 — híbrido, ícones soltos, mobile-first)
-============================================================================
-MODELO sem dados em tempo real. Hub leve: cabeçalho condensado + grid de
-ícones soltos (sem caixa/cartão por trás) que apontam, por link real
-<a href>, para os módulos já publicados.
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 — híbrido, ícones soltos, mobile-first)
+  ============================================================================
+  MODELO sem dados em tempo real. Hub leve: cabeçalho condensado + grid de
+  ícones soltos (sem caixa/cartão por trás) que apontam, por link real
+  <a href>, para os módulos já publicados.
 
-⚠️ ESTADO REAL DO HOSTING (confirmado por Rafa, 17 Jun 2026):
-No GitHub existe UM repositório com uma pasta "agendas" e subpastas por
-módulo. No Netlify, o projecto "rafa-agenda" publica a pasta "agendas"
-como Publish directory — isto significa que o prefixo "agendas/" É
-REMOVIDO nos URLs públicos. Ou seja:
-repo: agendas/home/index.html → URL: /home/index.html
-repo: agendas/briefing/index.html → URL: /briefing/index.html
-repo: agendas/Hff/Index.html → URL: /Hff/Index.html (verificar caixa)
-repo: agendas/lazer/index.html → URL: /lazer/index.html
-Os links relativos abaixo (../Hff/Index.html, etc.) funcionam corretamente
-porque preservam a relação de "irmãos" dentro de agendas/, independente
-do prefixo ser removido na publicação.
+  ⚠️ ESTADO REAL DO HOSTING (confirmado por Rafa, 17 Jun 2026):
+  No GitHub existe UM repositório com uma pasta "agenda" e subpastas por
+  módulo — mas no Netlify, HOJE, cada subpasta é o seu próprio projecto
+  Netlify separado (domínios diferentes, ex. rafa-briefing.netlify.app).
+  NÃO é ainda "mesmo site, pastas separadas".
 
-NOTA TÉCNICA — deep link para tabs do briefing:
-Os links para Tarefas/Calendário/Email/Finanças B3/Notícias/Tempo usam
-fragmentos (#tarefas, #calendario...). Para abrir já na tab certa, o
-briefing precisa de um pequeno hash-router no arranque:
-window.addEventListener('DOMContentLoaded', () => {
-const h = location.hash.replace('#','');
-if (h) showTab(h);
-});
-(nota de implementação para o ficheiro de destino, não faz parte deste hub)
+  Este template assume a estrutura-ALVO (recomendada, ainda não implementada):
+    agendas/home/index.html      ← este ficheiro
+    agendas/briefing/index.html  ← briefing diário (tabs internas)
+    agendas/Hff/Index.html       ← painel HFF standalone
+    agendas/lazer/index.html     ← agenda de lazer
+  Os caminhos relativos abaixo (../Hff/Index.html, etc.) só funcionam depois
+  de consolidar os projectos Netlify num único projecto/domínio que publique
+  a pasta "agenda" com as subpastas dentro. Ver explicação enviada a Rafa no
+  chat para os passos concretos.
+  SE Rafa decidir manter projectos Netlify separados, trocar cada href por
+  um URL absoluto (ex. https://rafa-briefing.netlify.app/#tarefas).
 
-NOTA — ícones de actividade na barra do tempo:
-Os ícones extra (🚲 bicicleta, 🍷 happy hour, ☕ café, 🎬 cinema) junto de
-cada período do dia são preenchidos, na geração real, a partir das regras
-já existentes no rafa_profile.md / feedback_log.md (ex: bicicleta só para
-lazer dentro de Lisboa depois de voltar a casa; happy hour com a Vanessa;
-café com a Clarinha; cinema em noite de chuva). Aqui aparecem como
-exemplo/placeholder — a lógica de decisão não faz parte deste template.
+  NOTA TÉCNICA — deep link para tabs do briefing:
+  Os links para Tarefas/Calendário/Email/Finanças B3/Notícias/Tempo usam
+  fragmentos (#tarefas, #calendario...). Para abrir já na tab certa, o
+  briefing precisa de um pequeno hash-router no arranque:
+    window.addEventListener('DOMContentLoaded', () => {
+      const h = location.hash.replace('#','');
+      if (h) showTab(h);
+    });
+  (nota de implementação para o ficheiro de destino, não faz parte deste hub)
 
-TEMA — Híbrido: topo escuro (navy) + corpo claro (creme). Textos sempre
-de alto contraste para leitura fácil ao sol.
+  NOTA — ícones de actividade na barra do tempo:
+  Os ícones extra (🚲 bicicleta, 🍷 happy hour, ☕ café, 🎬 cinema) junto de
+  cada período do dia são preenchidos, na geração real, a partir das regras
+  já existentes no rafa_profile.md / feedback_log.md (ex: bicicleta só para
+  lazer dentro de Lisboa depois de voltar a casa; happy hour com a Vanessa;
+  café com a Clarinha; cinema em noite de chuva). Aqui aparecem como
+  exemplo/placeholder — a lógica de decisão não faz parte deste template.
+
+  TEMA — Híbrido: topo escuro (navy) + corpo claro (creme). Textos sempre
+  de alto contraste para leitura fácil ao sol.
 -->
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agenda · Início</title>
+<title>Agenda · Ter, 7 Jul</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root{
---navy:#1A3D52;
---navy-2:#102B3A;
---navy-border:#2C5068;
---cream:#F5F0E8;
---card:#FDFAF4;
---border:#E0D8C8;
---ink:#1F2A33;
---ink-light:#FBF7EF;
---muted:#8A8070;
---muted-light:#B9CBD6;
---terracotta:#C75A2C;
---gold:#D4A946;
---sage:#5A7A5E;
---teal:#0D9488;
---red:#C0392B;
---blue:#4A7FAD;
---radius:16px;
---radius-sm:12px;
---shadow:0 1px 3px rgba(26,40,51,.12), 0 6px 14px rgba(26,40,51,.08);
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-background:var(--cream);
-color:var(--ink);
-font-family:'DM Sans', sans-serif;
--webkit-font-smoothing:antialiased;
-min-height:100vh;
-}
-h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
-a{ text-decoration:none; color:inherit; }
-.wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
+  :root{
+    --navy:#1A3D52;
+    --navy-2:#102B3A;
+    --navy-border:#2C5068;
+    --cream:#F5F0E8;
+    --card:#FDFAF4;
+    --border:#E0D8C8;
+    --ink:#1F2A33;
+    --ink-light:#FBF7EF;
+    --muted:#8A8070;
+    --muted-light:#B9CBD6;
+    --terracotta:#C75A2C;
+    --gold:#D4A946;
+    --sage:#5A7A5E;
+    --teal:#0D9488;
+    --red:#C0392B;
+    --blue:#4A7FAD;
+    --radius:16px;
+    --radius-sm:12px;
+    --shadow:0 1px 3px rgba(26,40,51,.12), 0 6px 14px rgba(26,40,51,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
 
-/* ===== TOPBAR — condensado, 2 linhas só, escuro ===== */
-.topbar{
-position:sticky; top:0; z-index:20;
-background:linear-gradient(160deg, var(--navy), var(--navy-2));
-padding:12px 14px 10px;
-border-bottom:1px solid var(--navy-border);
-}
-.topbar-inner{ max-width:680px; margin:0 auto; }
-.topbar-row1{
-display:flex; align-items:center; justify-content:space-between; gap:10px;
-}
-.greet{
-font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light);
-}
-.seg{
-display:inline-flex; background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
-border-radius:999px; padding:2px; gap:2px; flex:0 0 auto;
-}
-.seg button{
-border:none; background:transparent; color:var(--muted-light);
-font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
-padding:5px 11px; border-radius:999px; cursor:pointer;
-}
-.seg button.active{ background:var(--gold); color:var(--navy-2); }
-.topbar-row2{
-display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap;
-}
-.chip{
-font-size:12px; font-weight:700; color:var(--ink-light);
-background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
-border-radius:999px; padding:5px 10px;
-display:flex; align-items:center; gap:5px; white-space:nowrap;
-}
-.chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
-.chip b{ color:var(--gold); font-size:12.5px; }
-.chip.daytype b{ color:#FFF8EE; }
+  /* ===== TOPBAR — condensado, 2 linhas só, escuro ===== */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(160deg, var(--navy), var(--navy-2));
+    padding:12px 14px 10px;
+    border-bottom:1px solid var(--navy-border);
+  }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .greet{
+    font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light);
+  }
+  .seg{
+    display:inline-flex; background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
+    border-radius:999px; padding:2px; gap:2px; flex:0 0 auto;
+  }
+  .seg button{
+    border:none; background:transparent; color:var(--muted-light);
+    font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
+    padding:5px 11px; border-radius:999px; cursor:pointer;
+  }
+  .seg button.active{ background:var(--gold); color:var(--navy-2); }
+  .topbar-row2{
+    display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap;
+  }
+  .chip{
+    font-size:12px; font-weight:700; color:var(--ink-light);
+    background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
+    border-radius:999px; padding:5px 10px;
+    display:flex; align-items:center; gap:5px; white-space:nowrap;
+  }
+  .chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
+  .chip b{ color:var(--gold); font-size:12.5px; }
+  .chip.daytype b{ color:#FFF8EE; }
 
-/* ===== BARRA DO TEMPO + ACTIVIDADES — compacta, clara ===== */
-.wbar{
-background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
-margin:12px 0 14px; padding:9px 6px;
-display:grid; grid-template-columns:repeat(3,1fr);
-}
-.wbar-cell{
-text-align:center; font-size:12px; font-weight:600; color:var(--ink);
-display:flex; flex-direction:column; align-items:center; gap:1px;
-border-right:1px solid var(--border);
-}
-.wbar-cell:last-child{ border-right:none; }
-.wbar-time{ font-size:10px; color:var(--muted); font-weight:700; }
-.wbar-main{ font-size:13px; }
-.wbar-activity{ font-size:14px; margin-top:1px; }
+  /* ===== BARRA DO TEMPO + ACTIVIDADES — compacta, clara ===== */
+  .wbar{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
+    margin:12px 0 14px; padding:9px 6px;
+    display:grid; grid-template-columns:repeat(3,1fr);
+  }
+  .wbar-cell{
+    text-align:center; font-size:12px; font-weight:600; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    border-right:1px solid var(--border);
+  }
+  .wbar-cell:last-child{ border-right:none; }
+  .wbar-time{ font-size:10px; color:var(--muted); font-weight:700; }
+  .wbar-main{ font-size:13px; }
+  .wbar-activity{ font-size:14px; margin-top:1px; }
 
-.content{ padding-top:4px; }
+  .content{ padding-top:4px; }
 
-/* ===== BANNER ===== */
-.banner{
-border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px;
-display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
-border:1px solid var(--border); background:var(--card); color:var(--sage);
-}
-.banner-alert{ color:var(--red); border-color:#EBC9C2; }
+  /* ===== BANNER ===== */
+  .banner{
+    border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px;
+    display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
+    border:1px solid var(--border); background:var(--card); color:var(--sage);
+  }
+  .banner-alert{ color:var(--red); border-color:#EBC9C2; }
 
-/* ===== GRID DE ÍCONES — soltos, sem caixa/cartão ===== */
-.grid{
-display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:18px;
-}
-.tile{
-display:flex; align-items:center; justify-content:center;
-padding:8px 0; position:relative; transition:transform .12s;
-}
-.tile:active{ transform:scale(.90); }
-.tile-circle{
-width:50px; height:50px; border-radius:50%;
-display:flex; align-items:center; justify-content:center; font-size:23px;
-box-shadow:var(--shadow);
-}
-.c-terracotta{ background:#F7DCC9; }
-.c-sage{ background:#DCEBDD; }
-.c-blue{ background:#DCE9F7; }
-.c-gold{ background:#F8EBC9; }
-.c-red{ background:#FAD9D4; }
-.c-teal{ background:#CFF2EC; }
-.c-navy{ background:#D8E3EA; }
-.tile-alert{
-position:absolute; top:6px; right:14px; width:9px; height:9px;
-border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(192,57,43,.25);
-}
+  /* ===== GRID DE ÍCONES — soltos, sem caixa/cartão ===== */
+  .grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:18px;
+  }
+  .tile{
+    display:flex; align-items:center; justify-content:center;
+    padding:8px 0; position:relative; transition:transform .12s;
+  }
+  .tile:active{ transform:scale(.90); }
+  .tile-circle{
+    width:50px; height:50px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:23px;
+    box-shadow:var(--shadow);
+  }
+  .c-terracotta{ background:#F7DCC9; }
+  .c-sage{ background:#DCEBDD; }
+  .c-blue{ background:#DCE9F7; }
+  .c-gold{ background:#F8EBC9; }
+  .c-red{ background:#FAD9D4; }
+  .c-teal{ background:#CFF2EC; }
+  .c-navy{ background:#D8E3EA; }
+  .tile-alert{
+    position:absolute; top:6px; right:14px; width:9px; height:9px;
+    border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(192,57,43,.25);
+  }
 
-/* ===== WIDGETS (Prioridades / Carnegie) ===== */
-.section-label{
-font-size:11px; text-transform:uppercase; letter-spacing:.1em;
-color:var(--muted); font-weight:700; margin:0 0 8px 2px;
-}
-.widgets{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
-.card{
-background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-padding:14px 15px;
-}
-.card-title{
-font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink);
-display:flex; align-items:center; gap:7px; margin-bottom:8px;
-}
-.card-title .stripe{ width:4px; height:15px; border-radius:3px; background:var(--gold); display:inline-block; }
-.card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
-.card .muted{ color:var(--muted); font-size:12px; }
-.priority-list{ list-style:none; margin:0; padding:0; }
-.priority-list li{
-font-size:13.5px; padding:6px 0; border-bottom:1px dashed var(--border);
-display:flex; align-items:flex-start; gap:8px; color:var(--ink); font-weight:500;
-}
-.priority-list li:last-child{ border-bottom:none; }
-.priority-list li .num{
-background:var(--terracotta); color:#FFF8EE; font-size:10.5px; font-weight:700;
-border-radius:50%; width:16px; height:16px; flex:0 0 16px;
-display:flex; align-items:center; justify-content:center; margin-top:2px;
-}
+  /* ===== WIDGETS (Prioridades / Carnegie) ===== */
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); font-weight:700; margin:0 0 8px 2px;
+  }
+  .widgets{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px 15px;
+  }
+  .card-title{
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink);
+    display:flex; align-items:center; gap:7px; margin-bottom:8px;
+  }
+  .card-title .stripe{ width:4px; height:15px; border-radius:3px; background:var(--gold); display:inline-block; }
+  .card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
+  .card .muted{ color:var(--muted); font-size:12px; }
+  .priority-list{ list-style:none; margin:0; padding:0; }
+  .priority-list li{
+    font-size:13.5px; padding:6px 0; border-bottom:1px dashed var(--border);
+    display:flex; align-items:flex-start; gap:8px; color:var(--ink); font-weight:500;
+  }
+  .priority-list li:last-child{ border-bottom:none; }
+  .priority-list li .num{
+    background:var(--terracotta); color:#FFF8EE; font-size:10.5px; font-weight:700;
+    border-radius:50%; width:16px; height:16px; flex:0 0 16px;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
 
-/* ===== FOOTER ===== */
-.footer{ text-align:center; margin-top:18px; }
-.footer p{ font-size:11px; color:var(--muted); margin:0; }
+  /* ===== FOOTER ===== */
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
 
-/* ===== LEITURA ===== */
-#leitura{ display:none; }
-body[data-mode="leitura"] #painel{ display:none; }
-body[data-mode="leitura"] #leitura{ display:block; }
-.read-stack{ display:flex; flex-direction:column; gap:10px; }
-.shortcuts{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
-.shortcut-link{
-width:36px; height:36px; border-radius:50%;
-font-size:17px;
-display:flex; align-items:center; justify-content:center;
-}
+  /* ===== LEITURA ===== */
+  #leitura{ display:none; }
+  body[data-mode="leitura"] #painel{ display:none; }
+  body[data-mode="leitura"] #leitura{ display:block; }
+  .read-stack{ display:flex; flex-direction:column; gap:10px; }
+  .shortcuts{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
+  .shortcut-link{
+    width:36px; height:36px; border-radius:50%;
+    font-size:17px;
+    display:flex; align-items:center; justify-content:center;
+  }
 </style>
 </head>
 <body data-mode="painel">
 
-<!-- ===== TOPBAR — 2 linhas, condensado ===== -->
-<div class="topbar">
-<div class="topbar-inner">
-<div class="topbar-row1">
-<div class="greet">Bom dia, Rafa</div>
-<div class="seg">
-<button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
-<button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
-</div>
-</div>
-<div class="topbar-row2">
-<span class="chip daytype">🏥 <b>Dia de BO</b></span>
-<span class="chip">📅 <b>2</b></span>
-<span class="chip">✅ <b>3</b></span>
-<span class="chip">☀️ <b>28°</b> · 🎯 <b>Sem 2</b></span>
-</div>
-</div>
-</div>
+  <!-- ===== TOPBAR — 2 linhas, condensado ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="greet">Ter, 7 Jul</div>
+        <div class="seg">
+          <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
+          <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
+        </div>
+      </div>
+      <div class="topbar-row2">
+        <span class="chip daytype">🏥 <b>Sem BO</b></span>
+        <span class="chip">📅 <b>2</b></span>
+        <span class="chip">✅ <b>6</b></span>
+        <span class="chip">☀️ <b>33°</b> · 🎯 <b>3</b></span>
+      </div>
+    </div>
+  </div>
 
-<div class="wrap">
+  <div class="wrap">
 
-<!-- ===== TIRA DO TEMPO + ACTIVIDADES — compacta ===== -->
-<div class="wbar">
-<div class="wbar-cell">
-<span class="wbar-time">08h</span>
-<span class="wbar-main">☀️ 18°</span>
-<span class="wbar-activity" title="Exemplo: nada sugerido de manhã">·</span>
-</div>
-<div class="wbar-cell">
-<span class="wbar-time">16h</span>
-<span class="wbar-main">⛅ 28°</span>
-<span class="wbar-activity" title="Exemplo: tempo bom para bicicleta">🚲</span>
-</div>
-<div class="wbar-cell">
-<span class="wbar-time">20h</span>
-<span class="wbar-main">🌙 22°</span>
-<span class="wbar-activity" title="Exemplo: happy hour com a Vanessa">🍷</span>
-</div>
-</div>
+    <!-- ===== TIRA DO TEMPO + ACTIVIDADES — compacta ===== -->
+    <div class="wbar">
+      <div class="wbar-cell">
+        <span class="wbar-time">08h</span>
+        <span class="wbar-main">☀️ 22°</span>
+        <span class="wbar-activity" title="Exemplo: nada sugerido de manhã">·</span>
+      </div>
+      <div class="wbar-cell">
+        <span class="wbar-time">16h</span>
+        <span class="wbar-main">⛅ 33°</span>
+        <span class="wbar-activity" title="Exemplo: tempo bom para bicicleta">🚲</span>
+      </div>
+      <div class="wbar-cell">
+        <span class="wbar-time">20h</span>
+        <span class="wbar-main">🌙 25°</span>
+        <span class="wbar-activity" title="Exemplo: happy hour com a Vanessa">🍷</span>
+      </div>
+    </div>
 
-<div class="content">
+    <div class="content">
 
-<!-- ===================== MODO PAINEL ===================== -->
-<div id="painel">
+      <!-- ===================== MODO PAINEL ===================== -->
+      <div id="painel">
 
-<div class="banner">
-ℹ️ Dia de Bloco Operatório — 4 cirurgias de manhã + SIGIC à tarde (Isabel + Rafael). Prevenção esta semana: Rodrigo.
-</div>
+        <div class="banner">
+          ℹ️ Sem BO no bloco hoje · Consulta Uro 09:30 · Show Iron 13:30 · próximo BO: Segunda 13 Jul
+        </div>
 
-<div class="grid">
-<a class="tile" href="../Hff/Index.html" title="HFF" aria-label="HFF">
-<span class="tile-circle c-terracotta">🏥</span>
-</a>
-<a class="tile" href="../briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
-<span class="tile-circle c-sage">✅</span>
-</a>
-<a class="tile" href="../briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
-<span class="tile-circle c-blue">📅</span>
-</a>
-<a class="tile" href="../briefing/index.html#email" title="Email" aria-label="Email">
-<span class="tile-circle c-gold">📧</span>
-</a>
-<a class="tile" href="../briefing/index.html#fullb3" title="Finanças B3" aria-label="Finanças B3">
-<span class="tile-circle c-red">📈</span>
-</a>
-<a class="tile" href="../lazer/index.html" title="Lazer" aria-label="Lazer">
-<span class="tile-circle c-teal">🎭</span>
-</a>
-<a class="tile" href="../briefing/index.html#noticias" title="Notícias" aria-label="Notícias">
-<span class="tile-circle c-navy">📰</span>
-</a>
-<a class="tile" href="../briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
-<span class="tile-circle c-blue">🌤️</span>
-</a>
-</div>
+        <div class="grid">
+          <a class="tile" href="../Hff/Index.html" title="HFF" aria-label="HFF">
+            <span class="tile-circle c-terracotta">🏥</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
+            <span class="tile-circle c-sage">✅</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
+            <span class="tile-circle c-blue">📅</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#email" title="Email" aria-label="Email">
+            <span class="tile-circle c-gold">📧</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#fullb3" title="Finanças B3" aria-label="Finanças B3">
+            <span class="tile-circle c-red">📈</span>
+          </a>
+          <a class="tile" href="../lazer/index.html" title="Lazer" aria-label="Lazer">
+            <span class="tile-circle c-teal">🎭</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#noticias" title="Notícias" aria-label="Notícias">
+            <span class="tile-circle c-navy">📰</span>
+          </a>
+          <a class="tile" href="../briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
+            <span class="tile-circle c-blue">🌤️</span>
+          </a>
+        </div>
 
-<div class="section-label">Hoje</div>
-<div class="widgets">
-<div class="card">
-<div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
-<ol class="priority-list">
-<li><span class="num">1</span> Bloco Operatório — 4 cirurgias de manhã</li>
-<li><span class="num">2</span> SIGIC à tarde (Isabel + Rafael)</li>
-<li><span class="num">3</span> Reembolso IRS</li>
-</ol>
-</div>
-<div class="card">
-<div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
-<p>"Antes de falar — estou aqui para entender ou para corrigir?"</p>
-<p class="muted">Carnegie · Desenvolvimento de Pessoas</p>
-</div>
-</div>
+        <div class="section-label">Hoje</div>
+        <div class="widgets">
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
+            <ol class="priority-list">
+              <li><span class="num">1</span> Confirmar horário da Consulta Uro (09:30–11:00)</li>
+              <li><span class="num">2</span> CV Update + Gym 7h30 (hábitos de terça)</li>
+              <li><span class="num">3</span> Criar pj + case clínico Sergio (rádio quisto branquial)</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
+            <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Hoje: usar perguntas em vez de afirmações.</p>
+            <p class="muted">Sem sessão registada para 7 Jul (última: 2 Jul) — accionar rotina de manhã se quiseres gerar a de hoje.</p>
+          </div>
+        </div>
 
-</div>
+      </div>
 
-<!-- ===================== MODO LEITURA ===================== -->
-<div id="leitura">
-<div class="read-stack">
+      <!-- ===================== MODO LEITURA ===================== -->
+      <div id="leitura">
+        <div class="read-stack">
 
-<div class="card">
-<div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
-<p><b>Dia de BO</b> · 2 eventos · 3 tarefas pendentes.</p>
-<p class="muted">Prevenção esta semana: Rodrigo. Próxima semana on-call: Rafael.</p>
-</div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
+            <p><b>Sem BO</b> · 2 eventos · 6 tarefas pendentes.</p>
+            <p class="muted">Consulta Uro 09:30–11:00 · Show Iron 13:30–14:30 · próximo BO: Segunda 13 Jul</p>
+          </div>
 
-<div class="card">
-<div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
-<p>08h 18° ☀️ · 16h 28° ⛅ 🚲 · 20h 22° 🌙 🍷</p>
-</div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
+            <p>08h 22° ☀️ · 16h 33° ⛅ 🚲 · 20h 25° 🌙 🍷</p>
+          </div>
 
-<div class="card">
-<div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
-<ol class="priority-list">
-<li><span class="num">1</span> Bloco Operatório — 4 cirurgias de manhã</li>
-<li><span class="num">2</span> SIGIC à tarde (Isabel + Rafael)</li>
-<li><span class="num">3</span> Reembolso IRS</li>
-</ol>
-</div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
+            <ol class="priority-list">
+              <li><span class="num">1</span> Confirmar horário da Consulta Uro (09:30–11:00)</li>
+              <li><span class="num">2</span> CV Update + Gym 7h30 (hábitos de terça)</li>
+              <li><span class="num">3</span> Criar pj + case clínico Sergio (rádio quisto branquial)</li>
+            </ol>
+          </div>
 
-<div class="card">
-<div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
-<p>"Antes de falar — estou aqui para entender ou para corrigir?"</p>
-</div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
+            <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+          </div>
 
-<div class="card">
-<div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
-<div class="shortcuts">
-<a class="shortcut-link" href="../Hff/Index.html" title="HFF">🏥</a>
-<a class="shortcut-link" href="../briefing/index.html#tarefas" title="Tarefas">✅</a>
-<a class="shortcut-link" href="../briefing/index.html#calendario" title="Calendário">📅</a>
-<a class="shortcut-link" href="../briefing/index.html#email" title="Email">📧</a>
-<a class="shortcut-link" href="../briefing/index.html#fullb3" title="Finanças B3">📈</a>
-<a class="shortcut-link" href="../lazer/index.html" title="Lazer">🎭</a>
-<a class="shortcut-link" href="../briefing/index.html#noticias" title="Notícias">📰</a>
-<a class="shortcut-link" href="../briefing/index.html#tempo" title="Tempo">🌤️</a>
-</div>
-</div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
+            <div class="shortcuts">
+              <a class="shortcut-link" href="../Hff/Index.html" title="HFF">🏥</a>
+              <a class="shortcut-link" href="../briefing/index.html#tarefas" title="Tarefas">✅</a>
+              <a class="shortcut-link" href="../briefing/index.html#calendario" title="Calendário">📅</a>
+              <a class="shortcut-link" href="../briefing/index.html#email" title="Email">📧</a>
+              <a class="shortcut-link" href="../briefing/index.html#fullb3" title="Finanças B3">📈</a>
+              <a class="shortcut-link" href="../lazer/index.html" title="Lazer">🎭</a>
+              <a class="shortcut-link" href="../briefing/index.html#noticias" title="Notícias">📰</a>
+              <a class="shortcut-link" href="../briefing/index.html#tempo" title="Tempo">🌤️</a>
+            </div>
+          </div>
 
-</div>
-</div>
+        </div>
+      </div>
 
-<div class="footer">
-<p>Hub leve · teste técnico de publicação · dados reais do briefing de 17 Jun 2026 (última geração disponível) · construído 22 Jun 2026</p>
-</div>
+      <div class="footer">
+        <p>Hub leve · modelo · toca num ícone para abrir o módulo</p>
+      </div>
 
-</div>
-</div>
+    </div>
+  </div>
 
 <script>
-function setMode(m){
-document.body.dataset.mode = m;
-document.getElementById('btn-painel').classList.toggle('active', m === 'painel');
-document.getElementById('btn-leitura').classList.toggle('active', m === 'leitura');
-}
+  function setMode(m){
+    document.body.dataset.mode = m;
+    document.getElementById('btn-painel').classList.toggle('active', m === 'painel');
+    document.getElementById('btn-leitura').classList.toggle('active', m === 'leitura');
+  }
 </script>
 
 </body>
-</html> 
+</html>
