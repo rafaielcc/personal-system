@@ -4,6 +4,8 @@ import os
 import re
 import json
 import hashlib
+import tempfile
+import shutil
 from email.header import decode_header
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta
@@ -318,8 +320,14 @@ def export():
         f"Gmail_finance_briefing_{inicio.strftime('%Y-%m-%d')}_a_{agora.strftime('%Y-%m-%d')}.json"
     )
 
-    with open(ficheiro, "w", encoding="utf8") as f:
+    # escreve num arquivo temporario local e so entao move para o Google Drive:
+    # gravar direto num drive virtual sincronizado pode falhar com
+    # "OSError: [Errno 22] Invalid argument" durante a escrita.
+    fd, caminho_temp = tempfile.mkstemp(suffix=".json")
+    with os.fdopen(fd, "w", encoding="utf8") as f:
         json.dump(resultado, f, ensure_ascii=False, indent=2)
+
+    shutil.move(caminho_temp, ficheiro)
 
     print("Concluído:", ficheiro)
 
