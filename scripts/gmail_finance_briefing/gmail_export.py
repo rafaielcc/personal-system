@@ -52,12 +52,17 @@ INDICE_PATTERNS = {
     "gold": [r"\bouro\b"],
     "soybean": [r"\bsoja\b"],
     "cotton": [r"\balgod[aã]o\b"],
+    "ibovespa": [r"\bibovespa\b", r"\bibov\b"],
 }
 
 # numero com simbolo de moeda explicito (preferido: e o que distingue o
 # preco real de uma variacao percentual ou de outro numero solto na frase).
 NUM_BRL = re.compile(r"R\$\s?-?\d{1,3}(?:\.\d{3})*(?:,\d{1,4})?")
 NUM_USD = re.compile(r"(?:US\$|U\$|\$)\s?-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?")
+
+# numero em pontos, com separador de milhar (ex.: "134.850" do Ibovespa) —
+# o que distingue o nivel do indice de uma variacao percentual na mesma frase.
+NUM_PONTOS = re.compile(r"\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?")
 
 # numero solto, sem simbolo de moeda: exige que nao esteja colado a uma letra
 # (evita pegar digitos de ticker, tipo GOLD11) e que nao seja uma
@@ -76,6 +81,7 @@ MOEDA_ESPERADA = {
     "brent_oil": NUM_USD,
     "iron_ore": NUM_USD,
     "gold": NUM_USD,
+    "ibovespa": NUM_PONTOS,
 }
 
 LINK_PATTERN = re.compile(r"https?://\S+")
@@ -190,6 +196,20 @@ def normalizar_numero(token: str):
     ultimo_ponto = token.rfind(".")
 
     if ultima_virgula == -1 and ultimo_ponto == -1:
+        try:
+            return float(token)
+        except ValueError:
+            return None
+
+    if ultima_virgula == -1:
+        # so ha pontos: se formar grupos de exactamente 3 digitos (ex.:
+        # "134.850"), e separador de milhar (nivel de indice em pontos),
+        # nao casa decimal — senao e um preco tipo "82.45".
+        if re.fullmatch(r"\d{1,3}(?:\.\d{3})+", token):
+            try:
+                return float(token.replace(".", ""))
+            except ValueError:
+                return None
         try:
             return float(token)
         except ValueError:
