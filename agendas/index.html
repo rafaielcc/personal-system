@@ -1,33 +1,45 @@
 <!DOCTYPE html>
 <!--
-  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 — híbrido, ícones soltos, mobile-first)
-  ============================================================================
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v2 DARK · sessão de auditoria Dashboard, 3 Jul 2026)
+  =============================================================================
   MODELO sem dados em tempo real. Hub leve: cabeçalho condensado + grid de
   ícones soltos (sem caixa/cartão por trás) que apontam, por link real
   <a href>, para os módulos já publicados.
 
-  ⚠️ ESTADO REAL DO HOSTING (confirmado por Rafa, 17 Jun 2026):
-  No GitHub existe UM repositório com uma pasta "agenda" e subpastas por
-  módulo — mas no Netlify, HOJE, cada subpasta é o seu próprio projecto
-  Netlify separado (domínios diferentes, ex. rafa-briefing.netlify.app).
-  NÃO é ainda "mesmo site, pastas separadas".
+  VARIANTE DARK: fundo navy profundo em toda a página, texto claro brilhante,
+  círculos de ícones em pastel (destacam sobre o escuro). Alto contraste.
 
-  Este template assume a estrutura-ALVO (recomendada, ainda não implementada):
-    agendas/home/index.html      ← este ficheiro
-    agendas/briefing/index.html  ← briefing diário (tabs internas)
-    agendas/Hff/Index.html       ← painel HFF standalone
-    agendas/lazer/index.html     ← agenda de lazer
-  Os caminhos relativos abaixo (../Hff/Index.html, etc.) só funcionam depois
-  de consolidar os projectos Netlify num único projecto/domínio que publique
-  a pasta "agenda" com as subpastas dentro. Ver explicação enviada a Rafa no
-  chat para os passos concretos.
-  SE Rafa decidir manter projectos Netlify separados, trocar cada href por
-  um URL absoluto (ex. https://rafa-briefing.netlify.app/#tarefas).
+  HOSTING (actual): Cloudflare Pages serve o repositório GitHub
+  rafaielcc/personal-system automaticamente. Site base:
+    https://personal-system-hs5.pages.dev/
+  Estrutura publicada (caminhos SEMPRE minúsculos):
+    agendas/index.html            ← ESTE ficheiro (o Dashboard É a raiz de agendas/)
+    agendas/briefing/index.html   ← briefing diário (tabs internas; áudio no topo da tab Hoje)
+    agendas/hff/index.html        ← painel HFF pessoal
+    agendas/bo/index.html         ← lista cirúrgica da equipa (sem ícone — intencional)
+    agendas/lazer/index.html      ← agenda de lazer
+    agendas/noticiasB3/index.html ← página standalone Notícias/Finanças B3 (rotina AII)
+  Como este ficheiro vive em agendas/, os links relativos abaixo são
+  directos às subpastas (hff/index.html, briefing/index.html#tarefas, ...).
+
+  GRELHA — 8 ícones (4×2):
+    🎧 Briefing (1ª posição — uso diário; abre a tab Hoje, áudio no topo)
+    🏥 HFF · ✅ Tarefas · 📅 Calendário · 📧 Email · 🎭 Lazer ·
+    📈 Notícias/Finanças B3 (fundidos; ponto de alerta condicional) · 🌤️ Tempo
+
+  TOPBAR — LINHA ÚNICA: data com dia da semana (formato curto PT-PT,
+  ex: "Sex, 3 Jul") · chip 📅 eventos · chip ✅ tarefas · toggle
+  Painel/Leitura. O chip "🎯 [N]" do v1 foi removido (sem significado
+  atribuído), o chip do tempo também (a meteorologia vive só na barra
+  08h/16h/20h com ícones de actividade) e o chip "tipo de dia" também
+  (redundante — o tipo de dia vive na Nota do dia do banner e no cartão
+  "Dia de hoje" do modo Leitura).
 
   NOTA TÉCNICA — deep link para tabs do briefing:
-  Os links para Tarefas/Calendário/Email/Finanças B3/Notícias/Tempo usam
-  fragmentos (#tarefas, #calendario...). Para abrir já na tab certa, o
-  briefing precisa de um pequeno hash-router no arranque:
+  Os links Tarefas/Calendário/Email/Tempo usam fragmentos (#tarefas,
+  #calendario, #email, #tempo — tabs existentes no briefing v12.0). Para
+  abrir já na tab certa, o briefing precisa de um pequeno hash-router no
+  arranque:
     window.addEventListener('DOMContentLoaded', () => {
       const h = location.hash.replace('#','');
       if (h) showTab(h);
@@ -37,48 +49,51 @@
   NOTA — ícones de actividade na barra do tempo:
   Os ícones extra (🚲 bicicleta, 🍷 happy hour, ☕ café, 🎬 cinema) junto de
   cada período do dia são preenchidos, na geração real, a partir das regras
-  já existentes no rafa_profile.md / feedback_log.md (ex: bicicleta só para
-  lazer dentro de Lisboa depois de voltar a casa; happy hour com a Vanessa;
-  café com a Clarinha; cinema em noite de chuva). Aqui aparecem como
-  exemplo/placeholder — a lógica de decisão não faz parte deste template.
+  do rafa_profile.md / Feedback_log.json (ex: bicicleta só para lazer dentro
+  de Lisboa depois de voltar a casa; happy hour com a Vanessa; café com a
+  Clarinha; cinema em noite de chuva). Aqui aparecem como placeholder —
+  a lógica de decisão não faz parte deste template.
 
-  TEMA — Híbrido: topo escuro (navy) + corpo claro (creme). Textos sempre
-  de alto contraste para leitura fácil ao sol.
+  BLOCOS CONDICIONAIS (marcados no corpo):
+  · Alerta drawdown >20% — remover o bloco se nenhum ticker da carteira
+    estiver em drawdown >20% no relatório AII do dia.
+  · Ponto vermelho no ícone Notícias/B3 — mesmo critério.
+
+  Expansíveis nativos (<details>/<summary>) — sem JS adicional, offline.
 -->
 <html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agenda · Ter, 7 Jul</title>
+<title>Agenda · Início</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
+    --bg:#0C1E2A;
+    --bg-2:#0A1822;
     --navy:#1A3D52;
     --navy-2:#102B3A;
-    --navy-border:#2C5068;
-    --cream:#F5F0E8;
-    --card:#FDFAF4;
-    --border:#E0D8C8;
-    --ink:#1F2A33;
-    --ink-light:#FBF7EF;
-    --muted:#8A8070;
-    --muted-light:#B9CBD6;
-    --terracotta:#C75A2C;
-    --gold:#D4A946;
-    --sage:#5A7A5E;
-    --teal:#0D9488;
-    --red:#C0392B;
-    --blue:#4A7FAD;
+    --card:#16303F;
+    --border:#28495C;
+    --ink:#F3EDE0;          /* texto principal — creme brilhante */
+    --ink-strong:#FFFFFF;
+    --muted:#9FB4C2;
+    --terracotta:#E07A4B;
+    --gold:#E3B858;
+    --sage:#8FBE95;
+    --teal:#2CC7B4;
+    --red:#E36A5A;
+    --blue:#7FAFD9;
     --radius:16px;
     --radius-sm:12px;
-    --shadow:0 1px 3px rgba(26,40,51,.12), 0 6px 14px rgba(26,40,51,.08);
+    --shadow:0 1px 3px rgba(0,0,0,.35), 0 6px 16px rgba(0,0,0,.30);
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background:var(--cream);
+    background:linear-gradient(180deg, var(--bg), var(--bg-2));
     color:var(--ink);
     font-family:'DM Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
@@ -88,44 +103,40 @@
   a{ text-decoration:none; color:inherit; }
   .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
 
-  /* ===== TOPBAR — condensado, 2 linhas só, escuro ===== */
+  /* ===== TOPBAR — linha única, condensado ===== */
   .topbar{
     position:sticky; top:0; z-index:20;
     background:linear-gradient(160deg, var(--navy), var(--navy-2));
     padding:12px 14px 10px;
-    border-bottom:1px solid var(--navy-border);
+    border-bottom:1px solid var(--border);
   }
   .topbar-inner{ max-width:680px; margin:0 auto; }
   .topbar-row1{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
   }
-  .greet{
-    font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light);
+  .datebig{
+    font-family:'Fraunces', serif; font-size:17px; font-weight:700; color:var(--ink-strong);
+    letter-spacing:.01em; white-space:nowrap;
   }
   .seg{
-    display:inline-flex; background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
-    border-radius:999px; padding:2px; gap:2px; flex:0 0 auto;
+    display:inline-flex; background:rgba(255,255,255,.08); border:1px solid var(--border);
+    border-radius:999px; padding:2px; gap:2px; flex:0 0 auto; margin-left:auto;
   }
   .seg button{
-    border:none; background:transparent; color:var(--muted-light);
+    border:none; background:transparent; color:var(--muted);
     font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
     padding:5px 11px; border-radius:999px; cursor:pointer;
   }
-  .seg button.active{ background:var(--gold); color:var(--navy-2); }
-  .topbar-row2{
-    display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap;
-  }
+  .seg button.active{ background:var(--gold); color:#102B3A; }
   .chip{
-    font-size:12px; font-weight:700; color:var(--ink-light);
-    background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
-    border-radius:999px; padding:5px 10px;
+    font-size:12px; font-weight:700; color:var(--ink);
+    background:rgba(255,255,255,.08); border:1px solid var(--border);
+    border-radius:999px; padding:4px 9px;
     display:flex; align-items:center; gap:5px; white-space:nowrap;
   }
-  .chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
   .chip b{ color:var(--gold); font-size:12.5px; }
-  .chip.daytype b{ color:#FFF8EE; }
 
-  /* ===== BARRA DO TEMPO + ACTIVIDADES — compacta, clara ===== */
+  /* ===== BARRA DO TEMPO + ACTIVIDADES ===== */
   .wbar{
     background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
     margin:12px 0 14px; padding:9px 6px;
@@ -149,9 +160,9 @@
     display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
     border:1px solid var(--border); background:var(--card); color:var(--sage);
   }
-  .banner-alert{ color:var(--red); border-color:#EBC9C2; }
+  .banner-alert{ color:var(--red); border-color:#6A3730; }
 
-  /* ===== GRID DE ÍCONES — soltos, sem caixa/cartão ===== */
+  /* ===== GRID DE ÍCONES — soltos, sem caixa ===== */
   .grid{
     display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:18px;
   }
@@ -172,12 +183,13 @@
   .c-red{ background:#FAD9D4; }
   .c-teal{ background:#CFF2EC; }
   .c-navy{ background:#D8E3EA; }
+  .c-cream{ background:#F5F0E8; }
   .tile-alert{
     position:absolute; top:6px; right:14px; width:9px; height:9px;
-    border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(192,57,43,.25);
+    border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(227,106,90,.30);
   }
 
-  /* ===== WIDGETS (Prioridades / Carnegie) ===== */
+  /* ===== WIDGETS (Prioridades / B3) ===== */
   .section-label{
     font-size:11px; text-transform:uppercase; letter-spacing:.1em;
     color:var(--muted); font-weight:700; margin:0 0 8px 2px;
@@ -188,7 +200,7 @@
     padding:14px 15px;
   }
   .card-title{
-    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink);
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink-strong);
     display:flex; align-items:center; gap:7px; margin-bottom:8px;
   }
   .card-title .stripe{ width:4px; height:15px; border-radius:3px; background:var(--gold); display:inline-block; }
@@ -205,6 +217,27 @@
     border-radius:50%; width:16px; height:16px; flex:0 0 16px;
     display:flex; align-items:center; justify-content:center; margin-top:2px;
   }
+  .alert-strip{
+    margin-top:9px; padding:8px 11px; border-radius:var(--radius-sm);
+    background:#3C2320; border:1px solid #6A3730; color:#F5A79B;
+    font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px;
+  }
+
+  /* ===== CURSO — cartões expansíveis no fundo ===== */
+  details.card{ padding:0; overflow:hidden; }
+  details.card summary{
+    list-style:none; cursor:pointer; padding:14px 15px;
+    display:flex; align-items:center; gap:7px;
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink-strong);
+  }
+  details.card summary::-webkit-details-marker{ display:none; }
+  details.card summary .stripe{ width:4px; height:15px; border-radius:3px; background:var(--sage); display:inline-block; }
+  details.card summary .chev{ margin-left:auto; font-size:12px; color:var(--muted); transition:transform .15s; }
+  details.card[open] summary .chev{ transform:rotate(180deg); }
+  details.card .details-body{ padding:0 15px 14px; }
+  details.card .details-body p{ font-size:13.5px; line-height:1.55; color:var(--ink); margin:0 0 7px; }
+  details.card .details-body .muted{ color:var(--muted); font-size:12px; }
+  .audio-script p{ font-size:13.5px; line-height:1.65; }
 
   /* ===== FOOTER ===== */
   .footer{ text-align:center; margin-top:18px; }
@@ -225,21 +258,18 @@
 </head>
 <body data-mode="painel">
 
-  <!-- ===== TOPBAR — 2 linhas, condensado ===== -->
+  <!-- ===== TOPBAR — linha única, condensado ===== -->
   <div class="topbar">
     <div class="topbar-inner">
       <div class="topbar-row1">
-        <div class="greet">Ter, 7 Jul</div>
+        <!-- Linha única: data (dia da semana + dia + mês) · eventos · tarefas · toggle -->
+        <div class="datebig">Ter, 7 Jul</div>
+        <span class="chip">📅 <b>2</b></span>
+        <span class="chip">✅ <b>6</b></span>
         <div class="seg">
           <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
           <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
         </div>
-      </div>
-      <div class="topbar-row2">
-        <span class="chip daytype">🏥 <b>Sem BO</b></span>
-        <span class="chip">📅 <b>2</b></span>
-        <span class="chip">✅ <b>6</b></span>
-        <span class="chip">☀️ <b>33°</b> · 🎯 <b>3</b></span>
       </div>
     </div>
   </div>
@@ -274,30 +304,32 @@
           ℹ️ Sem BO no bloco hoje · Consulta Uro 09:30 · Show Iron 13:30 · próximo BO: Segunda 13 Jul
         </div>
 
+        <!-- 8 ícones (4×2): Briefing em 1º (uso diário — áudio no topo da tab Hoje).
+             Notícias e Finanças B3 fundidos num só (→ noticiasB3/). -->
         <div class="grid">
-          <a class="tile" href="../Hff/Index.html" title="HFF" aria-label="HFF">
+          <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing — áudio do dia">
+            <span class="tile-circle c-cream">🎧</span>
+          </a>
+          <a class="tile" href="hff/index.html" title="HFF" aria-label="HFF">
             <span class="tile-circle c-terracotta">🏥</span>
           </a>
-          <a class="tile" href="../briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
+          <a class="tile" href="briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
             <span class="tile-circle c-sage">✅</span>
           </a>
-          <a class="tile" href="../briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
+          <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
             <span class="tile-circle c-blue">📅</span>
           </a>
-          <a class="tile" href="../briefing/index.html#email" title="Email" aria-label="Email">
+          <a class="tile" href="briefing/index.html#email" title="Email" aria-label="Email">
             <span class="tile-circle c-gold">📧</span>
           </a>
-          <a class="tile" href="../briefing/index.html#fullb3" title="Finanças B3" aria-label="Finanças B3">
-            <span class="tile-circle c-red">📈</span>
-          </a>
-          <a class="tile" href="../lazer/index.html" title="Lazer" aria-label="Lazer">
+          <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
             <span class="tile-circle c-teal">🎭</span>
           </a>
-          <a class="tile" href="../briefing/index.html#noticias" title="Notícias" aria-label="Notícias">
-            <span class="tile-circle c-navy">📰</span>
+          <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
+            <span class="tile-circle c-red">📈</span>
           </a>
-          <a class="tile" href="../briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
-            <span class="tile-circle c-blue">🌤️</span>
+          <a class="tile" href="briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
+            <span class="tile-circle c-navy">🌤️</span>
           </a>
         </div>
 
@@ -312,10 +344,24 @@
             </ol>
           </div>
           <div class="card">
-            <div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
-            <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Hoje: usar perguntas em vez de afirmações.</p>
-            <p class="muted">Sem sessão registada para 7 Jul (última: 2 Jul) — accionar rotina de manhã se quiseres gerar a de hoje.</p>
+            <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
+            <p>Sentimento neutro a levemente positivo (relatório de 3 Jul, não regenerado hoje); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
+            <!-- SE drawdown >20%: manter o bloco abaixo. Caso contrário, REMOVER até ao fecho do div. -->
+            <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
           </div>
+        </div>
+
+        <div class="section-label" style="margin-top:16px;">Curso</div>
+        <div class="widgets">
+          <details class="card">
+            <summary><span class="stripe"></span>📖 Carnegie · Semana 2 de 17<span class="chev">▼</span></summary>
+            <div class="details-body">
+              <p><b>Reduzir Resistência</b></p>
+              <p>As pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Movimentos da semana: substituir "Devias…" por "O que achas de…?"; suavizar correcções; usar "podes ter razão" pelo menos uma vez ao dia.</p>
+              <p>Sem sessão de briefing gerada para 7 Jul (mais recente: 2 Jul) — acciona a rotina de manhã se quiseres a sessão de hoje.</p>
+              <p class="muted">Fonte: current_course.md + briefing do dia (Personal Dev OS)</p>
+            </div>
+          </details>
         </div>
 
       </div>
@@ -345,21 +391,30 @@
           </div>
 
           <div class="card">
-            <div class="card-title"><span class="stripe"></span>📖 Carnegie · Semana 2 de 17</div>
-            <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+            <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
+            <p>Sentimento neutro a levemente positivo (relatório de 3 Jul, não regenerado hoje); CPFE3 dentro do gatilho; sem drawdown relevante identificado.</p>
+            <!-- SE drawdown >20%: manter. Caso contrário, REMOVER. -->
           </div>
+
+          <details class="card">
+            <summary><span class="stripe"></span>📖 Carnegie · Semana 2 de 17<span class="chev">▼</span></summary>
+            <div class="details-body">
+              <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+            </div>
+          </details>
+
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
             <div class="shortcuts">
-              <a class="shortcut-link" href="../Hff/Index.html" title="HFF">🏥</a>
-              <a class="shortcut-link" href="../briefing/index.html#tarefas" title="Tarefas">✅</a>
-              <a class="shortcut-link" href="../briefing/index.html#calendario" title="Calendário">📅</a>
-              <a class="shortcut-link" href="../briefing/index.html#email" title="Email">📧</a>
-              <a class="shortcut-link" href="../briefing/index.html#fullb3" title="Finanças B3">📈</a>
-              <a class="shortcut-link" href="../lazer/index.html" title="Lazer">🎭</a>
-              <a class="shortcut-link" href="../briefing/index.html#noticias" title="Notícias">📰</a>
-              <a class="shortcut-link" href="../briefing/index.html#tempo" title="Tempo">🌤️</a>
+              <a class="shortcut-link c-cream" href="briefing/index.html" title="Briefing · áudio do dia">🎧</a>
+              <a class="shortcut-link c-terracotta" href="hff/index.html" title="HFF">🏥</a>
+              <a class="shortcut-link c-sage" href="briefing/index.html#tarefas" title="Tarefas">✅</a>
+              <a class="shortcut-link c-blue" href="briefing/index.html#calendario" title="Calendário">📅</a>
+              <a class="shortcut-link c-gold" href="briefing/index.html#email" title="Email">📧</a>
+              <a class="shortcut-link c-teal" href="lazer/index.html" title="Lazer">🎭</a>
+              <a class="shortcut-link c-red" href="noticiasB3/index.html" title="Notícias · Finanças B3">📈</a>
+              <a class="shortcut-link c-navy" href="briefing/index.html#tempo" title="Tempo">🌤️</a>
             </div>
           </div>
 
