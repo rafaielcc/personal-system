@@ -29,7 +29,7 @@ GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 LABEL = "finance briefing"
 WINDOW_DAYS = 7
 
-OUTPUT = r"G:\My Drive\Claude_PRJ\Relatorios\Sources\Gmail_finance_briefing"
+OUTPUT = r"G:\My Drive\Claude_PRJ\Relatorios\Sources\Gmail_finances"
 os.makedirs(OUTPUT, exist_ok=True)
 
 MIN_CHARS = 60
