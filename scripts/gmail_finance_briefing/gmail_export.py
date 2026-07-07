@@ -53,6 +53,8 @@ INDICE_PATTERNS = {
     "soybean": [r"\bsoja\b"],
     "cotton": [r"\balgod[aã]o\b"],
     "ibovespa": [r"\bibovespa\b", r"\bibov\b"],
+    "sp500": [r"\bs&p\s*500\b", r"\bsp\s*500\b"],
+    "dow_jones": [r"\bdow\s+jones\b", r"\bdow\b"],
 }
 
 # numero com simbolo de moeda explicito (preferido: e o que distingue o
@@ -112,6 +114,8 @@ MOEDA_ESPERADA = {
     "iron_ore": NUM_USD,
     "gold": NUM_USD,
     "ibovespa": NUM_PONTOS,
+    "sp500": NUM_PONTOS,
+    "dow_jones": NUM_PONTOS,
 }
 
 LINK_PATTERN = re.compile(r"https?://\S+")
