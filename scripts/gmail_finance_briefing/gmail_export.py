@@ -44,19 +44,39 @@ RODAPE_MARCADORES = [
 # grupos de palavras-chave para os indices. cada indice pega o primeiro
 # valor numerico encontrado perto de uma das palavras-chave.
 INDICE_PATTERNS = {
-    "usd_brl": [r"d[oó]lar", r"usd\s*/?\s*brl"],
-    "eur_brl": [r"euro", r"eur\s*/?\s*brl"],
-    "gbp_brl": [r"libra(?:\s+esterlina)?", r"gbp\s*/?\s*brl"],
-    "brent_oil": [r"petr[oó]leo(?:\s+bruto)?", r"\bbrent\b"],
-    "iron_ore": [r"min[eé]rio de ferro", r"iron\s*ore"],
+    "usd_brl": [r"\bd[oó]lar(?:es)?\b", r"usd\s*/?\s*brl"],
+    "eur_brl": [r"\beuros?\b", r"eur\s*/?\s*brl"],
+    "gbp_brl": [r"\blibras?(?:\s+esterlinas?)?\b", r"gbp\s*/?\s*brl"],
+    "brent_oil": [r"\bpetr[oó]leo(?:\s+bruto)?\b", r"\bbrent\b"],
+    "iron_ore": [r"\bmin[eé]rio de ferro\b", r"\biron\s*ore\b"],
     "gold": [r"\bouro\b"],
     "soybean": [r"\bsoja\b"],
-    "cotton": [r"algod[aã]o"],
+    "cotton": [r"\balgod[aã]o\b"],
 }
 
-NUM_PATTERN = re.compile(
-    r"(?:R\$|US\$|U\$|\$|€|£)?\s?-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?\s?%?"
+# numero com simbolo de moeda explicito (preferido: e o que distingue o
+# preco real de uma variacao percentual ou de outro numero solto na frase).
+NUM_BRL = re.compile(r"R\$\s?-?\d{1,3}(?:\.\d{3})*(?:,\d{1,4})?")
+NUM_USD = re.compile(r"(?:US\$|U\$|\$)\s?-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?")
+
+# numero solto, sem simbolo de moeda: exige que nao esteja colado a uma letra
+# (evita pegar digitos de ticker, tipo GOLD11) e que nao seja uma
+# percentagem (a variacao %, quando e o unico numero da frase, nao serve
+# como valor de indice).
+NUM_GENERICO = re.compile(
+    r"(?<![A-Za-z0-9])-?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{1,4})?(?!\s?%)"
 )
+
+# indices cuja unidade de referencia esperada e conhecida — usada para
+# decidir qual padrao de numero tentar primeiro.
+MOEDA_ESPERADA = {
+    "usd_brl": NUM_BRL,
+    "eur_brl": NUM_BRL,
+    "gbp_brl": NUM_BRL,
+    "brent_oil": NUM_USD,
+    "iron_ore": NUM_USD,
+    "gold": NUM_USD,
+}
 
 LINK_PATTERN = re.compile(r"https?://\S+")
 LINK_IGNORE_KEYWORDS = [
@@ -188,22 +208,43 @@ def normalizar_numero(token: str):
         return None
 
 
+def extrair_numero_da_linha(linha: str, chave: str):
+    esperado = MOEDA_ESPERADA.get(chave)
+
+    if esperado:
+        match = esperado.search(linha)
+        if match:
+            return match.group()
+
+    match = NUM_BRL.search(linha) or NUM_USD.search(linha)
+    if match:
+        return match.group()
+
+    match = NUM_GENERICO.search(linha)
+    return match.group() if match else None
+
+
 def extrair_indices(texto: str) -> dict:
     achados = {}
     linhas = texto.splitlines()
 
     for chave, padroes in INDICE_PATTERNS.items():
         for linha in linhas:
-            if not any(re.search(p, linha, flags=re.IGNORECASE) for p in padroes):
+            # remove links da linha antes de tudo: um "soja"/"ouro" etc.
+            # dentro do slug de uma URL nao e uma mencao real ao indice, e
+            # os parametros da URL (utm_*) tem digitos que parecem valores.
+            linha_limpa = LINK_PATTERN.sub(" ", linha)
+
+            if not any(re.search(p, linha_limpa, flags=re.IGNORECASE) for p in padroes):
                 continue
 
-            num_match = NUM_PATTERN.search(linha)
-            if not num_match:
+            token = extrair_numero_da_linha(linha_limpa, chave)
+            if not token:
                 continue
 
             achados[chave] = {
-                "raw": linha.strip(),
-                "value": normalizar_numero(num_match.group()),
+                "raw": linha_limpa.strip(),
+                "value": normalizar_numero(token),
             }
             break
 
