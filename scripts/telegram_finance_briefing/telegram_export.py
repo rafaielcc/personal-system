@@ -197,6 +197,17 @@ async def export():
     vistos = set()
     mensagens = []
     link_stats = {"encontrados": 0, "abertos": 0, "sucesso": 0}
+    stats = {
+        "mensagens_vistas": 0,
+        "ignoradas_ruido": 0,
+        "ignoradas_video": 0,
+        "ignoradas_duplicado": 0,
+        "ignoradas_audio_outro_autor": 0,
+        "incluidas": 0,
+        "audios_recebidos": 0,
+        "audios_transcritos_sucesso": 0,
+        "audios_erro": 0,
+    }
 
     for grupo in GROUPS:
 
@@ -213,6 +224,8 @@ async def export():
             if isinstance(m, MessageService):
                 continue
 
+            stats["mensagens_vistas"] += 1
+
             autor = ""
             try:
                 if m.sender:
@@ -228,11 +241,19 @@ async def export():
             if m.voice or m.audio:
 
                 if autor != "Daniel Nigri":
+                    stats["ignoradas_audio_outro_autor"] += 1
                     continue
+
+                stats["audios_recebidos"] += 1
 
                 try:
                     path = await m.download_media()
                     texto_audio = transcrever_audio(path)
+
+                    if texto_audio.startswith("[ERRO_TRANSCRICAO"):
+                        stats["audios_erro"] += 1
+                    else:
+                        stats["audios_transcritos_sucesso"] += 1
 
                     mensagens.append({
                         "channel": grupo,
@@ -244,8 +265,10 @@ async def export():
                         "link": None,
                         "article_text": None,
                     })
+                    stats["incluidas"] += 1
 
                 except Exception as e:
+                    stats["audios_erro"] += 1
                     mensagens.append({
                         "channel": grupo,
                         "time": data,
@@ -256,6 +279,7 @@ async def export():
                         "link": None,
                         "article_text": None,
                     })
+                    stats["incluidas"] += 1
 
                 continue
 
@@ -266,16 +290,19 @@ async def export():
 
             # video-only nunca e processado (nem sequer entra no JSON)
             if eh_apenas_video(texto_bruto):
+                stats["ignoradas_video"] += 1
                 continue
 
             texto = limpar_texto(texto_bruto)
 
             if ignorar_texto(texto):
+                stats["ignoradas_ruido"] += 1
                 continue
 
             chave = texto.lower()
 
             if chave in vistos:
+                stats["ignoradas_duplicado"] += 1
                 continue
 
             vistos.add(chave)
@@ -293,6 +320,7 @@ async def export():
                 "link": link,
                 "article_text": article_text,
             })
+            stats["incluidas"] += 1
 
     payload = {
         "generated_at": agora.strftime("%Y-%m-%dT%H:%M:%S"),
@@ -301,6 +329,7 @@ async def export():
             "end": agora.strftime("%Y-%m-%d"),
         },
         "channels": GROUPS,
+        "stats": stats,
         "link_stats": link_stats,
         "messages": mensagens,
     }
@@ -312,8 +341,29 @@ async def export():
         json.dump(payload, f, ensure_ascii=False, indent=2)
     shutil.move(tmp_path, ficheiro)
 
-    print("Concluido:", ficheiro)
-    print("Mensagens:", len(mensagens), "| Links:", link_stats)
+    taxa_links = (link_stats["sucesso"] / link_stats["encontrados"] * 100) if link_stats["encontrados"] else 0
+
+    print()
+    print("=" * 56)
+    print("RELATORIO DA EXECUCAO")
+    print("=" * 56)
+    print(f"Mensagens vistas (dentro da janela de 7 dias): {stats['mensagens_vistas']}")
+    print(f"  - Ignoradas (ruido/promocao/curto):           {stats['ignoradas_ruido']}")
+    print(f"  - Ignoradas (video sem conteudo):              {stats['ignoradas_video']}")
+    print(f"  - Ignoradas (duplicado):                       {stats['ignoradas_duplicado']}")
+    print(f"  - Ignoradas (audio de outro autor):             {stats['ignoradas_audio_outro_autor']}")
+    print(f"  - Incluidas no ficheiro final:                 {stats['incluidas']}")
+    print("-" * 56)
+    print(f"Audios do Daniel Nigri recebidos: {stats['audios_recebidos']}")
+    print(f"  - Transcritos com sucesso:      {stats['audios_transcritos_sucesso']}")
+    print(f"  - Com erro de transcricao:      {stats['audios_erro']}")
+    print("-" * 56)
+    print(f"Links encontrados:                {link_stats['encontrados']}")
+    print(f"Links abertos (HTTP 200):         {link_stats['abertos']}")
+    print(f"Artigos extraidos com sucesso:    {link_stats['sucesso']} ({taxa_links:.1f}%)")
+    print("=" * 56)
+    print("Ficheiro gravado em:", ficheiro)
+    print("=" * 56)
 
 
 with client:

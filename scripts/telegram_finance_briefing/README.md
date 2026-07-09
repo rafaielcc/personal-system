@@ -59,6 +59,23 @@ partilhado com o `gmail_export.py`) — sem LLM nenhum, só regex. Serve para
 a rotina localizar rapidamente o que é relevante para a carteira/Vigiar sem
 ter de ler mensagem a mensagem.
 
+## Relatório de execução
+
+Ao fim de cada execução, o script imprime um relatório no terminal (e grava
+os mesmos números no campo `stats`/`link_stats` do JSON) para permitir
+avaliar, ao longo do tempo, se cada mecanismo está a compensar o custo:
+
+- Mensagens vistas na janela de 7 dias, e quantas foram ignoradas por
+  ruído, por serem só vídeo, por serem duplicadas, ou por serem áudio de
+  outro autor — e quantas foram efetivamente incluídas no ficheiro final.
+- Áudios do Daniel Nigri recebidos, quantos transcritos com sucesso e
+  quantos com erro de transcrição.
+- Links encontrados, quantos foram abertos (HTTP 200) e quantos produziram
+  texto de artigo utilizável (`article_text`), com a taxa de sucesso em %.
+
+Isto serve para decidir no futuro, com dados reais, se vale a pena manter
+passos caros/baixo-rendimento como a abertura de links (Fase 2).
+
 ## Fases futuras (não implementadas ainda)
 
 - Agregar notícias repetidas entre canais/fontes diferentes numa única
