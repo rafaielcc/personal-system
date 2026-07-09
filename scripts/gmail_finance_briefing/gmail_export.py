@@ -14,6 +14,7 @@ import trafilatura
 from email.header import decode_header
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
@@ -136,6 +137,25 @@ LINK_IGNORE_KEYWORDS = [
     "unsubscribe", "descadastr", "list-manage", "optout", "opt-out",
     "preferences", "mailto:",
 ]
+
+# dominios de redes sociais/partilha — nunca sao o artigo em si, so o botao
+# de seguir/partilhar que toda newsletter repete no rodape.
+SOCIAL_DOMAINS = {
+    "facebook.com", "www.facebook.com",
+    "twitter.com", "x.com", "www.twitter.com",
+    "instagram.com", "www.instagram.com",
+    "linkedin.com", "www.linkedin.com",
+    "youtube.com", "www.youtube.com", "youtu.be",
+    "open.spotify.com", "spotify.com",
+    "tiktok.com", "www.tiktok.com",
+    "wa.me", "t.me",
+}
+
+# limite de links a abrir por email — newsletters trazem dezenas de links de
+# navegacao (menu, categorias, rodape) alem do(s) artigo(s) real(is); sem um
+# limite, a Fase 2 pode ficar a abrir centenas de links irrelevantes por
+# execucao (visto ao vivo: >100 links so numa newsletter da Bloomberg Linea).
+MAX_LINKS_PER_EMAIL = 5
 
 # tempo maximo de espera ao abrir um link (Fase 2 — extraccao de artigo)
 LINK_TIMEOUT_SECONDS = 8
@@ -292,14 +312,32 @@ def fase2_disponivel() -> bool:
     return resultado["ok"]
 
 
+def _e_pagina_de_navegacao(url: str) -> bool:
+    """Heuristica para descartar links de menu/categoria/homepage (ex.:
+    '/negocios/', '/mercados/', ou a raiz do site) — artigos a serio quase
+    sempre tem um slug mais longo no caminho da URL."""
+    segmentos = [s for s in urlparse(url).path.split("/") if s]
+    return len(segmentos) <= 1
+
+
 def extrair_links(texto: str, link_stats: dict, fase2_ok: bool) -> list:
     encontrados = []
     vistos = set()
 
     for url in LINK_PATTERN.findall(texto):
+        if len(encontrados) >= MAX_LINKS_PER_EMAIL:
+            break
+
         url = url.rstrip(").,;>\"'")
 
         if any(k in url.lower() for k in LINK_IGNORE_KEYWORDS):
+            continue
+
+        host = urlparse(url).netloc.lower()
+        if host in SOCIAL_DOMAINS or host.startswith("click."):
+            continue
+
+        if _e_pagina_de_navegacao(url):
             continue
 
         if url in vistos:
