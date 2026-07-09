@@ -236,7 +236,7 @@ def _abrir_link_worker(url: str, resultado: dict) -> None:
         pass
 
 
-def abrir_link(url: str, stats: dict) -> str | None:
+def abrir_link(url: str, stats: dict, fase2_ok: bool) -> str | None:
     """Fase 2: abre o link e extrai o texto do artigo. Nunca bloqueante —
     qualquer falha ou bloqueio devolve None e regista em stats.
 
@@ -245,8 +245,17 @@ def abrir_link(url: str, stats: dict) -> str | None:
     fica preso ao nivel do SO, ignorando o timeout do Python. Por isso o
     pedido corre numa thread daemon com um limite de parede (wall-clock)
     independente — se a thread nao responder a tempo, e abandonada (nunca
-    bloqueia o resto da rotina) em vez de a rotina inteira ficar presa."""
+    bloqueia o resto da rotina) em vez de a rotina inteira ficar presa.
+
+    Se `fase2_ok` for False (teste de conectividade inicial falhou), nao
+    tenta sequer abrir — evita gastar o timeout completo em cada um de
+    potencialmente dezenas de links quando a rede ja se mostrou bloqueada."""
     stats["encontrados"] += 1
+    print(f"  [link #{stats['encontrados']}] {'a abrir' if fase2_ok else 'a ignorar (sem rede)'}: {url[:90]}")
+
+    if not fase2_ok:
+        return None
+
     resultado = {"abertos": False, "texto": None}
 
     t = threading.Thread(target=_abrir_link_worker, args=(url, resultado), daemon=True)
@@ -263,7 +272,27 @@ def abrir_link(url: str, stats: dict) -> str | None:
     return resultado["texto"]
 
 
-def extrair_links(texto: str, link_stats: dict) -> list:
+def fase2_disponivel() -> bool:
+    """Teste rapido de conectividade HTTPS de saida, feito uma vez por
+    execucao, antes de processar qualquer link. Se falhar, a Fase 2 e
+    desactivada para toda a execucao (em vez de tentar e falhar link a
+    link, gastando o timeout completo em cada um)."""
+    resultado = {"ok": False}
+
+    def worker():
+        try:
+            requests.get("https://www.google.com", timeout=6, headers={"User-Agent": LINK_USER_AGENT})
+            resultado["ok"] = True
+        except Exception:
+            pass
+
+    t = threading.Thread(target=worker, daemon=True)
+    t.start()
+    t.join(timeout=10)
+    return resultado["ok"]
+
+
+def extrair_links(texto: str, link_stats: dict, fase2_ok: bool) -> list:
     encontrados = []
     vistos = set()
 
@@ -277,7 +306,7 @@ def extrair_links(texto: str, link_stats: dict) -> list:
             continue
 
         vistos.add(url)
-        encontrados.append({"url": url, "article_text": abrir_link(url, link_stats)})
+        encontrados.append({"url": url, "article_text": abrir_link(url, link_stats, fase2_ok)})
 
     return encontrados
 
@@ -422,6 +451,18 @@ def export():
 
     ids = dados[0].split()
 
+    print("A testar conectividade HTTPS de saida (para a Fase 2 de links)...")
+    fase2_ok = fase2_disponivel()
+    if fase2_ok:
+        print("Conectividade OK — Fase 2 (abertura de link) activa nesta execucao.")
+    else:
+        print(
+            "AVISO: sem conectividade HTTPS de saida detectada — Fase 2 (abertura de "
+            "link) DESACTIVADA nesta execucao (provavel bloqueio de rede/firewall/"
+            "antivirus/VPN). Os emails continuam a ser exportados normalmente, so "
+            "sem article_text."
+        )
+
     vistos = set()
     emails_out = []
     indices_por_dia = {}
@@ -477,7 +518,7 @@ def export():
             "date": data_email.strftime("%Y-%m-%dT%H:%M:%S"),
             "body_text": texto,
             "tickers_mentioned": find_tickers(texto),
-            "links": extrair_links(texto, link_stats),
+            "links": extrair_links(texto, link_stats, fase2_ok),
         })
         stats["incluidos"] += 1
 
