@@ -38,9 +38,38 @@ de cada índice capturado (ele mostra o trecho de texto de onde tirou o valor)
 e ajustar os padrões em `INDICE_PATTERNS`/`NUM_PATTERN` no script conforme o
 formato real das suas newsletters.
 
+## Extração de link (Fase 2)
+
+Cada link encontrado no corpo do email (exceto os de descadastro/preferências,
+já filtrados) é aberto e tem o texto do artigo extraído via `trafilatura`,
+preenchendo `article_text` em `links`. Isto:
+
+- Nunca é bloqueante — qualquer falha (timeout, paywall, erro de rede)
+  devolve `article_text: null` e o email continua a ser exportado
+  normalmente, só sem o texto do artigo.
+- Timeout de 8 segundos por link.
+- Fica registado em `link_stats` (nível do ficheiro): quantos links foram
+  encontrados, quantos foram abertos com sucesso (HTTP 200) e quantos
+  produziram texto de artigo utilizável.
+
+## Sobre `tickers_mentioned`
+
+Cada email já vem com uma lista de tickers detectados por correspondência de
+padrão fixo (`scripts/common/tickers.py`, partilhado com o
+`telegram_export.py`) — sem LLM nenhum, só regex. Serve para a rotina
+localizar rapidamente o que é relevante para a carteira/Vigiar sem ter de
+ler email a email.
+
+## Relatório de execução
+
+Ao fim de cada execução, o script imprime um relatório no terminal (e grava
+os mesmos números no campo `stats`/`link_stats` do JSON): emails vistos na
+janela de 7 dias, quantos foram ignorados por corpo curto/vazio ou por
+duplicado, quantos foram incluídos, e quantos links foram encontrados/
+abertos/produziram artigo utilizável (com taxa de sucesso em %). Serve para
+avaliar, ao longo do tempo, se vale a pena manter a abertura de links.
+
 ## Fases futuras (não implementadas ainda)
 
-- Abrir os links dos emails que só trazem link (sem reportagem no corpo) e
-  extrair o texto do artigo, preenchendo `article_text` (hoje sempre `null`).
 - Agregar notícias repetidas entre fontes diferentes numa única entrada,
   listando as fontes que mencionaram.

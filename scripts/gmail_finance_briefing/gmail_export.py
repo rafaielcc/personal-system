@@ -2,10 +2,13 @@ import imaplib
 import email
 import os
 import re
+import sys
 import json
 import hashlib
 import tempfile
 import shutil
+import requests
+import trafilatura
 from email.header import decode_header
 from email.utils import parsedate_to_datetime
 from datetime import datetime, timedelta
@@ -17,6 +20,9 @@ from bs4 import BeautifulSoup
 # BASE PATH
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from common.tickers import find_tickers
 
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
@@ -124,6 +130,10 @@ LINK_IGNORE_KEYWORDS = [
     "preferences", "mailto:",
 ]
 
+# tempo maximo de espera ao abrir um link (Fase 2 — extraccao de artigo)
+LINK_TIMEOUT_SECONDS = 8
+LINK_USER_AGENT = "Mozilla/5.0 (compatible; AII-briefing-bot/1.0)"
+
 
 def limpar_texto(texto: str) -> str:
     texto = re.sub(r"\n{3,}", "\n\n", texto)
@@ -202,7 +212,29 @@ def extrair_corpo(msg) -> str:
     return ""
 
 
-def extrair_links(texto: str) -> list:
+def abrir_link(url: str, stats: dict) -> str | None:
+    """Fase 2: abre o link e extrai o texto do artigo. Nunca bloqueante —
+    qualquer falha devolve None e regista em stats."""
+    stats["encontrados"] += 1
+    try:
+        resp = requests.get(
+            url,
+            timeout=LINK_TIMEOUT_SECONDS,
+            headers={"User-Agent": LINK_USER_AGENT},
+        )
+        stats["abertos"] += 1
+        if resp.status_code != 200:
+            return None
+        texto = trafilatura.extract(resp.text, include_comments=False, include_tables=False)
+        if texto and len(texto.strip()) >= MIN_CHARS:
+            stats["sucesso"] += 1
+            return texto.strip()
+        return None
+    except Exception:
+        return None
+
+
+def extrair_links(texto: str, link_stats: dict) -> list:
     encontrados = []
     vistos = set()
 
@@ -216,7 +248,7 @@ def extrair_links(texto: str) -> list:
             continue
 
         vistos.add(url)
-        encontrados.append({"url": url, "article_text": None})
+        encontrados.append({"url": url, "article_text": abrir_link(url, link_stats)})
 
     return encontrados
 
@@ -357,6 +389,13 @@ def export():
     vistos = set()
     emails_out = []
     indices_por_dia = {}
+    link_stats = {"encontrados": 0, "abertos": 0, "sucesso": 0}
+    stats = {
+        "emails_vistos": 0,
+        "ignorados_curto": 0,
+        "ignorados_duplicado": 0,
+        "incluidos": 0,
+    }
 
     for msg_id in ids:
         status, msg_data = imap.fetch(msg_id, "(RFC822)")
@@ -375,15 +414,19 @@ def export():
         if data_email < inicio:
             continue
 
+        stats["emails_vistos"] += 1
+
         texto = extrair_corpo(msg)
         texto = remover_rodape(texto)
         texto = limpar_texto(texto)
 
         if ignorar_texto(texto):
+            stats["ignorados_curto"] += 1
             continue
 
         chave = hashlib.sha1(texto.lower().encode("utf-8")).hexdigest()
         if chave in vistos:
+            stats["ignorados_duplicado"] += 1
             continue
         vistos.add(chave)
 
@@ -397,8 +440,10 @@ def export():
             "subject": decodificar_assunto(msg.get("Subject", "")),
             "date": data_email.strftime("%Y-%m-%dT%H:%M:%S"),
             "body_text": texto,
-            "links": extrair_links(texto),
+            "tickers_mentioned": find_tickers(texto),
+            "links": extrair_links(texto, link_stats),
         })
+        stats["incluidos"] += 1
 
     imap.logout()
 
@@ -411,6 +456,8 @@ def export():
             "end": agora.strftime("%Y-%m-%d"),
         },
         "indices": indices_por_dia,
+        "stats": stats,
+        "link_stats": link_stats,
         "emails": emails_out,
     }
 
@@ -428,7 +475,23 @@ def export():
 
     shutil.move(caminho_temp, ficheiro)
 
-    print("Concluído:", ficheiro)
+    taxa_links = (link_stats["sucesso"] / link_stats["encontrados"] * 100) if link_stats["encontrados"] else 0
+
+    print()
+    print("=" * 56)
+    print("RELATORIO DA EXECUCAO")
+    print("=" * 56)
+    print(f"Emails vistos (dentro da janela de {WINDOW_DAYS} dias): {stats['emails_vistos']}")
+    print(f"  - Ignorados (corpo curto/vazio):     {stats['ignorados_curto']}")
+    print(f"  - Ignorados (duplicado):              {stats['ignorados_duplicado']}")
+    print(f"  - Incluidos no ficheiro final:        {stats['incluidos']}")
+    print("-" * 56)
+    print(f"Links encontrados:                {link_stats['encontrados']}")
+    print(f"Links abertos (HTTP 200):         {link_stats['abertos']}")
+    print(f"Artigos extraidos com sucesso:    {link_stats['sucesso']} ({taxa_links:.1f}%)")
+    print("=" * 56)
+    print("Ficheiro gravado em:", ficheiro)
+    print("=" * 56)
 
 
 if __name__ == "__main__":
