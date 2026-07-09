@@ -10,6 +10,7 @@ import sys
 import json
 import tempfile
 import shutil
+import threading
 import requests
 import trafilatura
 from datetime import datetime, timedelta
@@ -144,26 +145,48 @@ def extrair_link(texto: str) -> str | None:
     return None
 
 
-def abrir_link(url: str, stats: dict) -> str | None:
-    """Fase 2: abre o link unico da mensagem e extrai o texto do artigo.
-    Nunca bloqueante — qualquer falha devolve None e regista em stats."""
-    stats["encontrados"] += 1
+def _abrir_link_worker(url: str, resultado: dict) -> None:
     try:
         resp = requests.get(
             url,
             timeout=LINK_TIMEOUT_SECONDS,
             headers={"User-Agent": LINK_USER_AGENT},
         )
-        stats["abertos"] += 1
+        resultado["abertos"] = True
         if resp.status_code != 200:
-            return None
+            return
         texto = trafilatura.extract(resp.text, include_comments=False, include_tables=False)
         if texto and len(texto.strip()) >= MIN_CHARS:
-            stats["sucesso"] += 1
-            return texto.strip()
-        return None
+            resultado["texto"] = texto.strip()
     except Exception:
+        pass
+
+
+def abrir_link(url: str, stats: dict) -> str | None:
+    """Fase 2: abre o link unico da mensagem e extrai o texto do artigo.
+    Nunca bloqueante — qualquer falha ou bloqueio devolve None e regista em stats.
+
+    O timeout do requests.get() nao e suficiente sozinho: em certas redes
+    (firewall/antivirus/VPN com inspeccao de trafego) o connect() do socket
+    fica preso ao nivel do SO, ignorando o timeout do Python. Por isso o
+    pedido corre numa thread daemon com um limite de parede (wall-clock)
+    independente — se a thread nao responder a tempo, e abandonada (nunca
+    bloqueia o resto da rotina) em vez de a rotina inteira ficar presa."""
+    stats["encontrados"] += 1
+    resultado = {"abertos": False, "texto": None}
+
+    t = threading.Thread(target=_abrir_link_worker, args=(url, resultado), daemon=True)
+    t.start()
+    t.join(timeout=LINK_TIMEOUT_SECONDS + 5)
+
+    if t.is_alive():
         return None
+
+    if resultado["abertos"]:
+        stats["abertos"] += 1
+    if resultado["texto"]:
+        stats["sucesso"] += 1
+    return resultado["texto"]
 
 
 def transcrever_audio(path: str) -> str:
