@@ -4,6 +4,7 @@ import os
 import re
 import sys
 import json
+import socket
 import hashlib
 import tempfile
 import shutil
@@ -34,6 +35,11 @@ GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 # =========================
 LABEL = "finance briefing"
 WINDOW_DAYS = 7
+
+# tempo maximo de espera para ligar/autenticar no IMAP antes de desistir com
+# erro explicito, em vez de ficar bloqueado indefinidamente (ex.: firewall/
+# antivirus/VPN a bloquear a porta 993 em silencio).
+IMAP_TIMEOUT_SECONDS = 30
 
 OUTPUT = r"G:\My Drive\Claude_PRJ\Relatorios\Sources\Gmail_finances"
 os.makedirs(OUTPUT, exist_ok=True)
@@ -370,7 +376,14 @@ def export():
     agora = datetime.now()
     inicio = agora - timedelta(days=WINDOW_DAYS)
 
-    imap = imaplib.IMAP4_SSL("imap.gmail.com")
+    try:
+        imap = imaplib.IMAP4_SSL("imap.gmail.com", timeout=IMAP_TIMEOUT_SECONDS)
+    except (socket.timeout, OSError) as e:
+        raise RuntimeError(
+            f"Nao foi possivel ligar a imap.gmail.com em {IMAP_TIMEOUT_SECONDS}s ({e}). "
+            "Provavel bloqueio de rede (firewall/antivirus/VPN) na porta 993 — "
+            "verificar se ha um pedido de permissao de firewall pendente para o python.exe."
+        )
     imap.login(GMAIL_ADDRESS, GMAIL_APP_PASSWORD)
 
     pasta_all = encontrar_pasta_todos_emails(imap)
