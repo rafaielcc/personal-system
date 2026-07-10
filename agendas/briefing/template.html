@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<!--
+  BRIEFING DIÁRIO — TEMPLATE DE RENDER (v3 — mecânico, Modo A/B)
+  ================================================================
+  Alinhado com BRIEFING_DIARIO v12.0 (schema JSON canónico, Secção 7).
+  Diferença para o v2: os placeholders em [colchetes] passam a {{TOKENS}}
+  e blocos repetíveis/condicionais passam a comentários MARKER de abertura
+  e fecho, para permitir substituição mecânica por render.py (sem LLM a
+  escrever HTML).
+
+  MODO A (completo, 7 tabs) vs MODO B (6 tabs, sem HFF):
+  → render.py remove os blocos HFF_BTN e HFF_PANEL inteiros quando meta.mode=="B".
+
+  Tabs Modo A: 1) Hoje 2) Tarefas 3) Calendário 4) Email 5) Trabalho HFF
+               6) Tempo 7) Rotina
+
+  Não alterar estrutura HTML/CSS/JS sem pedido explícito.
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefing Diário · Rafa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1A3D52; --navy-2:#102B3A; --navy-border:#2C5068;
+    --cream:#F5F0E8; --card:#FDFAF4; --border:#E0D8C8;
+    --ink:#1F2A33; --ink-light:#FBF7EF; --muted:#8A8070; --muted-light:#B9CBD6;
+    --terracotta:#C75A2C; --gold:#D4A946; --sage:#5A7A5E; --teal:#0D9488;
+    --red:#C0392B; --red-bg:#FAD9D4; --blue:#4A7FAD; --orange:#FF9900;
+    --green:#6AA84F; --purple:#8E6FA8;
+    --radius:16px; --radius-sm:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--cream); color:var(--ink); font-family:'DM Sans', sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
+
+  /* ===== TOPBAR ===== */
+  .topbar{ position:sticky; top:0; z-index:20; background:linear-gradient(160deg, var(--navy), var(--navy-2)); padding:12px 14px 10px; border-bottom:1px solid var(--navy-border); }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .greet{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light); display:flex; align-items:center; gap:6px; }
+  .back-link{ font-size:12px; color:var(--muted-light); font-weight:700; }
+  .topbar-row2{ display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap; }
+  .chip{ font-size:11.5px; font-weight:700; color:var(--ink-light); background:rgba(255,255,255,.07); border:1px solid var(--navy-border); border-radius:999px; padding:5px 10px; display:flex; align-items:center; gap:5px; white-space:nowrap; }
+  .chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
+  .chip b{ color:var(--gold); font-size:12px; }
+  .chip.daytype b{ color:#FFF8EE; }
+
+  /* ===== TABBAR ===== */
+  .tabbar{ position:sticky; top:0; z-index:19; background:var(--navy-2); display:flex; overflow-x:auto; gap:2px; padding:0 8px; border-bottom:1px solid var(--navy-border); }
+  .tabbar::-webkit-scrollbar{ display:none; }
+  .tabbtn{ flex:0 0 auto; border:none; background:transparent; color:var(--muted-light); font-family:'DM Sans', sans-serif; font-size:12px; font-weight:700; padding:10px 11px; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+  .tabbtn.active{ color:var(--gold); border-bottom-color:var(--gold); }
+
+  .content{ padding-top:14px; }
+  .tabpanel{ display:none; }
+  .tabpanel.active{ display:block; }
+
+  .banner{ border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px; display:flex; align-items:flex-start; gap:8px; font-size:13px; font-weight:600; border:1px solid var(--border); background:var(--card); color:var(--sage); }
+  .banner-alert{ color:var(--red); border-color:#EBC9C2; background:var(--red-bg); }
+  .banner-warn{ color:var(--terracotta); border-color:#EAD2BE; background:#F7E7D8; }
+  .banner-info{ color:var(--blue); }
+
+  .section-label{ font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:700; margin:18px 0 8px 2px; }
+  .section-label:first-child{ margin-top:0; }
+
+  .card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px 15px; margin-bottom:10px; position:relative; overflow:hidden; }
+  .card::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); }
+  .card.stripe-terracotta::before{ background:var(--terracotta); }
+  .card.stripe-sage::before{ background:var(--sage); }
+  .card.stripe-blue::before{ background:var(--blue); }
+  .card.stripe-teal::before{ background:var(--teal); }
+  .card-title{ font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+  .card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
+  .card .muted{ color:var(--muted); font-size:12px; }
+
+  /* ===== NAVY HIGHLIGHT BOX (próximo evento especial) ===== */
+  .navy-box{ background:linear-gradient(160deg, var(--navy), var(--navy-2)); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px; color:var(--ink-light); }
+  .navy-box .label{ font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:700; margin-bottom:4px; }
+  .navy-box .title{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; }
+  .navy-box .meta{ font-size:12px; color:var(--muted-light); margin-top:3px; }
+
+  /* ===== 3-DAY CARDS ===== */
+  .day3-grid{ display:grid; grid-template-columns:1fr; gap:8px; }
+  .day3-card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px; }
+  .day3-card .d3-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+  .day3-card .d3-name{ font-family:'Fraunces', serif; font-weight:600; font-size:14px; }
+  .day3-card .d3-date{ font-size:11px; color:var(--muted); }
+  .day3-card .d3-pills{ display:flex; gap:5px; flex-wrap:wrap; margin-top:5px; }
+  .pill-mini{ font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--border); color:var(--ink); }
+  .pill-mini.pm-event{ background:#DCE7EE; color:var(--blue); }
+  .pill-mini.pm-task{ background:#F2E4DD; color:var(--terracotta); }
+  .pill-mini.pm-bo{ background:var(--red-bg); color:var(--red); }
+  .pill-mini.pm-sigic{ background:#E4D7EC; color:var(--purple); }
+
+  /* ===== TAREFAS — board panorama 3 colunas ===== */
+  .board3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:14px; }
+  .board3-col{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 8px; text-align:center; }
+  .board3-col .b3-day{ font-size:10.5px; font-weight:700; color:var(--navy); text-transform:uppercase; margin-bottom:5px; }
+  .board3-col .b3-total{ font-family:'Fraunces', serif; font-size:19px; font-weight:600; }
+  .board3-col .b3-split{ font-size:10px; color:var(--muted); margin-top:2px; }
+  .board3-col .b3-extra{ font-size:10px; color:var(--muted); margin-top:5px; line-height:1.5; }
+
+  .task-section-label{ font-size:11px; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:.04em; margin:14px 0 6px 2px; }
+  .task-card{ border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:7px; border:1.5px solid var(--border); transition:background .2s,border-color .2s; }
+  .task-card.tc-red{ border-color:var(--red); background:var(--red-bg); }
+  .task-card.tc-yellow{ border-color:var(--gold); background:#FBF1D9; }
+  .task-card.tc-green{ border-color:var(--green); background:#E4EFE2; }
+  .task-card .tc-date{ font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase; }
+  .task-item{ display:flex; align-items:flex-start; gap:8px; font-size:13px; padding:3px 0; border-left:3px solid var(--terracotta); padding-left:8px; margin-bottom:2px; }
+  .task-item.ti-sugestao{ border-left-color:var(--gold); }
+  .task-item.ti-habito{ border-left-color:var(--sage); }
+  .task-item.ti-desporto{ border-left-color:var(--blue); }
+  .task-item input[type=checkbox]{ margin-top:2px; cursor:pointer; }
+  .task-item.done span{ text-decoration:line-through; color:var(--muted); }
+
+  /* ===== CALENDÁRIO ===== */
+  .cal-nav{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .cal-nav .cal-month{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--navy); }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .cal-dow{ font-size:10px; text-align:center; color:var(--muted); font-weight:700; padding:4px 0; }
+  .cal-cell{ min-height:70px; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:4px; font-size:11px; position:relative; }
+  .cal-cell.cal-other{ opacity:.35; }
+  .cal-cell.cal-today{ border:2px solid var(--terracotta); }
+  .cal-cell .cal-daynum{ font-weight:700; font-size:11px; }
+  .cal-cell .cal-pills{ display:flex; flex-wrap:wrap; gap:2px; margin-top:3px; }
+  .cal-pill{ font-size:8.5px; font-weight:700; padding:1px 4px; border-radius:6px; }
+  .cal-pill.cp-event{ background:#DCE7EE; color:var(--blue); }
+  .cal-pill.cp-task{ background:#F2E4DD; color:var(--terracotta); }
+  .cal-badge-dot{ width:6px; height:6px; border-radius:50%; position:absolute; top:4px; right:4px; }
+  .cal-badge-dot.cb-special{ background:var(--terracotta); }
+  .cal-badge-dot.cb-holiday{ background:var(--sage); }
+  .cal-badge-dot.cb-sport{ background:var(--blue); }
+  .cal-badge-dot.cb-sigic{ background:var(--red); }
+  .cal-badge-dot.cb-show{ background:var(--purple); }
+  .cal-detail{ margin-top:10px; }
+
+  /* ===== EMAIL ===== */
+  .email-section-label{ display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; margin:14px 0 6px 2px; }
+  .email-row{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 11px; margin-bottom:6px; font-size:13px; }
+  .email-row .e-from{ font-weight:700; font-size:12.5px; }
+  .email-row .e-subj{ font-size:13px; margin:2px 0; }
+  .email-row .e-summary{ font-size:12px; color:var(--muted); }
+  .email-row.e-noise{ padding:6px 11px; font-size:12px; color:var(--muted); }
+  .email-badge{ font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--teal); color:#fff; margin-left:5px; }
+
+  /* ===== TEMPO ===== */
+  table.weather7{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.weather7 th{ text-align:center; font-size:10px; color:var(--muted); text-transform:uppercase; padding:4px; border-bottom:1px solid var(--border); }
+  table.weather7 td{ text-align:center; padding:7px 4px; border-bottom:1px dashed var(--border); }
+  .window-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px dashed var(--border); font-size:13px; }
+  .window-row:last-child{ border-bottom:none; }
+  .window-time{ font-weight:700; color:var(--navy); min-width:48px; }
+
+  /* ===== ROTINA ===== */
+  .routine-card{ display:flex; gap:10px; align-items:flex-start; }
+  .routine-time{ font-family:'Fraunces', serif; font-size:18px; font-weight:600; color:var(--navy); min-width:58px; }
+
+  details.collapse{ background:var(--ink-light); border:1px solid var(--border); border-radius:var(--radius-sm); margin:6px 0; overflow:hidden; }
+  details.collapse summary{ padding:9px 11px; font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  details.collapse summary::-webkit-details-marker{ display:none; }
+  details.collapse summary::after{ content:'▾'; color:var(--muted); font-size:11px; }
+  details.collapse[open] summary::after{ content:'▴'; }
+  details.collapse .collapse-body{ padding:0 11px 11px; font-size:13px; }
+
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
+</style>
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="greet">☀️ Bom dia, Rafa</div>
+        <a class="back-link" href="../index.html">↩ Início</a>
+      </div>
+      <div class="topbar-row2">
+        <span class="chip daytype">📅 <b>{{DATA_LABEL}}</b></span>
+        <span class="chip">🌡️ <b>{{TEMP_ACTUAL}}°</b></span>
+        <span class="chip">🏥 <b>{{TIPO_DIA}}</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TABBAR — Modo A (7 tabs). render.py remove HFF_BTN inteiro em Modo B. ===== -->
+  <div class="tabbar">
+    <button class="tabbtn active" onclick="showTab('hoje')">🌅 Hoje</button>
+    <button class="tabbtn" onclick="showTab('tarefas')">✅ Tarefas</button>
+    <button class="tabbtn" onclick="showTab('calendario')">📅 Calendário</button>
+    <button class="tabbtn" onclick="showTab('email')">📬 Email</button>
+    <!--HFF_BTN--><button class="tabbtn" onclick="showTab('hff')">🏥 Trabalho HFF</button><!--/HFF_BTN-->
+    <button class="tabbtn" onclick="showTab('tempo')">🌤️ Tempo</button>
+    <button class="tabbtn" onclick="showTab('rotina')">⚡ Rotina</button>
+  </div>
+
+  <div class="wrap">
+    <div class="content">
+
+      <!-- ===================== TAB 1 — HOJE ===================== -->
+      <div id="tab-hoje" class="tabpanel active">
+
+        <div class="section-label">🎧 Áudio do dia</div>
+        <div class="card stripe-teal">
+          <p>{{AUDIO_SCRIPT}}</p>
+        </div>
+
+        <div class="banner {{BANNER_CLASS}}">
+          {{BANNER_ICON}} {{BANNER_TEXTO}}
+        </div>
+
+        <!--PROXIMO_EVENTO--><div class="navy-box">
+          <div class="label">Próximo destaque</div>
+          <div class="title">{{PROXIMO_EVENTO_TITULO}}</div>
+          <div class="meta">{{PROXIMO_EVENTO_META}}</div>
+        </div><!--/PROXIMO_EVENTO-->
+
+        <div class="section-label">Próximos 3 dias</div>
+        <div class="day3-grid">
+<!--DAY3_CARD-->
+          <div class="day3-card">
+            <div class="d3-head"><span class="d3-name">{{D3_NOME}}</span><span class="d3-date">{{D3_DATA}}</span></div>
+            <p class="muted">{{D3_RESUMO}}</p>
+            <div class="d3-pills">
+              <span class="pill-mini pm-event">📅 {{D3_N_EVENTOS}} eventos</span>
+              <span class="pill-mini pm-task">✅ {{D3_N_TAREFAS}} tarefas</span>
+              <span class="pill-mini pm-bo" style="display:{{D3_BO_DISPLAY}}">🏥 BO</span>
+              <span class="pill-mini pm-sigic" style="display:{{D3_SIGIC_DISPLAY}}">🕒 SIGIC</span>
+            </div>
+          </div>
+<!--/DAY3_CARD-->
+        </div>
+
+      </div>
+
+      <!-- ===================== TAB 2 — TAREFAS ===================== -->
+      <div id="tab-tarefas" class="tabpanel">
+
+        <div class="section-label">Panorama — 3 dias</div>
+        <div class="board3">
+<!--BOARD_COL-->
+          <div class="board3-col">
+            <div class="b3-day">{{B3_DIA}}</div>
+            <div class="b3-total">{{B3_TOTAL}}</div>
+            <div class="b3-split">💼 {{B3_TRABALHO}} · 👤 {{B3_PESSOAL}}</div>
+            <div class="b3-extra">💡 {{B3_SUGESTOES}} · 🌿 {{B3_HABITOS}} · 🏃 {{B3_DESPORTO}}</div>
+          </div>
+<!--/BOARD_COL-->
+        </div>
+
+<!--TASK_DAY-->
+        <div class="task-section-label">{{TD_DIA}}</div>
+        <div class="task-card {{TD_CLASS}}" data-task-card>
+          <div class="tc-date">{{TD_DONE}}/{{TD_TOTAL}} concluídas</div>
+<!--TASK_ITEM-->
+          <label class="task-item {{TI_CLASS}}" data-task><input type="checkbox" {{TI_CHECKED}} onchange="updateTaskCard(this)"><span>{{TI_TEXTO}}</span></label>
+<!--/TASK_ITEM-->
+        </div>
+<!--/TASK_DAY-->
+
+      </div>
+
+      <!-- ===================== TAB 3 — CALENDÁRIO ===================== -->
+      <div id="tab-calendario" class="tabpanel">
+
+        <div class="cal-nav">
+          <span class="cal-month">{{CAL_MES_ANO}}</span>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow">S</div><div class="cal-dow">T</div><div class="cal-dow">Q</div><div class="cal-dow">Q</div><div class="cal-dow">S</div><div class="cal-dow">S</div><div class="cal-dow">D</div>
+<!--CAL_CELL-->
+          <div class="cal-cell {{CAL_TODAY_CLASS}}" onclick="showDay('{{CAL_DATE}}')">
+            <span class="cal-daynum">{{CAL_DAYNUM}}</span>
+            <span class="cal-badge-dot {{CAL_BADGE_CLASS}}" style="display:{{CAL_BADGE_DISPLAY}}"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:{{CAL_EVENT_PILL_DISPLAY}}">📅{{CAL_N_EVENTOS}}</span>
+              <span class="cal-pill cp-task" style="display:{{CAL_TASK_PILL_DISPLAY}}">✅{{CAL_N_TAREFAS}}</span>
+            </div>
+          </div>
+<!--/CAL_CELL-->
+        </div>
+
+        <div class="cal-detail card" id="cal-detail-box">
+          <p class="card-title">{{CAL_DETAIL_TITULO}}</p>
+          <p>{{CAL_DETAIL_EVENTOS}}</p>
+          <p class="muted">{{CAL_DETAIL_TAREFAS}}</p>
+        </div>
+
+      </div>
+
+      <!-- ===================== TAB 4 — EMAIL ===================== -->
+      <div id="tab-email" class="tabpanel">
+
+<!--EMAIL_SECTION:urgente-->
+        <div class="email-section-label" style="color:var(--red)">🚨 Urgente</div>
+<!--EMAIL_ROW:urgente-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}</div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">{{E_SUMMARY}}</div>
+        </div>
+<!--/EMAIL_ROW:urgente-->
+<!--/EMAIL_SECTION:urgente-->
+
+<!--EMAIL_SECTION:importante-->
+        <div class="email-section-label" style="color:var(--terracotta)">⚡ Importante</div>
+<!--EMAIL_ROW:importante-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}</div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">{{E_SUMMARY}}</div>
+        </div>
+<!--/EMAIL_ROW:importante-->
+<!--/EMAIL_SECTION:importante-->
+
+<!--EMAIL_SECTION:informativo-->
+        <div class="email-section-label" style="color:var(--blue)">📢 Informativo</div>
+<!--EMAIL_ROW:informativo-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}</div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+        </div>
+<!--/EMAIL_ROW:informativo-->
+<!--/EMAIL_SECTION:informativo-->
+
+<!--EMAIL_SECTION:ruido-->
+        <div class="email-section-label" style="color:var(--muted)">⚫ Ruído</div>
+        <div class="email-row e-noise">{{RUIDO_COUNT}} emails de marketing/newsletters/Todoist digest</div>
+<!--/EMAIL_SECTION:ruido-->
+
+<!--EMAIL_SECTION:tarefas_sem_data-->
+        <div class="email-section-label">📁 Tarefas sem data</div>
+<!--EMAIL_ROW:tarefas_sem_data-->
+        <div class="email-row">
+          <div class="e-subj">{{E_SUBJ}}</div>
+        </div>
+<!--/EMAIL_ROW:tarefas_sem_data-->
+<!--/EMAIL_SECTION:tarefas_sem_data-->
+
+<!--EMAIL_SECTION:snoozed-->
+        <div class="email-section-label">💤 Snoozed</div>
+<!--EMAIL_ROW:snoozed-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}</div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">Reagendado para {{E_REAGENDADO}}</div>
+        </div>
+<!--/EMAIL_ROW:snoozed-->
+<!--/EMAIL_SECTION:snoozed-->
+
+<!--EMAIL_SECTION:pediatric_surgery-->
+        <div class="email-section-label">🔪 Cirurgia Pediátrica</div>
+<!--EMAIL_ROW:pediatric_surgery-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}<span class="email-badge">{{E_BADGE}}</span></div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">{{E_SUMMARY}}</div>
+        </div>
+<!--/EMAIL_ROW:pediatric_surgery-->
+<!--/EMAIL_SECTION:pediatric_surgery-->
+
+<!--EMAIL_SECTION:ulsasi-->
+        <div class="email-section-label">🏥 ULSASI</div>
+<!--EMAIL_ROW:ulsasi-->
+        <div class="email-row">
+          <div class="e-from">{{E_FROM}}</div>
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">{{E_SUMMARY}}</div>
+        </div>
+<!--/EMAIL_ROW:ulsasi-->
+<!--/EMAIL_SECTION:ulsasi-->
+
+<!--EMAIL_SECTION:events-->
+        <div class="email-section-label">🗓️ Events</div>
+<!--EMAIL_ROW:events-->
+        <div class="email-row">
+          <div class="e-subj">{{E_SUBJ}}</div>
+          <div class="e-summary">{{E_SUMMARY}}</div>
+        </div>
+<!--/EMAIL_ROW:events-->
+<!--/EMAIL_SECTION:events-->
+
+      </div>
+
+      <!-- ===================== TAB 5 — TRABALHO HFF (Modo A) ===================== -->
+      <!-- Versão condensada — painel completo vive em ../Hff/index.html -->
+<!--HFF_PANEL-->
+      <div id="tab-hff" class="tabpanel">
+
+        <div class="banner banner-info">
+          ℹ️ Painel completo em <a href="../Hff/index.html" style="text-decoration:underline">../Hff/index.html</a>
+        </div>
+
+        <div class="section-label">Resumo do dia</div>
+        <div class="card stripe-terracotta">
+          <p><b>{{HFF_TIPO_DIA}}</b></p>
+          <p class="muted">{{HFF_RESUMO}}</p>
+        </div>
+
+        <div class="section-label">Cirurgias de hoje (se BO)</div>
+        <div class="card">
+          <p class="muted">{{HFF_CIRURGIAS_RESUMO}}</p>
+        </div>
+
+      </div>
+<!--/HFF_PANEL-->
+
+      <!-- ===================== TAB 6 — TEMPO ===================== -->
+      <div id="tab-tempo" class="tabpanel">
+
+        <div class="section-label">Próximos 7 dias</div>
+        <table class="weather7">
+          <thead><tr><th>Dia</th><th>☁️</th><th>Máx/Mín</th><th>🌧️</th></tr></thead>
+          <tbody>
+<!--WEATHER_ROW-->
+            <tr><td>{{W_DIA}}</td><td>{{W_ICONE}}</td><td>{{W_MAXMIN}}</td><td>{{W_CHUVA}}%</td></tr>
+<!--/WEATHER_ROW-->
+          </tbody>
+        </table>
+
+        <div class="section-label">Janelas do dia</div>
+        <div class="card">
+<!--WINDOW_ROW-->
+          <div class="window-row"><span class="window-time">{{WIN_HORA}}</span><span>{{WIN_TEXTO}}</span></div>
+<!--/WINDOW_ROW-->
+        </div>
+
+      </div>
+
+      <!-- ===================== TAB 7 — ROTINA (dinâmica) ===================== -->
+      <div id="tab-rotina" class="tabpanel">
+
+        <div class="section-label">As 3 Janelas — à medida do dia</div>
+
+        <div class="card stripe-terracotta">
+          <div class="routine-card">
+            <span class="routine-time">{{ROT_MATINAL_HORA}}</span>
+            <div>
+              <p class="card-title">🌅 Matinal</p>
+              <p>{{ROT_MATINAL_CONFERIR}}</p>
+              <p class="muted">{{ROT_MATINAL_HABITO}} {{ROT_MATINAL_SUGESTAO}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="routine-card">
+            <span class="routine-time">{{ROT_PROC_HORA}}</span>
+            <div>
+              <p class="card-title">⚡ Processamento</p>
+              <p>{{ROT_PROC_SUGESTAO}}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card stripe-sage">
+          <div class="routine-card">
+            <span class="routine-time">{{ROT_DESC_HORA}}</span>
+            <div>
+              <p class="card-title">🌙 Descompressão</p>
+              <p>{{ROT_DESC_SUGESTAO}}</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="muted" style="font-size:11px; margin-top:6px; padding-left:2px;">Dias SIGIC: Processamento e Descompressão movem para depois das 21h.</p>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>Briefing Diário · {{DATA_LABEL}} · gerado às {{GERADO_HORA}}</p>
+    </div>
+  </div>
+
+<script>
+  function showTab(name){
+    document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tabbar > .tabbtn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+  function showDay(dateStr){
+    // substituir conteúdo de #cal-detail-box com os dados reais do dia clicado
+  }
+  function updateTaskCard(checkbox){
+    const card = checkbox.closest('[data-task-card]');
+    const items = card.querySelectorAll('[data-task] input[type=checkbox]');
+    let done = 0;
+    items.forEach(cb => { if (cb.checked) done++; cb.closest('.task-item').classList.toggle('done', cb.checked); });
+    card.classList.remove('tc-red','tc-yellow','tc-green');
+    if (done === 0) card.classList.add('tc-red');
+    else if (done === items.length) card.classList.add('tc-green');
+    else card.classList.add('tc-yellow');
+    const dateLabel = card.querySelector('.tc-date');
+    if (dateLabel) dateLabel.textContent = done + '/' + items.length + ' concluídas';
+  }
+</script>
+
+</body>
+</html>
