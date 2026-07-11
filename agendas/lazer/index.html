@@ -15,6 +15,8 @@
     --tv-bg:#EFF6FF;
     --escape-bg:#F0FDF4;
     --whatsapp:#25D366;
+    --gold:#D4A017;
+    --confirmado:#16A34A;
   }
   *{box-sizing:border-box;}
   body{
@@ -55,24 +57,15 @@
   }
   .pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
 
-  .dashboard{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));
-    gap:8px;padding:14px 16px;
-  }
-  .dash-item{
-    background:#fff;border-radius:12px;padding:10px;text-align:center;
-  }
-  .dash-item .num{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:600;}
-  .dash-item .label{font-size:0.7rem;opacity:0.7;}
-
   .banner-viagem{
-    margin:0 16px 14px;padding:12px 14px;border-radius:10px;
+    margin:14px 16px 14px;padding:12px 14px;border-radius:10px;
     background:#FEF3C7;color:#92400E;font-size:0.85rem;font-weight:600;
     display:none;
   }
   .banner-viagem.show{display:block;}
 
-  .secao{padding:0 16px 24px;}
+  .secao{padding:14px 16px 24px;display:none;}
+  .secao[data-secao="highlights"]{display:block;}
   .secao-titulo{
     font-size:1.1rem;font-weight:600;margin:0 0 10px;
     display:flex;align-items:center;gap:8px;
@@ -84,6 +77,29 @@
   @media(min-width:640px){
     .grid-cards{grid-template-columns:repeat(2,1fr);}
   }
+
+  .confirmados-bloco{
+    background:rgba(22,163,74,0.07);
+    border:1.5px solid rgba(22,163,74,0.3);
+    border-radius:14px;padding:12px;margin-bottom:16px;
+  }
+  .confirmados-titulo{
+    font-size:0.9rem;font-weight:700;color:var(--confirmado);
+    margin:0 0 10px;
+  }
+
+  .data-grupo{margin-bottom:14px;}
+  .data-grupo:last-child{margin-bottom:0;}
+  .data-grupo-titulo{
+    cursor:pointer;font-weight:700;font-size:0.92rem;
+    padding:8px 12px;background:rgba(26,61,82,0.06);border-radius:10px;
+    margin-bottom:10px;list-style:none;
+  }
+  .data-grupo-titulo::-webkit-details-marker{display:none;}
+  .data-grupo-titulo::marker{content:"";}
+  .data-grupo-titulo::before{content:"▸ ";}
+  .data-grupo[open] > .data-grupo-titulo::before{content:"▾ ";}
+  .data-grupo-count{font-weight:400;opacity:0.65;font-size:0.82rem;}
 
   .card{
     background:#fff;border-radius:14px;overflow:hidden;
@@ -101,8 +117,19 @@
     font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:999px;
     background:rgba(26,61,82,0.08);color:var(--navy);
   }
+  .badge-confirmed{background:var(--confirmado);color:#fff;}
   .card-meta{font-size:0.8rem;opacity:0.75;margin-top:6px;}
   .card-desc{font-size:0.85rem;margin-top:8px;line-height:1.4;}
+  .card-desc-details{margin-top:8px;}
+  .card-desc-details summary.card-desc-preview{
+    font-size:0.85rem;line-height:1.4;cursor:pointer;list-style:none;
+  }
+  .card-desc-details summary.card-desc-preview::-webkit-details-marker{display:none;}
+  .card-desc-details summary.card-desc-preview::after{
+    content:" · ler mais ↓";font-weight:600;color:var(--terracota);
+  }
+  .card-desc-details[open] summary.card-desc-preview{display:none;}
+  .card-desc-full{font-size:0.85rem;line-height:1.5;white-space:pre-line;}
   .card-with{font-size:0.78rem;opacity:0.7;margin-top:6px;}
   .card-logistica{
     font-size:0.78rem;margin-top:8px;opacity:0.85;
@@ -119,6 +146,7 @@
 
   .card.bg-tv{background:var(--tv-bg);}
   .card.bg-escape{background:var(--escape-bg);}
+  .card.bg-highlights{background:#FFFBEB;}
 
   .secao-vazia{display:none;}
 </style>
@@ -133,7 +161,7 @@
 <div class="banner-urgente "></div>
 
 <div class="filtros-sticky">
-  <div class="pill active" data-filtro="todos">Todos</div>
+  <div class="pill active" data-filtro="highlights">✨ Highlights</div>
   <div class="pill" data-filtro="tv">📺 TV</div>
   <div class="pill" data-filtro="streaming">🎬 Streaming</div>
   <div class="pill" data-filtro="cinema_indoor">🎟️ Cinema</div>
@@ -146,21 +174,295 @@
   <div class="pill" data-filtro="radar">📡 Radar</div>
 </div>
 
-<div class="dashboard">
-  <div class="dash-item"><div class="num">71</div><div class="label">Total</div></div>
-<div class="dash-item"><div class="num">📺 4</div><div class="label">Televisão</div></div>
-<div class="dash-item"><div class="num">🎬 6</div><div class="label">Streaming</div></div>
-<div class="dash-item"><div class="num">🎟️ 8</div><div class="label">Cinema</div></div>
-<div class="dash-item"><div class="num">🌙 10</div><div class="label">Cinema ao ar livre</div></div>
-<div class="dash-item"><div class="num">🤝 14</div><div class="label">Meetup</div></div>
-<div class="dash-item"><div class="num">🎭 8</div><div class="label">Cultura</div></div>
-<div class="dash-item"><div class="num">📚 4</div><div class="label">Livro</div></div>
-<div class="dash-item"><div class="num">🍽️ 9</div><div class="label">Gastronomia</div></div>
-<div class="dash-item"><div class="num">🧭 6</div><div class="label">Escapadinha</div></div>
-<div class="dash-item"><div class="num">📡 2</div><div class="label">Radar</div></div>
+<div class="banner-viagem "></div>
+
+
+<div class="secao" data-secao="highlights">
+  <div class="secao-titulo">✨ Highlights</div>
+  <div class="grid-cards">
+    
+<div class="card " data-categoria="books" style="--stripe:#92400E">
+  <style>.card[data-categoria="books"]::before{background:#92400E;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">A Cozinheira do Ditador</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">lancado Abril 2026, um dos mais aguardados</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Romance de Afonso Cruz, publicado pela Companhia das Letras em Abril 2026 - divertido e mordaz sobre a perversidade escondida onde menos se espera e o muito que se cozinha na sombra. Celebra a importancia da comida na mesa da Humanidade atraves de uma chef de…</summary><div class="card-desc-full">Romance de Afonso Cruz, publicado pela Companhia das Letras em Abril 2026 - divertido e mordaz sobre a perversidade escondida onde menos se espera e o muito que se cozinha na sombra. Celebra a importancia da comida na mesa da Humanidade atraves de uma chef de cozinha feita prisioneira por um ditador. Recheado de personagens improvaveis, com a audacia caracteristica do autor.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=A%20Cozinheira%20do%20Ditador%20%E2%80%94%20lancado%20Abril%202026%2C%20um%20dos%20mais%20aguardados" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20A%20Cozinheira%20do%20Ditador&body=A%20Cozinheira%20do%20Ditador%0Alancado%20Abril%202026%2C%20um%20dos%20mais%20aguardados%0ARomance%20de%20Afonso%20Cruz%2C%20publicado%20pela%20Companhia%20das%20Letras%20em%20Abril%202026%20-%20divertido%20e%20mordaz%20sobre%20a%20perversidade%20escondida%20onde%20menos%20se%20espera%20e%20o%20muito%20que%20se%20cozinha%20na%20sombra.%20Celebra%20a%20importancia%20da%20comida%20na%20mesa%20da%20Humanidade%20atraves%20de%20uma%20chef%20de%20cozinha%20feita%20prisioneira%20por%20um%20ditador.%20Recheado%20de%20personagens%20improvaveis%2C%20com%20a%20audacia%20caracteristica%20do%20autor.">📧 Email</a>
+    </div>
+  </div>
 </div>
 
-<div class="banner-viagem "></div>
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Enola Holmes 3</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Netflix</span></div>
+    <div class="card-meta">desde 1 Jul</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Enola esta em Malta prestes a casar com Tewkesbury quando o desaparecimento de Sherlock a atira para um caso mais complicado e perigoso do que qualquer outro que ja enfrentou. Obriga-a a largar o vestido de noiva e voltar a pegar na lupa: perseguicoes pelos m…</summary><div class="card-desc-full">Enola esta em Malta prestes a casar com Tewkesbury quando o desaparecimento de Sherlock a atira para um caso mais complicado e perigoso do que qualquer outro que ja enfrentou. Obriga-a a largar o vestido de noiva e voltar a pegar na lupa: perseguicoes pelos mercados de Malta, mortes suspeitas na sombra e um segredo antigo por vingar. Millie Bobby Brown repete o papel; realizacao de Philip Barantini (primeiro filme da saga sem Harry Bradbeer). 68% no Rotten Tomatoes.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Enola%20Holmes%203%20%E2%80%94%20desde%201%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Enola%20Holmes%203&body=Enola%20Holmes%203%0Adesde%201%20Jul%0AEnola%20esta%20em%20Malta%20prestes%20a%20casar%20com%20Tewkesbury%20quando%20o%20desaparecimento%20de%20Sherlock%20a%20atira%20para%20um%20caso%20mais%20complicado%20e%20perigoso%20do%20que%20qualquer%20outro%20que%20ja%20enfrentou.%20Obriga-a%20a%20largar%20o%20vestido%20de%20noiva%20e%20voltar%20a%20pegar%20na%20lupa%3A%20perseguicoes%20pelos%20mercados%20de%20Malta%2C%20mortes%20suspeitas%20na%20sombra%20e%20um%20segredo%20antigo%20por%20vingar.%20Millie%20Bobby%20Brown%20repete%20o%20papel%3B%20realizacao%20de%20Philip%20Barantini%20%28primeiro%20filme%20da%20saga%20sem%20Harry%20Bradbeer%29.%2068%25%20no%20Rotten%20Tomatoes.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Salgueiro Maia - O Implicado</h3>
+    </div>
+    <div class="card-badges"><span class="badge">HBO Max</span></div>
+    <div class="card-meta">desde 2 Jul</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Docudrama sobre Salgueiro Maia, o Capitao de Abril considerado o simbolo mais puro da Revolucao dos Cravos (25 Abril 1974). Acompanha a infancia e adolescencia, a Guerra Colonial, a preparacao da revolucao e os anos seguintes a conquista da democracia, numa a…</summary><div class="card-desc-full">Docudrama sobre Salgueiro Maia, o Capitao de Abril considerado o simbolo mais puro da Revolucao dos Cravos (25 Abril 1974). Acompanha a infancia e adolescencia, a Guerra Colonial, a preparacao da revolucao e os anos seguintes a conquista da democracia, numa abordagem intimista baseada em factos e relatos pessoais. Realizacao de Sergio Graciano, com Tomas Alves no papel principal.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Salgueiro%20Maia%20-%20O%20Implicado%20%E2%80%94%20desde%202%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Salgueiro%20Maia%20-%20O%20Implicado&body=Salgueiro%20Maia%20-%20O%20Implicado%0Adesde%202%20Jul%0ADocudrama%20sobre%20Salgueiro%20Maia%2C%20o%20Capitao%20de%20Abril%20considerado%20o%20simbolo%20mais%20puro%20da%20Revolucao%20dos%20Cravos%20%2825%20Abril%201974%29.%20Acompanha%20a%20infancia%20e%20adolescencia%2C%20a%20Guerra%20Colonial%2C%20a%20preparacao%20da%20revolucao%20e%20os%20anos%20seguintes%20a%20conquista%20da%20democracia%2C%20numa%20abordagem%20intimista%20baseada%20em%20factos%20e%20relatos%20pessoais.%20Realizacao%20de%20Sergio%20Graciano%2C%20com%20Tomas%20Alves%20no%20papel%20principal.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="streaming" style="--stripe:#0EA5E9">
+  <style>.card[data-categoria="streaming"]::before{background:#0EA5E9;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Miguel Angel Blanco: As 48 Horas Que Mudaram Espanha</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Netflix</span></div>
+    <div class="card-meta">desde 10 Jul</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Documentario em 4 partes sobre as 48 horas do sequestro e assassinato de Miguel Angel Blanco pela ETA em 1997, que mobilizou milhoes de espanhois e marcou a luta contra o terrorismo basco. Mais de 30 testemunhos, incluindo o entao Presidente Jose Maria Aznar,…</summary><div class="card-desc-full">Documentario em 4 partes sobre as 48 horas do sequestro e assassinato de Miguel Angel Blanco pela ETA em 1997, que mobilizou milhoes de espanhois e marcou a luta contra o terrorismo basco. Mais de 30 testemunhos, incluindo o entao Presidente Jose Maria Aznar, o Ministro do Interior Jaime Mayor Oreja, a irma da vitima Maria del Mar Blanco, e o Rei Felipe VI (entao Principe das Astúrias, com 29 anos). Realizado por Jon Sistiaga e Juanjo Lopez.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha%20%E2%80%94%20desde%2010%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha&body=Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha%0Adesde%2010%20Jul%0ADocumentario%20em%204%20partes%20sobre%20as%2048%20horas%20do%20sequestro%20e%20assassinato%20de%20Miguel%20Angel%20Blanco%20pela%20ETA%20em%201997%2C%20que%20mobilizou%20milhoes%20de%20espanhois%20e%20marcou%20a%20luta%20contra%20o%20terrorismo%20basco.%20Mais%20de%2030%20testemunhos%2C%20incluindo%20o%20entao%20Presidente%20Jose%20Maria%20Aznar%2C%20o%20Ministro%20do%20Interior%20Jaime%20Mayor%20Oreja%2C%20a%20irma%20da%20vitima%20Maria%20del%20Mar%20Blanco%2C%20e%20o%20Rei%20Felipe%20VI%20%28entao%20Principe%20das%20Ast%C3%BArias%2C%20com%2029%20anos%29.%20Realizado%20por%20Jon%20Sistiaga%20e%20Juanjo%20Lopez.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_indoor" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="cinema_indoor"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Dia D: Sob Pressao</h3>
+    </div>
+    <div class="card-badges"><span class="badge">⭐ M/12 (a confirmar na sala)</span></div>
+    <div class="card-meta">em cartaz · NOS Colombo / UCI El Corte Ingles</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Nos tres dias anteriores ao desembarque dos aliados na Normandia, houve uma previsao que, caso tivesse falhado, teria alterado o rumo da Segunda Grande Guerra. Responsavel pela avaliacao meteorologica, o capitao James Martin Stagg deparou-se com o aproximar d…</summary><div class="card-desc-full">Nos tres dias anteriores ao desembarque dos aliados na Normandia, houve uma previsao que, caso tivesse falhado, teria alterado o rumo da Segunda Grande Guerra. Responsavel pela avaliacao meteorologica, o capitao James Martin Stagg deparou-se com o aproximar de duas grandes tempestades para 5 de Junho de 1944, a data prevista. Apos avaliar relatorios contraditorios, Stagg previu uma breve janela com melhoria no tempo, e o general Eisenhower tomou a arriscada decisao de avancar para o dia seguinte. A maior invasao anfibia da Historia (156 mil soldados, sete mil navios, 50 mil veiculos, 11 mil avioes) ficou em suspenso durante essas horas de incerteza. Realizado por Anthony Maras (&#x27;Hotel Mumbai&#x27;). Elenco: Andrew Scott, Brendan Fraser, Kerry Condon, Chris Messina, Damian Lewis.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Dia%20D%3A%20Sob%20Pressao%20%E2%80%94%20em%20cartaz%20%40%20NOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Dia%20D%3A%20Sob%20Pressao&body=Dia%20D%3A%20Sob%20Pressao%0Aem%20cartaz%0ANOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles%0ANos%20tres%20dias%20anteriores%20ao%20desembarque%20dos%20aliados%20na%20Normandia%2C%20houve%20uma%20previsao%20que%2C%20caso%20tivesse%20falhado%2C%20teria%20alterado%20o%20rumo%20da%20Segunda%20Grande%20Guerra.%20Responsavel%20pela%20avaliacao%20meteorologica%2C%20o%20capitao%20James%20Martin%20Stagg%20deparou-se%20com%20o%20aproximar%20de%20duas%20grandes%20tempestades%20para%205%20de%20Junho%20de%201944%2C%20a%20data%20prevista.%20Apos%20avaliar%20relatorios%20contraditorios%2C%20Stagg%20previu%20uma%20breve%20janela%20com%20melhoria%20no%20tempo%2C%20e%20o%20general%20Eisenhower%20tomou%20a%20arriscada%20decisao%20de%20avancar%20para%20o%20dia%20seguinte.%20A%20maior%20invasao%20anfibia%20da%20Historia%20%28156%20mil%20soldados%2C%20sete%20mil%20navios%2C%2050%20mil%20veiculos%2C%2011%20mil%20avioes%29%20ficou%20em%20suspenso%20durante%20essas%20horas%20de%20incerteza.%20Realizado%20por%20Anthony%20Maras%20%28%27Hotel%20Mumbai%27%29.%20Elenco%3A%20Andrew%20Scott%2C%20Brendan%20Fraser%2C%20Kerry%20Condon%2C%20Chris%20Messina%2C%20Damian%20Lewis.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_indoor" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="cinema_indoor"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">George Washington</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Muitos anos antes de se tornar o primeiro Presidente dos EUA, o jovem George Washington lutou como soldado na Guerra Franco-Indigena (1754-1763), experiencia que moldou o seu caracter e chamou a atencao dos seus superiores. Com a eclosao da Guerra da Independ…</summary><div class="card-desc-full">Muitos anos antes de se tornar o primeiro Presidente dos EUA, o jovem George Washington lutou como soldado na Guerra Franco-Indigena (1754-1763), experiencia que moldou o seu caracter e chamou a atencao dos seus superiores. Com a eclosao da Guerra da Independencia Americana, foi nomeado comandante-chefe do Exercito Continental, levando as forcas coloniais a vitoria contra a Gra-Bretanha. O filme centra-se nos anos de juventude de Washington e no percurso que o conduziu a lideranca da Revolucao. William Franklyn-Miller no papel principal; elenco inclui Mary-Louise Parker, Ben Kingsley, Andy Serkis e Kelsey Grammer. Realizacao de Jon Erwin.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=George%20Washington%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20George%20Washington&body=George%20Washington%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0AMuitos%20anos%20antes%20de%20se%20tornar%20o%20primeiro%20Presidente%20dos%20EUA%2C%20o%20jovem%20George%20Washington%20lutou%20como%20soldado%20na%20Guerra%20Franco-Indigena%20%281754-1763%29%2C%20experiencia%20que%20moldou%20o%20seu%20caracter%20e%20chamou%20a%20atencao%20dos%20seus%20superiores.%20Com%20a%20eclosao%20da%20Guerra%20da%20Independencia%20Americana%2C%20foi%20nomeado%20comandante-chefe%20do%20Exercito%20Continental%2C%20levando%20as%20forcas%20coloniais%20a%20vitoria%20contra%20a%20Gra-Bretanha.%20O%20filme%20centra-se%20nos%20anos%20de%20juventude%20de%20Washington%20e%20no%20percurso%20que%20o%20conduziu%20a%20lideranca%20da%20Revolucao.%20William%20Franklyn-Miller%20no%20papel%20principal%3B%20elenco%20inclui%20Mary-Louise%20Parker%2C%20Ben%20Kingsley%2C%20Andy%20Serkis%20e%20Kelsey%20Grammer.%20Realizacao%20de%20Jon%20Erwin.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
+  <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Grass Volleyball at Jardim Vasco da Gama</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">semanal · Belem</div>
+    <div class="card-desc">Voleibol de relva semanal do grupo Meetup Sport Lisbon, confirmado por e-mail de inscricao. Rede montada perto do McDonald&#x27;s; normalmente segue-se jantar e bebidas por perto. Contribuicao de 2 EUR sugerida.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama%20%E2%80%94%20semanal%20%40%20Belem" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama&body=Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama%0Asemanal%0ABelem%0AVoleibol%20de%20relva%20semanal%20do%20grupo%20Meetup%20Sport%20Lisbon%2C%20confirmado%20por%20e-mail%20de%20inscricao.%20Rede%20montada%20perto%20do%20McDonald%27s%3B%20normalmente%20segue-se%20jantar%20e%20bebidas%20por%20perto.%20Contribuicao%20de%202%20EUR%20sugerida.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="books" style="--stripe:#92400E">
+  <style>.card[data-categoria="books"]::before{background:#92400E;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">As Rosas de Barbacena</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">lancamento recente</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Romance de Alberto S. Santos (Secretario de Estado da Cultura de Portugal) sobre silencio, memoria e responsabilidade. No Hospital Colonia de Barbacena, onde o esquecimento foi politica de Estado, Teresinha e internada gravida e sem defesa; Bernardo recusa ac…</summary><div class="card-desc-full">Romance de Alberto S. Santos (Secretario de Estado da Cultura de Portugal) sobre silencio, memoria e responsabilidade. No Hospital Colonia de Barbacena, onde o esquecimento foi politica de Estado, Teresinha e internada gravida e sem defesa; Bernardo recusa aceitar que o silencio seja destino dos vivos. Baseado em factos reais - o hospital psiquiatrico ficou conhecido como palco do &#x27;Holocausto Brasileiro&#x27;, com cerca de 60 mil mortes estimadas.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=As%20Rosas%20de%20Barbacena%20%E2%80%94%20lancamento%20recente" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20As%20Rosas%20de%20Barbacena&body=As%20Rosas%20de%20Barbacena%0Alancamento%20recente%0ARomance%20de%20Alberto%20S.%20Santos%20%28Secretario%20de%20Estado%20da%20Cultura%20de%20Portugal%29%20sobre%20silencio%2C%20memoria%20e%20responsabilidade.%20No%20Hospital%20Colonia%20de%20Barbacena%2C%20onde%20o%20esquecimento%20foi%20politica%20de%20Estado%2C%20Teresinha%20e%20internada%20gravida%20e%20sem%20defesa%3B%20Bernardo%20recusa%20aceitar%20que%20o%20silencio%20seja%20destino%20dos%20vivos.%20Baseado%20em%20factos%20reais%20-%20o%20hospital%20psiquiatrico%20ficou%20conhecido%20como%20palco%20do%20%27Holocausto%20Brasileiro%27%2C%20com%20cerca%20de%2060%20mil%20mortes%20estimadas.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="gastro" style="--stripe:#C75A2C">
+  <style>.card[data-categoria="gastro"]::before{background:#C75A2C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Adega das Gravatas</h3>
+    </div>
+    <div class="card-badges"><span class="badge">⭐ 5</span></div>
+    <div class="card-meta">esta semana</div>
+    <div class="card-desc">Favorito recente (avaliacao 5/5, 28 Jun) - naco de novilho na pedra (Rafa) e arroz de gambas (Vanessa) muito bem avaliados, experiencia descrita como &#x27;maravilhosa&#x27;. Conta total 49,30 EUR para os dois.</div>
+    <div class="card-with">👥 Com: 👑 Com Vanessa</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Adega%20das%20Gravatas%20%E2%80%94%20esta%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Adega%20das%20Gravatas&body=Adega%20das%20Gravatas%0Aesta%20semana%0AFavorito%20recente%20%28avaliacao%205/5%2C%2028%20Jun%29%20-%20naco%20de%20novilho%20na%20pedra%20%28Rafa%29%20e%20arroz%20de%20gambas%20%28Vanessa%29%20muito%20bem%20avaliados%2C%20experiencia%20descrita%20como%20%27maravilhosa%27.%20Conta%20total%2049%2C30%20EUR%20para%20os%20dois.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Wimbledon 2026 - Final masculina</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Grand Slam - final</span><span class="badge">Eurosport / HBO Max</span></div>
+    <div class="card-meta">Dom 12 Jul · 15:00</div>
+    <div class="card-desc">Final de singulares masculinos em Centre Court. Semifinais decorreram a 9-10 Jul (Sinner v Djokovic, Zverev v Fery).</div>
+    <div class="card-with">👥 Com: 🏠 Solo/amigos</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Wimbledon%202026%20-%20Final%20masculina%20%E2%80%94%20Dom%2012%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Wimbledon%202026%20-%20Final%20masculina&body=Wimbledon%202026%20-%20Final%20masculina%0ADom%2012%20Jul%0AFinal%20de%20singulares%20masculinos%20em%20Centre%20Court.%20Semifinais%20decorreram%20a%209-10%20Jul%20%28Sinner%20v%20Djokovic%2C%20Zverev%20v%20Fery%29.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Language Exchange - ALL Languages Welcome</h3>
+    </div>
+    <div class="card-badges"><span class="badge badge-confirmed">✅ Confirmado</span><span class="badge">Ja confirmado</span></div>
+    <div class="card-meta">Sáb 18 Jul · 19:00 · Deja Vu Park, Campo Grande</div>
+    <div class="card-desc">Ja confirmado no calendario do Rafa (Luma). Encontro de troca de idiomas, junto ao quiosque Deja Vu no Campo Grande - todas as linguas bem-vindas.</div>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Language%20Exchange%20-%20ALL%20Languages%20Welcome%20%E2%80%94%20S%C3%A1b%2018%20Jul%20%40%20Deja%20Vu%20Park%2C%20Campo%20Grande" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Language%20Exchange%20-%20ALL%20Languages%20Welcome&body=Language%20Exchange%20-%20ALL%20Languages%20Welcome%0AS%C3%A1b%2018%20Jul%0ADeja%20Vu%20Park%2C%20Campo%20Grande%0AJa%20confirmado%20no%20calendario%20do%20Rafa%20%28Luma%29.%20Encontro%20de%20troca%20de%20idiomas%2C%20junto%20ao%20quiosque%20Deja%20Vu%20no%20Campo%20Grande%20-%20todas%20as%20linguas%20bem-vindas.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-tv" data-categoria="tv" style="--stripe:#2563EB">
+  <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Mundial 2026 - Final</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Destaque</span><span class="badge">Sport TV / RTP1</span></div>
+    <div class="card-meta">Dom 19 Jul · 16:00</div>
+    <div class="card-desc">Grande final do Mundial 2026, MetLife Stadium (East Rutherford). Bola a rolar as 15h ET / 16h em Portugal continental.</div>
+    <div class="card-with">👥 Com: 🏠 Solo/amigos</div>
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%202026%20-%20Final%20%E2%80%94%20Dom%2019%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%202026%20-%20Final&body=Mundial%202026%20-%20Final%0ADom%2019%20Jul%0AGrande%20final%20do%20Mundial%202026%2C%20MetLife%20Stadium%20%28East%20Rutherford%29.%20Bola%20a%20rolar%20as%2015h%20ET%20/%2016h%20em%20Portugal%20continental.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card bg-escape" data-categoria="escape" style="--stripe:#16A34A">
+  <style>.card[data-categoria="escape"]::before{background:#16A34A;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Sintra - Pena Palace + Restaurante do Abano</h3>
+    </div>
+    <div class="card-badges"></div>
+    <div class="card-meta">Ter 21 Jul (day off)</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Combinacao de dia inteiro: desde Abril 2026 o Pena Palace tem novos percursos tematicos e visitas encenadas (menos &#x27;correr salas&#x27;, mais descobrir historias sobre a familia real) - depois almoco no Restaurante do Abano (recomendacao da Dra. Isabel). Coincide c…</summary><div class="card-desc-full">Combinacao de dia inteiro: desde Abril 2026 o Pena Palace tem novos percursos tematicos e visitas encenadas (menos &#x27;correr salas&#x27;, mais descobrir historias sobre a familia real) - depois almoco no Restaurante do Abano (recomendacao da Dra. Isabel). Coincide com o unico day off do trabalho no periodo.</div></details>
+    <div class="card-with">👥 Com: 👑 Com Vanessa</div>
+    <div class="card-logistica">🚗 25 min via A37 | ⚪ Parking: gratuito, chegar cedo</div>
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano%20%E2%80%94%20Ter%2021%20Jul%20%28day%20off%29" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano&body=Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano%0ATer%2021%20Jul%20%28day%20off%29%0ACombinacao%20de%20dia%20inteiro%3A%20desde%20Abril%202026%20o%20Pena%20Palace%20tem%20novos%20percursos%20tematicos%20e%20visitas%20encenadas%20%28menos%20%27correr%20salas%27%2C%20mais%20descobrir%20historias%20sobre%20a%20familia%20real%29%20-%20depois%20almoco%20no%20Restaurante%20do%20Abano%20%28recomendacao%20da%20Dra.%20Isabel%29.%20Coincide%20com%20o%20unico%20day%20off%20do%20trabalho%20no%20periodo.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card " data-categoria="cinema_outdoor" style="--stripe:#EA580C">
+  <style>.card[data-categoria="cinema_outdoor"]::before{background:#EA580C;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Atonement</h3>
+    </div>
+    <div class="card-badges"><span class="badge">Destaque</span></div>
+    <div class="card-meta">Sáb 25 Jul · Black Cat - Igreja da Graca</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Sem sinopse disponivel na fonte (excecao conhecida do Black Cat - o proprio local nao a disponibiliza). Adaptacao do romance de Ian McEwan: Briony, uma jovem de 13 anos, acusa erradamente Robbie de um crime que ele nao cometeu, e a mentira acompanha as duas f…</summary><div class="card-desc-full">Sem sinopse disponivel na fonte (excecao conhecida do Black Cat - o proprio local nao a disponibiliza). Adaptacao do romance de Ian McEwan: Briony, uma jovem de 13 anos, acusa erradamente Robbie de um crime que ele nao cometeu, e a mentira acompanha as duas familias ao longo da Segunda Guerra Mundial. Drama britanico de epoca com James McAvoy e Keira Knightley, realizacao de Joe Wright - o melhor match do periodo com o perfil.</div></details>
+    
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Atonement%20%E2%80%94%20S%C3%A1b%2025%20Jul%20%40%20Black%20Cat%20-%20Igreja%20da%20Graca" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Atonement&body=Atonement%0AS%C3%A1b%2025%20Jul%0ABlack%20Cat%20-%20Igreja%20da%20Graca%0ASem%20sinopse%20disponivel%20na%20fonte%20%28excecao%20conhecida%20do%20Black%20Cat%20-%20o%20proprio%20local%20nao%20a%20disponibiliza%29.%20Adaptacao%20do%20romance%20de%20Ian%20McEwan%3A%20Briony%2C%20uma%20jovem%20de%2013%20anos%2C%20acusa%20erradamente%20Robbie%20de%20um%20crime%20que%20ele%20nao%20cometeu%2C%20e%20a%20mentira%20acompanha%20as%20duas%20familias%20ao%20longo%20da%20Segunda%20Guerra%20Mundial.%20Drama%20britanico%20de%20epoca%20com%20James%20McAvoy%20e%20Keira%20Knightley%2C%20realizacao%20de%20Joe%20Wright%20-%20o%20melhor%20match%20do%20periodo%20com%20o%20perfil.">📧 Email</a>
+    </div>
+  </div>
+</div>
+
+  </div>
+</div>
+
 
 
 <div class="secao" data-secao="tv">
@@ -171,17 +473,17 @@
   <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
   <div class="card-inner">
     <div class="card-top">
-      <h3 class="card-titulo">Mundial 2026 - Quartas de final (dia 3)</h3>
+      <h3 class="card-titulo">Mundial 2026 - Quartas de final: Noruega vs Inglaterra</h3>
     </div>
-    <div class="card-badges"><span class="badge">Torneio em curso</span><span class="badge">Sport TV</span></div>
-    <div class="card-meta">Sáb 11 Jul</div>
-    <div class="card-desc">Ultimo jogo dos quartos de final do Mundial 2026 (Portugal e Brasil ja eliminados, mas o perfil acompanha o torneio por inteiro). Confirmar horario e emparelhamento no dia.</div>
+    <div class="card-badges"><span class="badge">Torneio em curso</span><span class="badge">Sport TV / LiveMode TV</span></div>
+    <div class="card-meta">Sáb 11 Jul · 22:00</div>
+    <div class="card-desc">Ultimo jogo dos quartos de final do Mundial 2026. Portugal e Brasil ja eliminados, mas o perfil acompanha o torneio por inteiro. Vencedor segue para as meias-finais de 14/15 Jul.</div>
     <div class="card-with">👥 Com: 🏠 Solo/amigos</div>
     
     <div class="card-acoes">
       
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%202026%20-%20Quartas%20de%20final%20%28dia%203%29%20%E2%80%94%20S%C3%A1b%2011%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%202026%20-%20Quartas%20de%20final%20%28dia%203%29&body=Mundial%202026%20-%20Quartas%20de%20final%20%28dia%203%29%0AS%C3%A1b%2011%20Jul%0AUltimo%20jogo%20dos%20quartos%20de%20final%20do%20Mundial%202026%20%28Portugal%20e%20Brasil%20ja%20eliminados%2C%20mas%20o%20perfil%20acompanha%20o%20torneio%20por%20inteiro%29.%20Confirmar%20horario%20e%20emparelhamento%20no%20dia.">📧 Email</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%202026%20-%20Quartas%20de%20final%3A%20Noruega%20vs%20Inglaterra%20%E2%80%94%20S%C3%A1b%2011%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%202026%20-%20Quartas%20de%20final%3A%20Noruega%20vs%20Inglaterra&body=Mundial%202026%20-%20Quartas%20de%20final%3A%20Noruega%20vs%20Inglaterra%0AS%C3%A1b%2011%20Jul%0AUltimo%20jogo%20dos%20quartos%20de%20final%20do%20Mundial%202026.%20Portugal%20e%20Brasil%20ja%20eliminados%2C%20mas%20o%20perfil%20acompanha%20o%20torneio%20por%20inteiro.%20Vencedor%20segue%20para%20as%20meias-finais%20de%2014/15%20Jul.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -211,17 +513,17 @@
   <style>.card[data-categoria="tv"]::before{background:#2563EB;}</style>
   <div class="card-inner">
     <div class="card-top">
-      <h3 class="card-titulo">Mundial 2026 - Meias-finais</h3>
+      <h3 class="card-titulo">Mundial 2026 - Meia-final (Jogo 102)</h3>
     </div>
     <div class="card-badges"><span class="badge">Torneio em curso</span><span class="badge">Sport TV</span></div>
-    <div class="card-meta">Ter 14 Jul</div>
-    <div class="card-desc">Meias-finais do Mundial 2026. Confirmar selecoes apuradas e horario exacto no dia - torneio acompanha-se por inteiro mesmo sem PT/BR em prova.</div>
+    <div class="card-meta">Ter 14 Jul · 20:00</div>
+    <div class="card-desc">Primeira meia-final do Mundial 2026, em Atlanta (Jogo 102) - vencedor do confronto dos quartos entre os apurados dos jogos 99 e 100. Confirmar selecoes exactas no dia.</div>
     <div class="card-with">👥 Com: 🏠 Solo/amigos</div>
     
     <div class="card-acoes">
       
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%202026%20-%20Meias-finais%20%E2%80%94%20Ter%2014%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%202026%20-%20Meias-finais&body=Mundial%202026%20-%20Meias-finais%0ATer%2014%20Jul%0AMeias-finais%20do%20Mundial%202026.%20Confirmar%20selecoes%20apuradas%20e%20horario%20exacto%20no%20dia%20-%20torneio%20acompanha-se%20por%20inteiro%20mesmo%20sem%20PT/BR%20em%20prova.">📧 Email</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Mundial%202026%20-%20Meia-final%20%28Jogo%20102%29%20%E2%80%94%20Ter%2014%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Mundial%202026%20-%20Meia-final%20%28Jogo%20102%29&body=Mundial%202026%20-%20Meia-final%20%28Jogo%20102%29%0ATer%2014%20Jul%0APrimeira%20meia-final%20do%20Mundial%202026%2C%20em%20Atlanta%20%28Jogo%20102%29%20-%20vencedor%20do%20confronto%20dos%20quartos%20entre%20os%20apurados%20dos%20jogos%2099%20e%20100.%20Confirmar%20selecoes%20exactas%20no%20dia.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -263,13 +565,13 @@
     </div>
     <div class="card-badges"><span class="badge">Netflix</span></div>
     <div class="card-meta">desde 1 Jul</div>
-    <div class="card-desc">Terceiro filme da saga, producao britanica de misterio - encaixa no perfil de dramas historicos/britanicos.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Enola esta em Malta prestes a casar com Tewkesbury quando o desaparecimento de Sherlock a atira para um caso mais complicado e perigoso do que qualquer outro que ja enfrentou. Obriga-a a largar o vestido de noiva e voltar a pegar na lupa: perseguicoes pelos m…</summary><div class="card-desc-full">Enola esta em Malta prestes a casar com Tewkesbury quando o desaparecimento de Sherlock a atira para um caso mais complicado e perigoso do que qualquer outro que ja enfrentou. Obriga-a a largar o vestido de noiva e voltar a pegar na lupa: perseguicoes pelos mercados de Malta, mortes suspeitas na sombra e um segredo antigo por vingar. Millie Bobby Brown repete o papel; realizacao de Philip Barantini (primeiro filme da saga sem Harry Bradbeer). 68% no Rotten Tomatoes.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Enola%20Holmes%203%20%E2%80%94%20desde%201%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Enola%20Holmes%203&body=Enola%20Holmes%203%0Adesde%201%20Jul%0ATerceiro%20filme%20da%20saga%2C%20producao%20britanica%20de%20misterio%20-%20encaixa%20no%20perfil%20de%20dramas%20historicos/britanicos.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Enola%20Holmes%203&body=Enola%20Holmes%203%0Adesde%201%20Jul%0AEnola%20esta%20em%20Malta%20prestes%20a%20casar%20com%20Tewkesbury%20quando%20o%20desaparecimento%20de%20Sherlock%20a%20atira%20para%20um%20caso%20mais%20complicado%20e%20perigoso%20do%20que%20qualquer%20outro%20que%20ja%20enfrentou.%20Obriga-a%20a%20largar%20o%20vestido%20de%20noiva%20e%20voltar%20a%20pegar%20na%20lupa%3A%20perseguicoes%20pelos%20mercados%20de%20Malta%2C%20mortes%20suspeitas%20na%20sombra%20e%20um%20segredo%20antigo%20por%20vingar.%20Millie%20Bobby%20Brown%20repete%20o%20papel%3B%20realizacao%20de%20Philip%20Barantini%20%28primeiro%20filme%20da%20saga%20sem%20Harry%20Bradbeer%29.%2068%25%20no%20Rotten%20Tomatoes.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -283,13 +585,13 @@
     </div>
     <div class="card-badges"><span class="badge">HBO Max</span></div>
     <div class="card-meta">desde 2 Jul</div>
-    <div class="card-desc">Filme historico portugues sobre a figura central do 25 de Abril de 1974 - forte match com o perfil (historia de Portugal, biografico).</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Docudrama sobre Salgueiro Maia, o Capitao de Abril considerado o simbolo mais puro da Revolucao dos Cravos (25 Abril 1974). Acompanha a infancia e adolescencia, a Guerra Colonial, a preparacao da revolucao e os anos seguintes a conquista da democracia, numa a…</summary><div class="card-desc-full">Docudrama sobre Salgueiro Maia, o Capitao de Abril considerado o simbolo mais puro da Revolucao dos Cravos (25 Abril 1974). Acompanha a infancia e adolescencia, a Guerra Colonial, a preparacao da revolucao e os anos seguintes a conquista da democracia, numa abordagem intimista baseada em factos e relatos pessoais. Realizacao de Sergio Graciano, com Tomas Alves no papel principal.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Salgueiro%20Maia%20-%20O%20Implicado%20%E2%80%94%20desde%202%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Salgueiro%20Maia%20-%20O%20Implicado&body=Salgueiro%20Maia%20-%20O%20Implicado%0Adesde%202%20Jul%0AFilme%20historico%20portugues%20sobre%20a%20figura%20central%20do%2025%20de%20Abril%20de%201974%20-%20forte%20match%20com%20o%20perfil%20%28historia%20de%20Portugal%2C%20biografico%29.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Salgueiro%20Maia%20-%20O%20Implicado&body=Salgueiro%20Maia%20-%20O%20Implicado%0Adesde%202%20Jul%0ADocudrama%20sobre%20Salgueiro%20Maia%2C%20o%20Capitao%20de%20Abril%20considerado%20o%20simbolo%20mais%20puro%20da%20Revolucao%20dos%20Cravos%20%2825%20Abril%201974%29.%20Acompanha%20a%20infancia%20e%20adolescencia%2C%20a%20Guerra%20Colonial%2C%20a%20preparacao%20da%20revolucao%20e%20os%20anos%20seguintes%20a%20conquista%20da%20democracia%2C%20numa%20abordagem%20intimista%20baseada%20em%20factos%20e%20relatos%20pessoais.%20Realizacao%20de%20Sergio%20Graciano%2C%20com%20Tomas%20Alves%20no%20papel%20principal.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -303,13 +605,13 @@
     </div>
     <div class="card-badges"><span class="badge">Netflix</span></div>
     <div class="card-meta">desde 8 Jul</div>
-    <div class="card-desc">Thriller, estreia recente no catalogo portugues.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Thriller frances (2025) que acompanha Jada, mae solo que engravidou por doacao de embriao apos anos de tentativas. A rotina tranquila dura pouco: o filho e diagnosticado com leucemia e ela precisa de um dador de medula compativel. Entre obstaculos medicos e b…</summary><div class="card-desc-full">Thriller frances (2025) que acompanha Jada, mae solo que engravidou por doacao de embriao apos anos de tentativas. A rotina tranquila dura pouco: o filho e diagnosticado com leucemia e ela precisa de um dador de medula compativel. Entre obstaculos medicos e burocraticos, o desespero empurra-a para o mundo do crime. Nawell Madani protagoniza, co-realiza e assina o guiao. (Nao confundir com o filme brasileiro homonimo de 2019 sobre Edir Macedo.)</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Nada%20a%20Perder%20%E2%80%94%20desde%208%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Nada%20a%20Perder&body=Nada%20a%20Perder%0Adesde%208%20Jul%0AThriller%2C%20estreia%20recente%20no%20catalogo%20portugues.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Nada%20a%20Perder&body=Nada%20a%20Perder%0Adesde%208%20Jul%0AThriller%20frances%20%282025%29%20que%20acompanha%20Jada%2C%20mae%20solo%20que%20engravidou%20por%20doacao%20de%20embriao%20apos%20anos%20de%20tentativas.%20A%20rotina%20tranquila%20dura%20pouco%3A%20o%20filho%20e%20diagnosticado%20com%20leucemia%20e%20ela%20precisa%20de%20um%20dador%20de%20medula%20compativel.%20Entre%20obstaculos%20medicos%20e%20burocraticos%2C%20o%20desespero%20empurra-a%20para%20o%20mundo%20do%20crime.%20Nawell%20Madani%20protagoniza%2C%20co-realiza%20e%20assina%20o%20guiao.%20%28Nao%20confundir%20com%20o%20filme%20brasileiro%20homonimo%20de%202019%20sobre%20Edir%20Macedo.%29">📧 Email</a>
     </div>
   </div>
 </div>
@@ -323,13 +625,13 @@
     </div>
     <div class="card-badges"><span class="badge">Netflix</span></div>
     <div class="card-meta">desde 10 Jul</div>
-    <div class="card-desc">Documentario sobre eventos reais - genero historico/factual que bate no perfil.</div>
+    <div class="card-desc">Documentario sobre o naufragio do cruzeiro Costa Concordia junto a ilha do Giglio em 2012, com 32 mortos - um dos maiores desastres maritimos europeus recentes. Genero historico/factual que bate no perfil.</div>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Naufragio%3A%20O%20Pesadelo%20do%20Costa%20Concordia%20%E2%80%94%20desde%2010%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Naufragio%3A%20O%20Pesadelo%20do%20Costa%20Concordia&body=Naufragio%3A%20O%20Pesadelo%20do%20Costa%20Concordia%0Adesde%2010%20Jul%0ADocumentario%20sobre%20eventos%20reais%20-%20genero%20historico/factual%20que%20bate%20no%20perfil.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Naufragio%3A%20O%20Pesadelo%20do%20Costa%20Concordia&body=Naufragio%3A%20O%20Pesadelo%20do%20Costa%20Concordia%0Adesde%2010%20Jul%0ADocumentario%20sobre%20o%20naufragio%20do%20cruzeiro%20Costa%20Concordia%20junto%20a%20ilha%20do%20Giglio%20em%202012%2C%20com%2032%20mortos%20-%20um%20dos%20maiores%20desastres%20maritimos%20europeus%20recentes.%20Genero%20historico/factual%20que%20bate%20no%20perfil.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -343,13 +645,13 @@
     </div>
     <div class="card-badges"><span class="badge">Netflix</span></div>
     <div class="card-meta">desde 10 Jul</div>
-    <div class="card-desc">Documentario historico sobre o sequestro que marcou Espanha em 1997.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Documentario em 4 partes sobre as 48 horas do sequestro e assassinato de Miguel Angel Blanco pela ETA em 1997, que mobilizou milhoes de espanhois e marcou a luta contra o terrorismo basco. Mais de 30 testemunhos, incluindo o entao Presidente Jose Maria Aznar,…</summary><div class="card-desc-full">Documentario em 4 partes sobre as 48 horas do sequestro e assassinato de Miguel Angel Blanco pela ETA em 1997, que mobilizou milhoes de espanhois e marcou a luta contra o terrorismo basco. Mais de 30 testemunhos, incluindo o entao Presidente Jose Maria Aznar, o Ministro do Interior Jaime Mayor Oreja, a irma da vitima Maria del Mar Blanco, e o Rei Felipe VI (entao Principe das Astúrias, com 29 anos). Realizado por Jon Sistiaga e Juanjo Lopez.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha%20%E2%80%94%20desde%2010%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha&body=Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha%0Adesde%2010%20Jul%0ADocumentario%20historico%20sobre%20o%20sequestro%20que%20marcou%20Espanha%20em%201997.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha&body=Miguel%20Angel%20Blanco%3A%20As%2048%20Horas%20Que%20Mudaram%20Espanha%0Adesde%2010%20Jul%0ADocumentario%20em%204%20partes%20sobre%20as%2048%20horas%20do%20sequestro%20e%20assassinato%20de%20Miguel%20Angel%20Blanco%20pela%20ETA%20em%201997%2C%20que%20mobilizou%20milhoes%20de%20espanhois%20e%20marcou%20a%20luta%20contra%20o%20terrorismo%20basco.%20Mais%20de%2030%20testemunhos%2C%20incluindo%20o%20entao%20Presidente%20Jose%20Maria%20Aznar%2C%20o%20Ministro%20do%20Interior%20Jaime%20Mayor%20Oreja%2C%20a%20irma%20da%20vitima%20Maria%20del%20Mar%20Blanco%2C%20e%20o%20Rei%20Felipe%20VI%20%28entao%20Principe%20das%20Ast%C3%BArias%2C%20com%2029%20anos%29.%20Realizado%20por%20Jon%20Sistiaga%20e%20Juanjo%20Lopez.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -363,13 +665,13 @@
     </div>
     <div class="card-badges"><span class="badge">Netflix</span></div>
     <div class="card-meta">desde 16 Jul</div>
-    <div class="card-desc">Drama romantico, chega ao catalogo a 16 de Julho.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Chega ao catalogo a 16 Jul. Pesquisa devolveu resultado ambiguo entre dois titulos parecidos no catalogo Netflix - &#x27;Me Before You&#x27; (2016, romance sobre uma cuidadora e um homem tetraplegico) e um titulo mais recente &#x27;Me Before Me&#x27; (2026, sobre uma estudante c…</summary><div class="card-desc-full">Chega ao catalogo a 16 Jul. Pesquisa devolveu resultado ambiguo entre dois titulos parecidos no catalogo Netflix - &#x27;Me Before You&#x27; (2016, romance sobre uma cuidadora e um homem tetraplegico) e um titulo mais recente &#x27;Me Before Me&#x27; (2026, sobre uma estudante com ataques de panico). Confirmar na app antes de decidir - nao inventamos qual dos dois e.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Eu%2C%20Antes%20de%20Mim%20%E2%80%94%20desde%2016%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Eu%2C%20Antes%20de%20Mim&body=Eu%2C%20Antes%20de%20Mim%0Adesde%2016%20Jul%0ADrama%20romantico%2C%20chega%20ao%20catalogo%20a%2016%20de%20Julho.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Eu%2C%20Antes%20de%20Mim&body=Eu%2C%20Antes%20de%20Mim%0Adesde%2016%20Jul%0AChega%20ao%20catalogo%20a%2016%20Jul.%20Pesquisa%20devolveu%20resultado%20ambiguo%20entre%20dois%20titulos%20parecidos%20no%20catalogo%20Netflix%20-%20%27Me%20Before%20You%27%20%282016%2C%20romance%20sobre%20uma%20cuidadora%20e%20um%20homem%20tetraplegico%29%20e%20um%20titulo%20mais%20recente%20%27Me%20Before%20Me%27%20%282026%2C%20sobre%20uma%20estudante%20com%20ataques%20de%20panico%29.%20Confirmar%20na%20app%20antes%20de%20decidir%20-%20nao%20inventamos%20qual%20dos%20dois%20e.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -391,13 +693,13 @@
     </div>
     <div class="card-badges"><span class="badge">⭐ M/12 (a confirmar na sala)</span></div>
     <div class="card-meta">em cartaz · NOS Colombo / UCI El Corte Ingles</div>
-    <div class="card-desc">Drama/thriller belico-historico, producao GB/EUA/FRA sobre o Dia D. Forte match com o perfil (drama historico, producao britanica).</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Nos tres dias anteriores ao desembarque dos aliados na Normandia, houve uma previsao que, caso tivesse falhado, teria alterado o rumo da Segunda Grande Guerra. Responsavel pela avaliacao meteorologica, o capitao James Martin Stagg deparou-se com o aproximar d…</summary><div class="card-desc-full">Nos tres dias anteriores ao desembarque dos aliados na Normandia, houve uma previsao que, caso tivesse falhado, teria alterado o rumo da Segunda Grande Guerra. Responsavel pela avaliacao meteorologica, o capitao James Martin Stagg deparou-se com o aproximar de duas grandes tempestades para 5 de Junho de 1944, a data prevista. Apos avaliar relatorios contraditorios, Stagg previu uma breve janela com melhoria no tempo, e o general Eisenhower tomou a arriscada decisao de avancar para o dia seguinte. A maior invasao anfibia da Historia (156 mil soldados, sete mil navios, 50 mil veiculos, 11 mil avioes) ficou em suspenso durante essas horas de incerteza. Realizado por Anthony Maras (&#x27;Hotel Mumbai&#x27;). Elenco: Andrew Scott, Brendan Fraser, Kerry Condon, Chris Messina, Damian Lewis.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Dia%20D%3A%20Sob%20Pressao%20%E2%80%94%20em%20cartaz%20%40%20NOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Dia%20D%3A%20Sob%20Pressao&body=Dia%20D%3A%20Sob%20Pressao%0Aem%20cartaz%0ANOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles%0ADrama/thriller%20belico-historico%2C%20producao%20GB/EUA/FRA%20sobre%20o%20Dia%20D.%20Forte%20match%20com%20o%20perfil%20%28drama%20historico%2C%20producao%20britanica%29.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Dia%20D%3A%20Sob%20Pressao&body=Dia%20D%3A%20Sob%20Pressao%0Aem%20cartaz%0ANOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles%0ANos%20tres%20dias%20anteriores%20ao%20desembarque%20dos%20aliados%20na%20Normandia%2C%20houve%20uma%20previsao%20que%2C%20caso%20tivesse%20falhado%2C%20teria%20alterado%20o%20rumo%20da%20Segunda%20Grande%20Guerra.%20Responsavel%20pela%20avaliacao%20meteorologica%2C%20o%20capitao%20James%20Martin%20Stagg%20deparou-se%20com%20o%20aproximar%20de%20duas%20grandes%20tempestades%20para%205%20de%20Junho%20de%201944%2C%20a%20data%20prevista.%20Apos%20avaliar%20relatorios%20contraditorios%2C%20Stagg%20previu%20uma%20breve%20janela%20com%20melhoria%20no%20tempo%2C%20e%20o%20general%20Eisenhower%20tomou%20a%20arriscada%20decisao%20de%20avancar%20para%20o%20dia%20seguinte.%20A%20maior%20invasao%20anfibia%20da%20Historia%20%28156%20mil%20soldados%2C%20sete%20mil%20navios%2C%2050%20mil%20veiculos%2C%2011%20mil%20avioes%29%20ficou%20em%20suspenso%20durante%20essas%20horas%20de%20incerteza.%20Realizado%20por%20Anthony%20Maras%20%28%27Hotel%20Mumbai%27%29.%20Elenco%3A%20Andrew%20Scott%2C%20Brendan%20Fraser%2C%20Kerry%20Condon%2C%20Chris%20Messina%2C%20Damian%20Lewis.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -411,13 +713,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
-    <div class="card-desc">Biografia/accao sobre o primeiro presidente dos EUA.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Muitos anos antes de se tornar o primeiro Presidente dos EUA, o jovem George Washington lutou como soldado na Guerra Franco-Indigena (1754-1763), experiencia que moldou o seu caracter e chamou a atencao dos seus superiores. Com a eclosao da Guerra da Independ…</summary><div class="card-desc-full">Muitos anos antes de se tornar o primeiro Presidente dos EUA, o jovem George Washington lutou como soldado na Guerra Franco-Indigena (1754-1763), experiencia que moldou o seu caracter e chamou a atencao dos seus superiores. Com a eclosao da Guerra da Independencia Americana, foi nomeado comandante-chefe do Exercito Continental, levando as forcas coloniais a vitoria contra a Gra-Bretanha. O filme centra-se nos anos de juventude de Washington e no percurso que o conduziu a lideranca da Revolucao. William Franklyn-Miller no papel principal; elenco inclui Mary-Louise Parker, Ben Kingsley, Andy Serkis e Kelsey Grammer. Realizacao de Jon Erwin.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=George%20Washington%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20George%20Washington&body=George%20Washington%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ABiografia/accao%20sobre%20o%20primeiro%20presidente%20dos%20EUA.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20George%20Washington&body=George%20Washington%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0AMuitos%20anos%20antes%20de%20se%20tornar%20o%20primeiro%20Presidente%20dos%20EUA%2C%20o%20jovem%20George%20Washington%20lutou%20como%20soldado%20na%20Guerra%20Franco-Indigena%20%281754-1763%29%2C%20experiencia%20que%20moldou%20o%20seu%20caracter%20e%20chamou%20a%20atencao%20dos%20seus%20superiores.%20Com%20a%20eclosao%20da%20Guerra%20da%20Independencia%20Americana%2C%20foi%20nomeado%20comandante-chefe%20do%20Exercito%20Continental%2C%20levando%20as%20forcas%20coloniais%20a%20vitoria%20contra%20a%20Gra-Bretanha.%20O%20filme%20centra-se%20nos%20anos%20de%20juventude%20de%20Washington%20e%20no%20percurso%20que%20o%20conduziu%20a%20lideranca%20da%20Revolucao.%20William%20Franklyn-Miller%20no%20papel%20principal%3B%20elenco%20inclui%20Mary-Louise%20Parker%2C%20Ben%20Kingsley%2C%20Andy%20Serkis%20e%20Kelsey%20Grammer.%20Realizacao%20de%20Jon%20Erwin.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -431,13 +733,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
-    <div class="card-desc">Biopic (EUA/GB) - genero favorito do perfil.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Biopic sobre Michael Jackson, com o sobrinho do artista, Jaafar Jackson, no papel principal. Acompanha o percurso desde a infancia com os Jackson 5 ate a consagracao a solo nos anos 80 (Thriller, Bad, Off the Wall), passando pelas contradicoes entre o sucesso…</summary><div class="card-desc-full">Biopic sobre Michael Jackson, com o sobrinho do artista, Jaafar Jackson, no papel principal. Acompanha o percurso desde a infancia com os Jackson 5 ate a consagracao a solo nos anos 80 (Thriller, Bad, Off the Wall), passando pelas contradicoes entre o sucesso global e a vida pessoal mais reservada. Realizacao de Antoine Fuqua, guiao de John Logan. Elenco: Colman Domingo (Joe Jackson), Nia Long (Katherine Jackson), Miles Teller, Larenz Tate.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Michael%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Michael&body=Michael%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ABiopic%20%28EUA/GB%29%20-%20genero%20favorito%20do%20perfil.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Michael&body=Michael%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ABiopic%20sobre%20Michael%20Jackson%2C%20com%20o%20sobrinho%20do%20artista%2C%20Jaafar%20Jackson%2C%20no%20papel%20principal.%20Acompanha%20o%20percurso%20desde%20a%20infancia%20com%20os%20Jackson%205%20ate%20a%20consagracao%20a%20solo%20nos%20anos%2080%20%28Thriller%2C%20Bad%2C%20Off%20the%20Wall%29%2C%20passando%20pelas%20contradicoes%20entre%20o%20sucesso%20global%20e%20a%20vida%20pessoal%20mais%20reservada.%20Realizacao%20de%20Antoine%20Fuqua%2C%20guiao%20de%20John%20Logan.%20Elenco%3A%20Colman%20Domingo%20%28Joe%20Jackson%29%2C%20Nia%20Long%20%28Katherine%20Jackson%29%2C%20Miles%20Teller%2C%20Larenz%20Tate.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -451,13 +753,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
-    <div class="card-desc">Drama europeu (Turquia/Alemanha/Polonia/Chequia/Franca).</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Filme biografico sobre Franz Kafka (1883-1924), autor de &#x27;A Metamorfose&#x27;, &#x27;O Processo&#x27; e &#x27;O Castelo&#x27;, que explorou temas como a alienacao, a culpa e a burocracia. Acompanha o escritor desde a infancia ate aos ultimos dias de vida, percorrendo a dificil relaca…</summary><div class="card-desc-full">Filme biografico sobre Franz Kafka (1883-1924), autor de &#x27;A Metamorfose&#x27;, &#x27;O Processo&#x27; e &#x27;O Castelo&#x27;, que explorou temas como a alienacao, a culpa e a burocracia. Acompanha o escritor desde a infancia ate aos ultimos dias de vida, percorrendo a dificil relacao com o pai autoritario, os anos como empregado numa seguradora, a relacao com o judaismo e a resistencia a intimidade nas suas relacoes romanticas. Realizacao de Agnieszka Holland (&#x27;Mr. Jones&#x27;, &#x27;Charlatao&#x27;). Elenco: Idan Weiss, Peter Kurth, Katharina Stark.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Franz%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Franz&body=Franz%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ADrama%20europeu%20%28Turquia/Alemanha/Polonia/Chequia/Franca%29.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Franz&body=Franz%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0AFilme%20biografico%20sobre%20Franz%20Kafka%20%281883-1924%29%2C%20autor%20de%20%27A%20Metamorfose%27%2C%20%27O%20Processo%27%20e%20%27O%20Castelo%27%2C%20que%20explorou%20temas%20como%20a%20alienacao%2C%20a%20culpa%20e%20a%20burocracia.%20Acompanha%20o%20escritor%20desde%20a%20infancia%20ate%20aos%20ultimos%20dias%20de%20vida%2C%20percorrendo%20a%20dificil%20relacao%20com%20o%20pai%20autoritario%2C%20os%20anos%20como%20empregado%20numa%20seguradora%2C%20a%20relacao%20com%20o%20judaismo%20e%20a%20resistencia%20a%20intimidade%20nas%20suas%20relacoes%20romanticas.%20Realizacao%20de%20Agnieszka%20Holland%20%28%27Mr.%20Jones%27%2C%20%27Charlatao%27%29.%20Elenco%3A%20Idan%20Weiss%2C%20Peter%20Kurth%2C%20Katharina%20Stark.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -471,13 +773,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
-    <div class="card-desc">Thriller/drama (EUA/CAN).</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Niki White (Leo Woodall) sofre de hiperacusia, hipersensibilidade a sons que o obrigou a deixar de tocar piano - mas fez dele um afinador de pianos extraordinario. Quando o seu amigo e mentor Harry Horowitz (Dustin Hoffman) contrai uma divida por uma cirurgia…</summary><div class="card-desc-full">Niki White (Leo Woodall) sofre de hiperacusia, hipersensibilidade a sons que o obrigou a deixar de tocar piano - mas fez dele um afinador de pianos extraordinario. Quando o seu amigo e mentor Harry Horowitz (Dustin Hoffman) contrai uma divida por uma cirurgia de urgencia, Niki enveredar por uma carreira mais lucrativa: arrombar cofres para um bando de assaltantes. As coisas complicam-se quando tenta afastar-se. Drama policial de Daniel Roher (Oscar de melhor documentario por &#x27;Navalny&#x27;). Elenco: Havana Rose Liu, Lior Raz, Tovah Feldshuh, Jean Reno.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Tuner%20-%20Ouvido%20Absoluto%2C%20Mao%20Leve%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Tuner%20-%20Ouvido%20Absoluto%2C%20Mao%20Leve&body=Tuner%20-%20Ouvido%20Absoluto%2C%20Mao%20Leve%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0AThriller/drama%20%28EUA/CAN%29.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Tuner%20-%20Ouvido%20Absoluto%2C%20Mao%20Leve&body=Tuner%20-%20Ouvido%20Absoluto%2C%20Mao%20Leve%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ANiki%20White%20%28Leo%20Woodall%29%20sofre%20de%20hiperacusia%2C%20hipersensibilidade%20a%20sons%20que%20o%20obrigou%20a%20deixar%20de%20tocar%20piano%20-%20mas%20fez%20dele%20um%20afinador%20de%20pianos%20extraordinario.%20Quando%20o%20seu%20amigo%20e%20mentor%20Harry%20Horowitz%20%28Dustin%20Hoffman%29%20contrai%20uma%20divida%20por%20uma%20cirurgia%20de%20urgencia%2C%20Niki%20enveredar%20por%20uma%20carreira%20mais%20lucrativa%3A%20arrombar%20cofres%20para%20um%20bando%20de%20assaltantes.%20As%20coisas%20complicam-se%20quando%20tenta%20afastar-se.%20Drama%20policial%20de%20Daniel%20Roher%20%28Oscar%20de%20melhor%20documentario%20por%20%27Navalny%27%29.%20Elenco%3A%20Havana%20Rose%20Liu%2C%20Lior%20Raz%2C%20Tovah%20Feldshuh%2C%20Jean%20Reno.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -491,13 +793,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · UCI El Corte Ingles</div>
-    <div class="card-desc">Documentario britanico.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Documentario sobre Marianne Faithfull (1946-2025), uma das vozes mais singulares da musica britanica, com seis decadas de carreira e mais de 20 albuns. Parte de &#x27;Broken English&#x27; (1979), o disco do seu regresso apos anos de problemas pessoais, e cruza imagens…</summary><div class="card-desc-full">Documentario sobre Marianne Faithfull (1946-2025), uma das vozes mais singulares da musica britanica, com seis decadas de carreira e mais de 20 albuns. Parte de &#x27;Broken English&#x27; (1979), o disco do seu regresso apos anos de problemas pessoais, e cruza imagens de arquivo com testemunhos dela e de outros artistas (Tilda Swinton, George MacKay). Inclui a sua ultima interpretacao de &#x27;Misunderstanding&#x27;, acompanhada por Warren Ellis e Nick Cave. Realizacao de Iain Forsyth e Jane Pollard.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Broken%20English%20%E2%80%94%20em%20cartaz%20%40%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Broken%20English&body=Broken%20English%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ADocumentario%20britanico.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Broken%20English&body=Broken%20English%0Aem%20cartaz%0AUCI%20El%20Corte%20Ingles%0ADocumentario%20sobre%20Marianne%20Faithfull%20%281946-2025%29%2C%20uma%20das%20vozes%20mais%20singulares%20da%20musica%20britanica%2C%20com%20seis%20decadas%20de%20carreira%20e%20mais%20de%2020%20albuns.%20Parte%20de%20%27Broken%20English%27%20%281979%29%2C%20o%20disco%20do%20seu%20regresso%20apos%20anos%20de%20problemas%20pessoais%2C%20e%20cruza%20imagens%20de%20arquivo%20com%20testemunhos%20dela%20e%20de%20outros%20artistas%20%28Tilda%20Swinton%2C%20George%20MacKay%29.%20Inclui%20a%20sua%20ultima%20interpretacao%20de%20%27Misunderstanding%27%2C%20acompanhada%20por%20Warren%20Ellis%20e%20Nick%20Cave.%20Realizacao%20de%20Iain%20Forsyth%20e%20Jane%20Pollard.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -511,13 +813,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">em cartaz · NOS Colombo / UCI El Corte Ingles</div>
-    <div class="card-desc">Thriller de ficcao cientifica com base dramatica.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Um especialista em ciberseguranca torna-se delator e decide revelar ao mundo, contra forcas poderosas, que extraterrestres existem. Novo filme de Steven Spielberg, escrito por David Koepp (colaborador em &#x27;Parque Jurassico&#x27;, &#x27;Guerra dos Mundos&#x27;, &#x27;Indiana Jones…</summary><div class="card-desc-full">Um especialista em ciberseguranca torna-se delator e decide revelar ao mundo, contra forcas poderosas, que extraterrestres existem. Novo filme de Steven Spielberg, escrito por David Koepp (colaborador em &#x27;Parque Jurassico&#x27;, &#x27;Guerra dos Mundos&#x27;, &#x27;Indiana Jones e o Reino da Caveira de Cristal&#x27;). Regresso de Spielberg a ficcao cientifica de &#x27;Encontros Imediatos do Terceiro Grau&#x27; e &#x27;E.T.&#x27;, com Emily Blunt e Josh O&#x27;Connor, ao lado de Colin Firth, Eve Hewson, Colman Domingo e Wyatt Russell.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=O%20Dia%20da%20Revelacao%20%E2%80%94%20em%20cartaz%20%40%20NOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Dia%20da%20Revelacao&body=O%20Dia%20da%20Revelacao%0Aem%20cartaz%0ANOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles%0AThriller%20de%20ficcao%20cientifica%20com%20base%20dramatica.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20O%20Dia%20da%20Revelacao&body=O%20Dia%20da%20Revelacao%0Aem%20cartaz%0ANOS%20Colombo%20/%20UCI%20El%20Corte%20Ingles%0AUm%20especialista%20em%20ciberseguranca%20torna-se%20delator%20e%20decide%20revelar%20ao%20mundo%2C%20contra%20forcas%20poderosas%2C%20que%20extraterrestres%20existem.%20Novo%20filme%20de%20Steven%20Spielberg%2C%20escrito%20por%20David%20Koepp%20%28colaborador%20em%20%27Parque%20Jurassico%27%2C%20%27Guerra%20dos%20Mundos%27%2C%20%27Indiana%20Jones%20e%20o%20Reino%20da%20Caveira%20de%20Cristal%27%29.%20Regresso%20de%20Spielberg%20a%20ficcao%20cientifica%20de%20%27Encontros%20Imediatos%20do%20Terceiro%20Grau%27%20e%20%27E.T.%27%2C%20com%20Emily%20Blunt%20e%20Josh%20O%27Connor%2C%20ao%20lado%20de%20Colin%20Firth%2C%20Eve%20Hewson%2C%20Colman%20Domingo%20e%20Wyatt%20Russell.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -531,7 +833,7 @@
     </div>
     <div class="card-badges"><span class="badge">Fora do perfil</span></div>
     <div class="card-meta">em cartaz</div>
-    <div class="card-desc">Vaiana, Toy Story 5, Minimos e Monstros, Supergirl, Evil Dead Burn, Backrooms, Obsession, Perfeitos a Francesa, O Diabo Veste Prada 2, L&#x27;Aventura, Letras Roubadas, O Rei da Intern…</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Vaiana, Toy Story 5, Minimos e Monstros, Supergirl, Evil Dead Burn, Backrooms, Obsession, Perfeitos a Francesa, O Diabo Veste Prada 2, L&#x27;Aventura, Letras Roubadas, O Rei da Internet, Pelo Adam - listados para completude, fora do perfil de gosto (accao pura/co…</summary><div class="card-desc-full">Vaiana, Toy Story 5, Minimos e Monstros, Supergirl, Evil Dead Burn, Backrooms, Obsession, Perfeitos a Francesa, O Diabo Veste Prada 2, L&#x27;Aventura, Letras Roubadas, O Rei da Internet, Pelo Adam - listados para completude, fora do perfil de gosto (accao pura/comedia leve/animacao infantil/terror).</div></details>
     
     
     <div class="card-acoes">
@@ -579,7 +881,7 @@
     </div>
     <div class="card-badges"><span class="badge">Sem detalhe de titulos</span></div>
     <div class="card-meta">quase diario ate 21 Jul</div>
-    <div class="card-desc">Programacao activa confirmada via newsletter (Society Lisboa) com sessoes quase diarias no Principe Real Terrace e no Beato Riverside Rooftop ate 21 Jul. Site oficial e so-JS, nao…</div>
+    <div class="card-desc">Programacao activa confirmada via newsletter (Society Lisboa) com sessoes quase diarias no Principe Real Terrace e no Beato Riverside Rooftop ate 21 Jul. Site oficial e so-JS, nao foi possivel extrair titulos especificos - confirmar por bilhete/ligacao.</div>
     
     
     <div class="card-acoes">
@@ -739,13 +1041,13 @@
     </div>
     <div class="card-badges"><span class="badge">Destaque</span></div>
     <div class="card-meta">Sáb 25 Jul · Black Cat - Igreja da Graca</div>
-    <div class="card-desc">Sem sinopse disponivel na fonte. Drama britanico de guerra/epoca - o melhor match do periodo.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Sem sinopse disponivel na fonte (excecao conhecida do Black Cat - o proprio local nao a disponibiliza). Adaptacao do romance de Ian McEwan: Briony, uma jovem de 13 anos, acusa erradamente Robbie de um crime que ele nao cometeu, e a mentira acompanha as duas f…</summary><div class="card-desc-full">Sem sinopse disponivel na fonte (excecao conhecida do Black Cat - o proprio local nao a disponibiliza). Adaptacao do romance de Ian McEwan: Briony, uma jovem de 13 anos, acusa erradamente Robbie de um crime que ele nao cometeu, e a mentira acompanha as duas familias ao longo da Segunda Guerra Mundial. Drama britanico de epoca com James McAvoy e Keira Knightley, realizacao de Joe Wright - o melhor match do periodo com o perfil.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Atonement%20%E2%80%94%20S%C3%A1b%2025%20Jul%20%40%20Black%20Cat%20-%20Igreja%20da%20Graca" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Atonement&body=Atonement%0AS%C3%A1b%2025%20Jul%0ABlack%20Cat%20-%20Igreja%20da%20Graca%0ASem%20sinopse%20disponivel%20na%20fonte.%20Drama%20britanico%20de%20guerra/epoca%20-%20o%20melhor%20match%20do%20periodo.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Atonement&body=Atonement%0AS%C3%A1b%2025%20Jul%0ABlack%20Cat%20-%20Igreja%20da%20Graca%0ASem%20sinopse%20disponivel%20na%20fonte%20%28excecao%20conhecida%20do%20Black%20Cat%20-%20o%20proprio%20local%20nao%20a%20disponibiliza%29.%20Adaptacao%20do%20romance%20de%20Ian%20McEwan%3A%20Briony%2C%20uma%20jovem%20de%2013%20anos%2C%20acusa%20erradamente%20Robbie%20de%20um%20crime%20que%20ele%20nao%20cometeu%2C%20e%20a%20mentira%20acompanha%20as%20duas%20familias%20ao%20longo%20da%20Segunda%20Guerra%20Mundial.%20Drama%20britanico%20de%20epoca%20com%20James%20McAvoy%20e%20Keira%20Knightley%2C%20realizacao%20de%20Joe%20Wright%20-%20o%20melhor%20match%20do%20periodo%20com%20o%20perfil.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -757,8 +1059,7 @@
 
 <div class="secao" data-secao="meetup">
   <div class="secao-titulo">🤝 Meetups</div>
-  <div class="grid-cards">
-    
+  <details class="data-grupo" open><summary class="data-grupo-titulo">semanal <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -767,18 +1068,18 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">semanal · Belem</div>
-    <div class="card-desc">Voleibol de relva semanal do grupo Meetup Sport Lisbon, confirmado por e-mail de inscricao.</div>
+    <div class="card-desc">Voleibol de relva semanal do grupo Meetup Sport Lisbon, confirmado por e-mail de inscricao. Rede montada perto do McDonald&#x27;s; normalmente segue-se jantar e bebidas por perto. Contribuicao de 2 EUR sugerida.</div>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama%20%E2%80%94%20semanal%20%40%20Belem" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama&body=Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama%0Asemanal%0ABelem%0AVoleibol%20de%20relva%20semanal%20do%20grupo%20Meetup%20Sport%20Lisbon%2C%20confirmado%20por%20e-mail%20de%20inscricao.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama&body=Grass%20Volleyball%20at%20Jardim%20Vasco%20da%20Gama%0Asemanal%0ABelem%0AVoleibol%20de%20relva%20semanal%20do%20grupo%20Meetup%20Sport%20Lisbon%2C%20confirmado%20por%20e-mail%20de%20inscricao.%20Rede%20montada%20perto%20do%20McDonald%27s%3B%20normalmente%20segue-se%20jantar%20e%20bebidas%20por%20perto.%20Contribuicao%20de%202%20EUR%20sugerida.">📧 Email</a>
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Fins de semana <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -797,8 +1098,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Terças 18h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -817,8 +1118,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Terças e Quintas 21h-23h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -837,8 +1138,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Terças 20h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -857,8 +1158,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Quartas 18h30 <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -877,8 +1178,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Quartas 19h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -897,8 +1198,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Quartas 18h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -917,8 +1218,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Quintas 17h45 <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -937,8 +1238,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Quintas 19h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -957,8 +1258,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Sextas 18h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -977,8 +1278,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Sextas/Segundas 18h-19h30 <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -997,8 +1298,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Sextas 20h <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -1017,8 +1318,8 @@
     </div>
   </div>
 </div>
-
-
+</div></details>
+<details class="data-grupo" open><summary class="data-grupo-titulo">Sábados manha <span class="data-grupo-count">(1)</span></summary><div class="grid-cards">
 <div class="card " data-categoria="meetup" style="--stripe:#1A3D52">
   <style>.card[data-categoria="meetup"]::before{background:#1A3D52;}</style>
   <div class="card-inner">
@@ -1037,16 +1338,34 @@
     </div>
   </div>
 </div>
-
-  </div>
+</div></details>
 </div>
 
 
 
 <div class="secao" data-secao="culture">
   <div class="secao-titulo">🎭 Cultura</div>
-  <div class="grid-cards">
+  <div class="confirmados-bloco"><div class="confirmados-titulo">✅ Já confirmados</div><div class="grid-cards">
+<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
+  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">Language Exchange - ALL Languages Welcome</h3>
+    </div>
+    <div class="card-badges"><span class="badge badge-confirmed">✅ Confirmado</span><span class="badge">Ja confirmado</span></div>
+    <div class="card-meta">Sáb 18 Jul · 19:00 · Deja Vu Park, Campo Grande</div>
+    <div class="card-desc">Ja confirmado no calendario do Rafa (Luma). Encontro de troca de idiomas, junto ao quiosque Deja Vu no Campo Grande - todas as linguas bem-vindas.</div>
     
+    
+    <div class="card-acoes">
+      
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Language%20Exchange%20-%20ALL%20Languages%20Welcome%20%E2%80%94%20S%C3%A1b%2018%20Jul%20%40%20Deja%20Vu%20Park%2C%20Campo%20Grande" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Language%20Exchange%20-%20ALL%20Languages%20Welcome&body=Language%20Exchange%20-%20ALL%20Languages%20Welcome%0AS%C3%A1b%2018%20Jul%0ADeja%20Vu%20Park%2C%20Campo%20Grande%0AJa%20confirmado%20no%20calendario%20do%20Rafa%20%28Luma%29.%20Encontro%20de%20troca%20de%20idiomas%2C%20junto%20ao%20quiosque%20Deja%20Vu%20no%20Campo%20Grande%20-%20todas%20as%20linguas%20bem-vindas.">📧 Email</a>
+    </div>
+  </div>
+</div>
+</div></div>
+<div class="grid-cards">
 <div class="card " data-categoria="culture" style="--stripe:#7C3AED">
   <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
   <div class="card-inner">
@@ -1185,28 +1504,7 @@
     </div>
   </div>
 </div>
-
-
-<div class="card " data-categoria="culture" style="--stripe:#7C3AED">
-  <style>.card[data-categoria="culture"]::before{background:#7C3AED;}</style>
-  <div class="card-inner">
-    <div class="card-top">
-      <h3 class="card-titulo">Language Exchange - ALL Languages Welcome</h3>
-    </div>
-    <div class="card-badges"><span class="badge">Ja confirmado</span></div>
-    <div class="card-meta">Sáb 18 Jul · 19:00 · Deja Vu Park, Campo Grande</div>
-    <div class="card-desc">Ja confirmado no calendario do Rafa (Luma). Encontro de troca de idiomas.</div>
-    
-    
-    <div class="card-acoes">
-      
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=Language%20Exchange%20-%20ALL%20Languages%20Welcome%20%E2%80%94%20S%C3%A1b%2018%20Jul%20%40%20Deja%20Vu%20Park%2C%20Campo%20Grande" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Language%20Exchange%20-%20ALL%20Languages%20Welcome&body=Language%20Exchange%20-%20ALL%20Languages%20Welcome%0AS%C3%A1b%2018%20Jul%0ADeja%20Vu%20Park%2C%20Campo%20Grande%0AJa%20confirmado%20no%20calendario%20do%20Rafa%20%28Luma%29.%20Encontro%20de%20troca%20de%20idiomas.">📧 Email</a>
-    </div>
-  </div>
 </div>
-
-  </div>
 </div>
 
 
@@ -1222,14 +1520,14 @@
       <h3 class="card-titulo">A Cozinheira do Ditador</h3>
     </div>
     <div class="card-badges"></div>
-    <div class="card-meta">lancamento aguardado</div>
-    <div class="card-desc">Novo livro de Afonso Cruz - um dos lancamentos mais aguardados da ficcao portuguesa.</div>
+    <div class="card-meta">lancado Abril 2026, um dos mais aguardados</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Romance de Afonso Cruz, publicado pela Companhia das Letras em Abril 2026 - divertido e mordaz sobre a perversidade escondida onde menos se espera e o muito que se cozinha na sombra. Celebra a importancia da comida na mesa da Humanidade atraves de uma chef de…</summary><div class="card-desc-full">Romance de Afonso Cruz, publicado pela Companhia das Letras em Abril 2026 - divertido e mordaz sobre a perversidade escondida onde menos se espera e o muito que se cozinha na sombra. Celebra a importancia da comida na mesa da Humanidade atraves de uma chef de cozinha feita prisioneira por um ditador. Recheado de personagens improvaveis, com a audacia caracteristica do autor.</div></details>
     
     
     <div class="card-acoes">
       
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=A%20Cozinheira%20do%20Ditador%20%E2%80%94%20lancamento%20aguardado" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20A%20Cozinheira%20do%20Ditador&body=A%20Cozinheira%20do%20Ditador%0Alancamento%20aguardado%0ANovo%20livro%20de%20Afonso%20Cruz%20-%20um%20dos%20lancamentos%20mais%20aguardados%20da%20ficcao%20portuguesa.">📧 Email</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=A%20Cozinheira%20do%20Ditador%20%E2%80%94%20lancado%20Abril%202026%2C%20um%20dos%20mais%20aguardados" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20A%20Cozinheira%20do%20Ditador&body=A%20Cozinheira%20do%20Ditador%0Alancado%20Abril%202026%2C%20um%20dos%20mais%20aguardados%0ARomance%20de%20Afonso%20Cruz%2C%20publicado%20pela%20Companhia%20das%20Letras%20em%20Abril%202026%20-%20divertido%20e%20mordaz%20sobre%20a%20perversidade%20escondida%20onde%20menos%20se%20espera%20e%20o%20muito%20que%20se%20cozinha%20na%20sombra.%20Celebra%20a%20importancia%20da%20comida%20na%20mesa%20da%20Humanidade%20atraves%20de%20uma%20chef%20de%20cozinha%20feita%20prisioneira%20por%20um%20ditador.%20Recheado%20de%20personagens%20improvaveis%2C%20com%20a%20audacia%20caracteristica%20do%20autor.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1242,14 +1540,14 @@
       <h3 class="card-titulo">As Rosas de Barbacena</h3>
     </div>
     <div class="card-badges"></div>
-    <div class="card-meta">lancamento</div>
-    <div class="card-desc">Alberto S. Santos - ficcao historica sobre a cidade-manicomio de Minas Gerais.</div>
+    <div class="card-meta">lancamento recente</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Romance de Alberto S. Santos (Secretario de Estado da Cultura de Portugal) sobre silencio, memoria e responsabilidade. No Hospital Colonia de Barbacena, onde o esquecimento foi politica de Estado, Teresinha e internada gravida e sem defesa; Bernardo recusa ac…</summary><div class="card-desc-full">Romance de Alberto S. Santos (Secretario de Estado da Cultura de Portugal) sobre silencio, memoria e responsabilidade. No Hospital Colonia de Barbacena, onde o esquecimento foi politica de Estado, Teresinha e internada gravida e sem defesa; Bernardo recusa aceitar que o silencio seja destino dos vivos. Baseado em factos reais - o hospital psiquiatrico ficou conhecido como palco do &#x27;Holocausto Brasileiro&#x27;, com cerca de 60 mil mortes estimadas.</div></details>
     
     
     <div class="card-acoes">
       
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=As%20Rosas%20de%20Barbacena%20%E2%80%94%20lancamento" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20As%20Rosas%20de%20Barbacena&body=As%20Rosas%20de%20Barbacena%0Alancamento%0AAlberto%20S.%20Santos%20-%20ficcao%20historica%20sobre%20a%20cidade-manicomio%20de%20Minas%20Gerais.">📧 Email</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=As%20Rosas%20de%20Barbacena%20%E2%80%94%20lancamento%20recente" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20As%20Rosas%20de%20Barbacena&body=As%20Rosas%20de%20Barbacena%0Alancamento%20recente%0ARomance%20de%20Alberto%20S.%20Santos%20%28Secretario%20de%20Estado%20da%20Cultura%20de%20Portugal%29%20sobre%20silencio%2C%20memoria%20e%20responsabilidade.%20No%20Hospital%20Colonia%20de%20Barbacena%2C%20onde%20o%20esquecimento%20foi%20politica%20de%20Estado%2C%20Teresinha%20e%20internada%20gravida%20e%20sem%20defesa%3B%20Bernardo%20recusa%20aceitar%20que%20o%20silencio%20seja%20destino%20dos%20vivos.%20Baseado%20em%20factos%20reais%20-%20o%20hospital%20psiquiatrico%20ficou%20conhecido%20como%20palco%20do%20%27Holocausto%20Brasileiro%27%2C%20com%20cerca%20de%2060%20mil%20mortes%20estimadas.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1263,13 +1561,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">lancamentos de julho</div>
-    <div class="card-desc">Autoras de ficcao historica com lancamentos internacionais em julho 2026 - titulos exactos a confirmar na livraria.</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Duas autoras de referencia em ficcao historica com lancamentos internacionais anunciados para julho 2026 - Silvia Moreno-Garcia (autora de &#x27;Mexican Gothic&#x27;) e Chanel Cleeton (autora de &#x27;Next Year in Havana&#x27;). Titulos exactos e datas de chegada a Portugal por…</summary><div class="card-desc-full">Duas autoras de referencia em ficcao historica com lancamentos internacionais anunciados para julho 2026 - Silvia Moreno-Garcia (autora de &#x27;Mexican Gothic&#x27;) e Chanel Cleeton (autora de &#x27;Next Year in Havana&#x27;). Titulos exactos e datas de chegada a Portugal por confirmar em livraria - incluido como pista, nao como recomendacao fechada.</div></details>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Novos%20titulos%20de%20Silvia%20Moreno-Garcia%20e%20Chanel%20Cleeton%20%E2%80%94%20lancamentos%20de%20julho" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Novos%20titulos%20de%20Silvia%20Moreno-Garcia%20e%20Chanel%20Cleeton&body=Novos%20titulos%20de%20Silvia%20Moreno-Garcia%20e%20Chanel%20Cleeton%0Alancamentos%20de%20julho%0AAutoras%20de%20ficcao%20historica%20com%20lancamentos%20internacionais%20em%20julho%202026%20-%20titulos%20exactos%20a%20confirmar%20na%20livraria.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Novos%20titulos%20de%20Silvia%20Moreno-Garcia%20e%20Chanel%20Cleeton&body=Novos%20titulos%20de%20Silvia%20Moreno-Garcia%20e%20Chanel%20Cleeton%0Alancamentos%20de%20julho%0ADuas%20autoras%20de%20referencia%20em%20ficcao%20historica%20com%20lancamentos%20internacionais%20anunciados%20para%20julho%202026%20-%20Silvia%20Moreno-Garcia%20%28autora%20de%20%27Mexican%20Gothic%27%29%20e%20Chanel%20Cleeton%20%28autora%20de%20%27Next%20Year%20in%20Havana%27%29.%20Titulos%20exactos%20e%20datas%20de%20chegada%20a%20Portugal%20por%20confirmar%20em%20livraria%20-%20incluido%20como%20pista%2C%20nao%20como%20recomendacao%20fechada.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1282,14 +1580,14 @@
       <h3 class="card-titulo">Finding Albion</h3>
     </div>
     <div class="card-badges"></div>
-    <div class="card-meta">com evento associado</div>
-    <div class="card-desc">Zakia Sewell - mito, folclore e identidade britanica. Autora em Lisboa a 17 Jul (ver secao Cultura).</div>
+    <div class="card-meta">com evento associado em Lisboa</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Nao-ficcao de Zakia Sewell (escritora, DJ e apresentadora de radio na BBC Radio 6 Music), &#x27;longlisted&#x27; para o Women&#x27;s Prize for Non-Fiction. Explora o espirito folk alternativo da Gra-Bretanha, mitos, simbolos e a procura de identidade para alem do nacionalis…</summary><div class="card-desc-full">Nao-ficcao de Zakia Sewell (escritora, DJ e apresentadora de radio na BBC Radio 6 Music), &#x27;longlisted&#x27; para o Women&#x27;s Prize for Non-Fiction. Explora o espirito folk alternativo da Gra-Bretanha, mitos, simbolos e a procura de identidade para alem do nacionalismo divisivo. A autora esta em Lisboa a 17 Jul para conversa sobre o livro, seguida de sessao de musica no dia seguinte (ver seccao Cultura).</div></details>
     
     
     <div class="card-acoes">
       
-      <a class="btn btn-whatsapp" href="https://wa.me/?text=Finding%20Albion%20%E2%80%94%20com%20evento%20associado" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Finding%20Albion&body=Finding%20Albion%0Acom%20evento%20associado%0AZakia%20Sewell%20-%20mito%2C%20folclore%20e%20identidade%20britanica.%20Autora%20em%20Lisboa%20a%2017%20Jul%20%28ver%20secao%20Cultura%29.">📧 Email</a>
+      <a class="btn btn-whatsapp" href="https://wa.me/?text=Finding%20Albion%20%E2%80%94%20com%20evento%20associado%20em%20Lisboa" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Finding%20Albion&body=Finding%20Albion%0Acom%20evento%20associado%20em%20Lisboa%0ANao-ficcao%20de%20Zakia%20Sewell%20%28escritora%2C%20DJ%20e%20apresentadora%20de%20radio%20na%20BBC%20Radio%206%20Music%29%2C%20%27longlisted%27%20para%20o%20Women%27s%20Prize%20for%20Non-Fiction.%20Explora%20o%20espirito%20folk%20alternativo%20da%20Gra-Bretanha%2C%20mitos%2C%20simbolos%20e%20a%20procura%20de%20identidade%20para%20alem%20do%20nacionalismo%20divisivo.%20A%20autora%20esta%20em%20Lisboa%20a%2017%20Jul%20para%20conversa%20sobre%20o%20livro%2C%20seguida%20de%20sessao%20de%20musica%20no%20dia%20seguinte%20%28ver%20seccao%20Cultura%29.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1311,13 +1609,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Recorrente apos passeio com os caes no Parque Quinta das Conchas.</div>
+    <div class="card-desc">Recorrente apos passeio com os caes no Parque Quinta das Conchas - cafe favorito da Clara, junto ao parque.</div>
     <div class="card-with">👥 Com: 🐕 Com Pub e Dexter</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Garden%20Balthazar%20Cafe%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Garden%20Balthazar%20Cafe&body=Garden%20Balthazar%20Cafe%0Afim%20de%20semana%0ARecorrente%20apos%20passeio%20com%20os%20caes%20no%20Parque%20Quinta%20das%20Conchas.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Garden%20Balthazar%20Cafe&body=Garden%20Balthazar%20Cafe%0Afim%20de%20semana%0ARecorrente%20apos%20passeio%20com%20os%20caes%20no%20Parque%20Quinta%20das%20Conchas%20-%20cafe%20favorito%20da%20Clara%2C%20junto%20ao%20parque.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1331,13 +1629,13 @@
     </div>
     <div class="card-badges"><span class="badge">⭐ 5</span></div>
     <div class="card-meta">esta semana</div>
-    <div class="card-desc">Favorito recente (avaliacao 5/5) - naco de novilho na pedra e arroz de gambas muito bem avaliados.</div>
+    <div class="card-desc">Favorito recente (avaliacao 5/5, 28 Jun) - naco de novilho na pedra (Rafa) e arroz de gambas (Vanessa) muito bem avaliados, experiencia descrita como &#x27;maravilhosa&#x27;. Conta total 49,30 EUR para os dois.</div>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Adega%20das%20Gravatas%20%E2%80%94%20esta%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Adega%20das%20Gravatas&body=Adega%20das%20Gravatas%0Aesta%20semana%0AFavorito%20recente%20%28avaliacao%205/5%29%20-%20naco%20de%20novilho%20na%20pedra%20e%20arroz%20de%20gambas%20muito%20bem%20avaliados.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Adega%20das%20Gravatas&body=Adega%20das%20Gravatas%0Aesta%20semana%0AFavorito%20recente%20%28avaliacao%205/5%2C%2028%20Jun%29%20-%20naco%20de%20novilho%20na%20pedra%20%28Rafa%29%20e%20arroz%20de%20gambas%20%28Vanessa%29%20muito%20bem%20avaliados%2C%20experiencia%20descrita%20como%20%27maravilhosa%27.%20Conta%20total%2049%2C30%20EUR%20para%20os%20dois.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1351,13 +1649,13 @@
     </div>
     <div class="card-badges"><span class="badge">⭐ 4</span></div>
     <div class="card-meta">esta semana</div>
-    <div class="card-desc">Italiano favorito, boa relacao qualidade-preco com desconto TheFork.</div>
+    <div class="card-desc">Italiano favorito (filial Saldanha), boa relacao qualidade-preco com desconto TheFork 50%. Pratos ja aprovados: spaghetti all&#x27;amatriciana, linguini al tartufo, tiramisu.</div>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Pasta%20Non%20Basta%20%E2%80%94%20esta%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Pasta%20Non%20Basta&body=Pasta%20Non%20Basta%0Aesta%20semana%0AItaliano%20favorito%2C%20boa%20relacao%20qualidade-preco%20com%20desconto%20TheFork.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Pasta%20Non%20Basta&body=Pasta%20Non%20Basta%0Aesta%20semana%0AItaliano%20favorito%20%28filial%20Saldanha%29%2C%20boa%20relacao%20qualidade-preco%20com%20desconto%20TheFork%2050%25.%20Pratos%20ja%20aprovados%3A%20spaghetti%20all%27amatriciana%2C%20linguini%20al%20tartufo%2C%20tiramisu.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1371,13 +1669,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">esta semana</div>
-    <div class="card-desc">Muito bom no geral, entrecote e bife da vazia recomendados. Desconto TheFork 30%.</div>
+    <div class="card-desc">Muito bom no geral. Croquete ligeiramente oleoso mas os pratos principais foram excelentes: entrecote e bife da vazia com legumes e espargos. Desconto TheFork 30%, conta total 49 EUR com 2 imperiais medias.</div>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Chefe%20Guiga%20%E2%80%94%20esta%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Chefe%20Guiga&body=Chefe%20Guiga%0Aesta%20semana%0AMuito%20bom%20no%20geral%2C%20entrecote%20e%20bife%20da%20vazia%20recomendados.%20Desconto%20TheFork%2030%25.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Chefe%20Guiga&body=Chefe%20Guiga%0Aesta%20semana%0AMuito%20bom%20no%20geral.%20Croquete%20ligeiramente%20oleoso%20mas%20os%20pratos%20principais%20foram%20excelentes%3A%20entrecote%20e%20bife%20da%20vazia%20com%20legumes%20e%20espargos.%20Desconto%20TheFork%2030%25%2C%20conta%20total%2049%20EUR%20com%202%20imperiais%20medias.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1391,13 +1689,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">por marcar</div>
-    <div class="card-desc">Da lista want-to-try - comida africana e portuguesa, recomendacao do Rodrigo, vista bonita.</div>
+    <div class="card-desc">Da lista want-to-try do feedback_log - comida africana e portuguesa, recomendacao do amigo Rodrigo, vista bonita e ambiente elegante.</div>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Zambeze%20%E2%80%94%20por%20marcar" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Zambeze&body=Zambeze%0Apor%20marcar%0ADa%20lista%20want-to-try%20-%20comida%20africana%20e%20portuguesa%2C%20recomendacao%20do%20Rodrigo%2C%20vista%20bonita.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Zambeze&body=Zambeze%0Apor%20marcar%0ADa%20lista%20want-to-try%20do%20feedback_log%20-%20comida%20africana%20e%20portuguesa%2C%20recomendacao%20do%20amigo%20Rodrigo%2C%20vista%20bonita%20e%20ambiente%20elegante.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1411,13 +1709,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Favorito da Vanessa, ideal para ocasiao especial - ir com desconto TheFork.</div>
+    <div class="card-desc">Favorito da Vanessa, ideal para ocasiao especial - ir com desconto TheFork (e caro sem ele).</div>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Jardim%20da%20Luz%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Jardim%20da%20Luz&body=Jardim%20da%20Luz%0Afim%20de%20semana%0AFavorito%20da%20Vanessa%2C%20ideal%20para%20ocasiao%20especial%20-%20ir%20com%20desconto%20TheFork.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Jardim%20da%20Luz&body=Jardim%20da%20Luz%0Afim%20de%20semana%0AFavorito%20da%20Vanessa%2C%20ideal%20para%20ocasiao%20especial%20-%20ir%20com%20desconto%20TheFork%20%28e%20caro%20sem%20ele%29.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1431,13 +1729,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Favorito da Clara - raramente ha desconto TheFork.</div>
+    <div class="card-desc">Favorito da Clara - raramente ha desconto TheFork, mas vale a pena mesmo assim.</div>
     <div class="card-with">👥 Com: 🧒 Com Clara</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Big%20Bowl%20Telheiras%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Big%20Bowl%20Telheiras&body=Big%20Bowl%20Telheiras%0Afim%20de%20semana%0AFavorito%20da%20Clara%20-%20raramente%20ha%20desconto%20TheFork.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Big%20Bowl%20Telheiras&body=Big%20Bowl%20Telheiras%0Afim%20de%20semana%0AFavorito%20da%20Clara%20-%20raramente%20ha%20desconto%20TheFork%2C%20mas%20vale%20a%20pena%20mesmo%20assim.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1451,13 +1749,13 @@
     </div>
     <div class="card-badges"><span class="badge">Recomendacao de terceiro</span></div>
     <div class="card-meta">day off - 21 Jul</div>
-    <div class="card-desc">Recomendacao de terceiro (Dra. Isabel) ainda por testar - arroz de camarao/tamboril para a Vanessa, peixe grelhado para o Rafa. Combina com escapadinha a Sintra.</div>
+    <div class="card-desc">Recomendacao de terceiro (Dra. Isabel) ainda por testar - arroz de camarao ou arroz de tamboril para a Vanessa, peixe grelhado para o Rafa. Combina bem com a escapadinha a Sintra do day off.</div>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Restaurante%20do%20Abano%20%28Sintra%29%20%E2%80%94%20day%20off%20-%2021%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Restaurante%20do%20Abano%20%28Sintra%29&body=Restaurante%20do%20Abano%20%28Sintra%29%0Aday%20off%20-%2021%20Jul%0ARecomendacao%20de%20terceiro%20%28Dra.%20Isabel%29%20ainda%20por%20testar%20-%20arroz%20de%20camarao/tamboril%20para%20a%20Vanessa%2C%20peixe%20grelhado%20para%20o%20Rafa.%20Combina%20com%20escapadinha%20a%20Sintra.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Restaurante%20do%20Abano%20%28Sintra%29&body=Restaurante%20do%20Abano%20%28Sintra%29%0Aday%20off%20-%2021%20Jul%0ARecomendacao%20de%20terceiro%20%28Dra.%20Isabel%29%20ainda%20por%20testar%20-%20arroz%20de%20camarao%20ou%20arroz%20de%20tamboril%20para%20a%20Vanessa%2C%20peixe%20grelhado%20para%20o%20Rafa.%20Combina%20bem%20com%20a%20escapadinha%20a%20Sintra%20do%20day%20off.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1471,13 +1769,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">day off - 21 Jul</div>
-    <div class="card-desc">Da lista want-to-try - buffet de comida brasileira, o Rafa ja foi 1x sozinho e gostou; quer levar o primo Raul.</div>
+    <div class="card-desc">Da lista want-to-try - buffet de comida brasileira em Sintra. O Rafa ja foi 1x sozinho e gostou bastante; quer voltar e levar o primo Raul.</div>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Orixas%20%28Sintra%29%20%E2%80%94%20day%20off%20-%2021%20Jul" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Orixas%20%28Sintra%29&body=Orixas%20%28Sintra%29%0Aday%20off%20-%2021%20Jul%0ADa%20lista%20want-to-try%20-%20buffet%20de%20comida%20brasileira%2C%20o%20Rafa%20ja%20foi%201x%20sozinho%20e%20gostou%3B%20quer%20levar%20o%20primo%20Raul.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Orixas%20%28Sintra%29&body=Orixas%20%28Sintra%29%0Aday%20off%20-%2021%20Jul%0ADa%20lista%20want-to-try%20-%20buffet%20de%20comida%20brasileira%20em%20Sintra.%20O%20Rafa%20ja%20foi%201x%20sozinho%20e%20gostou%20bastante%3B%20quer%20voltar%20e%20levar%20o%20primo%20Raul.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1499,13 +1797,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">meio da semana</div>
-    <div class="card-desc">Sugestao do Time Out para contrariar a onda de calor que ainda se mantem acima do normal.</div>
+    <div class="card-desc">Sugestao do Time Out para contrariar a onda de calor que ainda se mantem acima do normal ate meados de Julho - piscinas naturais em rocha ou zonas fluviais, alternativa mais fresca e menos cheia do que a praia oceanica em pico de verao.</div>
     
     
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Roteiro%20de%20piscinas%20naturais%20em%20Portugal%20%E2%80%94%20meio%20da%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Roteiro%20de%20piscinas%20naturais%20em%20Portugal&body=Roteiro%20de%20piscinas%20naturais%20em%20Portugal%0Ameio%20da%20semana%0ASugestao%20do%20Time%20Out%20para%20contrariar%20a%20onda%20de%20calor%20que%20ainda%20se%20mantem%20acima%20do%20normal.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Roteiro%20de%20piscinas%20naturais%20em%20Portugal&body=Roteiro%20de%20piscinas%20naturais%20em%20Portugal%0Ameio%20da%20semana%0ASugestao%20do%20Time%20Out%20para%20contrariar%20a%20onda%20de%20calor%20que%20ainda%20se%20mantem%20acima%20do%20normal%20ate%20meados%20de%20Julho%20-%20piscinas%20naturais%20em%20rocha%20ou%20zonas%20fluviais%2C%20alternativa%20mais%20fresca%20e%20menos%20cheia%20do%20que%20a%20praia%20oceanica%20em%20pico%20de%20verao.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1519,13 +1817,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Destino de verao favorito do perfil - praia e serra da Arrabida.</div>
+    <div class="card-desc">Destino de verao favorito do perfil - vila piscatoria com boas praias (Ribeiro do Cavalo, Portinho da Arrabida) e a Serra da Arrabida com miradouros e trilhos entre pinhal e mar. Boa opcao de dia inteiro num fim de semana de bom tempo.</div>
     
     <div class="card-logistica">🚗 50 min via A2 + A33 | 🟢 Parking: facil</div>
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Sesimbra%20%2B%20Arrabida%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sesimbra%20%2B%20Arrabida&body=Sesimbra%20%2B%20Arrabida%0Afim%20de%20semana%0ADestino%20de%20verao%20favorito%20do%20perfil%20-%20praia%20e%20serra%20da%20Arrabida.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sesimbra%20%2B%20Arrabida&body=Sesimbra%20%2B%20Arrabida%0Afim%20de%20semana%0ADestino%20de%20verao%20favorito%20do%20perfil%20-%20vila%20piscatoria%20com%20boas%20praias%20%28Ribeiro%20do%20Cavalo%2C%20Portinho%20da%20Arrabida%29%20e%20a%20Serra%20da%20Arrabida%20com%20miradouros%20e%20trilhos%20entre%20pinhal%20e%20mar.%20Boa%20opcao%20de%20dia%20inteiro%20num%20fim%20de%20semana%20de%20bom%20tempo.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1539,13 +1837,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Recomendacoes de hoteis rurais saidas no Time Out - dormidas com luxo/conforto e opcoes ecologicas.</div>
+    <div class="card-desc">Recomendacoes de hoteis rurais e refugios de turismo rural saidas no Time Out (dormidas com luxo/conforto e propostas ecologicas). Zona conhecida pelas praias extensas, arrozais e pinhal - popular mas ainda com zonas tranquilas fora do nucleo mais turistico.</div>
     
     <div class="card-logistica">🚗 90 min via A2 | 🟢 Parking: facil</div>
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Comporta%20/%20Melides%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Comporta%20/%20Melides&body=Comporta%20/%20Melides%0Afim%20de%20semana%0ARecomendacoes%20de%20hoteis%20rurais%20saidas%20no%20Time%20Out%20-%20dormidas%20com%20luxo/conforto%20e%20opcoes%20ecologicas.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Comporta%20/%20Melides&body=Comporta%20/%20Melides%0Afim%20de%20semana%0ARecomendacoes%20de%20hoteis%20rurais%20e%20refugios%20de%20turismo%20rural%20saidas%20no%20Time%20Out%20%28dormidas%20com%20luxo/conforto%20e%20propostas%20ecologicas%29.%20Zona%20conhecida%20pelas%20praias%20extensas%2C%20arrozais%20e%20pinhal%20-%20popular%20mas%20ainda%20com%20zonas%20tranquilas%20fora%20do%20nucleo%20mais%20turistico.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1559,13 +1857,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">Ter 21 Jul (day off)</div>
-    <div class="card-desc">Combinacao de dia inteiro: Pena Palace com novos percursos tematicos + almoco no Restaurante do Abano (recomendacao Dra. Isabel).</div>
+    <details class="card-desc-details"><summary class="card-desc-preview">Combinacao de dia inteiro: desde Abril 2026 o Pena Palace tem novos percursos tematicos e visitas encenadas (menos &#x27;correr salas&#x27;, mais descobrir historias sobre a familia real) - depois almoco no Restaurante do Abano (recomendacao da Dra. Isabel). Coincide c…</summary><div class="card-desc-full">Combinacao de dia inteiro: desde Abril 2026 o Pena Palace tem novos percursos tematicos e visitas encenadas (menos &#x27;correr salas&#x27;, mais descobrir historias sobre a familia real) - depois almoco no Restaurante do Abano (recomendacao da Dra. Isabel). Coincide com o unico day off do trabalho no periodo.</div></details>
     <div class="card-with">👥 Com: 👑 Com Vanessa</div>
     <div class="card-logistica">🚗 25 min via A37 | ⚪ Parking: gratuito, chegar cedo</div>
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano%20%E2%80%94%20Ter%2021%20Jul%20%28day%20off%29" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano&body=Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano%0ATer%2021%20Jul%20%28day%20off%29%0ACombinacao%20de%20dia%20inteiro%3A%20Pena%20Palace%20com%20novos%20percursos%20tematicos%20%2B%20almoco%20no%20Restaurante%20do%20Abano%20%28recomendacao%20Dra.%20Isabel%29.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano&body=Sintra%20-%20Pena%20Palace%20%2B%20Restaurante%20do%20Abano%0ATer%2021%20Jul%20%28day%20off%29%0ACombinacao%20de%20dia%20inteiro%3A%20desde%20Abril%202026%20o%20Pena%20Palace%20tem%20novos%20percursos%20tematicos%20e%20visitas%20encenadas%20%28menos%20%27correr%20salas%27%2C%20mais%20descobrir%20historias%20sobre%20a%20familia%20real%29%20-%20depois%20almoco%20no%20Restaurante%20do%20Abano%20%28recomendacao%20da%20Dra.%20Isabel%29.%20Coincide%20com%20o%20unico%20day%20off%20do%20trabalho%20no%20periodo.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1579,13 +1877,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Praia gratuita, favorita do perfil.</div>
+    <div class="card-desc">Praia gratuita, favorita do perfil - facil de chegar pela Ponte 25 de Abril, com longa faixa de areal e varios troços (do mais urbano perto da vila ate zonas mais calmas a sul).</div>
     
     <div class="card-logistica">🚗 30 min via A2 / Ponte 25 Abril | ⚪ Parking: lota no verao</div>
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Costa%20da%20Caparica%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Costa%20da%20Caparica&body=Costa%20da%20Caparica%0Afim%20de%20semana%0APraia%20gratuita%2C%20favorita%20do%20perfil.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Costa%20da%20Caparica&body=Costa%20da%20Caparica%0Afim%20de%20semana%0APraia%20gratuita%2C%20favorita%20do%20perfil%20-%20facil%20de%20chegar%20pela%20Ponte%2025%20de%20Abril%2C%20com%20longa%20faixa%20de%20areal%20e%20varios%20tro%C3%A7os%20%28do%20mais%20urbano%20perto%20da%20vila%20ate%20zonas%20mais%20calmas%20a%20sul%29.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1599,13 +1897,13 @@
     </div>
     <div class="card-badges"></div>
     <div class="card-meta">fim de semana</div>
-    <div class="card-desc">Vila de surf, qualquer epoca.</div>
+    <div class="card-desc">Vila de surf, Reserva Mundial de Surf - boas praias, ambiente descontraido e oferta de restaurantes de peixe/marisco no centro. Boa opcao qualquer epoca do ano.</div>
     
     <div class="card-logistica">🚗 40 min via A21 | 🟢 Parking: facil</div>
     <div class="card-acoes">
       
       <a class="btn btn-whatsapp" href="https://wa.me/?text=Ericeira%20%E2%80%94%20fim%20de%20semana" target="_blank" rel="noopener">📲 Partilhar</a>
-      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Ericeira&body=Ericeira%0Afim%20de%20semana%0AVila%20de%20surf%2C%20qualquer%20epoca.">📧 Email</a>
+      <a class="btn btn-email" href="mailto:?subject=Agenda%20de%20Lazer%3A%20Ericeira&body=Ericeira%0Afim%20de%20semana%0AVila%20de%20surf%2C%20Reserva%20Mundial%20de%20Surf%20-%20boas%20praias%2C%20ambiente%20descontraido%20e%20oferta%20de%20restaurantes%20de%20peixe/marisco%20no%20centro.%20Boa%20opcao%20qualquer%20epoca%20do%20ano.">📧 Email</a>
     </div>
   </div>
 </div>
@@ -1665,18 +1963,14 @@
 
 
 <script>
-  var EVENTOS = [{"id": "ev001", "category": "tv", "title": "Mundial 2026 - Quartas de final (dia 3)", "date": "2026-07-11"}, {"id": "ev002", "category": "tv", "title": "Wimbledon 2026 - Final masculina", "date": "2026-07-12"}, {"id": "ev003", "category": "tv", "title": "Mundial 2026 - Meias-finais", "date": "2026-07-14"}, {"id": "ev004", "category": "tv", "title": "Mundial 2026 - Final", "date": "2026-07-19"}, {"id": "ev005", "category": "streaming", "title": "Enola Holmes 3", "date": "2026-07-01"}, {"id": "ev006", "category": "streaming", "title": "Nada a Perder", "date": "2026-07-08"}, {"id": "ev007", "category": "streaming", "title": "Naufragio: O Pesadelo do Costa Concordia", "date": "2026-07-10"}, {"id": "ev008", "category": "streaming", "title": "Miguel Angel Blanco: As 48 Horas Que Mudaram Espanha", "date": "2026-07-10"}, {"id": "ev009", "category": "streaming", "title": "Eu, Antes de Mim", "date": "2026-07-16"}, {"id": "ev010", "category": "streaming", "title": "Salgueiro Maia - O Implicado", "date": "2026-07-02"}, {"id": "ev011", "category": "cinema_indoor", "title": "Dia D: Sob Pressao", "date": "2026-07-10"}, {"id": "ev012", "category": "cinema_indoor", "title": "George Washington", "date": "2026-07-10"}, {"id": "ev013", "category": "cinema_indoor", "title": "Michael", "date": "2026-07-10"}, {"id": "ev014", "category": "cinema_indoor", "title": "Franz", "date": "2026-07-10"}, {"id": "ev015", "category": "cinema_indoor", "title": "Tuner - Ouvido Absoluto, Mao Leve", "date": "2026-07-10"}, {"id": "ev016", "category": "cinema_indoor", "title": "Broken English", "date": "2026-07-10"}, {"id": "ev017", "category": "cinema_indoor", "title": "O Dia da Revelacao", "date": "2026-07-10"}, {"id": "ev018", "category": "cinema_indoor", "title": "Outros filmes em cartaz fora do perfil", "date": "2026-07-10"}, {"id": "ev019", "category": "cinema_outdoor", "title": "Marty Supreme", "date": "2026-07-10"}, {"id": "ev020", "category": "cinema_outdoor", "title": "Saltitoes", "date": "2026-07-11"}, {"id": "ev021", "category": "cinema_outdoor", "title": "Lady Bird", "date": "2026-07-10"}, {"id": "ev022", "category": "cinema_outdoor", "title": "Stand By Me", "date": "2026-07-11"}, {"id": "ev023", "category": "cinema_outdoor", "title": "Chungking Express", "date": "2026-07-12"}, {"id": "ev024", "category": "cinema_outdoor", "title": "Her", "date": "2026-07-16"}, {"id": "ev025", "category": "cinema_outdoor", "title": "Poor Things", "date": "2026-07-19"}, {"id": "ev026", "category": "cinema_outdoor", "title": "The Truman Show", "date": "2026-07-21"}, {"id": "ev027", "category": "cinema_outdoor", "title": "Atonement", "date": "2026-07-25"}, {"id": "ev028", "category": "cinema_outdoor", "title": "Cine Society - Principe Real Terrace / Beato Riverside Rooftop", "date": "2026-07-10"}, {"id": "ev029", "category": "meetup", "title": "Grass Volleyball at Jardim Vasco da Gama", "date": "2026-07-10"}, {"id": "ev030", "category": "meetup", "title": "Voleibol relva ActiveHive - Ribeirinho, Alges", "date": "2026-07-14"}, {"id": "ev031", "category": "meetup", "title": "Meditacao em grupo ActiveHive", "date": "2026-07-15"}, {"id": "ev032", "category": "meetup", "title": "Voleibol indoor ActiveHive - Olivais", "date": "2026-07-15"}, {"id": "ev033", "category": "meetup", "title": "Voleibol relva ActiveHive - Campo Grande", "date": "2026-07-16"}, {"id": "ev034", "category": "meetup", "title": "Game Night ActiveHive", "date": "2026-07-16"}, {"id": "ev035", "category": "meetup", "title": "Beach Tennis ActiveHive", "date": "2026-07-17"}, {"id": "ev036", "category": "meetup", "title": "Voleibol indoor GBS", "date": "2026-07-17"}, {"id": "ev037", "category": "meetup", "title": "Voleibol de praia GBS", "date": "2026-07-18"}, {"id": "ev038", "category": "meetup", "title": "Bowling social Meetup", "date": "2026-07-17"}, {"id": "ev039", "category": "meetup", "title": "Lisbon Hiking Meetup", "date": "2026-07-11"}, {"id": "ev040", "category": "meetup", "title": "Voleibol relva SSL (WhatsApp)", "date": "2026-07-15"}, {"id": "ev041", "category": "meetup", "title": "Voleibol indoor PowerRangers (WhatsApp)", "date": "2026-07-14"}, {"id": "ev042", "category": "meetup", "title": "Ciclismo Lisboa (WhatsApp)", "date": "2026-07-14"}, {"id": "ev043", "category": "culture", "title": "Jardim de Verao - Gulbenkian", "date": "2026-07-11"}, {"id": "ev044", "category": "culture", "title": "Marilyn Revisited - MACAM", "date": "2026-07-10"}, {"id": "ev045", "category": "culture", "title": "Posto de Escuta - Festival Interassociativo de Oeiras", "date": "2026-07-10"}, {"id": "ev046", "category": "culture", "title": "Finding Albion - conversa com Zakia Sewell", "date": "2026-07-17"}, {"id": "ev047", "category": "culture", "title": "Noite Zakia Sewell - Vago", "date": "2026-07-18"}, {"id": "ev048", "category": "culture", "title": "Language Exchange - ALL Languages Welcome", "date": "2026-07-18"}, {"id": "ev049", "category": "culture", "title": "Game Break Julho - IGDA Portugal", "date": "2026-07-17"}, {"id": "ev050", "category": "culture", "title": "The Lisbon Expat Meetup Group", "date": "2026-07-12"}, {"id": "ev051", "category": "gastro", "title": "Adega das Gravatas", "date": "2026-07-12"}, {"id": "ev052", "category": "gastro", "title": "Pasta Non Basta", "date": "2026-07-13"}, {"id": "ev053", "category": "gastro", "title": "Chefe Guiga", "date": "2026-07-13"}, {"id": "ev054", "category": "gastro", "title": "Jardim da Luz", "date": "2026-07-18"}, {"id": "ev055", "category": "gastro", "title": "Big Bowl Telheiras", "date": "2026-07-19"}, {"id": "ev056", "category": "gastro", "title": "Garden Balthazar Cafe", "date": "2026-07-11"}, {"id": "ev057", "category": "gastro", "title": "Restaurante do Abano (Sintra)", "date": "2026-07-21"}, {"id": "ev058", "category": "gastro", "title": "Zambeze", "date": "2026-07-17"}, {"id": "ev059", "category": "gastro", "title": "Orixas (Sintra)", "date": "2026-07-21"}, {"id": "ev060", "category": "escape", "title": "Sintra - Pena Palace + Restaurante do Abano", "date": "2026-07-21"}, {"id": "ev061", "category": "escape", "title": "Sesimbra + Arrabida", "date": "2026-07-18"}, {"id": "ev062", "category": "escape", "title": "Comporta / Melides", "date": "2026-07-19"}, {"id": "ev063", "category": "escape", "title": "Costa da Caparica", "date": "2026-07-25"}, {"id": "ev064", "category": "escape", "title": "Ericeira", "date": "2026-07-25"}, {"id": "ev065", "category": "escape", "title": "Roteiro de piscinas naturais em Portugal", "date": "2026-07-16"}, {"id": "ev066", "category": "books", "title": "A Cozinheira do Ditador", "date": "2026-07-10"}, {"id": "ev067", "category": "books", "title": "As Rosas de Barbacena", "date": "2026-07-10"}, {"id": "ev068", "category": "books", "title": "Finding Albion", "date": "2026-07-17"}, {"id": "ev069", "category": "books", "title": "Novos titulos de Silvia Moreno-Garcia e Chanel Cleeton", "date": "2026-07-10"}, {"id": "ev070", "category": "radar", "title": "Semifinais e final do Mundial 2026", "date": "2026-07-19"}, {"id": "ev071", "category": "radar", "title": "Riktus Rebirth - Ministerium", "date": "2026-07-30"}];
+  var EVENTOS = [{"id": "ev001", "category": "tv", "title": "Mundial 2026 - Quartas de final: Noruega vs Inglaterra", "date": "2026-07-11"}, {"id": "ev002", "category": "tv", "title": "Wimbledon 2026 - Final masculina", "date": "2026-07-12"}, {"id": "ev003", "category": "tv", "title": "Mundial 2026 - Meia-final (Jogo 102)", "date": "2026-07-14"}, {"id": "ev004", "category": "tv", "title": "Mundial 2026 - Final", "date": "2026-07-19"}, {"id": "ev005", "category": "streaming", "title": "Enola Holmes 3", "date": "2026-07-01"}, {"id": "ev006", "category": "streaming", "title": "Nada a Perder", "date": "2026-07-08"}, {"id": "ev007", "category": "streaming", "title": "Naufragio: O Pesadelo do Costa Concordia", "date": "2026-07-10"}, {"id": "ev008", "category": "streaming", "title": "Miguel Angel Blanco: As 48 Horas Que Mudaram Espanha", "date": "2026-07-10"}, {"id": "ev009", "category": "streaming", "title": "Eu, Antes de Mim", "date": "2026-07-16"}, {"id": "ev010", "category": "streaming", "title": "Salgueiro Maia - O Implicado", "date": "2026-07-02"}, {"id": "ev011", "category": "cinema_indoor", "title": "Dia D: Sob Pressao", "date": "2026-07-10"}, {"id": "ev012", "category": "cinema_indoor", "title": "George Washington", "date": "2026-07-10"}, {"id": "ev013", "category": "cinema_indoor", "title": "Michael", "date": "2026-07-10"}, {"id": "ev014", "category": "cinema_indoor", "title": "Franz", "date": "2026-07-10"}, {"id": "ev015", "category": "cinema_indoor", "title": "Tuner - Ouvido Absoluto, Mao Leve", "date": "2026-07-10"}, {"id": "ev016", "category": "cinema_indoor", "title": "Broken English", "date": "2026-07-10"}, {"id": "ev017", "category": "cinema_indoor", "title": "O Dia da Revelacao", "date": "2026-07-10"}, {"id": "ev018", "category": "cinema_indoor", "title": "Outros filmes em cartaz fora do perfil", "date": "2026-07-10"}, {"id": "ev019", "category": "cinema_outdoor", "title": "Marty Supreme", "date": "2026-07-10"}, {"id": "ev020", "category": "cinema_outdoor", "title": "Saltitoes", "date": "2026-07-11"}, {"id": "ev021", "category": "cinema_outdoor", "title": "Lady Bird", "date": "2026-07-10"}, {"id": "ev022", "category": "cinema_outdoor", "title": "Stand By Me", "date": "2026-07-11"}, {"id": "ev023", "category": "cinema_outdoor", "title": "Chungking Express", "date": "2026-07-12"}, {"id": "ev024", "category": "cinema_outdoor", "title": "Her", "date": "2026-07-16"}, {"id": "ev025", "category": "cinema_outdoor", "title": "Poor Things", "date": "2026-07-19"}, {"id": "ev026", "category": "cinema_outdoor", "title": "The Truman Show", "date": "2026-07-21"}, {"id": "ev027", "category": "cinema_outdoor", "title": "Atonement", "date": "2026-07-25"}, {"id": "ev028", "category": "cinema_outdoor", "title": "Cine Society - Principe Real Terrace / Beato Riverside Rooftop", "date": "2026-07-10"}, {"id": "ev029", "category": "meetup", "title": "Grass Volleyball at Jardim Vasco da Gama", "date": "2026-07-10"}, {"id": "ev030", "category": "meetup", "title": "Voleibol relva ActiveHive - Ribeirinho, Alges", "date": "2026-07-14"}, {"id": "ev031", "category": "meetup", "title": "Meditacao em grupo ActiveHive", "date": "2026-07-15"}, {"id": "ev032", "category": "meetup", "title": "Voleibol indoor ActiveHive - Olivais", "date": "2026-07-15"}, {"id": "ev033", "category": "meetup", "title": "Voleibol relva ActiveHive - Campo Grande", "date": "2026-07-16"}, {"id": "ev034", "category": "meetup", "title": "Game Night ActiveHive", "date": "2026-07-16"}, {"id": "ev035", "category": "meetup", "title": "Beach Tennis ActiveHive", "date": "2026-07-17"}, {"id": "ev036", "category": "meetup", "title": "Voleibol indoor GBS", "date": "2026-07-17"}, {"id": "ev037", "category": "meetup", "title": "Voleibol de praia GBS", "date": "2026-07-18"}, {"id": "ev038", "category": "meetup", "title": "Bowling social Meetup", "date": "2026-07-17"}, {"id": "ev039", "category": "meetup", "title": "Lisbon Hiking Meetup", "date": "2026-07-11"}, {"id": "ev040", "category": "meetup", "title": "Voleibol relva SSL (WhatsApp)", "date": "2026-07-15"}, {"id": "ev041", "category": "meetup", "title": "Voleibol indoor PowerRangers (WhatsApp)", "date": "2026-07-14"}, {"id": "ev042", "category": "meetup", "title": "Ciclismo Lisboa (WhatsApp)", "date": "2026-07-14"}, {"id": "ev043", "category": "culture", "title": "Jardim de Verao - Gulbenkian", "date": "2026-07-11"}, {"id": "ev044", "category": "culture", "title": "Marilyn Revisited - MACAM", "date": "2026-07-10"}, {"id": "ev045", "category": "culture", "title": "Posto de Escuta - Festival Interassociativo de Oeiras", "date": "2026-07-10"}, {"id": "ev046", "category": "culture", "title": "Finding Albion - conversa com Zakia Sewell", "date": "2026-07-17"}, {"id": "ev047", "category": "culture", "title": "Noite Zakia Sewell - Vago", "date": "2026-07-18"}, {"id": "ev048", "category": "culture", "title": "Language Exchange - ALL Languages Welcome", "date": "2026-07-18"}, {"id": "ev049", "category": "culture", "title": "Game Break Julho - IGDA Portugal", "date": "2026-07-17"}, {"id": "ev050", "category": "culture", "title": "The Lisbon Expat Meetup Group", "date": "2026-07-12"}, {"id": "ev051", "category": "gastro", "title": "Adega das Gravatas", "date": "2026-07-12"}, {"id": "ev052", "category": "gastro", "title": "Pasta Non Basta", "date": "2026-07-13"}, {"id": "ev053", "category": "gastro", "title": "Chefe Guiga", "date": "2026-07-13"}, {"id": "ev054", "category": "gastro", "title": "Jardim da Luz", "date": "2026-07-18"}, {"id": "ev055", "category": "gastro", "title": "Big Bowl Telheiras", "date": "2026-07-19"}, {"id": "ev056", "category": "gastro", "title": "Garden Balthazar Cafe", "date": "2026-07-11"}, {"id": "ev057", "category": "gastro", "title": "Restaurante do Abano (Sintra)", "date": "2026-07-21"}, {"id": "ev058", "category": "gastro", "title": "Zambeze", "date": "2026-07-17"}, {"id": "ev059", "category": "gastro", "title": "Orixas (Sintra)", "date": "2026-07-21"}, {"id": "ev060", "category": "escape", "title": "Sintra - Pena Palace + Restaurante do Abano", "date": "2026-07-21"}, {"id": "ev061", "category": "escape", "title": "Sesimbra + Arrabida", "date": "2026-07-18"}, {"id": "ev062", "category": "escape", "title": "Comporta / Melides", "date": "2026-07-19"}, {"id": "ev063", "category": "escape", "title": "Costa da Caparica", "date": "2026-07-25"}, {"id": "ev064", "category": "escape", "title": "Ericeira", "date": "2026-07-25"}, {"id": "ev065", "category": "escape", "title": "Roteiro de piscinas naturais em Portugal", "date": "2026-07-16"}, {"id": "ev066", "category": "books", "title": "A Cozinheira do Ditador", "date": "2026-04-01"}, {"id": "ev067", "category": "books", "title": "As Rosas de Barbacena", "date": "2026-07-10"}, {"id": "ev068", "category": "books", "title": "Finding Albion", "date": "2026-07-17"}, {"id": "ev069", "category": "books", "title": "Novos titulos de Silvia Moreno-Garcia e Chanel Cleeton", "date": "2026-07-10"}, {"id": "ev070", "category": "radar", "title": "Semifinais e final do Mundial 2026", "date": "2026-07-19"}, {"id": "ev071", "category": "radar", "title": "Riktus Rebirth - Ministerium", "date": "2026-07-30"}];
   document.querySelectorAll('.pill').forEach(function(p){
     p.addEventListener('click', function(){
       document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('active');});
       p.classList.add('active');
       var f = p.getAttribute('data-filtro');
       document.querySelectorAll('.secao').forEach(function(s){
-        if(f === 'todos' || s.getAttribute('data-secao') === f){
-          s.style.display = '';
-        } else {
-          s.style.display = 'none';
-        }
+        s.style.display = (s.getAttribute('data-secao') === f) ? '' : 'none';
       });
     });
   });
