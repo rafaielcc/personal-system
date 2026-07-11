@@ -1,1180 +1,583 @@
 <!DOCTYPE html>
-<html lang="pt">
+<!--
+  BRIEFING DIÁRIO — TEMPLATE DE RENDER (v3 — mecânico, Modo A/B)
+  ================================================================
+  Alinhado com BRIEFING_DIARIO v12.0 (schema JSON canónico, Secção 7).
+  Diferença para o v2: os placeholders em [colchetes] passam a {{TOKENS}}
+  e blocos repetíveis/condicionais passam a comentários MARKER de abertura
+  e fecho, para permitir substituição mecânica por render.py (sem LLM a
+  escrever HTML).
+
+  MODO A (completo, 7 tabs) vs MODO B (6 tabs, sem HFF):
+  → render.py remove os blocos HFF_BTN e HFF_PANEL inteiros quando meta.mode=="B".
+
+  Tabs Modo A: 1) Hoje 2) Tarefas 3) Calendário 4) Email 5) Trabalho HFF
+               6) Tempo 7) Rotina
+
+  Não alterar estrutura HTML/CSS/JS sem pedido explícito.
+-->
+<html lang="pt-PT">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Briefing · 17 Jun 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>Briefing Diário · Rafa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --navy: #1A3D52;
-  --terracotta: #C75A2C;
-  --gold: #D4A946;
-  --sage: #5A7A5E;
-  --teal: #0D9488;
-  --muted: #8A8070;
-  --card: #FDFAF4;
-  --border: #E0D8C8;
-  --bg: #F5F0E8;
-  --red: #C0392B;
-  --blue: #4A7FAD;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--navy); font-size: 14px; }
+  :root{
+    --navy:#1A3D52; --navy-2:#102B3A; --navy-border:#2C5068;
+    --cream:#F5F0E8; --card:#FDFAF4; --border:#E0D8C8;
+    --ink:#1F2A33; --ink-light:#FBF7EF; --muted:#8A8070; --muted-light:#B9CBD6;
+    --terracotta:#C75A2C; --gold:#D4A946; --sage:#5A7A5E; --teal:#0D9488;
+    --red:#C0392B; --red-bg:#FAD9D4; --blue:#4A7FAD; --orange:#FF9900;
+    --green:#6AA84F; --purple:#8E6FA8;
+    --radius:16px; --radius-sm:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--cream); color:var(--ink); font-family:'DM Sans', sans-serif; -webkit-font-smoothing:antialiased; min-height:100vh; }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
 
-/* HEADER */
-.header {
-  background: var(--navy);
-  color: white;
-  padding: 12px 16px;
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-}
-.header-left h1 { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 600; }
-.header-left p { font-size: 11px; opacity: 0.7; margin-top: 1px; }
-.weather-pill {
-  background: rgba(255,255,255,0.12);
-  border-radius: 20px; padding: 4px 10px;
-  font-size: 12px; text-align: center;
-}
+  /* ===== TOPBAR ===== */
+  .topbar{ position:sticky; top:0; z-index:20; background:linear-gradient(160deg, var(--navy), var(--navy-2)); padding:12px 14px 10px; border-bottom:1px solid var(--navy-border); }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .greet{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light); display:flex; align-items:center; gap:6px; }
+  .back-link{ font-size:12px; color:var(--muted-light); font-weight:700; }
+  .topbar-row2{ display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap; }
+  .chip{ font-size:11.5px; font-weight:700; color:var(--ink-light); background:rgba(255,255,255,.07); border:1px solid var(--navy-border); border-radius:999px; padding:5px 10px; display:flex; align-items:center; gap:5px; white-space:nowrap; }
+  .chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
+  .chip b{ color:var(--gold); font-size:12px; }
+  .chip.daytype b{ color:#FFF8EE; }
 
-/* TABS */
-.tab-nav {
-  display: flex; overflow-x: auto; background: var(--navy);
-  padding: 0 8px 8px; gap: 4px;
-  scrollbar-width: none;
-}
-.tab-nav::-webkit-scrollbar { display: none; }
-.tab-btn {
-  flex-shrink: 0; padding: 6px 12px; border-radius: 16px;
-  border: none; cursor: pointer; font-size: 12px; font-family: 'DM Sans';
-  background: rgba(255,255,255,0.12); color: white; transition: all 0.2s;
-}
-.tab-btn.active { background: var(--terracotta); font-weight: 600; }
+  /* ===== TABBAR ===== */
+  .tabbar{ position:sticky; top:0; z-index:19; background:var(--navy-2); display:flex; overflow-x:auto; gap:2px; padding:0 8px; border-bottom:1px solid var(--navy-border); }
+  .tabbar::-webkit-scrollbar{ display:none; }
+  .tabbtn{ flex:0 0 auto; border:none; background:transparent; color:var(--muted-light); font-family:'DM Sans', sans-serif; font-size:12px; font-weight:700; padding:10px 11px; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+  .tabbtn.active{ color:var(--gold); border-bottom-color:var(--gold); }
 
-/* CONTENT */
-.tab-content { display: none; padding: 12px 12px 80px; }
-.tab-content.active { display: block; }
+  .content{ padding-top:14px; }
+  .tabpanel{ display:none; }
+  .tabpanel.active{ display:block; }
 
-/* CARDS */
-.card {
-  background: var(--card); border-radius: 12px;
-  border: 1px solid var(--border); padding: 14px; margin-bottom: 10px;
-}
-.card-title {
-  font-family: 'Fraunces', serif; font-size: 15px; font-weight: 600;
-  color: var(--navy); margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.stripe { width: 3px; border-radius: 2px; height: 16px; flex-shrink: 0; }
-.stripe-terracotta { background: var(--terracotta); }
-.stripe-gold { background: var(--gold); }
-.stripe-sage { background: var(--sage); }
-.stripe-blue { background: var(--blue); }
-.stripe-teal { background: var(--teal); }
-.stripe-red { background: var(--red); }
-.stripe-navy { background: var(--navy); }
+  .banner{ border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px; display:flex; align-items:flex-start; gap:8px; font-size:13px; font-weight:600; border:1px solid var(--border); background:var(--card); color:var(--sage); }
+  .banner-alert{ color:var(--red); border-color:#EBC9C2; background:var(--red-bg); }
+  .banner-warn{ color:var(--terracotta); border-color:#EAD2BE; background:#F7E7D8; }
+  .banner-info{ color:var(--blue); }
 
-/* SECTION HEADERS */
-.section-label {
-  font-size: 10px; font-weight: 600; text-transform: uppercase;
-  letter-spacing: 0.8px; color: var(--muted); margin: 14px 0 6px;
-}
+  .section-label{ font-size:11px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); font-weight:700; margin:18px 0 8px 2px; }
+  .section-label:first-child{ margin-top:0; }
 
-/* TAGS */
-.tag {
-  display: inline-block; padding: 2px 8px; border-radius: 10px;
-  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px;
-}
-.tag-urgent { background: #FDEDED; color: var(--red); }
-.tag-important { background: #FFF8E7; color: #B45309; }
-.tag-info { background: #F0FDF4; color: var(--sage); }
-.tag-muted { background: var(--border); color: var(--muted); }
-.tag-teal { background: #E6FFFA; color: var(--teal); }
-.tag-work { background: #EEF4FF; color: var(--blue); }
-.tag-personal { background: #FFF8F0; color: var(--terracotta); }
+  .card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:14px 15px; margin-bottom:10px; position:relative; overflow:hidden; }
+  .card::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:var(--gold); }
+  .card.stripe-terracotta::before{ background:var(--terracotta); }
+  .card.stripe-sage::before{ background:var(--sage); }
+  .card.stripe-blue::before{ background:var(--blue); }
+  .card.stripe-teal::before{ background:var(--teal); }
+  .card-title{ font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink); display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+  .card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
+  .card .muted{ color:var(--muted); font-size:12px; }
 
-/* EMAIL ITEMS */
-.email-item {
-  border-left: 3px solid var(--border); padding: 8px 10px;
-  margin-bottom: 6px; border-radius: 0 8px 8px 0;
-}
-.email-item.urgent { border-left-color: var(--red); }
-.email-item.important { border-left-color: var(--gold); }
-.email-item.info { border-left-color: var(--sage); }
-.email-item.snoozed { border-left-color: var(--muted); }
+  /* ===== NAVY HIGHLIGHT BOX (próximo evento especial) ===== */
+  .navy-box{ background:linear-gradient(160deg, var(--navy), var(--navy-2)); border-radius:var(--radius); padding:14px 16px; margin-bottom:14px; color:var(--ink-light); }
+  .navy-box .label{ font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--gold); font-weight:700; margin-bottom:4px; }
+  .navy-box .title{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; }
+  .navy-box .meta{ font-size:12px; color:var(--muted-light); margin-top:3px; }
 
-/* TASK ITEMS */
-.task-item {
-  display: flex; align-items: flex-start; gap: 8px;
-  padding: 7px 0; border-bottom: 1px solid var(--border);
-}
-.task-item:last-child { border-bottom: none; }
-.task-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-.dot-terracotta { background: var(--terracotta); }
-.dot-gold { background: var(--gold); }
-.dot-sage { background: var(--sage); }
-.dot-blue { background: var(--blue); }
+  /* ===== 3-DAY CARDS ===== */
+  .day3-grid{ display:grid; grid-template-columns:1fr; gap:8px; }
+  .day3-card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px; }
+  .day3-card .d3-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:5px; }
+  .day3-card .d3-name{ font-family:'Fraunces', serif; font-weight:600; font-size:14px; }
+  .day3-card .d3-date{ font-size:11px; color:var(--muted); }
+  .day3-card .d3-pills{ display:flex; gap:5px; flex-wrap:wrap; margin-top:5px; }
+  .pill-mini{ font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:999px; background:var(--border); color:var(--ink); }
+  .pill-mini.pm-event{ background:#DCE7EE; color:var(--blue); }
+  .pill-mini.pm-task{ background:#F2E4DD; color:var(--terracotta); }
+  .pill-mini.pm-bo{ background:var(--red-bg); color:var(--red); }
+  .pill-mini.pm-sigic{ background:#E4D7EC; color:var(--purple); }
 
-/* CALENDAR */
-.cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; margin-bottom: 12px; }
-.cal-header { text-align: center; font-size: 10px; font-weight: 600; color: var(--muted); padding: 4px; }
-.cal-day {
-  min-height: 52px; padding: 4px; border-radius: 6px; cursor: pointer;
-  border: 2px solid transparent; transition: all 0.15s; position: relative;
-}
-.cal-day:hover { background: rgba(199,90,44,0.08); }
-.cal-day.today { border-color: var(--terracotta) !important; background: rgba(199,90,44,0.06); }
-.cal-day.selected { border-color: var(--navy); background: rgba(26,61,82,0.08); }
-.cal-day.other-month { opacity: 0.35; }
-.cal-day-num { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
-.cal-pill {
-  font-size: 9px; padding: 1px 4px; border-radius: 4px;
-  margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.pill-sigic { background: #FFF8E7; color: #B45309; }
-.pill-event { background: #EEF4FF; color: var(--blue); }
-.pill-work { background: #E6FFFA; color: var(--teal); }
-.pill-holl { background: #F0FDF4; color: var(--sage); }
-.pill-special { background: #FDEDED; color: var(--red); }
+  /* ===== TAREFAS — board panorama 3 colunas ===== */
+  .board3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:14px; }
+  .board3-col{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 8px; text-align:center; }
+  .board3-col .b3-day{ font-size:10.5px; font-weight:700; color:var(--navy); text-transform:uppercase; margin-bottom:5px; }
+  .board3-col .b3-total{ font-family:'Fraunces', serif; font-size:19px; font-weight:600; }
+  .board3-col .b3-split{ font-size:10px; color:var(--muted); margin-top:2px; }
+  .board3-col .b3-extra{ font-size:10px; color:var(--muted); margin-top:5px; line-height:1.5; }
 
-.cal-detail {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 10px; padding: 12px; margin-top: 8px;
-}
-.cal-detail-date { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; margin-bottom: 8px; }
-.cal-event-item { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-.cal-event-item:last-child { border-bottom: none; }
-.no-events { color: var(--muted); font-size: 12px; font-style: italic; padding: 8px 0; }
+  .task-section-label{ font-size:11px; font-weight:700; color:var(--navy); text-transform:uppercase; letter-spacing:.04em; margin:14px 0 6px 2px; }
+  .task-card{ border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:7px; border:1.5px solid var(--border); transition:background .2s,border-color .2s; }
+  .task-card.tc-red{ border-color:var(--red); background:var(--red-bg); }
+  .task-card.tc-yellow{ border-color:var(--gold); background:#FBF1D9; }
+  .task-card.tc-green{ border-color:var(--green); background:#E4EFE2; }
+  .task-card .tc-date{ font-size:11px; font-weight:700; color:var(--muted); margin-bottom:5px; text-transform:uppercase; }
+  .task-item{ display:flex; align-items:flex-start; gap:8px; font-size:13px; padding:3px 0; border-left:3px solid var(--terracotta); padding-left:8px; margin-bottom:2px; }
+  .task-item.ti-sugestao{ border-left-color:var(--gold); }
+  .task-item.ti-habito{ border-left-color:var(--sage); }
+  .task-item.ti-desporto{ border-left-color:var(--blue); }
+  .task-item input[type=checkbox]{ margin-top:2px; cursor:pointer; }
+  .task-item.done span{ text-decoration:line-through; color:var(--muted); }
 
-/* HFF TABS */
-.hff-tab-nav { display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto; padding-bottom: 4px; }
-.hff-tab-btn {
-  flex-shrink: 0; padding: 5px 12px; border-radius: 16px;
-  border: 1.5px solid var(--border); cursor: pointer; font-size: 12px;
-  background: white; color: var(--navy); transition: all 0.2s; font-family: 'DM Sans';
-}
-.hff-tab-btn.active { background: var(--navy); color: white; border-color: var(--navy); font-weight: 600; }
-.hff-section { display: none; }
-.hff-section.active { display: block; }
+  /* ===== CALENDÁRIO ===== */
+  .cal-nav{ display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+  .cal-nav .cal-month{ font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--navy); }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:3px; }
+  .cal-dow{ font-size:10px; text-align:center; color:var(--muted); font-weight:700; padding:4px 0; }
+  .cal-cell{ min-height:70px; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:4px; font-size:11px; position:relative; }
+  .cal-cell.cal-other{ opacity:.35; }
+  .cal-cell.cal-today{ border:2px solid var(--terracotta); }
+  .cal-cell .cal-daynum{ font-weight:700; font-size:11px; }
+  .cal-cell .cal-pills{ display:flex; flex-wrap:wrap; gap:2px; margin-top:3px; }
+  .cal-pill{ font-size:8.5px; font-weight:700; padding:1px 4px; border-radius:6px; }
+  .cal-pill.cp-event{ background:#DCE7EE; color:var(--blue); }
+  .cal-pill.cp-task{ background:#F2E4DD; color:var(--terracotta); }
+  .cal-badge-dot{ width:6px; height:6px; border-radius:50%; position:absolute; top:4px; right:4px; }
+  .cal-badge-dot.cb-special{ background:var(--terracotta); }
+  .cal-badge-dot.cb-holiday{ background:var(--sage); }
+  .cal-badge-dot.cb-sport{ background:var(--blue); }
+  .cal-badge-dot.cb-sigic{ background:var(--red); }
+  .cal-badge-dot.cb-show{ background:var(--purple); }
+  .cal-detail{ margin-top:10px; }
 
-/* TABLE */
-.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.data-table th { background: var(--navy); color: white; padding: 6px 8px; text-align: left; font-weight: 600; font-size: 11px; }
-.data-table td { padding: 7px 8px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.data-table tr:last-child td { border-bottom: none; }
-.data-table tr:hover td { background: rgba(26,61,82,0.03); }
-.fdr-row td { background: #FDEDED !important; border-left: 3px solid var(--red); }
+  /* ===== EMAIL ===== */
+  .email-section-label{ display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; margin:14px 0 6px 2px; }
+  .email-row{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 11px; margin-bottom:6px; font-size:13px; }
+  .email-row .e-from{ font-weight:700; font-size:12.5px; }
+  .email-row .e-subj{ font-size:13px; margin:2px 0; }
+  .email-row .e-summary{ font-size:12px; color:var(--muted); }
+  .email-row.e-noise{ padding:6px 11px; font-size:12px; color:var(--muted); }
+  .email-badge{ font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--teal); color:#fff; margin-left:5px; }
 
-/* COLLAPSIBLE */
-.collapsible-header {
-  display: flex; align-items: center; justify-content: space-between;
-  cursor: pointer; padding: 10px 12px; background: #FFF8E7;
-  border-radius: 8px; border: 1px solid #F0D89A; margin-bottom: 4px;
-  font-weight: 600; font-size: 13px;
-}
-.collapsible-header:hover { background: #FFF3D0; }
-.collapsible-body { display: none; }
-.collapsible-body.open { display: block; }
-.chevron { transition: transform 0.2s; }
-.chevron.open { transform: rotate(180deg); }
+  /* ===== TEMPO ===== */
+  table.weather7{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  table.weather7 th{ text-align:center; font-size:10px; color:var(--muted); text-transform:uppercase; padding:4px; border-bottom:1px solid var(--border); }
+  table.weather7 td{ text-align:center; padding:7px 4px; border-bottom:1px dashed var(--border); }
+  .window-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-bottom:1px dashed var(--border); font-size:13px; }
+  .window-row:last-child{ border-bottom:none; }
+  .window-time{ font-weight:700; color:var(--navy); min-width:48px; }
 
-/* PANORAMA BOARD */
-.board { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-.board-col { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
-.board-col-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin-bottom: 8px; }
-.board-stat { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--navy); }
-.board-sub { font-size: 10px; color: var(--muted); margin-top: 2px; }
-.board-split { display: flex; gap: 4px; margin-top: 6px; }
-.board-split span { font-size: 10px; padding: 2px 6px; border-radius: 6px; }
+  /* ===== ROTINA ===== */
+  .routine-card{ display:flex; gap:10px; align-items:flex-start; }
+  .routine-time{ font-family:'Fraunces', serif; font-size:18px; font-weight:600; color:var(--navy); min-width:58px; }
 
-/* B3 TABS */
-.b3-tab-nav { display: flex; gap: 4px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px; }
-.b3-tab-btn {
-  flex-shrink: 0; padding: 5px 10px; border-radius: 10px; cursor: pointer;
-  font-size: 11px; border: 1.5px solid var(--border); background: white;
-  color: var(--navy); font-family: 'DM Sans'; transition: all 0.2s;
-}
-.b3-tab-btn.active { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 700; }
-.b3-section { display: none; }
-.b3-section.active { display: block; }
+  details.collapse{ background:var(--ink-light); border:1px solid var(--border); border-radius:var(--radius-sm); margin:6px 0; overflow:hidden; }
+  details.collapse summary{ padding:9px 11px; font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer; list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  details.collapse summary::-webkit-details-marker{ display:none; }
+  details.collapse summary::after{ content:'▾'; color:var(--muted); font-size:11px; }
+  details.collapse[open] summary::after{ content:'▴'; }
+  details.collapse .collapse-body{ padding:0 11px 11px; font-size:13px; }
 
-/* BANNER */
-.banner {
-  border-radius: 10px; padding: 10px 14px; margin-bottom: 10px;
-  font-size: 13px; display: flex; align-items: flex-start; gap: 8px;
-}
-.banner-info { background: #EEF4FF; border: 1px solid #C3D5F5; color: var(--blue); }
-.banner-warn { background: #FFF8E7; border: 1px solid #F0D89A; color: #92400E; }
-.banner-alert { background: #FDEDED; border: 1px solid #FBBFBF; color: var(--red); }
-
-/* TEMPO TABLE */
-.weather-table { width: 100%; border-collapse: collapse; font-size: 12px; }
-.weather-table td { padding: 8px; border-bottom: 1px solid var(--border); text-align: center; }
-.weather-table tr:first-child td { border-radius: 8px 8px 0 0; background: rgba(26,61,82,0.04); font-weight: 600; }
-
-/* AUDIO BTN */
-.audio-btn {
-  width: 100%; padding: 12px; background: var(--navy); color: white;
-  border: none; border-radius: 10px; font-size: 14px; font-family: 'DM Sans';
-  cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
-  margin-bottom: 10px;
-}
-
-/* PREVENCAO */
-.prev-card {
-  border-radius: 8px; padding: 10px 12px; margin-bottom: 6px;
-  border: 1px solid var(--border); font-size: 13px;
-}
-.prev-card.on-call { background: rgba(199,90,44,0.06); border-color: var(--terracotta); }
-.prev-card.mine { background: rgba(199,90,44,0.12); border-color: var(--terracotta); border-width: 2px; }
-
-/* ABSENCE BADGE */
-.aus-badge { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; }
-.aus-isabel { background: #FFF3E0; color: #E65100; }
-.aus-rafael { background: #E3F2FD; color: #1565C0; }
-.aus-rodrigo { background: #E8F5E9; color: #2E7D32; }
-
-/* ROTINA */
-.rotina-item {
-  display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border);
-  align-items: flex-start;
-}
-.rotina-time { font-family: 'Fraunces', serif; font-size: 14px; font-weight: 700; color: var(--terracotta); min-width: 48px; }
-.rotina-body { flex: 1; }
-.rotina-title { font-weight: 600; font-size: 13px; }
-.rotina-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <h1>☀️ Terça · 17 Jun 2026</h1>
-    <p>Semana 25 · Dia de BO · Prevenção: Rodrigo</p>
-  </div>
-  <div class="weather-pill">⛅ 28°C<br><span style="font-size:10px">Carnide</span></div>
-</div>
-
-<div class="tab-nav" id="mainNav">
-  <button class="tab-btn active" onclick="showTab('hoje')">🌅 Hoje</button>
-  <button class="tab-btn" onclick="showTab('tarefas')">✅ Tarefas</button>
-  <button class="tab-btn" onclick="showTab('calendario')">📅 Calendário</button>
-  <button class="tab-btn" onclick="showTab('email')">📬 Email</button>
-  <button class="tab-btn" onclick="showTab('hff')">🏥 Trabalho HFF</button>
-  <button class="tab-btn" onclick="showTab('noticias')">📰 Notícias</button>
-  <button class="tab-btn" onclick="showTab('fullb3')">📊 Full B3</button>
-  <button class="tab-btn" onclick="showTab('carnegie')">📖 Carnegie</button>
-  <button class="tab-btn" onclick="showTab('tempo')">🌤️ Tempo</button>
-  <button class="tab-btn" onclick="showTab('rotina')">⚡ Rotina</button>
-</div>
-
-<!-- ════ TAB HOJE ════ -->
-<div id="tab-hoje" class="tab-content active">
-
-  <div class="banner banner-info">
-    <span>🏥</span>
-    <div><strong>Dia de Bloco Operatório</strong> — 4 cirurgias de manhã + SIGIC à tarde (Isabel + Rafael).<br>Prevenção esta semana: <strong>Rodrigo</strong>. Próxima semana on-call: <strong>Rafael</strong>.</div>
-  </div>
-
-  <div class="card" style="border-top: 3px solid #C75158; margin-bottom:10px;">
-    <div style="font-family:'Fraunces',serif; font-size:13px; font-weight:700; color:#C75158; margin-bottom:4px;">🎉 EM DESTAQUE — Esta Semana</div>
-    <div style="font-size:13px; color:var(--navy); line-height:1.5;">
-      <strong>Sex 27 Jun</strong> — Rock in Rio Legends Day 🎸<br>
-      <strong>Dom 22 Jun</strong> — Estreia House of the Dragon S3 (HBO/Max) 🐉
-    </div>
-  </div>
-
-  <!-- Próximos 3 dias -->
-  <div class="section-label">📅 Próximos 3 dias</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;">
-    <div class="card" style="border-top:3px solid var(--terracotta);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--terracotta);margin-bottom:6px;">Hoje · Ter</div>
-      <div style="font-size:11px;line-height:1.6;">🏥 BO manhã<br>🔪 SIGIC tarde<br>📋 Reembolso IRS<br>📋 IR Brasil<br>📋 Baixa</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--navy);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--navy);margin-bottom:6px;">Amanhã · Qua</div>
-      <div style="font-size:11px;line-height:1.6;">📋 Conferir FS Madeira<br>🏋️ Gym 7h30<br>📚 Leitura CP manhã<br>🚴 Ciclo lazer tarde</div>
-    </div>
-    <div class="card" style="border-top:3px solid var(--gold);">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Qui · 19 Jun</div>
-      <div style="font-size:11px;line-height:1.6;">📋 Conferir Sigic<br>📋 Junilson<br>📋 Pendrive<br>🎉 Active Hive Aniversário<br>⚡ Vcto Opções</div>
-    </div>
-  </div>
-
-  <!-- B3 Resumo -->
-  <div class="section-label">📊 B3 · Resumo</div>
-  <div class="card" style="border-left: 3px solid var(--gold);">
-    <div style="font-size:12px;color:var(--muted);margin-bottom:6px;">⚠️ Relatório AII de hoje não foi gerado ainda — pasta do projecto AII não acessível a partir deste projecto. Aciona o relatório manualmente no projecto AII.</div>
-    <div style="font-size:12px; line-height:1.7;">
-      <strong>Carteira:</strong> SUZB3 · KLBN · TIMS3 · BBDC · BBAS3 · SANB · BPAC11 · IRBR3 · RANI3 · SLCE3<br>
-      <span style="color:var(--muted);">USD/BRL e índices indisponíveis sem relatório do dia.</span>
-    </div>
-  </div>
-
-  <!-- Carnegie do dia -->
-  <div class="section-label">📖 Carnegie · Semana 2</div>
-  <div class="card" style="border-left: 3px solid var(--teal);">
-    <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">Briefing do curso não foi encontrado para hoje. Vai ao projecto Personal Development OS para gerar.</div>
-    <div style="font-weight:600;font-size:13px;color:var(--teal);">💭 Reflexão do dia</div>
-    <div style="font-size:13px;margin-top:4px;font-style:italic;">"Antes de falar — estou aqui para entender ou para corrigir?"</div>
-  </div>
-</div>
-
-<!-- ════ TAB TAREFAS ════ -->
-<div id="tab-tarefas" class="tab-content">
-
-  <!-- Panorama Board -->
-  <div class="section-label">📊 Panorama Visual</div>
-  <div class="board">
-    <div class="board-col">
-      <div class="board-col-title">Hoje</div>
-      <div class="board-stat">4</div>
-      <div class="board-sub">tarefas Todoist</div>
-      <div class="board-split">
-        <span style="background:#EEF4FF;color:var(--blue);">💼 2 Work</span>
-        <span style="background:#FFF8F0;color:var(--terracotta);">👤 2 Pessoal</span>
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="greet">☀️ Bom dia, Rafa</div>
+        <a class="back-link" href="../index.html">↩ Início</a>
       </div>
-    </div>
-    <div class="board-col">
-      <div class="board-col-title">Amanhã</div>
-      <div class="board-stat">2</div>
-      <div class="board-sub">tarefas</div>
-      <div class="board-split">
-        <span style="background:#EEF4FF;color:var(--blue);">💼 1 Work</span>
-        <span style="background:#FFF8F0;color:var(--terracotta);">👤 1 Pessoal</span>
-      </div>
-    </div>
-    <div class="board-col">
-      <div class="board-col-title">Depois</div>
-      <div class="board-stat">6+</div>
-      <div class="board-sub">nos próximos dias</div>
-      <div class="board-split">
-        <span style="background:var(--border);color:var(--muted);">Ver calendário</span>
+      <div class="topbar-row2">
+        <span class="chip daytype">📅 <b>Sábado, 11 Jul</b></span>
+        <span class="chip">🌡️ <b>20°</b></span>
+        <span class="chip">🏥 <b>Sem HFF hoje</b></span>
       </div>
     </div>
   </div>
 
-  <!-- Todoist Hoje -->
-  <div class="section-label">📋 Todoist · Hoje (17 Jun)</div>
-  <div class="card">
-    <div class="task-item">
-      <div class="task-dot dot-terracotta" style="margin-top:5px;"></div>
-      <div><div style="font-weight:600;font-size:13px;">Reembolso IRS</div><div style="font-size:11px;color:var(--muted);">👤 Pessoal · Hoje</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-terracotta"></div>
-      <div><div style="font-weight:600;font-size:13px;">IR Brasil</div><div style="font-size:11px;color:var(--muted);">👤 Pessoal · Hoje</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-blue"></div>
-      <div><div style="font-weight:600;font-size:13px;">✓ Agenesia pulmonar · proc. 1306876 · DeLange</div><div style="font-size:11px;color:var(--muted);">💼 Trabalho · Hoje</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-blue"></div>
-      <div><div style="font-weight:600;font-size:13px;">Baixa</div><div style="font-size:11px;color:var(--muted);">💼 Trabalho · Hoje</div></div>
-    </div>
+  <!-- ===== TABBAR — Modo A (7 tabs). render.py remove HFF_BTN inteiro em Modo B. ===== -->
+  <div class="tabbar">
+    <button class="tabbtn active" onclick="showTab('hoje')">🌅 Hoje</button>
+    <button class="tabbtn" onclick="showTab('tarefas')">✅ Tarefas</button>
+    <button class="tabbtn" onclick="showTab('calendario')">📅 Calendário</button>
+    <button class="tabbtn" onclick="showTab('email')">📬 Email</button>
+    
+    <button class="tabbtn" onclick="showTab('tempo')">🌤️ Tempo</button>
+    <button class="tabbtn" onclick="showTab('rotina')">⚡ Rotina</button>
   </div>
 
-  <!-- Hábitos de terça -->
-  <div class="section-label">🌿 Hábitos · Terça</div>
-  <div class="card">
-    <div class="task-item">
-      <div class="task-dot" style="background:var(--sage);margin-top:5px;"></div>
-      <div><div style="font-weight:600;font-size:13px;">Actualização de CV</div><div style="font-size:11px;color:var(--muted);">🌿 Hábito · Quinzenal</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot" style="background:#4A7FAD;"></div>
-      <div><div style="font-weight:600;font-size:13px;">Gym 7h30</div><div style="font-size:11px;color:var(--muted);">🏋️ Desporto · Terças</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot" style="background:#4A7FAD;"></div>
-      <div><div style="font-weight:600;font-size:13px;">Ciclo lazer/reabilitação</div><div style="font-size:11px;color:var(--muted);">🚴 Desporto · após regressar a casa</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot" style="background:var(--terracotta);"></div>
-      <div><div style="font-weight:600;font-size:13px;">Café com a Clara</div><div style="font-size:11px;color:var(--muted);">👤 Pessoal · Terças</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot" style="background:var(--terracotta);"></div>
-      <div><div style="font-weight:600;font-size:13px;">Forxiga</div><div style="font-size:11px;color:var(--muted);">💊 Medicação · Diária</div></div>
-    </div>
-  </div>
+  <div class="wrap">
+    <div class="content">
 
-  <!-- Amanhã -->
-  <div class="section-label">📋 Todoist · Amanhã (18 Jun)</div>
-  <div class="card">
-    <div class="task-item">
-      <div class="task-dot dot-blue"></div>
-      <div><div style="font-weight:600;font-size:13px;">Conferir FS Madeira</div><div style="font-size:11px;color:var(--muted);">💼 Trabalho · Amanhã</div></div>
-    </div>
-  </div>
-</div>
+      <!-- ===================== TAB 1 — HOJE ===================== -->
+      <div id="tab-hoje" class="tabpanel active">
 
-<!-- ════ TAB CALENDÁRIO ════ -->
-<div id="tab-calendario" class="tab-content">
+        <div class="section-label">🎧 Áudio do dia</div>
+        <div class="card stripe-teal">
+          <p>Bom dia. Hoje é sábado, 11 de Julho. Fim-de-semana sem bloco operatório e sem Painel HFF neste briefing. Estás em prevenção esta semana, até terça, 14 — mantém o telefone por perto, mas sem restrições de deslocação longa previstas para hoje. A única tarefa do dia é tratar do itinerário da viagem. O hábito do dia é o treino de perna e core. Amanhã, domingo, tens o Wimbledon e a Massa Crítica para acompanhar. Fim-de-semana tranquilo — aproveita.</p>
+        </div>
 
-  <div class="section-label">📅 Junho 2026</div>
+        <div class="banner banner-info">
+          ℹ️ Em prevenção Hff esta semana, até terça, 14 Jul.
+        </div>
 
-  <!-- Calendar Grid -->
-  <div class="cal-grid" id="calGrid">
-    <!-- Headers -->
-    <div class="cal-header">Seg</div>
-    <div class="cal-header">Ter</div>
-    <div class="cal-header">Qua</div>
-    <div class="cal-header">Qui</div>
-    <div class="cal-header">Sex</div>
-    <div class="cal-header">Sáb</div>
-    <div class="cal-header">Dom</div>
-    <!-- Semana 1: 1-7 -->
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">1</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">2</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">3</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">4</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">5</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">6</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">7</div></div>
-    <!-- Semana 2: 8-14 -->
-    <div class="cal-day" onclick="selectDay(8,'')"><div class="cal-day-num">8</div></div>
-    <div class="cal-day" onclick="selectDay(9,'')"><div class="cal-day-num">9</div></div>
-    <div class="cal-day" onclick="selectDay(10,'')"><div class="cal-day-num">10</div></div>
-    <div class="cal-day" onclick="selectDay(11,'')"><div class="cal-day-num">11</div></div>
-    <div class="cal-day" onclick="selectDay(12,'')"><div class="cal-day-num">12</div></div>
-    <div class="cal-day" onclick="selectDay(13,'')"><div class="cal-day-num">13</div></div>
-    <div class="cal-day" onclick="selectDay(14,'')"><div class="cal-day-num">14</div></div>
-    <!-- Semana 3: 15-21 -->
-    <div class="cal-day" onclick="selectDay(15,'prev')"><div class="cal-day-num">15</div><div class="cal-pill pill-work">Prevenção</div></div>
-    <div class="cal-day" id="cal-16" onclick="selectDay(16,'')"><div class="cal-day-num">16</div></div>
-    <div class="cal-day today" id="cal-17" onclick="selectDay(17,'bo-sigic')"><div class="cal-day-num">17</div><div class="cal-pill pill-work">BO</div><div class="cal-pill pill-sigic">SIGIC</div></div>
-    <div class="cal-day" onclick="selectDay(18,'')"><div class="cal-day-num">18</div></div>
-    <div class="cal-day" onclick="selectDay(19,'active-hive-aniversario vcto-opcoes')"><div class="cal-day-num">19</div><div class="cal-pill pill-event">Active Hive 🎉</div></div>
-    <div class="cal-day" onclick="selectDay(20,'josie-niver')"><div class="cal-day-num">20</div><div class="cal-pill pill-event">Niver Josie</div></div>
-    <div class="cal-day" onclick="selectDay(21,'')"><div class="cal-day-num">21</div></div>
-    <!-- Semana 4: 22-28 -->
-    <div class="cal-day" onclick="selectDay(22,'bo-sigic hotd-premiere')"><div class="cal-day-num">22</div><div class="cal-pill pill-work">BO</div><div class="cal-pill pill-sigic">SIGIC</div><div class="cal-pill pill-special">🐉 HotD</div></div>
-    <div class="cal-day" onclick="selectDay(23,'cv-update previdencia-uk')"><div class="cal-day-num">23</div><div class="cal-pill pill-event">CV Update</div></div>
-    <div class="cal-day" onclick="selectDay(24,'bo')"><div class="cal-day-num">24</div><div class="cal-pill pill-work">BO</div></div>
-    <div class="cal-day" onclick="selectDay(25,'conferir-sigic')"><div class="cal-day-num">25</div></div>
-    <div class="cal-day" onclick="selectDay(26,'')"><div class="cal-day-num">26</div></div>
-    <div class="cal-day" onclick="selectDay(27,'rock-rio')"><div class="cal-day-num">27</div><div class="cal-pill pill-special">🎸 Rock in Rio</div></div>
-    <div class="cal-day" onclick="selectDay(28,'')"><div class="cal-day-num">28</div></div>
-    <!-- Semana 5: 29-30 + Jul -->
-    <div class="cal-day" onclick="selectDay(29,'sigic marcar-dentista cancelar-netlify')"><div class="cal-day-num">29</div><div class="cal-pill pill-sigic">SIGIC</div></div>
-    <div class="cal-day" onclick="selectDay(30,'revisao-carro')"><div class="cal-day-num">30</div><div class="cal-pill pill-event">Rev. Carro</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">1</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">2</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">3</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">4</div></div>
-    <div class="cal-day other-month" onclick="selectDay(0,'')"><div class="cal-day-num">5</div></div>
-  </div>
+        <div class="navy-box">
+          <div class="label">Próximo destaque</div>
+          <div class="title">Language Exchange: All Languages Welcome</div>
+          <div class="meta">Sábado, 18 Jul · 19h00</div>
+        </div>
 
-  <!-- Detalhe do dia seleccionado -->
-  <div class="cal-detail" id="calDetail">
-    <div class="cal-detail-date" id="calDetailDate">Terça, 17 de Junho</div>
-    <div id="calDetailContent">
-      <div class="cal-event-item"><span class="tag tag-work">🏥 BO</span> Bloco Operatório manhã — 4 cirurgias (Língua presa, Hérnia inguinal, Orelhas proeminentes)</div>
-      <div class="cal-event-item"><span class="tag tag-important">⏰ SIGIC</span> Lista adicional tarde — Isabel + Rafael (bloqueado ~15h30–21h)</div>
-      <div class="cal-event-item"><span class="tag tag-teal">📋 Tarefa</span> Reembolso IRS</div>
-      <div class="cal-event-item"><span class="tag tag-teal">📋 Tarefa</span> IR Brasil</div>
-      <div class="cal-event-item"><span class="tag tag-teal">📋 Tarefa</span> Baixa</div>
-      <div class="cal-event-item"><span class="tag tag-teal">📋 Tarefa</span> ✓ Agenesia pulmonar · proc. 1306876</div>
-    </div>
-  </div>
-</div>
+        <div class="section-label">Próximos 3 dias</div>
+        <div class="day3-grid">
 
-<!-- ════ TAB EMAIL ════ -->
-<div id="tab-email" class="tab-content">
+          <div class="day3-card">
+            <div class="d3-head"><span class="d3-name">Hoje</span><span class="d3-date">sábado</span></div>
+            <p class="muted">Leg &amp; Core Reinforcement</p>
+            <div class="d3-pills">
+              <span class="pill-mini pm-event">📅 0 eventos</span>
+              <span class="pill-mini pm-task">✅ 1 tarefas</span>
+              <span class="pill-mini pm-bo" style="display:none">🏥 BO</span>
+              <span class="pill-mini pm-sigic" style="display:none">🕒 SIGIC</span>
+            </div>
+          </div>
 
-  <!-- Urgente -->
-  <div class="section-label">🚨 Urgente</div>
-  <div class="card">
-    <div class="email-item urgent">
-      <div class="tag tag-urgent" style="margin-bottom:4px;">🚨 Urgente</div>
-      <div style="font-weight:600;font-size:13px;">GlobalcastMD — Laparoscopic Pediatric Hernia Repair 2026</div>
-      <div style="font-size:11px;color:var(--muted);">postmaster@globalcastmd.com · Snoozed</div>
-      <div style="font-size:12px;margin-top:3px;">Webinar <strong>amanhã 18 Jun às 14h00 (EDT = 19h Lisboa)</strong> — evento dentro de 24h</div>
-    </div>
-    <div class="email-item urgent">
-      <div class="tag tag-urgent" style="margin-bottom:4px;">🚨 Urgente</div>
-      <div style="font-weight:600;font-size:13px;">MEO Kalorama — Passe Geral preço especial</div>
-      <div style="font-size:11px;color:var(--muted);">meokalorama@lasttour.info · Snoozed</div>
-      <div style="font-size:12px;margin-top:3px;">Prazo: <strong>hoje 17 Jun às 23h59</strong> — preço especial termina hoje</div>
-    </div>
-  </div>
+          <div class="day3-card">
+            <div class="d3-head"><span class="d3-name">Amanhã</span><span class="d3-date">domingo</span></div>
+            <p class="muted">Leg &amp; Core Reinforcement</p>
+            <div class="d3-pills">
+              <span class="pill-mini pm-event">📅 0 eventos</span>
+              <span class="pill-mini pm-task">✅ 2 tarefas</span>
+              <span class="pill-mini pm-bo" style="display:none">🏥 BO</span>
+              <span class="pill-mini pm-sigic" style="display:none">🕒 SIGIC</span>
+            </div>
+          </div>
 
-  <!-- Importante -->
-  <div class="section-label">⚡ Importante</div>
-  <div class="card">
-    <div class="email-item important">
-      <div style="font-weight:600;font-size:13px;">ADSE — Comparticipação de Regime Livre</div>
-      <div style="font-size:11px;color:var(--muted);">no-reply@adse.pt · 9 Jun</div>
-      <div style="font-size:12px;margin-top:3px;">Pedido nº 17015002 — comparticipação de Clara Mazzoni Correia processada</div>
-    </div>
-    <div class="email-item important">
-      <div style="font-weight:600;font-size:13px;">Hospital da Luz — Consulta Endocrinologia</div>
-      <div style="font-size:11px;color:var(--muted);">noreply@hospitaldaluz.pt · Snoozed</div>
-      <div style="font-size:12px;margin-top:3px;">Ana Filipa Martins · <strong>14 Jul 2026 às 09h10</strong> (27 dias) — confirmar</div>
-    </div>
-    <div class="email-item important">
-      <div style="font-weight:600;font-size:13px;">Netlify — 50% de créditos usados</div>
-      <div style="font-size:11px;color:var(--muted);">team@netlify.com · Hoje</div>
-      <div style="font-size:12px;margin-top:3px;">Ciclo Jun 5–Jul 4: 500/1000 créditos usados. <em>(Nota: tarefa de cancelar Netlify Pro em 29 Jun)</em></div>
-    </div>
-  </div>
+          <div class="day3-card">
+            <div class="d3-head"><span class="d3-name">Depois de amanhã</span><span class="d3-date">segunda</span></div>
+            <p class="muted">Leitura artigos/vídeos Cirurgia Pediátrica</p>
+            <div class="d3-pills">
+              <span class="pill-mini pm-event">📅 1 eventos</span>
+              <span class="pill-mini pm-task">✅ 1 tarefas</span>
+              <span class="pill-mini pm-bo" style="display:none">🏥 BO</span>
+              <span class="pill-mini pm-sigic" style="display:inline-flex">🕒 SIGIC</span>
+            </div>
+          </div>
 
-  <!-- Informativo -->
-  <div class="section-label">📋 Informativo</div>
-  <div class="card">
-    <div class="email-item info">
-      <div style="font-weight:600;font-size:13px;">GlobalcastMD — Pediatric Surgery Update Course 2026</div>
-      <div style="font-size:11px;color:var(--muted);">info@globalcastmd.com · Snoozed</div>
-      <div style="font-size:12px;margin-top:3px;">Confirmação de registo — <strong>10 Ago 2026 às 15h00 (Lisboa)</strong></div>
-    </div>
-    <div class="email-item info">
-      <div style="font-weight:600;font-size:13px;">ISA Energia Brasil (ISAE3/4) — Pagamento Debêntures</div>
-      <div style="font-size:11px;color:var(--muted);">isaenergia@mail-ri.com.br · 12 Jun</div>
-      <div style="font-size:12px;margin-top:3px;">Pagamento de principal e juros da 1ª emissão + juros 8ª e 18ª série em 15 Jun</div>
-    </div>
-    <div class="email-item info">
-      <div style="font-weight:600;font-size:13px;">ADVFN · Bom dia — 15 Jun</div>
-      <div style="font-size:11px;color:var(--muted);">boletim@advfnbrmailservice.com · 15 Jun</div>
-      <div style="font-size:12px;margin-top:3px;">EUA e Irã chegam a acordo de paz, petróleo cai, Boletim Focus</div>
-    </div>
-  </div>
+        </div>
 
-  <!-- Snoozed -->
-  <div class="section-label">💤 Snoozed</div>
-  <div class="card">
-    <div class="email-item snoozed">
-      <div style="font-size:12px;color:var(--muted);">Bilhetes Scorpions · clarinhaiaia16@gmail.com · Jan 2026</div>
-    </div>
-    <div class="email-item snoozed">
-      <div style="font-size:12px;color:var(--muted);">Compra TicketLine (Iron Maiden) · clarinhaiaia16@gmail.com · Dez 2025</div>
-    </div>
-    <div class="email-item snoozed">
-      <div style="font-size:12px;color:var(--muted);">Amazon Music — alteração de preço · amazon.com · Fev 2026</div>
-    </div>
-    <div class="email-item snoozed">
-      <div style="font-size:12px;color:var(--muted);">Netlify — Pagamento $9 (Jun 5) · noreply@netlify.com</div>
-    </div>
-  </div>
-
-  <!-- Tarefas sem data -->
-  <div class="section-label">🗂️ Tarefas sem data</div>
-  <div class="card">
-    <div class="task-item">
-      <div class="task-dot dot-terracotta"></div>
-      <div><div style="font-weight:600;font-size:13px;">Certidão de Tempo de Contribuição</div><div style="font-size:11px;color:var(--muted);">rcc4730@gmail.com · Jun 2026</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-sage"></div>
-      <div><div style="font-weight:600;font-size:13px;">Aulas de Vela (Oeiras)</div><div style="font-size:11px;color:var(--muted);">Pedido de informação · Abr 2026</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-blue"></div>
-      <div><div style="font-weight:600;font-size:13px;">Artigo Diverticulite Apêndice (Afonso)</div><div style="font-size:11px;color:var(--muted);">afonsolrmendes@gmail.com · Jan 2026 — revisão pendente</div></div>
-    </div>
-    <div class="task-item">
-      <div class="task-dot dot-blue"></div>
-      <div><div style="font-weight:600;font-size:13px;">Protocolo NAC Neonatologia (Sofia)</div><div style="font-size:11px;color:var(--muted);">sofia.ptfg@gmail.com · Jan 2026 — versão actualizada enviada</div></div>
-    </div>
-  </div>
-
-  <!-- Events -->
-  <div class="section-label">🗓️ Events</div>
-  <div class="card">
-    <div class="email-item info">
-      <div style="font-weight:600;font-size:13px;">Gulbenkian — Jardim de Verão + Ciclo Cinema</div>
-      <div style="font-size:11px;color:var(--muted);">newsletters@gulbenkian.pt · 11 Jun</div>
-      <div style="font-size:12px;margin-top:3px;">Ex-libris (Wiseman) · Dom 14 Jun 16h + concertos de verão no jardim</div>
-    </div>
-    <div class="email-item info">
-      <div style="font-weight:600;font-size:13px;">What's happening in Lisbon · Semana 15 Jun</div>
-      <div style="font-size:11px;color:var(--muted);">luma-mail.com · 14 Jun</div>
-      <div style="font-size:12px;margin-top:3px;">Festas de Lisboa em curso · Rock in Rio + MEO Kalorama abrem este fim-de-semana · 33°C Sábado</div>
-    </div>
-  </div>
-</div>
-
-<!-- ════ TAB HFF ════ -->
-<div id="tab-hff" class="tab-content">
-
-  <!-- HFF Sub-tabs -->
-  <div class="hff-tab-nav">
-    <button class="hff-tab-btn active" onclick="showHffTab('resumo')">📋 Resumo</button>
-    <button class="hff-tab-btn" onclick="showHffTab('cirurgias')">🔪 Cirurgias</button>
-    <button class="hff-tab-btn" onclick="showHffTab('prevencao')">🛡️ Prevenção</button>
-    <button class="hff-tab-btn" onclick="showHffTab('sigic')">📊 SIGIC</button>
-    <button class="hff-tab-btn" onclick="showHffTab('equipa')">👥 Equipa</button>
-  </div>
-
-  <!-- RESUMO -->
-  <div id="hff-resumo" class="hff-section active">
-    <div class="banner banner-info" style="margin-bottom:8px;">
-      <span>🏥</span>
-      <div><strong>Terça-feira — Dia de Bloco Operatório</strong><br>Manhã: 4 cirurgias programadas · Tarde: SIGIC (Isabel + Rafael)</div>
-    </div>
-    <div class="card">
-      <div class="card-title"><div class="stripe stripe-navy"></div>Situação do Dia</div>
-      <div style="font-size:13px;line-height:1.8;">
-        🔪 <strong>Bloco Operatório:</strong> 4 cirurgias manhã (M)<br>
-        ⏰ <strong>SIGIC hoje:</strong> Isabel + Rafael · ~15h30–21h bloqueado<br>
-        🛡️ <strong>Prevenção esta semana:</strong> Rodrigo<br>
-        📅 <strong>Próximo BO:</strong> Quarta 22 Jun
       </div>
-    </div>
-    <div class="card">
-      <div class="card-title"><div class="stripe stripe-gold"></div>Alertas</div>
-      <div class="task-item">
-        <div class="task-dot" style="background:var(--gold);"></div>
-        <div style="font-size:13px;"><strong>22 Jun (Seg):</strong> On-call começa — Rafael de Prevenção a partir de 22 Jun. Isabel de férias essa semana.</div>
-      </div>
-      <div class="task-item">
-        <div class="task-dot" style="background:var(--terracotta);"></div>
-        <div style="font-size:13px;"><strong>24 Jun:</strong> IF ausente no BO (Isabel de férias) — só Rafael + RR</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- CIRURGIAS -->
-  <div id="hff-cirurgias" class="hff-section">
-    <div class="section-label">🔪 MANHÃ — Bloco Operatório (17 Jun)</div>
-    <div class="card" style="padding:0;overflow:hidden;">
-      <table class="data-table">
-        <thead><tr><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-        <tbody>
-          <tr><td><strong>6 m</strong></td><td>Esther Santana Lopes Oliveira</td><td>Língua Presa</td></tr>
-          <tr><td><strong>6,3a</strong></td><td>Júlia Siqueira Mendes</td><td>Hérnia Inguinal Bilateral</td></tr>
-          <tr><td><strong>8,1a</strong></td><td>Filipe Manuel Martins Ribeiro</td><td>Orelhas Proeminentes</td></tr>
-          <tr><td><strong>—</strong></td><td>Enzel Plácido Katuya Silva</td><td>—</td></tr>
-        </tbody>
-      </table>
-    </div>
+      <!-- ===================== TAB 2 — TAREFAS ===================== -->
+      <div id="tab-tarefas" class="tabpanel">
 
-    <div class="section-label">⏰ TARDE — SIGIC (17 Jun · Isabel + Rafael)</div>
-    <div class="collapsible-header" onclick="toggleCollapsible(this)">
-      <span>🔢 6 cirurgias SIGIC — clica para ver lista</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="collapsible-body">
-      <div class="card" style="padding:0;overflow:hidden;margin-top:4px;">
-        <table class="data-table">
-          <thead><tr><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+        <div class="section-label">Panorama — 3 dias</div>
+        <div class="board3">
+
+          <div class="board3-col">
+            <div class="b3-day">Hoje</div>
+            <div class="b3-total">1</div>
+            <div class="b3-split">💼 0 · 👤 1</div>
+            <div class="b3-extra">💡 0 · 🌿 1 · 🏃 0</div>
+          </div>
+
+          <div class="board3-col">
+            <div class="b3-day">Amanhã</div>
+            <div class="b3-total">2</div>
+            <div class="b3-split">💼 0 · 👤 2</div>
+            <div class="b3-extra">💡 0 · 🌿 1 · 🏃 0</div>
+          </div>
+
+          <div class="board3-col">
+            <div class="b3-day">Depois</div>
+            <div class="b3-total">1</div>
+            <div class="b3-split">💼 1 · 👤 0</div>
+            <div class="b3-extra">💡 0 · 🌿 1 · 🏃 0</div>
+          </div>
+
+        </div>
+
+
+        <div class="task-section-label">Hoje — Sábado, 11 Jul</div>
+        <div class="task-card tc-red" data-task-card>
+          <div class="tc-date">0/2 concluídas</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="updateTaskCard(this)"><span>Itinerário viagem</span></label>
+
+          <label class="task-item ti-habito" data-task><input type="checkbox"  onchange="updateTaskCard(this)"><span>Leg &amp; Core Reinforcement</span></label>
+        </div>
+
+        <div class="task-section-label">Amanhã — Domingo, 12 Jul</div>
+        <div class="task-card tc-red" data-task-card>
+          <div class="tc-date">0/3 concluídas</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="updateTaskCard(this)"><span>Wimbledon</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="updateTaskCard(this)"><span>Massa crítica (15h00)</span></label>
+
+          <label class="task-item ti-habito" data-task><input type="checkbox"  onchange="updateTaskCard(this)"><span>Leg &amp; Core Reinforcement</span></label>
+        </div>
+
+
+      </div>
+
+      <!-- ===================== TAB 3 — CALENDÁRIO ===================== -->
+      <div id="tab-calendario" class="tabpanel">
+
+        <div class="cal-nav">
+          <span class="cal-month">Julho 2026</span>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow">S</div><div class="cal-dow">T</div><div class="cal-dow">Q</div><div class="cal-dow">Q</div><div class="cal-dow">S</div><div class="cal-dow">S</div><div class="cal-dow">D</div>
+
+          <div class="cal-cell cal-today" onclick="showDay('2026-07-11')">
+            <span class="cal-daynum">11</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:none">📅0</span>
+              <span class="cal-pill cp-task" style="display:flex">✅1</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-12')">
+            <span class="cal-daynum">12</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:none">📅0</span>
+              <span class="cal-pill cp-task" style="display:flex">✅2</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-13')">
+            <span class="cal-daynum">13</span>
+            <span class="cal-badge-dot cb-sigic" style="display:block"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:flex">✅1</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-14')">
+            <span class="cal-daynum">14</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:flex">✅5</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-18')">
+            <span class="cal-daynum">18</span>
+            <span class="cal-badge-dot cb-special" style="display:block"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-21')">
+            <span class="cal-daynum">21</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell " onclick="showDay('2026-07-22')">
+            <span class="cal-daynum">22</span>
+            <span class="cal-badge-dot cb-sigic" style="display:block"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="cal-detail card" id="cal-detail-box">
+          <p class="card-title">Sábado, 2026-07-11</p>
+          <p>Sem eventos</p>
+          <p class="muted">Itinerário viagem</p>
+        </div>
+
+      </div>
+
+      <!-- ===================== TAB 4 — EMAIL ===================== -->
+      <div id="tab-email" class="tabpanel">
+
+
+
+
+        <div class="email-section-label" style="color:var(--terracotta)">⚡ Importante</div>
+
+        <div class="email-row">
+          <div class="e-from">Netlify</div>
+          <div class="e-subj">Créditos esgotados — acção necessária</div>
+          <div class="e-summary">Ciclo de faturação sem créditos; 30 créditos de cortesia activos, mas deploys de produção em risco.</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Google Flights</div>
+          <div class="e-subj">Preço do voo monitorado para Tirana baixou</div>
+          <div class="e-summary">Lisboa–Tirana agora 281€ (era 330€) · Sex 4 Set–Sáb 12 Set</div>
+        </div>
+
+
+
+
+        <div class="email-section-label" style="color:var(--blue)">📢 Informativo</div>
+
+        <div class="email-row">
+          <div class="e-from">ADSE</div>
+          <div class="e-subj">Comparticipação de Regime Livre</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">GMC UK</div>
+          <div class="e-subj">Desconto de rendimento na quota anual aprovado</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Leroy Merlin</div>
+          <div class="e-subj">Fatura electrónica FS 20260395202/030586</div>
+        </div>
+
+
+
+
+        <div class="email-section-label" style="color:var(--muted)">⚫ Ruído</div>
+        <div class="email-row e-noise">8 emails de marketing/newsletters/Todoist digest</div>
+
+
+
+
+
+        <div class="email-section-label">💤 Snoozed</div>
+
+        <div class="email-row">
+          <div class="e-from">Hospital da Luz</div>
+          <div class="e-subj">Confirmação de marcação — Consulta Endocrinologia</div>
+          <div class="e-summary">Reagendado para Terça, 14 Jul às 09h10</div>
+        </div>
+
+
+
+
+
+
+
+
+
+      </div>
+
+      <!-- ===================== TAB 5 — TRABALHO HFF (Modo A) ===================== -->
+      <!-- Versão condensada — painel completo vive em ../Hff/index.html -->
+
+
+      <!-- ===================== TAB 6 — TEMPO ===================== -->
+      <div id="tab-tempo" class="tabpanel">
+
+        <div class="section-label">Próximos 7 dias</div>
+        <table class="weather7">
+          <thead><tr><th>Dia</th><th>☁️</th><th>Máx/Mín</th><th>🌧️</th></tr></thead>
           <tbody>
-            <tr><td><strong>3,2a</strong></td><td>Ivanildo Gabriel Boaventura</td><td>Fimose + Hérnia Umbilical</td></tr>
-            <tr><td><strong>6,3a</strong></td><td>Gabriel Alexandre Andrade Monteiro</td><td>Fimose</td></tr>
-            <tr><td><strong>6,9a</strong></td><td>Jayden Lisandro Moreno</td><td>Fimose</td></tr>
-            <tr><td><strong>9,4a</strong></td><td>Onofre Mamadu Djalo</td><td>Fimose</td></tr>
-            <tr><td><strong>9,4a</strong></td><td>Ariana Carvalho Silva</td><td>Hérnia Umbilical</td></tr>
-            <tr><td><strong>10,0a</strong></td><td>João Pedro Machado Dias</td><td>Fimose</td></tr>
+
+            <tr><td>Sáb 11</td><td>☀️</td><td>27°/18°</td><td>0%</td></tr>
+
+            <tr><td>Dom 12</td><td>☀️</td><td>28°/18°</td><td>0%</td></tr>
+
+            <tr><td>Seg 13</td><td>🌤️</td><td>26°/17°</td><td>0%</td></tr>
+
+            <tr><td>Ter 14</td><td>☀️</td><td>27°/18°</td><td>0%</td></tr>
+
+            <tr><td>Qua 15</td><td>⛅</td><td>25°/17°</td><td>10%</td></tr>
+
+            <tr><td>Qui 16</td><td>☀️</td><td>28°/18°</td><td>0%</td></tr>
+
+            <tr><td>Sex 17</td><td>☀️</td><td>29°/19°</td><td>0%</td></tr>
+
           </tbody>
         </table>
+
+        <div class="section-label">Janelas do dia</div>
+        <div class="card">
+
+          <div class="window-row"><span class="window-time">08h00</span><span>Manhã livre em casa — fim-de-semana, sem saídas marcadas</span></div>
+
+          <div class="window-row"><span class="window-time">16h30</span><span>Tarde livre</span></div>
+
+          <div class="window-row"><span class="window-time">Após</span><span>Ciclo de lazer (bom tempo) — boa janela ao final da tarde</span></div>
+
+        </div>
+
       </div>
-    </div>
 
-    <div class="section-label">📅 Próximo BO — Segunda 22 Jun</div>
-    <div class="collapsible-header" onclick="toggleCollapsible(this)">
-      <span>🔢 8 cirurgias (2M + 6S) — clica para ver lista</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="collapsible-body">
-      <div class="card" style="padding:0;overflow:hidden;margin-top:4px;">
-        <table class="data-table">
-          <thead><tr><th>Turno</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-          <tbody>
-            <tr><td><span class="tag tag-work">M</span></td><td><strong>1,1a</strong></td><td>Lia Cássia José Muecária</td><td>DRGE</td></tr>
-            <tr><td><span class="tag tag-work">M</span></td><td><strong>11,2a</strong></td><td>Maria Helena</td><td>Tumor Membro Inf. Esq.</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>3,3a</strong></td><td>Miguel David Suarez Pires</td><td>Fimose + Hérnia Umbilical</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>5,0a</strong></td><td>Kevin Rafael Alves Vaz</td><td>Fimose</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>5,2a</strong></td><td>Gonçalo Rito Quade Pereira</td><td>Fimose</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>6,0a</strong></td><td>Noah Ratinho Pereira</td><td>Fimose</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>15,8a</strong></td><td>Ana Paula Anjos Lopes</td><td>Quisto Pilonidal</td></tr>
-            <tr><td><span class="tag tag-important">S</span></td><td><strong>16,7a</strong></td><td>Danilson Justino Cusha Aquite</td><td>Fimose</td></tr>
-          </tbody>
-        </table>
+      <!-- ===================== TAB 7 — ROTINA (dinâmica) ===================== -->
+      <div id="tab-rotina" class="tabpanel">
+
+        <div class="section-label">As 3 Janelas — à medida do dia</div>
+
+        <div class="card stripe-terracotta">
+          <div class="routine-card">
+            <span class="routine-time">08h</span>
+            <div>
+              <p class="card-title">🌅 Matinal</p>
+              <p>Itinerário viagem (única tarefa de hoje)</p>
+              <p class="muted">Leg &amp; Core Reinforcement · Fim-de-semana sem compromissos fixos — trata do itinerário da viagem cedo e liberta o resto do dia para o treino e para descansar.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="routine-card">
+            <span class="routine-time">~15h30</span>
+            <div>
+              <p class="card-title">⚡ Processamento</p>
+              <p>Decidir sobre o voo para Tirana antes que o preço suba outra vez; ver o aviso da Netlify com calma, não é urgente hoje.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card stripe-sage">
+          <div class="routine-card">
+            <span class="routine-time">21h30</span>
+            <div>
+              <p class="card-title">🌙 Descompressão</p>
+              <p>Amanhã: Wimbledon · Massa Crítica · Leg &amp; Core Reinforcement.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="muted" style="font-size:11px; margin-top:6px; padding-left:2px;">Dias SIGIC: Processamento e Descompressão movem para depois das 21h.</p>
+
       </div>
+
     </div>
 
-    <div class="section-label">📅 Quarta 24 Jun</div>
-    <div class="collapsible-header" onclick="toggleCollapsible(this)">
-      <span>🔢 5 cirurgias (todas M) · ⚠️ IF ausente</span>
-      <span class="chevron">▼</span>
-    </div>
-    <div class="collapsible-body">
-      <div class="banner banner-warn" style="margin:4px 0 4px;">⚠️ Isabel ausente (férias) — só Rafael + Rodrigo</div>
-      <div class="card" style="padding:0;overflow:hidden;">
-        <table class="data-table">
-          <thead><tr><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-          <tbody>
-            <tr><td><strong>&lt;1m</strong></td><td>Davi Oliveira Conceição Lima</td><td>Polidactilia Mão</td></tr>
-            <tr><td><strong>1,0a</strong></td><td>Derrick Khadka</td><td>Fimose</td></tr>
-            <tr><td><strong>4,2a</strong></td><td>Laura Maria Beites Rosa</td><td>HIE</td></tr>
-            <tr><td><strong>7,7a</strong></td><td>Matheus Silva Deus</td><td>Fimose</td></tr>
-            <tr><td><strong>8,6a</strong></td><td>Diego Alexandre Andrade Simões</td><td>Testículo Não Descido Bilateral</td></tr>
-          </tbody>
-        </table>
-      </div>
+    <div class="footer">
+      <p>Briefing Diário · Sábado, 11 Jul · gerado às 08:00</p>
     </div>
   </div>
-
-  <!-- PREVENÇÃO -->
-  <div id="hff-prevencao" class="hff-section">
-    <div class="section-label">🛡️ Escala de Prevenção</div>
-
-    <div class="prev-card on-call">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Esta semana · 15–21 Jun</div>
-      <div style="font-weight:700;font-size:15px;color:var(--sage);">🟢 Rodrigo</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px;">ON CALL esta semana</div>
-    </div>
-
-    <div class="prev-card mine" style="margin-top:6px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Próxima semana · 22–28 Jun</div>
-      <div style="font-weight:700;font-size:15px;color:var(--terracotta);">🔴 Rafael — ON CALL</div>
-      <div style="font-size:12px;color:var(--muted);margin-top:2px;">+ Isabel de férias esta semana</div>
-    </div>
-
-    <div class="prev-card" style="margin-top:6px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">29 Jun – 5 Jul</div>
-      <div style="font-size:13px;color:var(--muted);font-style:italic;">Ainda não atribuído</div>
-    </div>
-
-    <div class="prev-card" style="margin-top:6px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">13–19 Jul</div>
-      <div style="font-weight:600;font-size:13px;color:var(--sage);">Rodrigo de férias — escala a confirmar</div>
-    </div>
-  </div>
-
-  <!-- SIGIC -->
-  <div id="hff-sigic" class="hff-section">
-    <div class="section-label">📊 Listas SIGIC · Próximas 4 semanas</div>
-
-    <div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-weight:700;font-size:14px;">17 Jun (Ter) · <span style="color:var(--terracotta);">Hoje</span></div>
-        <span class="tag tag-work">Isabel + Rafael</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);">6 cirurgias SIGIC tarde — ver tab Cirurgias</div>
-    </div>
-
-    <div class="card" style="margin-top:6px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-weight:700;font-size:14px;">22 Jun (Seg)</div>
-        <span class="tag tag-work">Rafael + Rodrigo</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);">6 cirurgias SIGIC tarde — ⚠️ Isabel de férias</div>
-    </div>
-
-    <div class="card" style="margin-top:6px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-weight:700;font-size:14px;">29 Jun (Seg)</div>
-        <span class="tag tag-work">Isabel + Rafael</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);">Lista pendente — ver Sigic tab</div>
-    </div>
-
-    <div class="card" style="margin-top:6px; opacity:0.6;">
-      <div style="font-weight:600;font-size:13px;">6 Jul · 8 Jul · 13 Jul</div>
-      <div style="font-size:12px;color:var(--muted);">Cirurgiões ainda não atribuídos</div>
-    </div>
-  </div>
-
-  <!-- EQUIPA -->
-  <div id="hff-equipa" class="hff-section">
-    <div class="section-label">👥 Equipa · Ausências Jun–Jul 2026</div>
-
-    <div class="card">
-      <div class="card-title"><div class="stripe stripe-terracotta"></div>Isabel Franca (IF)</div>
-      <div style="font-size:13px;line-height:1.9;">
-        <span class="aus-badge aus-isabel">F Férias</span> <strong>22–28 Jun</strong> (semana da Prevenção do Rafael)<br>
-        <span class="aus-badge aus-isabel">F Férias</span> Também ausente 24 Jun (BO sem IF)
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:6px;">
-      <div class="card-title"><div class="stripe stripe-blue"></div>Rafael (RC) — Tu</div>
-      <div style="font-size:13px;line-height:1.9;">
-        <span class="aus-badge aus-rafael">🛡️ Prevenção</span> <strong>22–28 Jun</strong> — On call<br>
-        Sem ausências registadas para Junho
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:6px;">
-      <div class="card-title"><div class="stripe stripe-sage"></div>Rodrigo Roquette (RR)</div>
-      <div style="font-size:13px;line-height:1.9;">
-        <span class="aus-badge aus-rodrigo">🛡️ Prevenção</span> <strong>15–21 Jun</strong> — On call esta semana<br>
-        <span class="aus-badge aus-rodrigo">F Férias</span> Férias previstas em Julho
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:6px;">
-      <div class="card-title"><div class="stripe stripe-navy"></div>Alexandra (cirped)</div>
-      <div style="font-size:13px;color:var(--muted);">Férias até 30 Jun 2026 (calendário cirped)</div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ════ TAB NOTÍCIAS ════ -->
-<div id="tab-noticias" class="tab-content">
-
-  <!-- ADVFN -->
-  <div class="section-label">📰 ADVFN · Mercados (15 Jun)</div>
-  <div class="card">
-    <div class="card-title"><div class="stripe stripe-gold"></div>Destaques do último boletim</div>
-    <div style="font-size:13px;line-height:1.8;">
-      🕊️ <strong>EUA e Irã</strong> chegam a acordo de paz — petróleo recua<br>
-      📊 <strong>Boletim Focus</strong> divulgado (expectativas de mercado BR)<br>
-      🚀 <strong>SpaceX</strong> estreia na bolsa (sexta 12 Jun)<br>
-      📈 <strong>IPCA Brasil</strong> — dados divulgados<br>
-      🏦 <strong>BCE</strong> decidiu juros na semana passada
-    </div>
-  </div>
-
-  <!-- B3 Short -->
-  <div class="section-label">📊 B3 · SHORT SEM FONTES</div>
-  <div class="banner banner-warn">
-    ⚠️ <strong>Relatório AII de hoje (17 Jun) não disponível.</strong> Pasta do projecto AII não acessível a partir deste projecto. Para ter o relatório actualizado, aciona a rotina de geração no projecto AII.
-  </div>
-  <div class="card">
-    <div style="font-size:12px;line-height:1.8;color:var(--muted);">
-      Carteira activa: <strong>SUZB3 · KLBN · TIMS3 · BBDC · BBAS3 · SANB · BPAC11 · IRBR3 · RANI3 · SLCE3</strong><br>
-      Último boletim disponível: segunda 15 Jun — EUA/Irã, petróleo, Focus.<br>
-      <em>Para análise detalhada por ticker, vai ao projecto AII e aciona a rotina diária.</em>
-    </div>
-  </div>
-
-</div>
-
-<!-- ════ TAB FULL B3 ════ -->
-<div id="tab-fullb3" class="tab-content">
-
-  <div class="banner banner-alert">
-    🚨 <strong>Relatório AII de hoje (17 Jun 2026) não foi gerado.</strong><br>
-    Pasta <code>19IlmZ5GwFj6iF2OBbMmIvyuDA33s8u04</code> não acessível a partir deste projecto.<br><br>
-    <strong>Acção necessária:</strong> abre o projecto AII e aciona o ficheiro <code>AII_Z_Noticias_do_dia.md</code> para gerar o relatório de hoje.
-  </div>
-
-  <!-- B3 sub-tabs (placeholder) -->
-  <div class="b3-tab-nav">
-    <button class="b3-tab-btn active" onclick="showB3Tab('full-sf')">FULL s/ Fontes</button>
-    <button class="b3-tab-btn" onclick="showB3Tab('full-cf')">FULL c/ Fontes</button>
-    <button class="b3-tab-btn" onclick="showB3Tab('short-sf')">SHORT s/ Fontes</button>
-    <button class="b3-tab-btn" onclick="showB3Tab('short-cf')">SHORT c/ Fontes</button>
-    <button class="b3-tab-btn" onclick="showB3Tab('politica')">POLÍTICA</button>
-  </div>
-
-  <div id="b3-full-sf" class="b3-section active">
-    <div class="card">
-      <div class="card-title"><div class="stripe stripe-gold"></div>FULL SEM FONTES · 17 Jun 2026</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.8;">
-        O relatório completo não foi gerado para hoje.<br><br>
-        <strong>Carteira:</strong> SUZB3 · KLBN · TIMS3 · BBDC · BBAS3 · SANB · BPAC11 · IRBR3 · RANI3 · SLCE3<br><br>
-        Para aceder ao relatório de hoje com análise completa por ticker, macro e agenda económica, vai ao projecto AII e corre a rotina diária.
-      </div>
-    </div>
-  </div>
-  <div id="b3-full-cf" class="b3-section"><div class="card"><div style="color:var(--muted);font-size:13px;">Relatório não disponível — acionar rotina AII.</div></div></div>
-  <div id="b3-short-sf" class="b3-section"><div class="card"><div style="color:var(--muted);font-size:13px;">Relatório não disponível — acionar rotina AII.</div></div></div>
-  <div id="b3-short-cf" class="b3-section"><div class="card"><div style="color:var(--muted);font-size:13px;">Relatório não disponível — acionar rotina AII.</div></div></div>
-  <div id="b3-politica" class="b3-section"><div class="card"><div style="color:var(--muted);font-size:13px;">Secção POLÍTICA separada — disponível quando relatório AII for gerado.</div></div></div>
-</div>
-
-<!-- ════ TAB CARNEGIE ════ -->
-<div id="tab-carnegie" class="tab-content">
-
-  <div class="banner banner-info">
-    📖 <strong>Carnegie · Desenvolvimento de Pessoas · Semana 2 de 17</strong><br>
-    Briefing do curso para hoje não encontrado na pasta Licoes_diarias. Vai ao projecto Personal Development OS para gerar.
-  </div>
-
-  <div class="card" style="border-left:3px solid var(--teal);">
-    <div class="card-title"><div class="stripe stripe-teal"></div>Fio Condutor · Semana 1→2</div>
-    <div style="font-size:14px;font-style:italic;color:var(--navy);line-height:1.6;padding:6px 0;">
-      "Antes de falar — estou aqui para entender ou para corrigir?"
-    </div>
-    <div style="font-size:12px;color:var(--muted);margin-top:6px;">Padrão identificado: entrar em "modo correcção" — dar opiniões, resolver problemas, tentar mudar as pessoas em vez de ouvir.</div>
-  </div>
-
-  <div class="card" style="margin-top:8px;">
-    <div class="card-title"><div class="stripe stripe-sage"></div>Pessoas em foco · Semana 2</div>
-    <div style="font-size:13px;line-height:1.9;">
-      💛 Vanessa · 👩 Clara · 📞 Kátia · 📞 Raíssa · 🏥 Colega "38"
-    </div>
-    <div style="font-size:12px;color:var(--muted);margin-top:4px;">Exercício W1 com Vanessa (pergunta aberta, ouvir sem redirecionar) — correu melhor do que o esperado.</div>
-  </div>
-
-  <div class="card" style="margin-top:8px;">
-    <div class="card-title"><div class="stripe stripe-gold"></div>💭 Reflexão do dia</div>
-    <div style="font-size:13px;color:var(--navy);line-height:1.7;font-style:italic;">
-      "Hoje, numa conversa — vou deixar a outra pessoa chegar ao fim do pensamento antes de abrir a boca."
-    </div>
-  </div>
-
-</div>
-
-<!-- ════ TAB TEMPO ════ -->
-<div id="tab-tempo" class="tab-content">
-
-  <!-- 7 dias -->
-  <div class="section-label">🌡️ Previsão 7 dias · Lisboa</div>
-  <div class="card" style="padding:0;overflow:hidden;">
-    <table class="weather-table">
-      <tr>
-        <td>📅</td><td><strong>Ter 17</strong></td><td>Qua 18</td><td>Qui 19</td><td>Sex 20</td><td>Sáb 21</td><td>Dom 22</td><td>Seg 23</td>
-      </tr>
-      <tr>
-        <td>☀️</td><td>⛅</td><td>🌤️</td><td>☀️</td><td>☀️</td><td>☀️</td><td>🌤️</td><td>☀️</td>
-      </tr>
-      <tr>
-        <td>Máx</td><td><strong>28°</strong></td><td>26°</td><td>28°</td><td>29°</td><td>31°</td><td>30°</td><td>28°</td>
-      </tr>
-      <tr>
-        <td>Mín</td><td>16°</td><td>15°</td><td>16°</td><td>17°</td><td>18°</td><td>18°</td><td>17°</td>
-      </tr>
-      <tr>
-        <td>💧</td><td>5%</td><td>10%</td><td>5%</td><td>5%</td><td>5%</td><td>10%</td><td>5%</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- Janelas do dia -->
-  <div class="section-label">⏰ Janelas do dia</div>
-  <div class="card">
-    <div class="rotina-item">
-      <div class="rotina-time">08h00</div>
-      <div class="rotina-body">
-        <div class="rotina-title">🚗 Saída para HFF</div>
-        <div class="rotina-desc">IC19 · ~15 min · ⛅ 18° · Agradável</div>
-      </div>
-    </div>
-    <div class="rotina-item">
-      <div class="rotina-time">~21h00</div>
-      <div class="rotina-body">
-        <div class="rotina-title">🚗 Regresso a casa (após SIGIC)</div>
-        <div class="rotina-desc">IC19 · 22° noite agradável · 🚴 Ciclo lazer depois de chegar a casa (se energia)</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ════ TAB ROTINA ════ -->
-<div id="tab-rotina" class="tab-content">
-  <div class="section-label">⚡ As 3 Janelas · Terça SIGIC</div>
-
-  <div class="card">
-    <div class="rotina-item">
-      <div class="rotina-time">08h00</div>
-      <div class="rotina-body">
-        <div class="rotina-title">🌅 Matinal</div>
-        <div class="rotina-desc">Briefing completo → saída para HFF (BO + SIGIC)</div>
-      </div>
-    </div>
-    <div class="rotina-item">
-      <div class="rotina-time">~21h30</div>
-      <div class="rotina-body">
-        <div class="rotina-title">⚡ Processamento</div>
-        <div class="rotina-desc">Email + Todoist + 1 unsubscribe · Janela move após 21h (dia SIGIC)</div>
-      </div>
-    </div>
-    <div class="rotina-item" style="border-bottom:none;">
-      <div class="rotina-time">~22h30</div>
-      <div class="rotina-body">
-        <div class="rotina-title">🌙 Descompressão</div>
-        <div class="rotina-desc">Carnegie 5min + B3 SHORT 3min + 3 prioridades amanhã</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">🎯 3 Prioridades de Hoje</div>
-  <div class="card">
-    <div class="task-item">
-      <div style="font-size:16px;font-weight:700;color:var(--terracotta);min-width:24px;">1</div>
-      <div style="font-size:13px;font-weight:600;">Bloco operatório + SIGIC — foco clínico total</div>
-    </div>
-    <div class="task-item">
-      <div style="font-size:16px;font-weight:700;color:var(--terracotta);min-width:24px;">2</div>
-      <div style="font-size:13px;font-weight:600;">Reembolso IRS + IR Brasil — tratar hoje</div>
-    </div>
-    <div class="task-item" style="border-bottom:none;">
-      <div style="font-size:16px;font-weight:700;color:var(--terracotta);min-width:24px;">3</div>
-      <div style="font-size:13px;font-weight:600;">MEO Kalorama — decisão antes das 23h59</div>
-    </div>
-  </div>
-
-  <div class="section-label">💊 Medicação</div>
-  <div class="card">
-    <div style="font-size:13px;padding:4px 0;">💊 <strong>Forxiga</strong> — tomar hoje (recorrente diário)</div>
-    <div style="font-size:13px;padding:4px 0;">💊 <strong>Metformina 500mg</strong> — 1x ao dia</div>
-  </div>
-</div>
 
 <script>
-// TABS PRINCIPAIS
-function showTab(name) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// HFF SUB-TABS
-function showHffTab(name) {
-  document.querySelectorAll('.hff-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.hff-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('hff-'+name).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// B3 SUB-TABS
-function showB3Tab(name) {
-  document.querySelectorAll('.b3-section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.b3-tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('b3-'+name).classList.add('active');
-  event.target.classList.add('active');
-}
-
-// COLLAPSIBLE
-function toggleCollapsible(header) {
-  const body = header.nextElementSibling;
-  const chevron = header.querySelector('.chevron');
-  body.classList.toggle('open');
-  chevron.classList.toggle('open');
-}
-
-// CALENDAR
-const calEvents = {
-  17: {
-    label: 'Terça, 17 de Junho',
-    items: [
-      {type:'work',text:'Bloco Operatório manhã — 4 cirurgias (Língua presa, Hérnia inguinal, Orelhas proeminentes)'},
-      {type:'urgent',text:'SIGIC tarde — Isabel + Rafael (~15h30–21h)'},
-      {type:'teal',text:'Tarefa: Reembolso IRS'},
-      {type:'teal',text:'Tarefa: IR Brasil'},
-      {type:'teal',text:'Tarefa: Baixa'},
-      {type:'teal',text:'Tarefa: ✓ Agenesia pulmonar · proc. 1306876'},
-    ]
-  },
-  18: {
-    label: 'Quarta, 18 de Junho',
-    items: [
-      {type:'teal',text:'Tarefa: Conferir FS Madeira'},
-      {type:'info',text:'Hábito: Leitura artigos CP manhã'},
-      {type:'sport',text:'Gym 7h30'},
-      {type:'sport',text:'Ciclo lazer/reabilitação tarde'},
-    ]
-  },
-  19: {
-    label: 'Quinta, 19 de Junho',
-    items: [
-      {type:'teal',text:'Tarefa: Conferir doentes SIGIC'},
-      {type:'teal',text:'Tarefa: Junilson'},
-      {type:'teal',text:'Tarefa: Pendrive'},
-      {type:'teal',text:'Tarefa: Abscesso perianal (João Rafael) — RM'},
-      {type:'special',text:'🎉 ACTIVE HIVE 2nd Anniversary — Praia Fluvial de Janeiro de Cima (19–22 Jun)'},
-      {type:'urgent',text:'⚡ Vencimento Opções (3ª Sexta do mês)'},
-    ]
-  },
-  20: {
-    label: 'Sexta, 20 de Junho',
-    items: [
-      {type:'event',text:'Niver Josie em Sintra (14h00–15h00)'},
-    ]
-  },
-  22: {
-    label: 'Segunda, 22 de Junho',
-    items: [
-      {type:'work',text:'Bloco Operatório manhã — 8 cirurgias'},
-      {type:'urgent',text:'SIGIC tarde — Rafael + Rodrigo (Isabel de férias)'},
-      {type:'special',text:'🐉 House of the Dragon S3 — Estreia (HBO/Max)'},
-      {type:'teal',text:'Tarefa: Classificar e-faturas (mensal dia 22)'},
-    ]
-  },
-  23: {
-    label: 'Terça, 23 de Junho',
-    items: [
-      {type:'teal',text:'Tarefa: CV Update (quinzenal)'},
-      {type:'teal',text:'Tarefa: Previdência UK'},
-    ]
-  },
-  24: {
-    label: 'Quarta, 24 de Junho',
-    items: [
-      {type:'work',text:'Bloco Operatório manhã — 5 cirurgias (sem Isabel)'},
-      {type:'teal',text:'Tarefa: Itinerário viagem'},
-    ]
-  },
-  25: {
-    label: 'Quinta, 25 de Junho',
-    items: [
-      {type:'teal',text:'Tarefa: Conferir doentes SIGIC'},
-    ]
-  },
-  27: {
-    label: 'Sábado, 27 de Junho',
-    items: [
-      {type:'special',text:'🎸 Rock in Rio — Legends Day'},
-    ]
-  },
-  29: {
-    label: 'Segunda, 29 de Junho',
-    items: [
-      {type:'urgent',text:'SIGIC tarde — Isabel + Rafael'},
-      {type:'teal',text:'Tarefa: Marcar Dentista'},
-      {type:'teal',text:'Tarefa: Cancelar Netlify Pro'},
-    ]
-  },
-  30: {
-    label: 'Terça, 30 de Junho',
-    items: [
-      {type:'event',text:'Revisão Carro (09h45–10h15)'},
-    ]
-  },
-};
-
-const typeMap = {
-  work: {cls:'tag-work', emoji:'🏥'},
-  urgent: {cls:'tag-urgent', emoji:'⚠️'},
-  teal: {cls:'tag-teal', emoji:'📋'},
-  info: {cls:'tag-info', emoji:'📚'},
-  sport: {cls:'tag-muted', emoji:'🏋️'},
-  event: {cls:'tag-important', emoji:'📅'},
-  special: {cls:'tag-urgent', emoji:'⭐'},
-};
-
-let selectedDay = 17;
-
-function selectDay(day, tags) {
-  if (day === 0) return;
-  
-  // Remove selected from all
-  document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
-  
-  // Add selected to clicked
-  event.currentTarget.classList.add('selected');
-  selectedDay = day;
-  
-  const data = calEvents[day];
-  const dateEl = document.getElementById('calDetailDate');
-  const contentEl = document.getElementById('calDetailContent');
-  
-  if (!data) {
-    dateEl.textContent = 'Junho, dia ' + day;
-    contentEl.innerHTML = '<div class="no-events">Sem eventos registados.</div>';
-    return;
+  function showTab(name){
+    document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tabbar > .tabbtn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
   }
-  
-  dateEl.textContent = data.label;
-  contentEl.innerHTML = data.items.map(item => {
-    const t = typeMap[item.type] || {cls:'tag-muted', emoji:'•'};
-    return `<div class="cal-event-item"><span class="tag ${t.cls}">${t.emoji}</span> ${item.text}</div>`;
-  }).join('');
-}
-
-// Init: select today
-document.addEventListener('DOMContentLoaded', () => {
-  const todayEl = document.getElementById('cal-17');
-  if (todayEl) todayEl.classList.add('selected');
-});
+  function showDay(dateStr){
+    // substituir conteúdo de #cal-detail-box com os dados reais do dia clicado
+  }
+  function updateTaskCard(checkbox){
+    const card = checkbox.closest('[data-task-card]');
+    const items = card.querySelectorAll('[data-task] input[type=checkbox]');
+    let done = 0;
+    items.forEach(cb => { if (cb.checked) done++; cb.closest('.task-item').classList.toggle('done', cb.checked); });
+    card.classList.remove('tc-red','tc-yellow','tc-green');
+    if (done === 0) card.classList.add('tc-red');
+    else if (done === items.length) card.classList.add('tc-green');
+    else card.classList.add('tc-yellow');
+    const dateLabel = card.querySelector('.tc-date');
+    if (dateLabel) dateLabel.textContent = done + '/' + items.length + ' concluídas';
+  }
 </script>
+
 </body>
 </html>
