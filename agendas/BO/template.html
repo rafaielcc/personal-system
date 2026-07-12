@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--
+  LISTA BO — TEMPLATE DE RENDER (v2 — mecânico, tabs por semana)
+  ============================================================================
+  Alinhado com INSTRUCOES_PAINEL_HFF_v5.0.md, Secção 9 (schema JSON canónico,
+  Secção 11 — mesmo objecto usado pelo Painel HFF). Diferença para o v1:
+  placeholders em [colchetes] passam a {{TOKENS}} e blocos repetíveis/
+  condicionais passam a comentários MARKER, para permitir substituição
+  mecânica por render.py.
+
+  DIFERENÇA chave vs. Painel HFF (pessoal): esta página é PÚBLICA / FACE À
+  EQUIPA. Nunca mostra tarefas pessoais, calendário pessoal, nem a escala
+  de Prevenção. Mostra apenas: tabs por semana, tira de presença da equipa,
+  tabela cirúrgica da manhã (completa), resumo colapsável da tarde/SIGIC.
+
+  Não alterar estrutura HTML/CSS/JS sem pedido explícito.
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista BO · Cirurgia Pediátrica HFF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1A3D52;
+    --navy-2:#102B3A;
+    --navy-border:#2C5068;
+    --cream:#F5F0E8;
+    --card:#FDFAF4;
+    --border:#E0D8C8;
+    --ink:#1F2A33;
+    --ink-light:#FBF7EF;
+    --muted:#8A8070;
+    --muted-light:#B9CBD6;
+    --terracotta:#C75A2C;
+    --gold:#D4A946;
+    --sage:#5A7A5E;
+    --teal:#0D9488;
+    --red:#C0392B;
+    --red-bg:#FAD9D4;
+    --blue:#4A7FAD;
+    --orange:#FF9900;
+    --green:#6AA84F;
+    --purple:#8E6FA8;
+    --radius:16px;
+    --radius-sm:12px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream); color:var(--ink); font-family:'DM Sans', sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(160deg, var(--navy), var(--navy-2));
+    padding:12px 14px 10px; border-bottom:1px solid var(--navy-border);
+  }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .greet{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light); display:flex; align-items:center; gap:6px; }
+  .subtitle{ font-size:11.5px; color:var(--muted-light); margin-top:2px; }
+
+  /* ===== TABBAR POR SEMANA ===== */
+  .tabbar{
+    position:sticky; top:0; z-index:19; background:var(--navy-2);
+    display:flex; overflow-x:auto; gap:2px; padding:0 8px;
+    border-bottom:1px solid var(--navy-border);
+  }
+  .tabbar::-webkit-scrollbar{ display:none; }
+  .tabbtn{
+    flex:0 0 auto; border:none; background:transparent; color:var(--muted-light);
+    font-family:'DM Sans', sans-serif; font-size:12.5px; font-weight:700;
+    padding:10px 12px; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap;
+  }
+  .tabbtn.active{ color:var(--gold); border-bottom-color:var(--gold); }
+
+  .content{ padding-top:14px; }
+  .tabpanel{ display:none; }
+  .tabpanel.active{ display:block; }
+
+  .banner{
+    border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px;
+    display:flex; align-items:flex-start; gap:8px; font-size:13px; font-weight:600;
+    border:1px solid var(--border); background:var(--card); color:var(--sage);
+  }
+  .banner-info{ color:var(--blue); }
+
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); font-weight:700; margin:18px 0 8px 2px;
+  }
+  .section-label:first-child{ margin-top:0; }
+
+  /* ===== TIRA DE PRESENÇA DA EQUIPA ===== */
+  .team-strip{
+    display:flex; gap:8px; margin-bottom:14px; overflow-x:auto; padding-bottom:2px;
+  }
+  .team-pill{
+    flex:0 0 auto; display:flex; align-items:center; gap:6px;
+    background:var(--card); border:1px solid var(--border); border-radius:999px;
+    padding:6px 11px; font-size:12px; font-weight:600;
+  }
+  .team-pill.away{ background:#F2E4DD; border-color:var(--terracotta); color:var(--terracotta); }
+  .team-dot{ width:8px; height:8px; border-radius:50%; flex:0 0 8px; }
+  .dot-isabel{ background:var(--orange); }
+  .dot-rafael{ background:var(--blue); }
+  .dot-rodrigo{ background:var(--green); }
+  .dot-afonso{ background:var(--purple); }
+
+  /* ===== BLOCO DE SESSÃO (dia de BO) ===== */
+  .session-card{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px 15px; margin-bottom:14px;
+  }
+  .session-header{
+    font-family:'Fraunces', serif; font-size:16px; font-weight:600; color:var(--navy);
+    margin-bottom:10px; display:flex; align-items:center; gap:7px;
+  }
+  .session-header .stripe{ width:4px; height:16px; border-radius:3px; background:var(--gold); display:inline-block; }
+
+  .period-label{
+    font-size:12px; font-weight:700; color:var(--navy); text-transform:uppercase;
+    letter-spacing:.04em; margin:10px 0 4px; display:flex; align-items:center; gap:6px;
+  }
+  .period-label .dot{ width:7px; height:7px; border-radius:50%; }
+  .dot-am{ background:var(--gold); }
+  .dot-pm{ background:var(--blue); }
+
+  table.surg{ width:100%; border-collapse:collapse; font-size:12.5px; margin-top:6px; }
+  table.surg th{
+    text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--muted); font-weight:700; padding:4px 6px; border-bottom:1px solid var(--border);
+  }
+  table.surg td{ padding:7px 6px; border-bottom:1px dashed var(--border); vertical-align:top; }
+  table.surg tr:last-child td{ border-bottom:none; }
+  table.surg tr.fdr-row{ background:var(--red-bg); }
+  table.surg tr.fdr-row td:first-child{ border-left:3px solid var(--red); }
+  .proc-num{ font-family:monospace; font-size:11.5px; color:var(--muted); }
+
+  .fdr-box{
+    border:1.5px solid var(--red); background:var(--red-bg); border-radius:var(--radius-sm);
+    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--red); font-weight:600;
+  }
+  .fdr-box .fdr-note{ font-weight:400; color:var(--ink); margin-top:3px; }
+
+  details.collapse{
+    background:var(--ink-light); border:1px solid var(--border); border-radius:var(--radius-sm);
+    margin:6px 0; overflow:hidden;
+  }
+  details.collapse summary{
+    padding:9px 11px; font-size:12.5px; font-weight:600; color:var(--ink); cursor:pointer;
+    list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  }
+  details.collapse summary::-webkit-details-marker{ display:none; }
+  details.collapse summary::after{ content:'▾'; color:var(--muted); font-size:11px; }
+  details.collapse[open] summary::after{ content:'▴'; }
+  details.collapse .collapse-body{ padding:0 11px 11px; }
+
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
+</style>
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="greet">🪒 Lista BO</div>
+      </div>
+      <div class="subtitle">Cirurgia Pediátrica · HFF — actualizado {{GERADO_LABEL}}</div>
+    </div>
+  </div>
+
+  <!-- ===== TABBAR POR SEMANA ===== -->
+  <div class="tabbar">
+<!--WEEK_TAB_BTN-->
+    <button class="tabbtn {{WTB_ACTIVE}}" onclick="showTab('{{WTB_ID}}')">{{WTB_LABEL}}</button>
+<!--/WEEK_TAB_BTN-->
+  </div>
+
+  <div class="wrap">
+    <div class="content">
+
+<!--WEEK_TAB_PANEL-->
+      <div id="tab-{{WTP_ID}}" class="tabpanel {{WTP_ACTIVE}}">
+
+        <div class="section-label">Equipa esta semana</div>
+        <div class="team-strip">
+<!--WTP_TEAM_PILL-->
+          <div class="team-pill {{TP_AWAY_CLASS}}"><span class="team-dot {{TP_DOT_CLASS}}"></span>{{TP_NOME}}{{TP_STATUS_SUFFIX}}</div>
+<!--/WTP_TEAM_PILL-->
+        </div>
+
+<!--WTP_SEM_SESSOES-->
+        <div class="banner banner-info">ℹ️ Sem sessões de BO esta semana.</div>
+<!--/WTP_SEM_SESSOES-->
+
+<!--WTP_SESSION-->
+        <div class="session-card">
+          <div class="session-header"><span class="stripe"></span>{{SESSAO_LABEL}}</div>
+
+          <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+          <table class="surg">
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs.</th></tr></thead>
+            <tbody>
+<!--SESSAO_DOENTE_M-->
+              <tr class="{{SM_FDR_CLASS}}"><td class="proc-num">{{SM_PROCESSO}}</td><td>{{SM_IDADE}}</td><td>{{SM_NOME}}</td><td>{{SM_PROCEDIMENTO}}</td><td>{{SM_OBS}}</td></tr>
+<!--/SESSAO_DOENTE_M-->
+            </tbody>
+          </table>
+<!--SESSAO_SEM_MANHA-->
+          <p class="muted">Sem cirurgias de manhã.</p>
+<!--/SESSAO_SEM_MANHA-->
+
+          <div class="period-label" style="display:{{SESSAO_TARDE_DISPLAY}}"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+<!--SESSAO_TARDE-->
+          <details class="collapse">
+            <summary>📋 {{SESSAO_N_SIGIC}} cirurgias SIGIC — {{SESSAO_SIGIC_RESUMO}}</summary>
+            <div class="collapse-body">
+              <table class="surg">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+<!--SESSAO_DOENTE_S-->
+                  <tr class="{{SS_FDR_CLASS}}"><td class="proc-num">{{SS_PROCESSO}}</td><td>{{SS_IDADE}}</td><td>{{SS_NOME}}</td><td>{{SS_PROCEDIMENTO}}</td></tr>
+<!--/SESSAO_DOENTE_S-->
+                </tbody>
+              </table>
+            </div>
+          </details>
+<!--/SESSAO_TARDE-->
+        </div>
+<!--/WTP_SESSION-->
+
+      </div>
+<!--/WEEK_TAB_PANEL-->
+
+    </div>
+
+    <div class="footer">
+      <p>Lista BO · Cirurgia Pediátrica HFF · gerado às {{GERADO_HORA}}</p>
+    </div>
+  </div>
+
+<script>
+  function showTab(name){
+    document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tabbtn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+</script>
+
+</body>
+</html>
