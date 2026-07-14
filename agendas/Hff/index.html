@@ -1,1 +1,506 @@
+<!DOCTYPE html>
+<!--
+  PAINEL HFF — TEMPLATE DE RENDER (v2 — mecânico, standalone 5 tabs)
+  ============================================================================
+  Alinhado com INSTRUCOES_PAINEL_HFF_v5.0.md (schema JSON canónico, Secção 11).
+  Diferença para o v1: placeholders em [colchetes] passam a {{TOKENS}} e
+  blocos repetíveis/condicionais passam a comentários MARKER de abertura e
+  fecho, para permitir substituição mecânica por render.py (a LLM não
+  escreve HTML — só o JSON canónico).
 
+  Tabs: 1) Resumo 2) Cirurgias 3) Prevenção 4) SIGIC 5) Equipa
+
+  Não alterar estrutura HTML/CSS/JS sem pedido explícito.
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel HFF · Rafa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1A3D52;
+    --navy-2:#102B3A;
+    --navy-border:#2C5068;
+    --cream:#F5F0E8;
+    --card:#FDFAF4;
+    --border:#E0D8C8;
+    --ink:#1F2A33;
+    --ink-light:#FBF7EF;
+    --muted:#8A8070;
+    --muted-light:#B9CBD6;
+    --terracotta:#C75A2C;
+    --gold:#D4A946;
+    --sage:#5A7A5E;
+    --teal:#0D9488;
+    --red:#C0392B;
+    --red-bg:#FAD9D4;
+    --blue:#4A7FAD;
+    --orange:#FF9900;
+    --green:#6AA84F;
+    --purple:#8E6FA8;
+    --radius:16px;
+    --radius-sm:12px;
+    --shadow:0 1px 3px rgba(26,40,51,.12), 0 6px 14px rgba(26,40,51,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream); color:var(--ink); font-family:'DM Sans', sans-serif;
+    -webkit-font-smoothing:antialiased; min-height:100vh;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(160deg, var(--navy), var(--navy-2));
+    padding:12px 14px 10px; border-bottom:1px solid var(--navy-border);
+  }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .greet{ font-family:'Fraunces', serif; font-size:17px; font-weight:600; color:var(--ink-light); display:flex; align-items:center; gap:6px; }
+  .back-link{ font-size:12px; color:var(--muted-light); font-weight:700; }
+  .topbar-row2{ display:flex; align-items:center; gap:6px; margin-top:9px; flex-wrap:wrap; }
+  .chip{
+    font-size:12px; font-weight:700; color:var(--ink-light);
+    background:rgba(255,255,255,.07); border:1px solid var(--navy-border);
+    border-radius:999px; padding:5px 10px; display:flex; align-items:center; gap:5px; white-space:nowrap;
+  }
+  .chip.daytype{ background:var(--terracotta); border-color:var(--terracotta); color:#FFF8EE; }
+  .chip b{ color:var(--gold); font-size:12.5px; }
+  .chip.daytype b{ color:#FFF8EE; }
+
+  /* ===== TABBAR — sticky, scroll horizontal em telas pequenas ===== */
+  .tabbar{
+    position:sticky; top:0; z-index:19; background:var(--navy-2);
+    display:flex; overflow-x:auto; gap:2px; padding:0 8px;
+    border-bottom:1px solid var(--navy-border);
+  }
+  .tabbar::-webkit-scrollbar{ display:none; }
+  .tabbtn{
+    flex:0 0 auto; border:none; background:transparent; color:var(--muted-light);
+    font-family:'DM Sans', sans-serif; font-size:12.5px; font-weight:700;
+    padding:10px 12px; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap;
+  }
+  .tabbtn.active{ color:var(--gold); border-bottom-color:var(--gold); }
+
+  .content{ padding-top:14px; }
+  .tabpanel{ display:none; }
+  .tabpanel.active{ display:block; }
+
+  /* ===== BANNER / ALERTAS ===== */
+  .banner{
+    border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px;
+    display:flex; align-items:flex-start; gap:8px; font-size:13px; font-weight:600;
+    border:1px solid var(--border); background:var(--card); color:var(--sage);
+  }
+  .banner-alert{ color:var(--red); border-color:#EBC9C2; background:var(--red-bg); }
+  .banner-info{ color:var(--blue); }
+
+  /* ===== CARDS ===== */
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); font-weight:700; margin:18px 0 8px 2px;
+  }
+  .section-label:first-child{ margin-top:0; }
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px 15px; margin-bottom:10px;
+  }
+  .card-title{
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink);
+    display:flex; align-items:center; gap:7px; margin-bottom:8px;
+  }
+  .card-title .stripe{ width:4px; height:15px; border-radius:3px; background:var(--gold); display:inline-block; }
+  .card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
+  .card .muted{ color:var(--muted); font-size:12px; }
+
+  /* ===== FDR ALERT BOX ===== */
+  .fdr-box{
+    border:1.5px solid var(--red); background:var(--red-bg); border-radius:var(--radius-sm);
+    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--red); font-weight:600;
+  }
+  .fdr-box .fdr-note{ font-weight:400; color:var(--ink); margin-top:3px; }
+
+  /* ===== TABELAS DE CIRURGIA ===== */
+  table.surg{ width:100%; border-collapse:collapse; font-size:12.5px; margin-top:6px; }
+  table.surg th{
+    text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em;
+    color:var(--muted); font-weight:700; padding:4px 6px; border-bottom:1px solid var(--border);
+  }
+  table.surg td{ padding:7px 6px; border-bottom:1px dashed var(--border); vertical-align:top; }
+  table.surg tr:last-child td{ border-bottom:none; }
+  table.surg tr.fdr-row{ background:var(--red-bg); }
+  table.surg tr.fdr-row td:first-child{ border-left:3px solid var(--red); }
+  .proc-num{ font-family:monospace; font-size:11.5px; color:var(--muted); }
+
+  /* ===== SUBSECÇÃO MANHÃ / TARDE ===== */
+  .period-label{
+    font-size:12px; font-weight:700; color:var(--navy); text-transform:uppercase;
+    letter-spacing:.04em; margin:10px 0 4px; display:flex; align-items:center; gap:6px;
+  }
+  .period-label .dot{ width:7px; height:7px; border-radius:50%; }
+  .dot-am{ background:var(--gold); }
+  .dot-pm{ background:var(--blue); }
+
+  /* ===== COLAPSÁVEL (tarde/SIGIC) ===== */
+  details.collapse{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
+    margin:6px 0; overflow:hidden;
+  }
+  details.collapse summary{
+    padding:10px 12px; font-size:13px; font-weight:600; color:var(--ink); cursor:pointer;
+    list-style:none; display:flex; align-items:center; justify-content:space-between; gap:8px;
+  }
+  details.collapse summary::-webkit-details-marker{ display:none; }
+  details.collapse summary::after{ content:'▾'; color:var(--muted); font-size:11px; }
+  details.collapse[open] summary::after{ content:'▴'; }
+  details.collapse .collapse-body{ padding:0 12px 12px; }
+
+  /* ===== PRÓXIMOS BOS (semanas) ===== */
+  .week-block{ margin-bottom:8px; }
+  .week-header{
+    font-family:'Fraunces', serif; font-size:14px; font-weight:600; color:var(--navy);
+    margin-bottom:6px;
+  }
+
+  /* ===== PREVENÇÃO ===== */
+  .oncall-row{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:9px 12px; border-radius:var(--radius-sm); margin-bottom:6px;
+    background:var(--card); border:1px solid var(--border); font-size:13px;
+  }
+  .oncall-row.current{ border-color:var(--gold); box-shadow:0 0 0 1.5px var(--gold) inset; }
+  .oncall-row.is-rafa{ background:#F7DCC9; border-color:var(--terracotta); }
+  .badge{
+    font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px;
+    white-space:nowrap;
+  }
+  .badge-oncall{ background:var(--terracotta); color:#FFF8EE; }
+  .badge-neutral{ background:var(--navy); color:var(--ink-light); }
+  .badge-empty{ background:var(--border); color:var(--muted); }
+  .oncall-meta{ font-size:11.5px; color:var(--muted); margin-top:2px; }
+
+  /* ===== TAREFAS (checkbox) ===== */
+  .task-box{
+    border-radius:var(--radius-sm); padding:10px 12px; margin-bottom:8px;
+    border:1.5px solid var(--border);
+  }
+  .task-box.tb-red{ border-color:var(--red); background:var(--red-bg); }
+  .task-box.tb-yellow{ border-color:var(--gold); background:#FBF1D9; }
+  .task-item{ display:flex; align-items:flex-start; gap:8px; font-size:13px; padding:4px 0; }
+  .task-item input[type=checkbox]{ margin-top:2px; }
+
+  /* ===== EQUIPA / AUSÊNCIAS ===== */
+  .team-row{
+    display:flex; align-items:center; gap:9px; padding:8px 4px;
+    border-bottom:1px dashed var(--border); font-size:13px;
+  }
+  .team-row:last-child{ border-bottom:none; }
+  .team-dot{ width:10px; height:10px; border-radius:50%; flex:0 0 10px; }
+  .dot-isabel{ background:var(--orange); }
+  .dot-rafael{ background:var(--blue); }
+  .dot-rodrigo{ background:var(--green); }
+  .dot-afonso{ background:var(--purple); }
+  .team-status{ font-size:11.5px; color:var(--muted); margin-left:auto; }
+  .team-status.away{ color:var(--terracotta); font-weight:700; }
+
+  /* ===== SIGIC EXPANSÍVEL ===== */
+  .sigic-date{
+    font-family:'Fraunces', serif; font-size:14px; font-weight:600; color:var(--navy);
+  }
+  .sigic-surgeons{ font-size:12px; color:var(--muted); margin-top:1px; }
+
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
+</style>
+</head>
+<body>
+
+  <!-- ===== TOPBAR ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <div class="greet">🏥 Painel HFF</div>
+        <a class="back-link" href="../index.html">← Início</a>
+      </div>
+      <div class="topbar-row2">
+        <span class="chip daytype">📅 <b>Segunda, 13 Jul</b></span>
+        <span class="chip">🩺 <b>BO manhã + SIGIC tarde</b></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TABBAR ===== -->
+  <div class="tabbar">
+    <button class="tabbtn active" onclick="showTab('resumo')">📋 Resumo</button>
+    <button class="tabbtn" onclick="showTab('cirurgias')">🪒 Cirurgias</button>
+    <button class="tabbtn" onclick="showTab('prevencao')">🚨 Prevenção</button>
+    <button class="tabbtn" onclick="showTab('sigic')">📋 SIGIC</button>
+    <button class="tabbtn" onclick="showTab('equipa')">👥 Equipa</button>
+  </div>
+
+  <div class="wrap">
+    <div class="content">
+
+      <!-- ===================== TAB 1 — RESUMO ===================== -->
+      <div id="tab-resumo" class="tabpanel active">
+
+        <div class="banner banner-alert">
+          ⚠️ FDR hoje: Maria Silva — atenção a via aérea difícil
+        </div>
+
+        <div class="section-label">Tipo de dia</div>
+        <div class="card">
+          <p><b>Bloco Operatório (manhã) + SIGIC à tarde</b></p>
+          <p class="muted">Hoje é segunda → BO confirmado (Segunda/Quarta).</p>
+        </div>
+
+        <div class="section-label">Alertas</div>
+        <div class="card">
+          <p>🤒 <b>On-call esta semana:</b> Rafael Correia</p>
+          <p>🏖️ <b>Ausências relevantes:</b> IF (Férias)</p>
+
+          <div class="fdr-box">
+            ⚠️ FDR hoje: Maria Silva — Via aérea difícil documentada
+          </div>
+
+        </div>
+
+        <div class="section-label">Tarefas HFF — hoje + 2 dias</div>
+
+        <div class="task-box tb-red">
+
+          <div class="task-item"><input type="checkbox" disabled><span>Relatório Sigic p/ adm</span></div>
+
+          <div class="task-item"><input type="checkbox" disabled><span>Rever processo nº 1332701</span></div>
+
+        </div>
+
+
+
+        <div class="section-label">Próximo BO</div>
+        <div class="card">
+          <p>📅 <b>Quarta, 15 Jul</b> — 4 cirurgias agendadas</p>
+          <p class="muted">Ver detalhes na aba Cirurgias.</p>
+        </div>
+
+      </div>
+
+      <!-- ===================== TAB 2 — CIRURGIAS ===================== -->
+      <div id="tab-cirurgias" class="tabpanel">
+
+
+        <div class="section-label">BO de hoje — Segunda, 13 Jul</div>
+
+        <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+        <table class="surg">
+          <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs.</th></tr></thead>
+          <tbody>
+
+            <tr class="fdr-row"><td class="proc-num">1332630</td><td>2,4a</td><td>Maria Silva</td><td>Herniorrafia inguinal</td><td>Via aérea difícil documentada</td></tr>
+
+            <tr class=""><td class="proc-num">1341022</td><td>7,1a</td><td>João Pais</td><td>Circuncisão</td><td></td></tr>
+
+          </tbody>
+        </table>
+
+
+        <div class="period-label"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+
+        <details class="collapse">
+          <summary>🕒 1 cirurgias SIGIC — Orquidopexia</summary>
+          <div class="collapse-body">
+            <table class="surg">
+              <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+              <tbody>
+
+                <tr class=""><td class="proc-num">1350099</td><td>4a</td><td>Ana Costa</td><td>Orquidopexia</td></tr>
+
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+
+
+
+
+
+        <div class="section-label">Próximos BOs</div>
+
+
+        <div class="week-block">
+          <div class="week-header">Semana de 15 Jul a 15 Jul</div>
+
+          <details class="collapse">
+            <summary>📅 Quarta, 15 Jul — 2 cirurgias manhã</summary>
+            <div class="collapse-body">
+              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+              <table class="surg">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                  <tr class=""><td class="proc-num">1360011</td><td>1,2a</td><td>Pedro Nunes</td><td>Apendicectomia</td></tr>
+
+                  <tr class=""><td class="proc-num">1360012</td><td>5,5a</td><td>Rita Alves</td><td>Hipospadia</td></tr>
+
+                </tbody>
+              </table>
+              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+              <table class="surg" style="display:none">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+        </div>
+
+
+      </div>
+
+      <!-- ===================== TAB 3 — PREVENÇÃO ===================== -->
+      <div id="tab-prevencao" class="tabpanel">
+
+        <div class="section-label">Escala de Prevenção — próximas semanas</div>
+
+
+        <div class="oncall-row current is-rafa">
+          <div>
+            <b>13 Jul – 19 Jul</b>
+            <div class="oncall-meta">RR faz 1 e 2</div>
+          </div>
+          <span class="badge badge-oncall">ON CALL · Rafael Correia</span>
+        </div>
+
+        <div class="oncall-row  ">
+          <div>
+            <b>20 Jul – 26 Jul</b>
+            <div class="oncall-meta"></div>
+          </div>
+          <span class="badge badge-neutral">Rodrigo Roquette</span>
+        </div>
+
+        <div class="oncall-row  ">
+          <div>
+            <b>27 Jul – 2 Ago</b>
+            <div class="oncall-meta"></div>
+          </div>
+          <span class="badge badge-empty">Não atribuído</span>
+        </div>
+
+
+      </div>
+
+      <!-- ===================== TAB 4 — SIGIC ===================== -->
+      <div id="tab-sigic" class="tabpanel">
+
+        <div class="section-label">Listas SIGIC — próximas semanas</div>
+
+
+
+        <details class="collapse">
+          <summary>
+            <span><span class="sigic-date">Segunda, 13 Jul</span><br><span class="sigic-surgeons">Rafael Correia · Interno — 1 cirurgias</span></span>
+          </summary>
+          <div class="collapse-body">
+            <table class="surg">
+              <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+              <tbody>
+
+                <tr><td class="proc-num">1350099</td><td>4a</td><td>Ana Costa</td><td>Orquidopexia</td></tr>
+
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+        <details class="collapse">
+          <summary>
+            <span><span class="sigic-date">Segunda, 20 Jul</span><br><span class="sigic-surgeons">Rodrigo Roquette · Isabel Franca — 0 cirurgias</span></span>
+          </summary>
+          <div class="collapse-body">
+            <table class="surg">
+              <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+              <tbody>
+
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+
+      </div>
+
+      <!-- ===================== TAB 5 — EQUIPA ===================== -->
+      <div id="tab-equipa" class="tabpanel">
+
+        <div class="section-label">Esta semana</div>
+        <div class="card">
+
+          <div class="team-row">
+            <span class="team-dot dot-isabel"></span> Isabel Franca
+            <span class="team-status away">Ausente (Férias)</span>
+          </div>
+
+          <div class="team-row">
+            <span class="team-dot dot-rafael"></span> Rafael Correia
+            <span class="team-status ">Presente</span>
+          </div>
+
+          <div class="team-row">
+            <span class="team-dot dot-rodrigo"></span> Rodrigo Roquette
+            <span class="team-status ">Presente</span>
+          </div>
+
+          <div class="team-row">
+            <span class="team-dot dot-afonso"></span> Afonso
+            <span class="team-status ">Presente</span>
+          </div>
+
+        </div>
+
+        <div class="section-label">Próximas semanas</div>
+        <div class="card">
+          <p class="muted">Isabel Franca — Férias (18–31 Jul)</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer">
+      <p>Painel HFF · Segunda, 13 Jul · gerado às 08:00</p>
+    </div>
+  </div>
+
+<script>
+  function showTab(name){
+    document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tabbtn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+    const h = location.hash.replace('#','');
+    if (h && document.getElementById('tab-' + h)) {
+      document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tabbtn').forEach(el => el.classList.remove('active'));
+      document.getElementById('tab-' + h).classList.add('active');
+      const idx = ['resumo','cirurgias','prevencao','sigic','equipa'].indexOf(h);
+      if (idx >= 0) document.querySelectorAll('.tabbtn')[idx].classList.add('active');
+    }
+  });
+</script>
+
+</body>
+</html>
