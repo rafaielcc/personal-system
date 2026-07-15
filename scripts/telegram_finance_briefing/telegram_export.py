@@ -39,6 +39,16 @@ GROUPS = [
     "XP Investimentos"
 ]
 
+# Canais onde so admins da "Dica de Hoje" (Daniel Nigri, Patricia) podem
+# publicar audio — qualquer audio nestes 3 e transcrito, mesmo quando
+# enviado com a identidade do proprio canal (posting anonimo de admin, onde
+# o Telegram nao expoe a identidade pessoal do remetente a esta conta).
+CANAIS_AUDIO_OFICIAL = [
+    "Dica de Hoje - Notícias 📰 e Atualizações 🌎",
+    "DH - Dica Ações",
+    "DH - DicaPrev",
+]
+
 OUTPUT = r"G:\My Drive\Claude_PRJ\Relatorios\Sources\Telegram_finances"
 SESSION = os.path.join(BASE_DIR, "sessions", "telegram")
 
@@ -300,13 +310,19 @@ async def export():
             data = m.date.strftime("%Y-%m-%dT%H:%M:%S")
 
             # =========================
-            # AUDIO (SO DANIEL NIGRI)
+            # AUDIO
             # =========================
             if m.voice or m.audio:
 
-                if autor != "Daniel Nigri":
+                # Fora dos 3 canais oficiais "Dica de Hoje", mantem-se a
+                # restricao original (so transcreve audio do Daniel Nigri,
+                # identificado por nome). Dentro deles, qualquer audio e
+                # transcrito, porque so admins publicam audio ali.
+                if grupo not in CANAIS_AUDIO_OFICIAL and autor != "Daniel Nigri":
                     stats["ignoradas_audio_outro_autor"] += 1
                     continue
+
+                autor_final = autor if autor else "Dica de Hoje (canal, remetente anonimo)"
 
                 stats["audios_recebidos"] += 1
 
@@ -322,7 +338,7 @@ async def export():
                     mensagens.append({
                         "channel": grupo,
                         "time": data,
-                        "author": autor,
+                        "author": autor_final,
                         "type": "audio",
                         "content": texto_audio,
                         "tickers_mentioned": find_tickers(texto_audio),
@@ -336,7 +352,7 @@ async def export():
                     mensagens.append({
                         "channel": grupo,
                         "time": data,
-                        "author": autor,
+                        "author": autor_final,
                         "type": "audio",
                         "content": f"[AUDIO_ERROR: {e}]",
                         "tickers_mentioned": [],
@@ -418,7 +434,7 @@ async def export():
     print(f"  - Ignoradas (audio de outro autor):             {stats['ignoradas_audio_outro_autor']}")
     print(f"  - Incluidas no ficheiro final:                 {stats['incluidas']}")
     print("-" * 56)
-    print(f"Audios do Daniel Nigri recebidos: {stats['audios_recebidos']}")
+    print(f"Audios recebidos (Daniel Nigri + canais oficiais Dica de Hoje): {stats['audios_recebidos']}")
     print(f"  - Transcritos com sucesso:      {stats['audios_transcritos_sucesso']}")
     print(f"  - Com erro de transcricao:      {stats['audios_erro']}")
     print("-" * 56)
