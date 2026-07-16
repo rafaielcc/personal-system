@@ -1,0 +1,5 @@
+telethon
+faster-whisper
+python-dotenv
+requests
+trafilatura
