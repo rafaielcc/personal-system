@@ -7,7 +7,7 @@ description: Use quando o Rafa pedir "painel hff", "painel trabalho", "agenda hf
 
 ## Passos
 
-1. **Ler `CLAUDE.md`** na raiz deste repo, se ainda não estiver em contexto nesta sessão.
+1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler `SYSTEM_PROMPT_v6.1_FINAL.md`** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar pelo nome; usar a cópia de `createdTime` mais recente se houver duplicados). Obrigatório mesmo que a rotina abaixo pareça auto-suficiente.
 3. Na mesma pasta Drive, procurar **`INSTRUCOES_PAINEL_HFF`** pelo nome (título actual esperado: `INSTRUCOES_PAINEL_HFF_v5.0.md`) — se houver mais do que uma cópia, usar sempre a de `createdTime` mais recente. Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
 

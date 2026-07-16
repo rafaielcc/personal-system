@@ -7,7 +7,7 @@ description: Use quando o Rafa pedir "dashboard", "gera o dashboard", "atualiza 
 
 ## Passos
 
-1. **Ler `CLAUDE.md`** na raiz deste repo, se ainda não estiver em contexto nesta sessão.
+1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler `SYSTEM_PROMPT_v6.1_FINAL.md`** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar pelo nome; se houver mais do que uma cópia, usar a de `createdTime` mais recente). Obrigatório mesmo que pareça redundante — dá o contexto de arquitectura, Rotina de Publicação e Leitura de Calendário partilhadas que este documento por si só não repete.
 3. Na mesma pasta Drive, procurar **`INSTRUCOES_DASHBOARD_v10.0.md`** pelo nome exacto (usar a cópia mais recente por `createdTime` se houver duplicados). Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
 4. Seguir a rotina tal como descrita lá. Não inventar passos nem assumir que sabes o processo de cor — o documento é a fonte de verdade, este skill é só o ponteiro para ele.

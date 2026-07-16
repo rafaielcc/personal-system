@@ -7,7 +7,7 @@ description: Use quando o Rafa pedir "bom dia", "good morning", "briefing", "faz
 
 ## Passos
 
-1. **Ler `CLAUDE.md`** na raiz deste repo, se ainda não estiver em contexto nesta sessão.
+1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler `SYSTEM_PROMPT_v6.1_FINAL.md`** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar pelo nome; usar a cópia de `createdTime` mais recente se houver duplicados). Obrigatório mesmo que a rotina abaixo pareça auto-suficiente.
 3. Na mesma pasta Drive, procurar **`BRIEFING_DIARIO`** pelo nome (título actual esperado: `BRIEFING_DIARIO_v12.1.md`) — se houver mais do que uma versão, usar sempre a de `createdTime` mais recente, não assumir que o número de versão no nome é o mais alto (o Rafa por vezes demora a apagar a versão anterior). Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
 

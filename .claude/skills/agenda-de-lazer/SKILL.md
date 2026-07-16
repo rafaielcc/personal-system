@@ -7,7 +7,7 @@ description: Use quando o Rafa pedir "agenda da semana", "agenda de lazer", "age
 
 ## Passos
 
-1. **Ler `CLAUDE.md`** na raiz deste repo, se ainda não estiver em contexto nesta sessão.
+1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler `SYSTEM_PROMPT_v6.1_FINAL.md`** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar pelo nome; usar a cópia de `createdTime` mais recente se houver duplicados). Obrigatório mesmo que a rotina abaixo pareça auto-suficiente.
 3. Na mesma pasta Drive, procurar por título a começar por **`AGENDA_LAZER_INSTRUCOES`**. ⚠️ Este módulo está em auditoria/reestruturação activa — o Rafa está deliberadamente a manter o ficheiro sem sufixo de versão fixo no nome, apagando versões antigas conforme avança. **Não assumir um nome de ficheiro fixo com número de versão** (ex: não confiar cegamente em "v5.0" estar no título) — procurar por prefixo e usar sempre a cópia de `createdTime` mais recente entre os resultados. Se houver um ficheiro com "(conflict ...)" no título, ignorá-lo e usar o que não tem esse sufixo, a não ser que o Rafa diga o contrário nessa sessão. Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
 
