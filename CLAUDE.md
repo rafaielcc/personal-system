@@ -13,11 +13,11 @@ Este repositório (`rafaielcc/personal-system`) é o backend de código do proje
 - **Pasta de instruções** (todos os `AII_Z_*.md`, incluindo o histórico de versões): `1ivd9atfgH5Xmf0wP6Q0BMcZoDByTpqLI`
 - **Pasta de relatórios** (`Relatorios/AII`, onde os `AII_0_*.md` são lidos e gravados): `19IlmZ5GwFj6iF2OBbMmIvyuDA33s8u04`
 - **Histórico de versões de todas as rotinas**: `AII_Z_CHANGELOG.md`, na pasta de instruções. Só consultar se precisares de entender a evolução de uma regra — não é preciso lê-lo para executar uma rotina.
-- **Perfil do investidor / orientações gerais**: `AII_Z_Orientacoes_Gerais.md`, na pasta de instruções.
+- **Perfil do investidor / contexto geral do projeto**: `AII_Z_SYSTEM_PROMPT_REVISTO.md`, na pasta de instruções — **é o único destes documentos actualizado**. Existem dois ficheiros irmãos mais antigos na mesma pasta, `AII_Z_Orientacoes_Gerais.md` e `AII_Z_SYSTEM_PROMPT.MD.md` (na prática cópias idênticas um do outro) — ambos desactualizados, com pelo menos duas falhas confirmadas: descrevem o formato errado dos marcadores da planilha "Espelho carteira" (formato que nunca existiu, já corrigido no Revisto) e não mencionam de todo a rotina Decisões e Reflexões nem a pasta de staging `RELEASES_EXTRACAO` usada pela Análise de Empresa. **Nunca usar estes dois ficheiros antigos como fonte** — pendente de o Rafa os apagar do Drive; se ainda aqui estiverem, ignorar.
 
 ## Regra importante: perfil do investidor nesta sessão
 
-As rotinas foram escritas para um projeto do claude.ai onde o perfil do investidor já vem embutido no system prompt do projeto ("Ativação direta"). **Uma sessão de Claude Code não tem esse contexto** — por isso, ao executar QUALQUER rotina AII a partir daqui, ler sempre `AII_Z_Orientacoes_Gerais.md` primeiro para obter o perfil, mesmo quando a própria rotina disser que isso "não é preciso" na ativação direta. Para tudo o resto (apresentar resultados no chat, gerar ficheiros, publicar HTML/GitHub), seguir a ativação direta normalmente — o Rafa está a pedir diretamente, só falta o perfil em contexto.
+As rotinas foram escritas para um projeto do claude.ai onde o perfil do investidor já vem embutido no system prompt do projeto ("Ativação direta"). **Uma sessão de Claude Code não tem esse contexto** — por isso, ao executar QUALQUER rotina AII a partir daqui, ler sempre `AII_Z_SYSTEM_PROMPT_REVISTO.md` primeiro para obter o perfil e o contexto geral, mesmo quando a própria rotina disser que isso "não é preciso" na ativação direta. Para tudo o resto (apresentar resultados no chat, gerar ficheiros, publicar HTML/GitHub), seguir a ativação direta normalmente — o Rafa está a pedir diretamente, só falta o perfil em contexto.
 
 ## Rotinas disponíveis (skills)
 
