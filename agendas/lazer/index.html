@@ -1806,7 +1806,7 @@
       p.classList.add('active');
       var f = p.getAttribute('data-filtro');
       document.querySelectorAll('.secao').forEach(function(s){
-        s.style.display = (s.getAttribute('data-secao') === f) ? '' : 'none';
+        s.style.display = (s.getAttribute('data-secao') === f) ? 'block' : 'none';
       });
     });
   });
