@@ -143,7 +143,7 @@
   table.surg td{ padding:7px 6px; border-bottom:1px dashed var(--border); vertical-align:top; }
   table.surg tr:last-child td{ border-bottom:none; }
   table.surg tr.fdr-row{ background:var(--red-bg); }
-  table.surg tr.fdr-row td:first-child{ border-left:3px solid var(--red); }
+  table.surg tr.fdr-row td:first-child{border-left:3px solid var(--red); }
   .proc-num{ font-family:monospace; font-size:11.5px; color:var(--muted); }
 
   .fdr-box{
@@ -165,6 +165,25 @@
   details.collapse[open] summary::after{ content:'▴'; }
   details.collapse .collapse-body{ padding:0 11px 11px; }
 
+  /* ===== LINHA DE DOENTE CLICÁVEL (expande observações) ===== */
+  table.surg tr.has-obs{ cursor:pointer; }
+  table.surg tr.has-obs td:last-child::after{ content:'ℹ️'; margin-left:5px; font-size:10px; opacity:.6; }
+  table.surg tr.obs-row{ display:none; }
+  table.surg tr.obs-row.open{ display:table-row; }
+  table.surg tr.obs-row td{ background:var(--ink-light); color:var(--muted); font-style:italic; font-size:12px; border-bottom:1px dashed var(--border); }
+
+  /* ===== BADGE DE AUSÊNCIA POR DIA/SESSÃO ===== */
+  .badge-ausente{
+    display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:700;
+    color:var(--red); background:var(--red-bg); border:1px solid #EBC9C2; border-radius:999px;
+    padding:2px 8px; margin-left:6px; white-space:nowrap; vertical-align:middle;
+  }
+  .badge-completa{
+    display:inline-flex; align-items:center; gap:3px; font-size:11px; font-weight:700;
+    color:var(--sage); background:var(--card); border:1px solid var(--border); border-radius:999px;
+    padding:2px 8px; margin-left:6px; white-space:nowrap; vertical-align:middle;
+  }
+
   .footer{ text-align:center; margin-top:18px; }
   .footer p{ font-size:11px; color:var(--muted); margin:0; }
 </style>
@@ -177,14 +196,18 @@
       <div class="topbar-row1">
         <div class="greet">🪒 Lista BO</div>
       </div>
-      <div class="subtitle">Cirurgia Pediátrica · HFF — actualizado Segunda, 13 Jul · 08:00</div>
+      <div class="subtitle">Cirurgia Pediátrica · oHFF — actualizado Domingo, 19 Jul · 08:25</div>
     </div>
   </div>
 
   <!-- ===== TABBAR POR SEMANA ===== -->
   <div class="tabbar">
 
-    <button class="tabbtn active" onclick="showTab('semana1')">Semana 13 Jul – 15 Jul</button>
+    <button class="tabbtn active" onclick="showTab('semana1')">Semana 20 Jul – 22 Jul</button>
+
+    <button class="tabbtn " onclick="showTab('semana2')">Semana 27 Jul – 29 Jul</button>
+
+    <button class="tabbtn " onclick="showTab('semana3')">Semana 3 Ago – 3 Ago</button>
 
   </div>
 
@@ -194,67 +217,150 @@
 
       <div id="tab-semana1" class="tabpanel active">
 
-        <div class="section-label">Equipa esta semana</div>
-        <div class="team-strip">
-
-          <div class="team-pill away"><span class="team-dot dot-isabel"></span>Isabel Franca — Férias</div>
-
-          <div class="team-pill "><span class="team-dot dot-rafael"></span>Rafael Correia</div>
-
-          <div class="team-pill "><span class="team-dot dot-rodrigo"></span>Rodrigo Roquette</div>
-
-          <div class="team-pill "><span class="team-dot dot-afonso"></span>Afonso</div>
-
-        </div>
-
 
 
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Segunda, 13 Jul</div>
+          <div class="session-header"><span class="stripe"></span>Segunda, 20 Jul <span class="badge-ausente">⚠️ Rodrigo Roquette ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
-            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs.</th></tr></thead>
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class="fdr-row"><td class="proc-num">1332630</td><td>2,4a</td><td>Maria Silva</td><td>Herniorrafia inguinal</td><td>Via aérea difícil documentada</td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1246681</td><td></td><td>Adam Gourgel</td><td>CVC</td></tr>
+              <tr class="obs-row"><td colspan="4">interna vesp 14h</td></tr>
 
-              <tr class=""><td class="proc-num">1341022</td><td>7,1a</td><td>João Pais</td><td>Circuncisão</td><td></td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1292793</td><td>2,4a</td><td>Duarte Henrique Gomes Florindo</td><td>Orquiectomia E, Orquidopexia D</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1340300</td><td>9,0a</td><td>Letson Jose Lopes Varela</td><td>HID VLP</td></tr>
+              <tr class="obs-row"><td colspan="4">DTA</td></tr>
 
             </tbody>
           </table>
 
 
-          <div class="period-label" style="display:flex"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
-
-          <details class="collapse">
-            <summary>📋 1 cirurgias SIGIC — Orquidopexia</summary>
-            <div class="collapse-body">
-              <table class="surg">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                  <tr class=""><td class="proc-num">1350099</td><td>4a</td><td>Ana Costa</td><td>Orquidopexia</td></tr>
-
-                </tbody>
-              </table>
-            </div>
-          </details>
+          <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
 
         </div>
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Quarta, 15 Jul</div>
+          <div class="session-header"><span class="stripe"></span>Quarta, 22 Jul <span class="badge-completa">✓ Equipa completa</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
-            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th><th>Obs.</th></tr></thead>
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=""><td class="proc-num">1360011</td><td>1,2a</td><td>Pedro Nunes</td><td>Apendicectomia</td><td></td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1277663</td><td>3,5a</td><td>Edgar Gael Cabral</td><td>Hidrocelo</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
 
-              <tr class=""><td class="proc-num">1360012</td><td>5,5a</td><td>Rita Alves</td><td>Hipospadia</td><td></td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1127321</td><td>7,6a</td><td>Jonathan Alves Carvalho Rodrigues Co</td><td>HIPOSPÁDIA PENIANA</td></tr>
+              <tr class="obs-row"><td colspan="4">distal/coronal</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">925679</td><td>14,2a</td><td>Afonso Teixeira Soares</td><td>Cripto</td></tr>
+              <tr class="obs-row"><td colspan="4">Bianchi</td></tr>
+
+            </tbody>
+          </table>
+
+
+          <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+
+        </div>
+
+
+      </div>
+
+      <div id="tab-semana2" class="tabpanel ">
+
+
+
+
+        <div class="session-card">
+          <div class="session-header"><span class="stripe"></span>Segunda, 27 Jul <span class="badge-completa">✓ Equipa completa</span></div>
+
+          <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+          <table class="surg">
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+            <tbody>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1177542</td><td>4,4a</td><td>Miguel Eduardo Costa Ramalho</td><td>FIMOSE</td></tr>
+              <tr class="obs-row"><td colspan="4">*</td></tr>
+
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1334678</td><td>13,4a</td><td>Umaro Balde</td><td>CVL</td></tr>
+              <tr class="obs-row"><td colspan="4">Drepa /Anest/Ucip</td></tr>
+
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1203099</td><td>14,8a</td><td>Brayan Richard Fernandes Barros</td><td>TUMOR, MASSA OU PROTUBERÂNCIA LOCALIZADAS, MEMBRO INFERIOR ESQUERDO</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+            </tbody>
+          </table>
+
+
+          <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+
+        </div>
+
+        <div class="session-card">
+          <div class="session-header"><span class="stripe"></span>Quarta, 29 Jul <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
+
+          <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+          <table class="surg">
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+            <tbody>
+
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1350020</td><td>&lt; 1 mês</td><td>Leonor Filipa Lopes Murteira</td><td>POLIDACTILIA DE DEDOS DA MÃO</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1298420</td><td>1,7a</td><td>Vitor Rafael Isaac Antonio</td><td>LÍNGUA PRESA</td></tr>
+              <tr class="obs-row"><td colspan="4">Prog</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1155532</td><td>5,1a</td><td>Seidina Djibril Bari Camara</td><td>Hernia umbilical</td></tr>
+              <tr class="obs-row"><td colspan="4">*</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1155532</td><td>5,1a</td><td>Seidina Djibril Bari Camara</td><td>FIMOSE</td></tr>
+              <tr class="obs-row"><td colspan="4">*</td></tr>
+
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">925679</td><td>14,2a</td><td>Afonso Teixeira Soares</td><td>CRIPTORQUIDIA INGUINAL UNILATERAL</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+            </tbody>
+          </table>
+
+
+          <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+
+        </div>
+
+
+      </div>
+
+      <div id="tab-semana3" class="tabpanel ">
+
+
+
+
+        <div class="session-card">
+          <div class="session-header"><span class="stripe"></span>Segunda, 3 Ago <span class="badge-completa">✓ Equipa completa</span></div>
+
+          <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+          <table class="surg">
+            <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+            <tbody>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1343447</td><td>1,2a</td><td>Kaio Alexandre Menezes Alonso Soto Veiga</td><td>LÍNGUA PRESA</td></tr>
+              <tr class="obs-row"><td colspan="4">FRENOTOMIA LINGUAL</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1300907</td><td>1,7a</td><td>Iris Fernandes Martins</td><td>HID Lap</td></tr>
+              <tr class="obs-row"><td colspan="4">&gt;Vem 8/06</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1362420</td><td>6,7a</td><td>Alison Alexandre Carvalho Junqueira Joao</td><td>Fimose</td></tr>
+              <tr class="obs-row"><td colspan="4">vem de 13/07 pernoita</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1346924</td><td>11,5a</td><td>Anderson Gabriel Carvalho Junqueira Joao</td><td>FIMOSE</td></tr>
+              <tr class="obs-row"><td colspan="4">vem de 13/07 pernoita</td></tr>
 
             </tbody>
           </table>
@@ -271,7 +377,7 @@
     </div>
 
     <div class="footer">
-      <p>Lista BO · Cirurgia Pediátrica HFF · gerado às 08:00</p>
+      <p>Lista BO · Cirurgia Pediátrica HFF · gerado às 08:25</p>
     </div>
   </div>
 
@@ -281,6 +387,12 @@
     document.querySelectorAll('.tabbtn').forEach(el => el.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
     event.target.classList.add('active');
+  }
+  function toggleObs(tr){
+    if (!tr.classList.contains('has-obs')) return;
+    const next = tr.nextElementSibling;
+    if (!next || !next.classList.contains('obs-row')) return;
+    next.classList.toggle('open');
   }
 </script>
 
