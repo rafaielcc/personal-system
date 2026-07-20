@@ -11,6 +11,21 @@
   Tabs: 1) Resumo 2) Cirurgias 3) Prevenção 4) SIGIC 5) Equipa
 
   Não alterar estrutura HTML/CSS/JS sem pedido explícito.
+
+  v3 — 19 Jul 2026 (pedido directo do Rafa, feedback em 2 rondas):
+  · Cirurgias: linhas de doente expandem observação ao clicar (qualquer
+    doente, não só FDR); badge de ausência de cirurgião por dia/sessão
+    junto do título; removido o cabeçalho "Semana de X a Y" (redundante
+    com a data já no título de cada dia — só ficou o espaçamento).
+  · Resumo: ausências relevantes saíram do banner de topo (ficava confuso)
+    e passaram a bullets próprios com datas.
+  · Prevenção: mostra o motivo real da ausência cruzada (Férias/Madeira/
+    Curso/Folga) sempre que a aba Ausências tiver essa informação, em vez
+    de assumir "férias"; janela agora cobre o mês corrente inteiro + o
+    seguinte (até onde a escala já estiver preenchida), não só 4 semanas
+    a partir de hoje.
+  · Equipa: calendário de 4 semanas novo (dias clicáveis, ausências, nº de
+    cirurgias de manhã, ícone de SIGIC à tarde + legenda).
 -->
 <html lang="pt-PT">
 <head>
@@ -39,6 +54,7 @@
     --red:#C0392B;
     --red-bg:#FAD9D4;
     --blue:#4A7FAD;
+    --blue-bg:#DCE7EE;
     --orange:#FF9900;
     --green:#6AA84F;
     --purple:#8E6FA8;
@@ -122,9 +138,11 @@
   .card .muted{ color:var(--muted); font-size:12px; }
 
   /* ===== FDR ALERT BOX ===== */
+  /* Cor mudada de vermelho para azul (v4) — o vermelho confundia-se visualmente
+     com o badge de cirurgião ausente (também vermelho), feedback da Vanessa. */
   .fdr-box{
-    border:1.5px solid var(--red); background:var(--red-bg); border-radius:var(--radius-sm);
-    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--red); font-weight:600;
+    border:1.5px solid var(--blue); background:var(--blue-bg); border-radius:var(--radius-sm);
+    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--blue); font-weight:600;
   }
   .fdr-box .fdr-note{ font-weight:400; color:var(--ink); margin-top:3px; }
 
@@ -136,8 +154,8 @@
   }
   table.surg td{ padding:7px 6px; border-bottom:1px dashed var(--border); vertical-align:top; }
   table.surg tr:last-child td{ border-bottom:none; }
-  table.surg tr.fdr-row{ background:var(--red-bg); }
-  table.surg tr.fdr-row td:first-child{ border-left:3px solid var(--red); }
+  table.surg tr.fdr-row{ background:var(--blue-bg); }
+  table.surg tr.fdr-row td:first-child{ border-left:3px solid var(--blue); }
   .proc-num{ font-family:monospace; font-size:11.5px; color:var(--muted); }
 
   /* ===== SUBSECÇÃO MANHÃ / TARDE ===== */
@@ -214,8 +232,9 @@
   .sigic-surgeons{ font-size:12px; color:var(--muted); margin-top:1px; }
 
   /* ===== LINHA DE DOENTE CLICÁVEL (expande observações) ===== */
+  /* Ícone aumentado (v4) — estava demasiado pequeno/discreto, feedback da Vanessa. */
   table.surg tr.has-obs{ cursor:pointer; }
-  table.surg tr.has-obs td:last-child::after{ content:'ℹ️'; margin-left:5px; font-size:10px; opacity:.6; }
+  table.surg tr.has-obs td:last-child::after{ content:'ℹ️'; margin-left:6px; font-size:15px; opacity:.9; }
   table.surg tr.obs-row{ display:none; }
   table.surg tr.obs-row.open{ display:table-row; }
   table.surg tr.obs-row td{ background:var(--ink-light); color:var(--muted); font-style:italic; font-size:12px; border-bottom:1px dashed var(--border); }
