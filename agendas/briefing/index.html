@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <!--
-  BRIEFING DIÁRIO — TEMPLATE DE RENDER (v4 — mecânico, Modo A/B)
+  BRIEFING DIÁRIO — TEMPLATE DE RENDER (v5 — mecânico, Modo A/B)
   ================================================================
-  Alinhado com BRIEFING_DIARIO v12.2 (schema JSON canónico, Secção 7).
-  Diferença para o v3: removida a linha de saudação "Bom dia, Rafa" do
-  topbar; removido o board panorama (3 colunas) da aba Tarefas; aba
-  Tarefas passa a 3 boxes de cor FIXA por dia (Tarefas=vermelho,
-  Eventos=azul, Hábitos+Sugestão+Desporto=verde) em vez do antigo
-  esquema de card único com cor dinâmica conforme progresso
-  (🔴→🟡→🟢); clique num item esmaece/risca em vez de mudar a cor do
-  card; aba Calendário ganha navegação por dia a sério — cada dia tem
-  o seu painel de detalhe pré-gerado (CAL_DAY_PANEL), trocado por JS
-  ao clicar (antes o botão era decorativo, sem lógica); Áudio do dia
-  ganha um botão real "▶ Ouvir" ligado ao Web Speech API do browser.
+  Alinhado com BRIEFING_DIARIO v12.3 (schema JSON canónico, Secção 7).
+  Diferença para o v4: cabeçalho passa a uma única linha (chips +
+  "↩ Início" à direita, na mesma linha topbar-row1 — antes eram duas
+  linhas); Calendário — .cal-today (marcador dourado persistente) e
+  .cal-selected (contorno terracota, movido por JS a cada clique) são
+  agora classes separadas, com token novo {{CAL_SELECTED_CLASS}}
+  (antes só existia .cal-today fixo na DATA_ALVO, sem se mover ao
+  navegar); .cal-pill aumentado (8.5px→11px, ilegível antes); painel de
+  detalhe do dia (CAL_DAY_PANEL) deixa de ser duas linhas de prosa e
+  passa a 3 task-cards (tc-tarefas/tc-eventos/tc-extras, tokens
+  {{CAL_PANEL_TAREFAS_HTML}}/{{CAL_PANEL_EVENTOS_HTML}}/
+  {{CAL_PANEL_EXTRAS_HTML}}), reaproveitando o mesmo estilo visual da
+  aba Tarefas; aba Tempo — ordem invertida, "Janelas do dia" antes de
+  "Próximos 7 dias"; aba Rotina — cada janela passa a <ul class=
+  "routine-list"> com tokens                 <li>3 cirurgias de manhã (Edgar, Jonathan FDR, Afonso)</li>
+                <li>Classificar e-faturas</li>
+                <li>Confirmar qual vólei à noite (Belém ou Marvila)</li>
+                <li>🌿 Leitura de Cirurgia Pediátrica entre cirurgias</li>
+                <li>💡 Dia de bloco cheio mas tranquilo, sem alertas de última hora — aproveita os intervalos para o artigo de CP.</li>
+/                <li>Email (4 importantes: GlobalcastMD, GMC, ADSE, XP Empresas)</li>
+                <li>Testes # no Todoist</li>
+                <li>Confirmar presença no vólei</li>
+                <li>💡 Resolve o Testes # e confirma o vólei antes de saíres do hospital, para não chegares a decidir em cima da hora.</li>
+/
+                  <li>Amanhã: Conferir doentes SIGIC, cinema às 20h20 (Odisseia, Colombo), Happy hour com a Vanessa à noite</li>
+                <li>💡 Cinema amanhã à noite — vale confirmar os bilhetes antes de dormir.</li>
+ (antes {{ROT_..._CONFERIR}}/{{ROT_..._HABITO}}/
+  {{ROT_..._SUGESTAO}} em parágrafos soltos, e Processamento/
+  Descompressão nunca mostravam o "conferir").
 
   MODO A (completo, 7 tabs) vs MODO B (6 tabs, sem HFF):
   → render.py remove os blocos HFF_BTN e HFF_PANEL inteiros quando meta.mode=="B".
