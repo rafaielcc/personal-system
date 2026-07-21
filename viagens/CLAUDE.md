@@ -21,6 +21,7 @@ Há também uma pasta `.obsidian` na pasta Viagens (metadata do vault do Obsidia
 - O Drive não edita ficheiros in-place — uma actualização pode gerar uma cópia nova com o mesmo título. **Se uma busca devolver mais do que um resultado com o mesmo título, usar sempre o de `createdTime` mais recente.**
 - Ficheiros de viagem individual seguem o padrão `trip_[destino]_[YYYY-MM].md` / `.html`; iterações da mesma viagem podem gerar sufixo `_v2`, `_v3`, etc. (o Drive não substitui o ficheiro anterior).
 - Ficheiros de feedback pós-viagem (pasta Trips Passadas): `trip_[destino]_[YYYY-MM]_feedback.md`.
+- **Viagem em preparação (onboarding incremental, jul/2026):** cada viagem ainda por fechar tem uma subpasta própria dentro da pasta Viagens, `[Destino]_[YYYY-MM]` (mesma chave destino+mês/ano que o Rafa usa para identificar as viagens). Dentro dela: `trip_[destino]_[YYYY-MM]_dados.md` (ficheiro-mãe com as respostas acumuladas do Questionário Pré-Viagem, que agora aceita preenchimento parcial/retomável) e `trip_[destino]_[YYYY-MM]_itinerario_preliminar.md` (rascunho leve, gerado a pedido, para discutir com o Rafa antes de fechar a viagem). Os ficheiros finais `.md`/`.html` só nascem quando a viagem é confirmada como fechada — ver `System_prompt_Viagens.md.md`, Trigger 2 e Trigger 2b.
 
 ## Regra importante: ler o system prompt do projecto primeiro
 
@@ -37,7 +38,7 @@ Isto aplica-se mesmo quando o documento da própria rotina disser que isso "não
 | Comando | Rotina | Documento de instrução no Drive |
 |---|---|---|
 | `/sugestao-destinos` | Consultor de destinos — sugere destinos personalizados a partir do perfil + questionário | `INSTRUCOES_SUGESTAO_DESTINOS.md` |
-| `/planear-viagem` | Onboarding de viagem (questionário pré-viagem) + geração do guia HTML | `INSTRUCOES_HTML_VIAGEM.md` (não há um `INSTRUCOES_PRE_VIAGEM.md` separado — a lógica do questionário pré-viagem está descrita no próprio `System_prompt_Viagens.md.md`, Trigger 2) |
+| `/planear-viagem` | Onboarding de viagem — questionário pré-viagem incremental/retomável (Trigger 2), itinerário preliminar a pedido (Trigger 2b) + geração do guia HTML final quando o Rafa fechar a viagem | `INSTRUCOES_HTML_VIAGEM.md` (não há um `INSTRUCOES_PRE_VIAGEM.md` separado — a lógica do questionário pré-viagem está descrita no próprio `System_prompt_Viagens.md.md`, Triggers 2 e 2b) |
 | `/pos-viagem` | Feedback pós-viagem — questionário, actualização do `travel_log.md`, ficheiro de feedback individual | `INSTRUCOES_POS_VIAGEM.md` |
 
 Outras acções mencionadas no system prompt ("continuar viagem em curso", "ver viagens passadas") são simples leituras de ficheiro existente — não têm rotina/skill própria, basta localizar e ler o ficheiro certo na pasta Viagens ou Trips Passadas.
