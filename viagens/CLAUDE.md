@@ -48,7 +48,7 @@ Outras acções mencionadas no system prompt ("continuar viagem em curso", "ver 
 | Ficheiro | Google Drive ID | Descrição |
 |---|---|---|
 | `questionario_destinos.json` / `.jsx` | `1IjfcrLg9ebUoCFNjc9VqrdbwOlFD4y03` / `1WnLnFfArHIbLIC_D2eG2pkEEouftgZHR` | Perguntas + interface do questionário de sugestão de destinos |
-| `questionario_pre_viagem.jsx` | `1SaMtH3IneRstUcr8vcc_bO124L7XgSEB` | Interface do questionário pré-viagem (usado no `/planear-viagem`) |
+| `questionario_pre_viagem.jsx` | `1TaN61ozZvoinLf1TajM0ZNLVuiVGMB6H` | Interface do questionário pré-viagem, incremental/retomável (usado no `/planear-viagem`) |
 | `questionario_pos_viagem.json` / `.jsx` | `1hWxb_Lk5iOZX7X6zafaZuedmW6-3l2xe` / `15dFQf2aBG_3EBjcFyFyuTKunZhQytT-7` | Perguntas + interface do questionário pós-viagem |
 
 ## Publicação no GitHub — `trips/<Destino>/` (prática actual, não documentada nos ficheiros do Drive)
