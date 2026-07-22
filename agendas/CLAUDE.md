@@ -34,6 +34,8 @@ Todos os documentos de instrução dos módulos da Agenda (e o `SYSTEM_PROMPT_v6
 | "bom dia", "briefing", "gera o briefing", "briefing para amanhã" | `briefing` | `BRIEFING_DIARIO_v12.1.md` (ou mais recente) | `agendas/briefing/index.html` |
 | "agenda de lazer", "eventos em Lisboa", "o que há para fazer" | `agenda-de-lazer` | `AGENDA_LAZER_INSTRUCOES*` (mais recente, sem sufixo fixo — ver nota acima) | `agendas/lazer/index.html` |
 | "painel hff", "agenda de trabalho", "cirurgias hoje", "lista bo" | `agenda-de-trabalho` | `INSTRUCOES_PAINEL_HFF_v5.0.md` | `agendas/Hff/index.html` + `agendas/BO/index.html` |
+| "sazonal:", "incluir sazonal" | `incluir-sazonal` | secção "Lista Sazonal" de `AGENDA_LAZER_INSTRUCOES*` (dados: `Lista_Sazonal.json`, Drive ID fixo `1K307L5u7Ftl0fRRnX11FGA245kFzUzgQ`) | — (não publica HTML) |
+| "consultar sazonal" | `consultar-sazonal` | idem (só lê `Lista_Sazonal.json` directo pelo ID) | — (resposta no chat) |
 
 ## Padrão de publicação (todos os módulos)
 
