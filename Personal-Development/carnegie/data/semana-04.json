@@ -1,0 +1,24 @@
+{
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pela Agenda OS. Gerado a partir do estado vivo em current_course.md (Drive). Atualizar a cada fecho de semana.",
+  "curso": "carnegie",
+  "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
+  "semana_atual": 4,
+  "total_semanas": 17,
+  "fase": "Fase 2 — Presença Emocional",
+  "tema": "A Pausa e o Nome",
+  "progresso": { "semanas_concluidas": 4, "total_semanas": 17 },
+  "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
+  "ultima_atualizacao": "2026-07-22",
+  "topicos": [
+    "A Pausa: 1–2 segundos antes de responder a algo importante",
+    "Usar Nomes: sobretudo na apreciação e na tensão",
+    "Validar antes de informar: reconhecer a emoção antes de explicar ou resolver"
+  ],
+  "exemplos_chave": [
+    "Família: alguém chega a casa em stress — validar antes de perguntar. \"Parece que foi um dia difícil.\" Pausa. Deixar responder.",
+    "Trabalho: com doentes ou clientes ansiosos, emoção primeiro, informação depois — sempre."
+  ],
+  "sintese_falada": "Estás na Semana 4 do curso Carnegie, já na segunda fase do programa, chamada Presença Emocional. Depois de três semanas a construir segurança nas conversas, esta semana muda de foco. Já não se trata de reduzir resistência ou de dar espaço aos outros. Trata-se de como as pessoas se sentem quando estão perto de ti.\n\nA lição desta semana chama-se A Pausa e o Nome. A ideia central é simples de dizer: as pessoas esquecem quase tudo o que dizes, mas lembram-se de como se sentiram contigo. Por isso, antes de responderes a algo importante, vale a pena fazer uma pausa de um ou dois segundos. Isso mostra que estiveste mesmo a ouvir. Vale também a pena usar mais os nomes das pessoas, sobretudo quando as agradeces ou quando há tensão. E há uma terceira prática, talvez a mais difícil de todas. Validar a emoção da outra pessoa antes de dares uma explicação ou uma solução. Primeiro reconhece o que ela sente. Só depois entra a informação.\n\nO teu fio condutor continua o mesmo desde a Semana zero. Perguntares-te, antes de falares, se estás ali para perceber ou para corrigir. Esta semana, a pausa, o nome e a validação são três formas concretas de escolher perceber.\n\nA tarefa é simples de descrever e difícil de manter. Aplicar a pausa, o nome e a validação pelo menos uma vez por dia, em domínios diferentes da tua vida — família, amigos, trabalho — e reparar no que muda no tom das conversas.",
+  "link_semana_html": "https://rafaielcc.github.io/personal-system/Personal-Development/carnegie/semanas/semana-04.html",
+  "link_curso_completo": "https://rafaielcc.github.io/personal-system/Personal-Development/carnegie/curso-completo.html"
+}
