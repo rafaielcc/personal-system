@@ -373,7 +373,16 @@ def buscar_candidatos_da_label(imap, texto_procura: str) -> list:
     pasta_label = encontrar_pasta_label(imap, texto_procura)
     print(f"  [info] label resolvida para a pasta IMAP: {pasta_label}")
 
+    # STATUS é independente do estado de selecção — dá uma contagem
+    # autoritativa de mensagens na pasta sem depender do SELECT/SEARCH
+    # seguintes. Serve para isolar se o problema está na visibilidade da
+    # label no IMAP (ex.: opção "Mostrar no IMAP" desligada no Gmail) ou
+    # noutro sítio.
+    status, status_dados = imap.status(f'"{pasta_label}"', "(MESSAGES)")
+    print(f"  [info] STATUS da pasta (contagem independente): {status} {status_dados}")
+
     status, dados = imap.select(f'"{pasta_label}"', readonly=True)
+    print(f"  [info] SELECT devolveu (contagem EXISTS): {dados}")
     if status != "OK":
         raise RuntimeError(f"Não consegui abrir a pasta '{pasta_label}' (status: {status}).")
 
@@ -382,6 +391,7 @@ def buscar_candidatos_da_label(imap, texto_procura: str) -> list:
         raise RuntimeError(f"Busca IMAP falhou: {status}")
 
     ids = dados[0].split()
+    print(f"  [info] SEARCH ALL devolveu {len(ids)} mensagem(ns)")
     candidatos = []
 
     for msg_id in ids:
