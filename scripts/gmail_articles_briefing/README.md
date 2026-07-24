@@ -7,14 +7,25 @@ execução, sempre pela mesma ordem:
    `decisoes_*.json` na pasta `OUTPUT` (gerado pelo botão "Exportar decisões
    da semana" da página HTML publicada) e aplica no Gmail via IMAP:
    - `guardar` → aplica a label `Paediatric Surgery/Artigos Lidos` e remove
-     `Paediatric Surgery/Artigos para ler`.
+     `Paediatric Surgery/Artigos para ler` e `Paediatric Surgery/Artigos em
+     Leitura` (o artigo pode vir de qualquer uma das duas).
    - `excluir` → copia para o Lixo (recuperável 30 dias, nunca apaga
-     definitivamente) e remove de `Paediatric Surgery/Artigos para ler`.
+     definitivamente) e remove das mesmas duas labels de origem.
+   - `manter` → aplica `Paediatric Surgery/Artigos em Leitura` e remove
+     `Paediatric Surgery/Artigos para ler`. Diferença chave para `guardar`:
+     o artigo **continua a ser reexposto em todas as corridas seguintes**
+     (campo `articles_em_leitura` do JSON, sem limite de lote) em vez de
+     sair de circulação — pensado para artigos longos/de leitura recorrente
+     que levam semanas a terminar.
    - Ficheiros processados são movidos para `decisoes_processadas/` (nunca
      apagados, para auditoria).
 2. **Extrai os próximos artigos** da label `Paediatric Surgery/Artigos para
-   ler` — até 10 por corrida, priorizando remetente = você mesmo
-   (`OWNER_EMAIL`), depois os restantes, mais recentes primeiro.
+   ler` — até 10 por corrida (`articles`), priorizando remetente = você
+   mesmo (`OWNER_EMAIL`), depois os restantes, mais recentes primeiro.
+3. **Extrai todos os artigos "em leitura"** da label `Paediatric Surgery/
+   Artigos em Leitura` — sem limite de lote (`articles_em_leitura`), já que
+   é uma lista curada manualmente pelo Rafa. Se a label ainda não existir
+   ou estiver vazia, o campo vem como lista vazia, sem rebentar a corrida.
 
 ## Setup (uma vez só)
 
@@ -48,12 +59,20 @@ ser incluído normalmente (só sem abstract/texto completo).
 
 ## Sobre as labels aninhadas
 
-`Paediatric Surgery/Artigos para ler` e `Paediatric Surgery/Artigos Lidos`
-são sub-labels do Gmail — o IMAP trata o `/` como parte literal do nome, não
-como hierarquia de pastas real. As duas ações (`guardar`/`excluir`) usam a
-extensão `X-GM-LABELS` do IMAP do Gmail para mover entre elas; "excluir"
-adicionalmente copia a mensagem para o Lixo antes de remover a label de
-origem, para nunca apagar nada de forma irrecuperável.
+`Paediatric Surgery/Artigos para ler`, `Paediatric Surgery/Artigos Lidos` e
+`Paediatric Surgery/Artigos em Leitura` são sub-labels do Gmail — o IMAP
+trata o `/` como parte literal do nome, não como hierarquia de pastas real.
+As três ações (`guardar`/`excluir`/`manter`) usam a extensão `X-GM-LABELS`
+do IMAP do Gmail para mover entre elas; "excluir" adicionalmente copia a
+mensagem para o Lixo antes de remover as labels de origem, para nunca
+apagar nada de forma irrecuperável.
+
+A extração das labels (Secção "extrai" acima) **não usa** o operador de
+busca `label:"..."` do Gmail (`X-GM-RAW`) — essa sintaxe não se mostrou
+fiável com labels aninhadas com espaços em testes reais. Em vez disso, o
+script lista as pastas IMAP da conta (`imap.list()`) e localiza/selecciona
+directamente a pasta cujo nome contém o texto da label, que o Gmail expõe
+como uma mailbox navegável como qualquer outra.
 
 ## Sobre `gmail_web_link`
 
@@ -70,7 +89,8 @@ Formato esperado em `decisoes_<data>.json`:
 ```json
 [
   {"message_id": "1234567890123456789", "acao": "guardar"},
-  {"message_id": "9876543210987654321", "acao": "excluir"}
+  {"message_id": "9876543210987654321", "acao": "excluir"},
+  {"message_id": "1111111111111111111", "acao": "manter"}
 ]
 ```
 

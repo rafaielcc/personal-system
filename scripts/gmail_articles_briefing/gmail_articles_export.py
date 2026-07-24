@@ -36,6 +36,11 @@ OWNER_EMAIL = (os.getenv("OWNER_EMAIL") or GMAIL_ADDRESS or "").lower()
 # hierarquia de pastas real, só de apresentação.
 LABEL_PARA_LER = "Paediatric Surgery/Artigos para ler"
 LABEL_LIDOS = "Paediatric Surgery/Artigos Lidos"
+# terceira label: equivalente a "guardar", mas os artigos aqui continuam a
+# ser reexpostos em todas as corridas (secção própria "em leitura"), em vez
+# de saírem de circulação — pensada para artigos longos/de leitura
+# recorrente que levam semanas.
+LABEL_EM_LEITURA = "Paediatric Surgery/Artigos em Leitura"
 
 BATCH_SIZE = 10
 
@@ -285,9 +290,14 @@ def _x_gm_labels_literal(labels: list) -> str:
 
 
 def aplicar_decisao(imap, pasta_all: str, pasta_trash: str, message_id: str, acao: str) -> bool:
-    """Aplica uma decisão (guardar/excluir) a uma mensagem, localizada pelo
-    X-GM-MSGID estável (não o UID, que só é válido dentro de uma pasta).
-    Devolve True se aplicada com sucesso."""
+    """Aplica uma decisão (guardar/excluir/manter-em-leitura) a uma mensagem,
+    localizada pelo X-GM-MSGID estável (não o UID, que só é válido dentro de
+    uma pasta). Devolve True se aplicada com sucesso.
+
+    Remove sempre as duas labels de origem possíveis (para_ler e
+    em_leitura) antes de aplicar o destino — cobre tanto um artigo novo
+    (vindo de "para ler") como um artigo que já estava "em leitura" há
+    semanas e agora finalmente é guardado/excluído."""
     imap.select(f'"{pasta_all}"', readonly=False)
 
     status, dados = imap.uid("SEARCH", None, "X-GM-MSGID", message_id)
@@ -299,15 +309,20 @@ def aplicar_decisao(imap, pasta_all: str, pasta_trash: str, message_id: str, aca
 
     if acao == "guardar":
         imap.uid("STORE", uid, "+X-GM-LABELS", _x_gm_labels_literal([LABEL_LIDOS]))
+        imap.uid("STORE", uid, "-X-GM-LABELS", _x_gm_labels_literal([LABEL_PARA_LER, LABEL_EM_LEITURA]))
+        return True
+
+    if acao == "manter":
+        imap.uid("STORE", uid, "+X-GM-LABELS", _x_gm_labels_literal([LABEL_EM_LEITURA]))
         imap.uid("STORE", uid, "-X-GM-LABELS", _x_gm_labels_literal([LABEL_PARA_LER]))
         return True
 
     if acao == "excluir":
-        # copia para o Lixo (recuperável 30 dias) e só depois remove da
-        # label de origem + expunge em All Mail (equivalente a "apagar" no
+        # copia para o Lixo (recuperável 30 dias) e só depois remove das
+        # labels de origem + expunge em All Mail (equivalente a "apagar" no
         # modelo de labels do Gmail).
         imap.uid("COPY", uid, f'"{pasta_trash}"')
-        imap.uid("STORE", uid, "-X-GM-LABELS", _x_gm_labels_literal([LABEL_PARA_LER]))
+        imap.uid("STORE", uid, "-X-GM-LABELS", _x_gm_labels_literal([LABEL_PARA_LER, LABEL_EM_LEITURA]))
         imap.uid("STORE", uid, "+FLAGS", "(\\Deleted)")
         imap.expunge()
         return True
@@ -317,8 +332,10 @@ def aplicar_decisao(imap, pasta_all: str, pasta_trash: str, message_id: str, aca
 
 
 def processar_decisoes_pendentes(imap, pasta_all: str, pasta_trash: str) -> dict:
-    stats = {"guardados": 0, "excluidos": 0, "falhas": 0}
+    stats = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "falhas": 0}
     ficheiros = sorted(glob.glob(os.path.join(OUTPUT, "decisoes_*.json")))
+
+    chave_stats = {"guardar": "guardados", "excluir": "excluidos", "manter": "mantidos_em_leitura"}
 
     for caminho in ficheiros:
         print(f"A processar ficheiro de decisões: {os.path.basename(caminho)}")
@@ -332,12 +349,12 @@ def processar_decisoes_pendentes(imap, pasta_all: str, pasta_trash: str) -> dict
         for entrada in decisoes:
             message_id = str(entrada.get("message_id", "")).strip()
             acao = str(entrada.get("acao", "")).strip().lower()
-            if not message_id or acao not in ("guardar", "excluir"):
+            if not message_id or acao not in chave_stats:
                 continue
 
             ok = aplicar_decisao(imap, pasta_all, pasta_trash, message_id, acao)
             if ok:
-                stats["guardados" if acao == "guardar" else "excluidos"] += 1
+                stats[chave_stats[acao]] += 1
             else:
                 stats["falhas"] += 1
 
@@ -346,8 +363,10 @@ def processar_decisoes_pendentes(imap, pasta_all: str, pasta_trash: str) -> dict
     return stats
 
 
-def extrair_novos_artigos(imap) -> list:
-    pasta_label = encontrar_pasta_label(imap, "Artigos para ler")
+def buscar_candidatos_da_label(imap, texto_procura: str) -> list:
+    """Localiza a pasta IMAP da label e devolve os metadados brutos (sem
+    processar PDF/corpo ainda) de todas as mensagens lá dentro."""
+    pasta_label = encontrar_pasta_label(imap, texto_procura)
     print(f"  [info] label resolvida para a pasta IMAP: {pasta_label}")
 
     status, dados = imap.select(f'"{pasta_label}"', readonly=True)
@@ -402,37 +421,61 @@ def extrair_novos_artigos(imap) -> list:
             "msg": msg,
         })
 
-    # prioridade: o próprio Rafa primeiro, depois os restantes — dentro de
-    # cada grupo, mais recente primeiro.
+    return candidatos
+
+
+def montar_artigo(c: dict) -> dict:
+    """Processa um candidato bruto (extrai corpo, PDF, abstract) e monta a
+    entrada final do artigo para o JSON."""
+    msg = c["msg"]
+    corpo = limpar_texto(remover_rodape(extrair_corpo(msg)))
+
+    pdf_nome, pdf_bytes = extrair_pdf_anexo(msg)
+    texto_completo = extrair_texto_pdf(pdf_bytes) if pdf_bytes else ""
+    abstract = isolar_abstract(texto_completo)
+
+    gm_msgid_hex = format(int(c["message_id"]), "x")
+
+    return {
+        "message_id": c["message_id"],
+        "gmail_web_link": f"https://mail.google.com/mail/u/0/#all/{gm_msgid_hex}",
+        "sender_name": c["sender_name"],
+        "sender_email": c["sender_email"],
+        "sender_is_owner": c["sender_is_owner"],
+        "date": c["date"].strftime("%Y-%m-%dT%H:%M:%S"),
+        "subject": c["subject"],
+        "email_body_text": corpo,
+        "pdf_filename": pdf_nome,
+        "abstract_text": abstract,
+        "full_text": texto_completo,
+    }
+
+
+def extrair_novos_artigos(imap) -> list:
+    """Até BATCH_SIZE e-mails novos da label 'para ler', priorizando o
+    próprio Rafa e depois os mais recentes."""
+    candidatos = buscar_candidatos_da_label(imap, "Artigos para ler")
+
     candidatos.sort(key=lambda c: (not c["sender_is_owner"], -c["date"].timestamp()))
     escolhidos = candidatos[:BATCH_SIZE]
 
-    artigos = []
-    for c in escolhidos:
-        msg = c["msg"]
-        corpo = limpar_texto(remover_rodape(extrair_corpo(msg)))
+    return [montar_artigo(c) for c in escolhidos]
 
-        pdf_nome, pdf_bytes = extrair_pdf_anexo(msg)
-        texto_completo = extrair_texto_pdf(pdf_bytes) if pdf_bytes else ""
-        abstract = isolar_abstract(texto_completo)
 
-        gm_msgid_hex = format(int(c["message_id"]), "x")
+def extrair_em_leitura(imap) -> list:
+    """Todos os e-mails actualmente na label 'em leitura' — sem limite de
+    lote, porque é uma lista já curada pelo próprio Rafa (artigos longos/
+    recorrentes que ele escolheu manter em aberto). Se a label ainda não
+    existir ou estiver vazia, devolve lista vazia em vez de rebentar a
+    corrida."""
+    try:
+        candidatos = buscar_candidatos_da_label(imap, "Artigos em Leitura")
+    except RuntimeError as e:
+        print(f"  [aviso] label 'em leitura' não encontrada/vazia: {e}")
+        return []
 
-        artigos.append({
-            "message_id": c["message_id"],
-            "gmail_web_link": f"https://mail.google.com/mail/u/0/#all/{gm_msgid_hex}",
-            "sender_name": c["sender_name"],
-            "sender_email": c["sender_email"],
-            "sender_is_owner": c["sender_is_owner"],
-            "date": c["date"].strftime("%Y-%m-%dT%H:%M:%S"),
-            "subject": c["subject"],
-            "email_body_text": corpo,
-            "pdf_filename": pdf_nome,
-            "abstract_text": abstract,
-            "full_text": texto_completo,
-        })
-
-    return artigos
+    candidatos.sort(key=lambda c: -c["date"].timestamp())
+    return [montar_artigo(c) for c in candidatos]
 
 
 def export():
@@ -450,20 +493,25 @@ def export():
     pasta_all = encontrar_pasta_todos_emails(imap)
     pasta_trash = encontrar_pasta_trash(imap)
 
-    print("A aplicar decisões pendentes (guardar/excluir) da semana anterior...")
+    print("A aplicar decisões pendentes (guardar/excluir/manter) da semana anterior...")
     stats_decisoes = processar_decisoes_pendentes(imap, pasta_all, pasta_trash)
 
     print("A extrair novos artigos da label 'Artigos para ler'...")
     artigos = extrair_novos_artigos(imap)
+
+    print("A extrair artigos da label 'Artigos em Leitura'...")
+    artigos_em_leitura = extrair_em_leitura(imap)
 
     imap.logout()
 
     resultado = {
         "generated_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "label_origem": LABEL_PARA_LER,
+        "label_em_leitura": LABEL_EM_LEITURA,
         "batch_size": BATCH_SIZE,
         "decisoes_aplicadas": stats_decisoes,
         "articles": artigos,
+        "articles_em_leitura": artigos_em_leitura,
     }
 
     ficheiro = os.path.join(
@@ -481,10 +529,13 @@ def export():
     print("RELATORIO DA EXECUCAO")
     print("=" * 56)
     print(f"Decisões aplicadas — guardados: {stats_decisoes['guardados']}, "
-          f"excluídos: {stats_decisoes['excluidos']}, falhas: {stats_decisoes['falhas']}")
+          f"excluídos: {stats_decisoes['excluidos']}, "
+          f"mantidos em leitura: {stats_decisoes['mantidos_em_leitura']}, "
+          f"falhas: {stats_decisoes['falhas']}")
     print(f"Artigos novos extraídos: {len(artigos)}")
     print(f"  - com PDF/abstract encontrado: {sum(1 for a in artigos if a['abstract_text'])}")
     print(f"  - do próprio Rafa (prioridade 1): {sum(1 for a in artigos if a['sender_is_owner'])}")
+    print(f"Artigos em leitura (sempre reexpostos): {len(artigos_em_leitura)}")
     print("=" * 56)
     print("Ficheiro gravado em:", ficheiro)
     print("=" * 56)
