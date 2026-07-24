@@ -399,12 +399,15 @@ def buscar_candidatos_da_label(imap, texto_procura: str) -> list:
         if status != "OK":
             continue
 
-        # X-GM-MSGID vem na mesma resposta do FETCH, num item separado.
+        # X-GM-MSGID vem no descritor do FETCH — que é o PRIMEIRO elemento
+        # do tuple (ex.: (b'1 (X-GM-MSGID 123... RFC822 {1234}', b'<bytes>')),
+        # não um item à parte. A versão anterior ignorava tuples por
+        # completo ao procurar o X-GM-MSGID, por isso nunca o encontrava —
+        # e todas as mensagens eram silenciosamente descartadas.
         gm_msgid = None
         for item in msg_data:
-            if isinstance(item, tuple):
-                continue
-            texto_item = item.decode("utf-8", errors="replace") if isinstance(item, bytes) else str(item)
+            descritor = item[0] if isinstance(item, tuple) else item
+            texto_item = descritor.decode("utf-8", errors="replace") if isinstance(descritor, bytes) else str(descritor)
             m = re.search(r"X-GM-MSGID\s+(\d+)", texto_item)
             if m:
                 gm_msgid = m.group(1)
@@ -435,6 +438,7 @@ def buscar_candidatos_da_label(imap, texto_procura: str) -> list:
             "msg": msg,
         })
 
+    print(f"  [info] candidatos processados com sucesso: {len(candidatos)}/{len(ids)}")
     return candidatos
 
 
