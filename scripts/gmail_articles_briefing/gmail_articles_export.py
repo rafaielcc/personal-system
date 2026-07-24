@@ -213,9 +213,37 @@ def isolar_abstract(texto_completo: str) -> str:
     return limpar_texto(candidato)
 
 
-def montar_query_gmail(label: str) -> str:
-    query = f'label:"{label}"'
-    return '"' + query.replace('"', '\\"') + '"'
+def encontrar_pasta_label(imap, texto_procura: str) -> str:
+    """Encontra o nome exacto (tal como o IMAP do Gmail o reporta) da pasta/
+    label que contém `texto_procura`. Evita depender da sintaxe de busca
+    label:"..." do Gmail (cujo escape de espaços/hierarquia em labels
+    aninhadas via X-GM-RAW nunca foi 100% fiável em testes) — em vez disso,
+    seleciona directamente a pasta IMAP correspondente à label, que o Gmail
+    expõe como uma mailbox navegável como qualquer outra."""
+    status, pastas = imap.list()
+    if status != "OK":
+        raise RuntimeError("Não foi possível listar as pastas da conta (comando LIST falhou).")
+
+    candidatos = []
+    for pasta in pastas:
+        linha = pasta.decode("utf-8", errors="replace") if isinstance(pasta, bytes) else pasta
+        match = re.search(r'"([^"]+)"\s*$', linha)
+        nome = match.group(1) if match else linha.split()[-1]
+        if texto_procura.lower() in nome.lower():
+            candidatos.append(nome)
+
+    if not candidatos:
+        raise RuntimeError(
+            f"Não encontrei nenhuma pasta/label contendo '{texto_procura}'. "
+            "Confirme o nome exacto da label no Gmail (maiúsculas/minúsculas, "
+            "espaços) — o script imprime todas as pastas encontradas acima "
+            "deste erro para ajudar a comparar."
+        )
+
+    # a correspondência mais curta é a mais específica (evita apanhar a
+    # label-pai "Paediatric Surgery" quando se procura a sub-label).
+    candidatos.sort(key=len)
+    return candidatos[0]
 
 
 def encontrar_pasta_todos_emails(imap) -> str:
@@ -318,11 +346,15 @@ def processar_decisoes_pendentes(imap, pasta_all: str, pasta_trash: str) -> dict
     return stats
 
 
-def extrair_novos_artigos(imap, pasta_all: str) -> list:
-    imap.select(f'"{pasta_all}"', readonly=True)
+def extrair_novos_artigos(imap) -> list:
+    pasta_label = encontrar_pasta_label(imap, "Artigos para ler")
+    print(f"  [info] label resolvida para a pasta IMAP: {pasta_label}")
 
-    criterio = montar_query_gmail(LABEL_PARA_LER)
-    status, dados = imap.search(None, "X-GM-RAW", criterio)
+    status, dados = imap.select(f'"{pasta_label}"', readonly=True)
+    if status != "OK":
+        raise RuntimeError(f"Não consegui abrir a pasta '{pasta_label}' (status: {status}).")
+
+    status, dados = imap.search(None, "ALL")
     if status != "OK":
         raise RuntimeError(f"Busca IMAP falhou: {status}")
 
@@ -422,7 +454,7 @@ def export():
     stats_decisoes = processar_decisoes_pendentes(imap, pasta_all, pasta_trash)
 
     print("A extrair novos artigos da label 'Artigos para ler'...")
-    artigos = extrair_novos_artigos(imap, pasta_all)
+    artigos = extrair_novos_artigos(imap)
 
     imap.logout()
 
