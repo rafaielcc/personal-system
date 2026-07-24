@@ -218,13 +218,13 @@
 
   <!-- ===== TABBAR — Modo A (7 tabs). render.py remove HFF_BTN inteiro em Modo B. ===== -->
   <div class="tabbar">
-    <button class="tabbtn active" onclick="showTab('hoje')">🌅 Hoje</button>
-    <button class="tabbtn" onclick="showTab('tarefas')">✅ Tarefas</button>
-    <button class="tabbtn" onclick="showTab('calendario')">📅 Calendário</button>
-    <button class="tabbtn" onclick="showTab('email')">📬 Email</button>
-    <button class="tabbtn" onclick="showTab('hff')">🏥 Trabalho HFF</button>
-    <button class="tabbtn" onclick="showTab('tempo')">🌤️ Tempo</button>
-    <button class="tabbtn" onclick="showTab('rotina')">⚡ Rotina</button>
+    <button class="tabbtn active" data-tab="hoje" onclick="showTab('hoje')">🌅 Hoje</button>
+    <button class="tabbtn" data-tab="tarefas" onclick="showTab('tarefas')">✅ Tarefas</button>
+    <button class="tabbtn" data-tab="calendario" onclick="showTab('calendario')">📅 Calendário</button>
+    <button class="tabbtn" data-tab="email" onclick="showTab('email')">📬 Email</button>
+    <button class="tabbtn" data-tab="hff" onclick="showTab('hff')">🏥 Trabalho HFF</button>
+    <button class="tabbtn" data-tab="tempo" onclick="showTab('tempo')">🌤️ Tempo</button>
+    <button class="tabbtn" data-tab="rotina" onclick="showTab('rotina')">⚡ Rotina</button>
   </div>
 
   <div class="wrap">
@@ -1156,11 +1156,18 @@
 
 <script>
   function showTab(name){
+    const panel = document.getElementById('tab-' + name);
+    const btn = document.querySelector('.tabbtn[data-tab="' + name + '"]');
+    if (!panel || !btn) return;
     document.querySelectorAll('.tabpanel').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.tabbar > .tabbtn').forEach(el => el.classList.remove('active'));
-    document.getElementById('tab-' + name).classList.add('active');
-    event.target.classList.add('active');
+    panel.classList.add('active');
+    btn.classList.add('active');
   }
+  window.addEventListener('DOMContentLoaded', () => {
+    const h = location.hash.replace('#', '');
+    if (h) showTab(h);
+  });
   function showDay(dateStr, el){
     document.querySelectorAll('.cal-day-panel').forEach(p => p.style.display = 'none');
     const panel = document.getElementById('calday-' + dateStr);
