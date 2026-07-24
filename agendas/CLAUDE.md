@@ -56,6 +56,6 @@ agendas/
 ```
 Nomes de pastas em maiúscula/minúscula têm de respeitar exactamente o que está acima (`Hff`, `BO` maiúsculas; `briefing`, `lazer` minúsculas) — o Cloudflare serve tudo case-insensitive, mas o GitHub não, e uma caixa errada cria pasta duplicada.
 
-## Módulo Artigos Científicos — trigger próprio
+## Módulo Artigos Científicos
 
-Ao contrário dos outros módulos (accionados só pelo Dashboard ou por pedido directo), o Artigos tem uma **Routine dedicada, chamada "Artigos"** (poke-only, sem cron). O Dashboard, na sua orquestração de frescura, verifica se `agendas/artigos/index.html` foi publicado há mais de 7 dias — se sim, dispara essa Routine diretamente (sem perguntar ao Rafa, tal como as outras regras de janela expirada); se não, não faz nada. A extração de e-mails/PDF é feita por um script Python fora do LLM (`scripts/gmail_articles_briefing/` neste repo, com cópia de execução em Drive — ver `INSTRUCOES_ARTIGOS_v1.0.md` secção 4). Detalhe completo da rotina: skill `artigos`.
+Mesmo padrão de accionamento dos outros módulos (frase-gatilho na skill `artigos`, ou o Dashboard aciona a rotina directamente dentro do seu próprio ciclo, tal como já faz com a Notícias do Dia): o Dashboard, na sua orquestração de frescura, verifica se `agendas/artigos/index.html` foi publicado há mais de 7 dias — se sim, acciona a rotina Artigos nesse mesmo ciclo (sem perguntar ao Rafa, tal como as outras regras de janela expirada); se não, não faz nada. A extração de e-mails/PDF é feita por um script Python fora do LLM (`scripts/gmail_articles_briefing/` neste repo, com cópia de execução em Drive — ver `INSTRUCOES_ARTIGOS` secção 4, versão mais recente). Detalhe completo da rotina: skill `artigos`.
