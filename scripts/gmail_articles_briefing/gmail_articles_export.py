@@ -31,16 +31,20 @@ OWNER_EMAIL = (os.getenv("OWNER_EMAIL") or GMAIL_ADDRESS or "").lower()
 # =========================
 # CONFIG
 # =========================
-# Labels aninhadas do Gmail (pai "Paediatric Surgery", duas sub-labels). O
-# IMAP do Gmail trata o "/" como parte literal do nome da label — não é uma
-# hierarquia de pastas real, só de apresentação.
-LABEL_PARA_LER = "Paediatric Surgery/Artigos para ler"
-LABEL_LIDOS = "Paediatric Surgery/Artigos Lidos"
+# Labels aninhadas do Gmail (pai "Paediatric Surgery", três sub-labels sem
+# espaço no nome — evita ambiguidade de escaping). O IMAP do Gmail trata o
+# "/" como parte literal do nome da label — não é uma hierarquia de pastas
+# real, só de apresentação. Estas três constantes são a ÚNICA fonte de
+# verdade dos nomes — o texto de busca usado para localizar cada pasta IMAP
+# é sempre derivado delas (nunca duplicado à parte), para uma renomeação de
+# tag no Gmail só exigir mudar aqui.
+LABEL_PARA_LER = "Paediatric Surgery/Artigos-ParaLer"
+LABEL_LIDOS = "Paediatric Surgery/Artigos-Lidos"
 # terceira label: equivalente a "guardar", mas os artigos aqui continuam a
 # ser reexpostos em todas as corridas (secção própria "em leitura"), em vez
 # de saírem de circulação — pensada para artigos longos/de leitura
 # recorrente que levam semanas.
-LABEL_EM_LEITURA = "Paediatric Surgery/Artigos em Leitura"
+LABEL_EM_LEITURA = "Paediatric Surgery/Artigos-EmLeitura"
 
 BATCH_SIZE = 10
 
@@ -454,7 +458,7 @@ def montar_artigo(c: dict) -> dict:
 def extrair_novos_artigos(imap) -> list:
     """Até BATCH_SIZE e-mails novos da label 'para ler', priorizando o
     próprio Rafa e depois os mais recentes."""
-    candidatos = buscar_candidatos_da_label(imap, "Artigos para ler")
+    candidatos = buscar_candidatos_da_label(imap, LABEL_PARA_LER.split("/")[-1])
 
     candidatos.sort(key=lambda c: (not c["sender_is_owner"], -c["date"].timestamp()))
     escolhidos = candidatos[:BATCH_SIZE]
@@ -469,7 +473,7 @@ def extrair_em_leitura(imap) -> list:
     existir ou estiver vazia, devolve lista vazia em vez de rebentar a
     corrida."""
     try:
-        candidatos = buscar_candidatos_da_label(imap, "Artigos em Leitura")
+        candidatos = buscar_candidatos_da_label(imap, LABEL_EM_LEITURA.split("/")[-1])
     except RuntimeError as e:
         print(f"  [aviso] label 'em leitura' não encontrada/vazia: {e}")
         return []
