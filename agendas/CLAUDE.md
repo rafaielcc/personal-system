@@ -34,6 +34,7 @@ Todos os documentos de instrução dos módulos da Agenda (e o `SYSTEM_PROMPT_v6
 | "bom dia", "briefing", "gera o briefing", "briefing para amanhã" | `briefing` | `BRIEFING_DIARIO_v12.1.md` (ou mais recente) | `agendas/briefing/index.html` |
 | "agenda de lazer", "eventos em Lisboa", "o que há para fazer" | `agenda-de-lazer` | `AGENDA_LAZER_INSTRUCOES*` (mais recente, sem sufixo fixo — ver nota acima) | `agendas/lazer/index.html` |
 | "painel hff", "agenda de trabalho", "cirurgias hoje", "lista bo" | `agenda-de-trabalho` | `INSTRUCOES_PAINEL_HFF_v5.0.md` | `agendas/Hff/index.html` + `agendas/BO/index.html` |
+| "artigos científicos", "gera os artigos", "/artigos" | `artigos` | `INSTRUCOES_ARTIGOS_v1.0.md` (ou mais recente) | `agendas/artigos/index.html` |
 
 ## Padrão de publicação (todos os módulos)
 
@@ -51,5 +52,10 @@ agendas/
   BO/index.html         ← Lista cirúrgica da equipa (Módulo 4, face pública)
   lazer/index.html     ← Agenda de Lazer (Módulo 2)
   noticiasB3/          ← gerado por outro projecto, só verificado aqui
+  artigos/index.html   ← Artigos Científicos (trigger próprio, ver nota abaixo)
 ```
 Nomes de pastas em maiúscula/minúscula têm de respeitar exactamente o que está acima (`Hff`, `BO` maiúsculas; `briefing`, `lazer` minúsculas) — o Cloudflare serve tudo case-insensitive, mas o GitHub não, e uma caixa errada cria pasta duplicada.
+
+## Módulo Artigos Científicos — trigger próprio
+
+Ao contrário dos outros módulos (accionados só pelo Dashboard ou por pedido directo), o Artigos tem uma **Routine dedicada, chamada "Artigos"** (poke-only, sem cron). O Dashboard, na sua orquestração de frescura, verifica se `agendas/artigos/index.html` foi publicado há mais de 7 dias — se sim, dispara essa Routine diretamente (sem perguntar ao Rafa, tal como as outras regras de janela expirada); se não, não faz nada. A extração de e-mails/PDF é feita por um script Python fora do LLM (`scripts/gmail_articles_briefing/` neste repo, com cópia de execução em Drive — ver `INSTRUCOES_ARTIGOS_v1.0.md` secção 4). Detalhe completo da rotina: skill `artigos`.
