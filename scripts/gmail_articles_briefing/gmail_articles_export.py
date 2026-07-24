@@ -68,10 +68,25 @@ RODAPE_MARCADORES = [
     "click here to unsubscribe",
 ]
 
+def _padrao_letras_espacadas(palavra: str) -> str:
+    """Gera um padrão regex tolerante a letras separadas por espaço —
+    artefacto comum da extração de PDF quando o heading usa versalete/
+    letter-spacing (ex.: 'Abstract' costuma extrair como 'a b s t r a c t')."""
+    return r"\s*".join(re.escape(c) for c in palavra)
+
+
+PADRAO_ABSTRACT = re.compile(
+    r"\b" + _padrao_letras_espacadas("abstract") + r"\b", re.IGNORECASE
+)
+
 # heurística de fim de secção do abstract: primeiro heading destes que
-# aparecer depois do "Abstract" fecha a secção.
+# aparecer depois do "Abstract" fecha a secção. Tolerante a letras
+# espaçadas, pelo mesmo motivo do heading do abstract acima.
 ABSTRACT_FIM_HEADINGS = [
-    r"key\s*words", r"keywords", r"introduction", r"background",
+    _padrao_letras_espacadas("keywords"),
+    _padrao_letras_espacadas("key words"),
+    _padrao_letras_espacadas("introduction"),
+    _padrao_letras_espacadas("background"),
     r"1\.\s+introduction", r"1\s+introduction", r"©", r"doi\s*:",
 ]
 
@@ -200,11 +215,11 @@ def isolar_abstract(texto_completo: str) -> str:
     if not texto_completo:
         return ""
 
-    match_inicio = re.search(r"\babstract\b\s*:?\s*\n?", texto_completo, flags=re.IGNORECASE)
+    match_inicio = PADRAO_ABSTRACT.search(texto_completo)
     if not match_inicio:
         return ""
 
-    resto = texto_completo[match_inicio.end():]
+    resto = texto_completo[match_inicio.end():].lstrip(" :\n")
 
     fim = len(resto)
     for padrao in ABSTRACT_FIM_HEADINGS:
