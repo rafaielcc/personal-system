@@ -1,5 +1,5 @@
 {
-  "_comentario": "Camada 3 — ficheiro-máquina, consumido pela Agenda OS. Gerado a partir do estado vivo em current_course.md (Drive). Atualizar a cada fecho de semana.",
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-04.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária continua a ser current_course.md no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
   "curso": "carnegie",
   "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
   "semana_atual": 4,
@@ -9,6 +9,7 @@
   "progresso": { "semanas_concluidas": 4, "total_semanas": 17 },
   "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
   "ultima_atualizacao": "2026-07-22",
+  "resumo_curto": "Semana 4 de 17 · Fase 2 — Presença Emocional: A Pausa e o Nome. Fazer uma pausa antes de responder, usar mais os nomes das pessoas e validar a emoção antes de informar.",
   "topicos": [
     "A Pausa: 1–2 segundos antes de responder a algo importante",
     "Usar Nomes: sobretudo na apreciação e na tensão",
