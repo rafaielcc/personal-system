@@ -93,6 +93,10 @@ ABSTRACT_FIM_HEADINGS = [
 
 def limpar_texto(texto: str) -> str:
     texto = re.sub(r"\n{3,}", "\n\n", texto)
+    # PDFs com colunas estreitas geram uma quebra de linha por linha (por
+    # vezes por palavra) — junta essas quebras simples num espaço, mas
+    # preserva quebras duplas (\n\n) como separador real de parágrafo.
+    texto = re.sub(r"(?<!\n)\n(?!\n)", " ", texto)
     texto = re.sub(r"[ \t]+", " ", texto)
     return texto.strip()
 

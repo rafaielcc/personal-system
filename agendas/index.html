@@ -356,13 +356,17 @@
 
         <div class="section-label" style="margin-top:16px;">Curso</div>
         <div class="widgets">
-          <details class="card">
-            <summary><span class="stripe"></span>📖 Carnegie · Semana 2 de 17<span class="chev">▼</span></summary>
+          <details class="card" data-curso="carnegie">
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
             <div class="details-body">
-              <p><b>Reduzir Resistência</b></p>
-              <p>As pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Movimentos da semana: substituir "Devias…" por "O que achas de…?"; suavizar correcções; usar "podes ter razão" pelo menos uma vez ao dia.</p>
-              <p>Sem sessão de briefing gerada para 7 Jul (mais recente: 2 Jul) — acciona a rotina de manhã se quiseres a sessão de hoje.</p>
-              <p class="muted">Fonte: current_course.md + briefing do dia (Personal Dev OS)</p>
+              <p class="curso-fase-tema"><b>Reduzir Resistência</b></p>
+              <p class="curso-resumo">As pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Movimentos da semana: substituir "Devias…" por "O que achas de…?"; suavizar correcções; usar "podes ter razão" pelo menos uma vez ao dia.</p>
+              <p class="muted curso-status" style="display:none;"></p>
+              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
+                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
+                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
+              </div>
+              <p class="muted" style="margin-top:8px;">Fonte: current_course.md + estado_atual.json (Personal Dev OS)</p>
             </div>
           </details>
         </div>
@@ -399,10 +403,15 @@
             <!-- SE drawdown >20%: manter. Caso contrário, REMOVER. -->
           </div>
 
-          <details class="card">
-            <summary><span class="stripe"></span>📖 Carnegie · Semana 2 de 17<span class="chev">▼</span></summary>
+          <details class="card" data-curso="carnegie">
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
             <div class="details-body">
-              <p>Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+              <p class="curso-resumo">Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+              <p class="muted curso-status" style="display:none;"></p>
+              <div class="curso-links" style="display:flex; gap:8px; margin-top:8px;">
+                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
+                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
+              </div>
             </div>
           </details>
 
@@ -438,6 +447,45 @@
     document.getElementById('btn-painel').classList.toggle('active', m === 'painel');
     document.getElementById('btn-leitura').classList.toggle('active', m === 'leitura');
   }
+
+  // ===== Atalho Personal Development (Carnegie) — fetch ao vivo, mesmo domínio =====
+  (function(){
+    function aplicarEstadoCurso(dados){
+      document.querySelectorAll('[data-curso="carnegie"]').forEach(card => {
+        const titulo = card.querySelector('.curso-titulo');
+        const tema = card.querySelector('.curso-fase-tema');
+        const resumo = card.querySelector('.curso-resumo');
+        const linkSemana = card.querySelector('.curso-link-semana');
+        const linkCompleto = card.querySelector('.curso-link-completo');
+        if (titulo && dados.semana_atual && dados.total_semanas){
+          titulo.textContent = '📖 Carnegie · Semana ' + dados.semana_atual + ' de ' + dados.total_semanas;
+        }
+        if (tema && dados.tema){
+          tema.innerHTML = '<b>' + dados.tema.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + '</b>';
+        }
+        if (resumo && dados.resumo_curto){
+          resumo.textContent = dados.resumo_curto;
+        }
+        if (linkSemana && dados.link_semana_html) linkSemana.href = dados.link_semana_html;
+        if (linkCompleto && dados.link_curso_completo) linkCompleto.href = dados.link_curso_completo;
+      });
+    }
+
+    function mostrarFallback(msg){
+      document.querySelectorAll('[data-curso="carnegie"] .curso-status').forEach(el => {
+        el.textContent = msg;
+        el.style.display = 'block';
+      });
+    }
+
+    fetch('../personal-development/carnegie/data/estado-atual.json')
+      .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+      .then(dados => aplicarEstadoCurso(dados))
+      .catch(err => {
+        console.warn('Não foi possível carregar o estado do curso Carnegie:', err);
+        mostrarFallback('Sem atualização recente do curso.');
+      });
+  })();
 </script>
 
 </body>
