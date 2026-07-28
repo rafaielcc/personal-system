@@ -123,6 +123,34 @@ footer.site{text-align:center;color:var(--muted);font-size:12px;padding:20px 24p
 .week-nav-mini a{color:var(--slate);border:1px solid var(--border);padding:9px 16px;border-radius:3px}
 .week-nav-mini a:hover{border-color:var(--gold);color:var(--gold);text-decoration:none}
 
+/* ---- Abas expansíveis (Camada 2) ---- */
+details.card{padding:0;overflow:hidden}
+details.card summary{list-style:none;cursor:pointer;padding:22px 28px;display:flex;
+  align-items:center;justify-content:space-between;gap:12px;user-select:none}
+details.card summary::-webkit-details-marker{display:none}
+details.card summary .label{margin-bottom:0}
+details.card summary::after{content:'+';font-family:'Cormorant Garamond',serif;font-size:26px;
+  color:var(--gold);line-height:1;flex-shrink:0;transition:transform .2s}
+details.card[open] summary::after{content:'–'}
+details.card .details-body{padding:0 28px 26px}
+details.card[open] summary{border-bottom:1px solid var(--border);margin-bottom:0}
+
+/* ---- Áudios da semana ---- */
+.audio-list{display:flex;flex-direction:column;gap:10px}
+.audio-item{border:1px solid var(--border);border-radius:3px;background:#fff;overflow:hidden}
+.audio-item-head{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.audio-item .play-btn{flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid var(--gold);
+  background:none;color:var(--gold);font-size:14px;cursor:pointer;transition:.2s;display:flex;
+  align-items:center;justify-content:center}
+.audio-item .play-btn:hover{background:var(--gold);color:#fff}
+.audio-item .play-btn.playing{background:var(--rust);border-color:var(--rust);color:#fff}
+.audio-item-title{flex:1;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--ink)}
+.audio-item-toggle{font-size:11px;color:var(--muted);cursor:pointer;text-decoration:underline;
+  text-underline-offset:2px}
+.audio-item-text{display:none;padding:0 16px 16px 66px;font-size:14px;color:var(--slate);line-height:1.65}
+.audio-item-text.show{display:block}
+.audio-note{font-size:12px;color:var(--muted);margin-top:10px}
+
 @media (max-width:820px){
   main{flex-direction:column}
   nav.toc{position:static;flex:none;width:100%;max-height:none}

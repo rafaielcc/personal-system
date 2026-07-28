@@ -84,7 +84,53 @@
     }
   }
 
+  /* ---- Áudio (síntese de voz do browser, sem custo nem serviço externo) ---- */
+  var currentUtterance = null;
+  var currentBtn = null;
+
+  function pickPortugueseVoice(){
+    var voices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+    return voices.find(function(v){ return v.lang === 'pt-PT'; })
+      || voices.find(function(v){ return v.lang && v.lang.indexOf('pt') === 0; })
+      || null;
+  }
+
+  function stopAudio(){
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    if (currentBtn){ currentBtn.classList.remove('playing'); currentBtn.textContent = '▶'; }
+    currentUtterance = null;
+    currentBtn = null;
+  }
+
   window.PDOS = {
+    ouvir: function(btn, text){
+      if (!window.speechSynthesis){
+        alert('O teu browser não suporta leitura em voz alta.');
+        return;
+      }
+      var wasThisPlaying = (currentBtn === btn);
+      stopAudio();
+      if (wasThisPlaying) return; /* clicar de novo no mesmo = só parar */
+
+      var utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'pt-PT';
+      var voice = pickPortugueseVoice();
+      if (voice) utter.voice = voice;
+      utter.rate = 0.98;
+      utter.onend = stopAudio;
+      utter.onerror = stopAudio;
+
+      currentUtterance = utter;
+      currentBtn = btn;
+      btn.classList.add('playing');
+      btn.textContent = '■';
+      window.speechSynthesis.speak(utter);
+    },
+    toggleAudioText: function(link){
+      var body = link.closest('.audio-item').querySelector('.audio-item-text');
+      var open = body.classList.toggle('show');
+      link.textContent = open ? 'Esconder texto' : 'Ler texto';
+    },
     copiar: function(){
       navigator.clipboard.writeText(buildTextBlock()).then(function(){
         showFeedback('fb-copiar', 'Copiado!');
