@@ -1,8 +1,9 @@
 /* Personal Development OS — lógica partilhada das páginas de semana (Camada 2).
    Recolhe os campos marcados com [data-field-label] e oferece dois caminhos:
    "Copiar" (clipboard, para colar numa conversa e discutir ao vivo) e
-   "Gravar" (POST silencioso para um webhook Zapier, que grava um ficheiro
-   em Inputs/ no Drive — processado no próximo fecho de semana). */
+   "Gravar" (POST silencioso para um endpoint — Apps Script ou Zapier — que
+   grava um ficheiro em Inputs/ no Drive, processado no próximo fecho de
+   semana). */
 (function(){
   function today(){
     return new Date().toISOString().slice(0,10);
@@ -99,8 +100,13 @@
       }
       var btn = document.getElementById('btn-gravar');
       if (btn){ btn.disabled = true; }
+      /* mode:'no-cors' porque o recetor (Apps Script ou Zapier) não devolve
+         cabeçalhos CORS — sem isto o fetch rejeitava mesmo quando o registo
+         era gravado com sucesso do lado do servidor. Content-Type text/plain
+         mantém o pedido como "simples", sem preflight. */
       fetch(url, {
         method: 'POST',
+        mode: 'no-cors',
         headers: {'Content-Type': 'text/plain'},
         body: JSON.stringify(buildPayload())
       }).then(function(){
