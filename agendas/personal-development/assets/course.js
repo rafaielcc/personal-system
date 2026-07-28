@@ -1,6 +1,8 @@
 /* Personal Development OS — lógica partilhada das páginas de semana (Camada 2).
-   Recolhe os campos marcados com [data-field-label], monta o bloco de texto
-   e copia para a área de transferência via navigator.clipboard.writeText. */
+   Recolhe os campos marcados com [data-field-label] e oferece dois caminhos:
+   "Copiar" (clipboard, para colar numa conversa e discutir ao vivo) e
+   "Gravar" (POST silencioso para um webhook Zapier, que grava um ficheiro
+   em Inputs/ no Drive — processado no próximo fecho de semana). */
 (function(){
   function today(){
     return new Date().toISOString().slice(0,10);
@@ -38,16 +40,19 @@
     return out;
   }
 
-  function buildBlock(marker, extraLines){
+  function currentDate(){
     var dateEl = document.getElementById('entry-date');
-    var date = (dateEl && dateEl.value) ? dateEl.value : today();
+    return (dateEl && dateEl.value) ? dateEl.value : today();
+  }
+
+  function buildTextBlock(){
+    var date = currentDate();
     var week = document.body.getAttribute('data-week');
     var title = document.body.getAttribute('data-title');
     var lines = [];
-    lines.push('[' + marker + ']');
+    lines.push('[INPUT DIÁRIO]');
     lines.push('Data: ' + date);
     lines.push('Semana ' + week + ' — ' + title);
-    if (extraLines) extraLines.forEach(function(l){ lines.push(l); });
     lines.push('');
     collectFields().forEach(function(f){
       lines.push(f.label + ': ' + f.value);
@@ -55,29 +60,56 @@
     return lines.join('\n');
   }
 
-  function copyToClipboard(text, feedbackId){
-    navigator.clipboard.writeText(text).then(function(){
-      var fb = document.getElementById(feedbackId);
-      if (fb){
-        fb.textContent = 'Copiado!';
-        fb.classList.add('show');
-        setTimeout(function(){ fb.classList.remove('show'); }, 2400);
-      }
-    }).catch(function(){
-      var fb = document.getElementById(feedbackId);
-      if (fb){
-        fb.textContent = 'Não foi possível copiar — copia manualmente.';
-        fb.classList.add('show');
-      }
-    });
+  function buildPayload(){
+    var fields = {};
+    collectFields().forEach(function(f){ fields[f.label] = f.value; });
+    return {
+      marker: 'INPUT_SEMANA',
+      date: currentDate(),
+      week: document.body.getAttribute('data-week'),
+      title: document.body.getAttribute('data-title'),
+      fields: fields,
+      source: 'personal_development_semana_html',
+      origin: { platform: 'Personal Development OS', method: 'gravar_button' }
+    };
+  }
+
+  function showFeedback(id, text){
+    var fb = document.getElementById(id);
+    if (fb){
+      fb.textContent = text;
+      fb.classList.add('show');
+      setTimeout(function(){ fb.classList.remove('show'); }, 2600);
+    }
   }
 
   window.PDOS = {
-    guardarInputDia: function(){
-      copyToClipboard(buildBlock('INPUT DIÁRIO'), 'fb-guardar');
+    copiar: function(){
+      navigator.clipboard.writeText(buildTextBlock()).then(function(){
+        showFeedback('fb-copiar', 'Copiado!');
+      }).catch(function(){
+        showFeedback('fb-copiar', 'Não foi possível copiar — copia manualmente.');
+      });
     },
-    fecharSemana: function(){
-      copyToClipboard(buildBlock('FECHO DE SEMANA', ['Estado: semana concluída — avançar para a próxima']), 'fb-fechar');
+    gravar: function(){
+      var url = window.PDOS_WEBHOOK_URL;
+      if (!url){
+        showFeedback('fb-gravar', 'Webhook ainda não configurado.');
+        return;
+      }
+      var btn = document.getElementById('btn-gravar');
+      if (btn){ btn.disabled = true; }
+      fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify(buildPayload())
+      }).then(function(){
+        showFeedback('fb-gravar', 'Guardado!');
+        if (btn){ btn.disabled = false; }
+      }).catch(function(){
+        showFeedback('fb-gravar', 'Erro — tenta de novo.');
+        if (btn){ btn.disabled = false; }
+      });
     }
   };
 
