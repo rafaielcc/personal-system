@@ -31,6 +31,7 @@ Cada rotina tem um skill próprio em `.claude/skills/`, que só aponta para o fi
 | `/analise-empresa` | Análise fundamentalista de uma empresa específica (`AII_Z_Instrucoes_Analise_Empresa.md`) |
 | `/organizar-setor` | Reorganização de um ficheiro setorial (`AII_Z_Organizar_Setor.md`) |
 | `/decisoes-e-reflexoes` | Registo de discussões/decisões ad-hoc de investimento (`AII_Z_Decisoes_e_Reflexoes.md`) |
+| `/auditoria-de-fontes` | Qualidade histórica das fontes de notícias, alimentada pela Notícias do Dia (`AII_Z_Auditoria_de_Fontes.md`) |
 
 ## Ferramentas necessárias
 
