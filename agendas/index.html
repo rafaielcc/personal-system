@@ -1,10 +1,38 @@
 <!DOCTYPE html>
 <!--
-  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v2 DARK · sessão de auditoria Dashboard, 3 Jul 2026)
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 DARK · render mecânico, 27 Jul 2026)
   =============================================================================
-  MODELO sem dados em tempo real. Hub leve: cabeçalho condensado + grid de
-  ícones soltos (sem caixa/cartão por trás) que apontam, por link real
-  <a href>, para os módulos já publicados.
+  Consumido por render.py (mesma pasta Drive): a LLM produz apenas o JSON
+  canónico do módulo dashboard; este ficheiro é preenchido por substituição
+  de texto pura, sem juízo de conteúdo. Placeholders {{TOKEN}} — ver schema
+  no cabeçalho de render.py. Blocos condicionais marcados com um par de
+  comentários HTML por nome (abertura NOME, fecho barra-NOME) — DRAWDOWN_DOT,
+  DRAWDOWN_PAINEL, DRAWDOWN_LEITURA — removidos inteiros pelo render.py
+  quando não aplicáveis (drawdown null). NUNCA escrever a sintaxe literal
+  desses marcadores dentro deste comentário de cabeçalho — a sequência "--"
+  seguida de ">" fecha um comentário HTML prematuramente em qualquer
+  parser/browser, e isso já causou este bloco inteiro a vazar como texto
+  visível na página numa versão anterior deste ficheiro.
+
+  Mudanças v3 (27 Jul 2026, pedido do Rafa):
+  - Grelha promovida de 8 para 9 ícones: novo ícone 📄 Artigos Científicos
+    (→ artigos/index.html), acrescentado antes só ao HTML publicado, agora
+    promovido ao template canónico.
+  - Secção Curso deixa de usar tokens {{COURSE_*}}/render.py — o cartão
+    (data-curso="carnegie") faz fetch ao vivo, client-side, de
+    personal-development/carnegie/data/estado-atual.json (mesmo domínio,
+    sem CORS) e preenche semana/tema/resumo/links via JS no arranque, com
+    fallback silencioso ("sem atualização recente") se o fetch falhar. A
+    LLM/render.py já não precisam de gerar conteúdo de curso — o campo
+    "course" deixou de ser obrigatório no JSON canónico (ver render.py).
+    Blocos AUDIO_PAINEL/AUDIO_LEITURA (áudio do curso) removidos por já não
+    haver token de curso vindo do JSON — se um script de áudio persistido
+    vier a ser necessário no futuro, terá de ser outra fonte de dados.
+
+  MODELO sem dados em tempo real (excepto o cartão do curso, que já é ao
+  vivo). Hub leve: cabeçalho condensado + grid de ícones soltos (sem caixa/
+  cartão por trás) que apontam, por link real <a href>, para os módulos já
+  publicados.
 
   VARIANTE DARK: fundo navy profundo em toda a página, texto claro brilhante,
   círculos de ícones em pastel (destacam sobre o escuro). Alto contraste.
@@ -19,13 +47,15 @@
     agendas/bo/index.html         ← lista cirúrgica da equipa (sem ícone — intencional)
     agendas/lazer/index.html      ← agenda de lazer
     agendas/noticiasB3/index.html ← página standalone Notícias/Finanças B3 (rotina AII)
+    agendas/artigos/index.html    ← Artigos Científicos (trigger próprio, ver skill artigos)
   Como este ficheiro vive em agendas/, os links relativos abaixo são
   directos às subpastas (hff/index.html, briefing/index.html#tarefas, ...).
 
-  GRELHA — 8 ícones (4×2):
+  GRELHA — 9 ícones (4×2, o 9º sozinho na 3ª linha):
     🎧 Briefing (1ª posição — uso diário; abre a tab Hoje, áudio no topo)
     🏥 HFF · ✅ Tarefas · 📅 Calendário · 📧 Email · 🎭 Lazer ·
-    📈 Notícias/Finanças B3 (fundidos; ponto de alerta condicional) · 🌤️ Tempo
+    📈 Notícias/Finanças B3 (fundidos; ponto de alerta condicional) · 🌤️ Tempo ·
+    📄 Artigos Científicos
 
   TOPBAR — LINHA ÚNICA: data com dia da semana (formato curto PT-PT,
   ex: "Sex, 3 Jul") · chip 📅 eventos · chip ✅ tarefas · toggle
@@ -263,9 +293,9 @@
     <div class="topbar-inner">
       <div class="topbar-row1">
         <!-- Linha única: data (dia da semana + dia + mês) · eventos · tarefas · toggle -->
-        <div class="datebig">Ter, 7 Jul</div>
-        <span class="chip">📅 <b>2</b></span>
-        <span class="chip">✅ <b>6</b></span>
+        <div class="datebig">Ter, 4 Ago</div>
+        <span class="chip">📅 <b>1</b></span>
+        <span class="chip">✅ <b>1</b></span>
         <div class="seg">
           <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
           <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
@@ -280,18 +310,18 @@
     <div class="wbar">
       <div class="wbar-cell">
         <span class="wbar-time">08h</span>
-        <span class="wbar-main">☀️ 22°</span>
-        <span class="wbar-activity" title="Exemplo: nada sugerido de manhã">·</span>
+        <span class="wbar-main">☀️ 20°</span>
+        <span class="wbar-activity" title="">·</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">16h</span>
-        <span class="wbar-main">⛅ 33°</span>
-        <span class="wbar-activity" title="Exemplo: tempo bom para bicicleta">🚲</span>
+        <span class="wbar-main">☀️ 25°</span>
+        <span class="wbar-activity" title="Boa para Lisbora (ciclismo)">🚲</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">20h</span>
-        <span class="wbar-main">🌙 25°</span>
-        <span class="wbar-activity" title="Exemplo: happy hour com a Vanessa">🍷</span>
+        <span class="wbar-main">🌙 21°</span>
+        <span class="wbar-activity" title="Game Night at Amelia Cafe, 19:00">🎲</span>
       </div>
     </div>
 
@@ -300,12 +330,13 @@
       <!-- ===================== MODO PAINEL ===================== -->
       <div id="painel">
 
-        <div class="banner">
-          ℹ️ Sem BO no bloco hoje · Consulta Uro 09:30 · Show Iron 13:30 · próximo BO: Segunda 13 Jul
+        <div class="banner ">
+          ℹ️ Terça sem BO — dia de hábitos de rotina, Lisbora à tarde e Game Night à noite.
         </div>
 
-        <!-- 8 ícones (4×2): Briefing em 1º (uso diário — áudio no topo da tab Hoje).
-             Notícias e Finanças B3 fundidos num só (→ noticiasB3/). -->
+        <!-- 9 ícones: Briefing em 1º (uso diário — áudio no topo da tab Hoje).
+             Notícias e Finanças B3 fundidos num só (→ noticiasB3/). 9º ícone
+             (Artigos Científicos) sozinho na 3ª linha da grelha 4×N. -->
         <div class="grid">
           <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing — áudio do dia">
             <span class="tile-circle c-cream">🎧</span>
@@ -327,6 +358,7 @@
           </a>
           <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
             <span class="tile-circle c-red">📈</span>
+            
           </a>
           <a class="tile" href="briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
             <span class="tile-circle c-navy">🌤️</span>
@@ -341,15 +373,15 @@
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Confirmar horário da Consulta Uro (09:30–11:00)</li>
-              <li><span class="num">2</span> CV Update + Gym 7h30 (hábitos de terça)</li>
-              <li><span class="num">3</span> Criar pj + case clínico Sergio (rádio quisto branquial)</li>
+              <li><span class="num">1</span> Lisbora (ciclismo)</li>
+              <li><span class="num">2</span> Atualizar CV · organizar gavetas · café com a Clara</li>
+              <li><span class="num">3</span> Game Night at Amelia Cafe, 19:00</li>
             </ol>
           </div>
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sentimento neutro a levemente positivo (relatório de 3 Jul, não regenerado hoje); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
-            <!-- SE drawdown >20%: manter o bloco abaixo. Caso contrário, REMOVER até ao fecho do div. -->
+            <p>Sentimento neutro a levemente positivo (relatório de 30 Jul 2026, não regenerado neste ciclo — Notícias/B3 fora do âmbito desta corrida); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
+            
             <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
           </div>
         </div>
@@ -360,13 +392,13 @@
             <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
             <div class="details-body">
               <p class="curso-fase-tema"><b>Reduzir Resistência</b></p>
-              <p class="curso-resumo">As pessoas não resistem às tuas ideias — resistem a sentir-se erradas. Movimentos da semana: substituir "Devias…" por "O que achas de…?"; suavizar correcções; usar "podes ter razão" pelo menos uma vez ao dia.</p>
+              <p class="curso-resumo">As pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
               <p class="muted curso-status" style="display:none;"></p>
               <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
                 <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
                 <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
               </div>
-              <p class="muted" style="margin-top:8px;">Fonte: current_course.md + estado_atual.json (Personal Dev OS)</p>
+              <p class="muted" style="margin-top:8px;">Fonte: personal-development/carnegie/data/estado-atual.json (fetch ao vivo, mesmo domínio)</p>
             </div>
           </details>
         </div>
@@ -379,28 +411,28 @@
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
-            <p><b>Sem BO</b> · 2 eventos · 6 tarefas pendentes.</p>
-            <p class="muted">Consulta Uro 09:30–11:00 · Show Iron 13:30–14:30 · próximo BO: Segunda 13 Jul</p>
+            <p><b>Sem BO — terça-feira</b> · 1 eventos · 1 tarefas pendentes.</p>
+            <p class="muted">Dia leve: hábitos de rotina (CV, gavetas, café com a Clara) + Lisbora (ciclismo) de tarde e Game Night at Amelia Cafe às 19h.</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
-            <p>08h 22° ☀️ · 16h 33° ⛅ 🚲 · 20h 25° 🌙 🍷</p>
+            <p>08h 20° ☀️ · 16h 25° ☀️ 🚲 · 20h 21° 🌙 🎲</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Confirmar horário da Consulta Uro (09:30–11:00)</li>
-              <li><span class="num">2</span> CV Update + Gym 7h30 (hábitos de terça)</li>
-              <li><span class="num">3</span> Criar pj + case clínico Sergio (rádio quisto branquial)</li>
+              <li><span class="num">1</span> Lisbora (ciclismo)</li>
+              <li><span class="num">2</span> Atualizar CV · organizar gavetas · café com a Clara</li>
+              <li><span class="num">3</span> Game Night at Amelia Cafe, 19:00</li>
             </ol>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sentimento neutro a levemente positivo (relatório de 3 Jul, não regenerado hoje); CPFE3 dentro do gatilho; sem drawdown relevante identificado.</p>
-            <!-- SE drawdown >20%: manter. Caso contrário, REMOVER. -->
+            <p>Sentimento neutro a levemente positivo (relatório de 30 Jul 2026, não regenerado neste ciclo — Notícias/B3 fora do âmbito desta corrida); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
+            
           </div>
 
           <details class="card" data-curso="carnegie">
@@ -414,7 +446,6 @@
               </div>
             </div>
           </details>
-
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
