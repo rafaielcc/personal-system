@@ -1,0 +1,53 @@
+{
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-06.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
+  "curso": "carnegie",
+  "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
+  "semana_atual": 6,
+  "total_semanas": 17,
+  "fase": "Fase 2 — Presença Emocional",
+  "tema": "Autoridade Calma",
+  "progresso": { "semanas_concluidas": 6, "total_semanas": 17 },
+  "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
+  "ultima_atualizacao": "2026-08-04",
+  "resumo_curto": "Semana 6 de 17 · Fase 2 — Presença Emocional (última semana da fase): Autoridade Calma. Tornares-te alguém em quem as pessoas confiam e seguem naturalmente — não por dominância, mas por firmeza serena.",
+  "topicos": [
+    "Falar mais devagar em momentos importantes — cerca de 80% do teu ritmo normal",
+    "Curiosidade acima de exibição: uma pergunta a mais antes de partilhares a tua perspetiva",
+    "Proteger o clima emocional: seres a pessoa menos reativa quando os outros escalam",
+    "Tarefa 6-A — Ponto de situação a meio do curso: revisitar a lista de 5 pessoas da Semana 0"
+  ],
+  "exemplos_chave": [
+    "Conversas difíceis: antes de responderes a um desacordo, abranda o ritmo da fala para cerca de 80% do normal — comunica controlo, não pressa.",
+    "Trabalho sob pressão: quando a situação escala, sê a pessoa menos reativa presente — não acompanhes a energia, baixa-a."
+  ],
+  "sintese_falada": "Estás na Semana 6 do curso Carnegie, a última da Fase 2 — Presença Emocional. Depois de duas semanas sobre tom e calor, esta semana liga tudo isso a influência. A ideia central é que, em qualquer grupo, a pessoa mais regulada emocionalmente tende a ter a maior influência sobre o tom geral — não por dominância, mas por firmeza serena.\n\nHá três práticas esta semana: falar mais devagar em momentos de alto risco emocional, a cerca de 80% do teu ritmo normal; ter curiosidade acima de exibição, fazendo mais uma pergunta antes de partilhares a tua perspetiva; e proteger o clima emocional, sendo deliberadamente a pessoa menos reativa quando os outros escalam.\n\nHá também uma tarefa especial esta semana — a Tarefa 6-A, um ponto de situação a meio do curso. Volta à lista das cinco pessoas que escreveste na Semana zero e escreve, para cada uma, duas ou três frases sobre o que mudou.\n\nO teu fio condutor continua o mesmo: antes de falar, perguntar se estás ali para perceber ou para corrigir. Esta noite, pergunta-te: a minha presença reduziu o stress à minha volta, ou espalhou-o?",
+  "leitura_detalhada": "A Semana 6 fecha a Fase 2 com a ideia que mais diretamente liga presença emocional a influência: em qualquer grupo — família, amigos, equipa — a pessoa mais regulada emocionalmente da sala tende a ter, com o tempo, a maior influência sobre o tom geral. Isto acontece porque os estados emocionais são contagiosos por natureza; alguém tem de definir a temperatura, e essa pessoa raramente é quem fala mais alto — é quem se mantém mais estável quando tudo à volta escala.\n\nFalar mais devagar em momentos de alto risco emocional — desacordos, conversas difíceis, ensino — é uma das ferramentas mais simples e mais contra-intuitivas do curso. O instinto sob pressão é acelerar: falar mais depressa para \"resolver\" mais depressa. Mas a velocidade do discurso é lida, a um nível quase pré-consciente, como um sinal de urgência ou nervosismo, o que aumenta a tensão em vez de a baixar. Falar a cerca de 80% do ritmo habitual comunica o oposto: que a situação, por mais séria que seja, está sob controlo suficiente para não exigir pressa.\n\nA curiosidade acima de exibição pede um adiamento deliberado: antes de mostrares o que sabes, fazer mais uma pergunta. Isto parece sacrificar a oportunidade de demonstrar competência, mas na prática constrói mais confiança do que a exibiria — porque as pessoas confiam mais em quem parece genuinamente interessado em compreender do que em quem parece ansioso por mostrar perícia.\n\nProteger o clima emocional é, no fundo, uma aplicação prática de tudo o resto: em situações de stress, ser deliberadamente a pessoa menos reativa presente. Quando outros escalam, o movimento natural é acompanhar essa energia. Mas contrariar, baixando em vez de subir, é exatamente o que quebra o ciclo. Isto aplica-se indiferentemente a um jantar de família tenso ou a uma sala de operações sob pressão — é a mesma capacidade, exercitada em contextos muito diferentes.\n\nA tarefa 6-A marca o ponto médio do curso de forma deliberada: voltar à lista de cinco pessoas da Semana 0 e escrever, para cada uma, duas ou três frases sobre o que mudou. É um exercício de confronto honesto com o progresso real, não com a intenção.",
+  "audio_segmentos": [
+    {
+      "titulo": "Resumo da semana",
+      "texto": "Estás na Semana 6 do curso Carnegie, a última da Fase 2 — Presença Emocional. Depois de duas semanas sobre tom e calor, esta semana liga tudo isso a influência. A ideia central é que, em qualquer grupo, a pessoa mais regulada emocionalmente tende a ter a maior influência sobre o tom geral — não por dominância, mas por firmeza serena. Nos próximos áudios vou explicar as três práticas da semana: falar mais devagar, curiosidade acima de exibição, e proteger o clima emocional. E há também uma tarefa especial — um ponto de situação a meio do curso."
+    },
+    {
+      "titulo": "A pessoa mais regulada tem a maior influência",
+      "texto": "A Semana 6 fecha a Fase 2 com a ideia que mais diretamente liga presença emocional a influência: em qualquer grupo — família, amigos, equipa — a pessoa mais regulada emocionalmente da sala tende a ter, com o tempo, a maior influência sobre o tom geral. Isto acontece porque os estados emocionais são contagiosos por natureza; alguém tem de definir a temperatura, e essa pessoa raramente é quem fala mais alto — é quem se mantém mais estável quando tudo à volta escala."
+    },
+    {
+      "titulo": "Falar mais devagar",
+      "texto": "Falar mais devagar em momentos de alto risco emocional — desacordos, conversas difíceis, ensino — é uma das ferramentas mais simples e mais contra-intuitivas do curso. O instinto sob pressão é acelerar: falar mais depressa para resolver mais depressa. Mas a velocidade do discurso é lida, a um nível quase pré-consciente, como um sinal de urgência ou nervosismo, o que aumenta a tensão em vez de a baixar. Falar a cerca de 80% do ritmo habitual comunica o oposto: que a situação, por mais séria que seja, está sob controlo suficiente para não exigir pressa."
+    },
+    {
+      "titulo": "Curiosidade acima de exibição",
+      "texto": "A curiosidade acima de exibição pede um adiamento deliberado: antes de mostrares o que sabes, fazer mais uma pergunta. Isto parece sacrificar a oportunidade de demonstrar competência, mas na prática constrói mais confiança do que a exibiria — porque as pessoas confiam mais em quem parece genuinamente interessado em compreender do que em quem parece ansioso por mostrar perícia."
+    },
+    {
+      "titulo": "Proteger o clima emocional",
+      "texto": "Proteger o clima emocional é, no fundo, uma aplicação prática de tudo o resto: em situações de stress, ser deliberadamente a pessoa menos reativa presente. Quando outros escalam, o movimento natural é acompanhar essa energia. Mas contrariar, baixando em vez de subir, é exatamente o que quebra o ciclo. Isto aplica-se indiferentemente a um jantar de família tenso ou a uma sala de operações sob pressão — é a mesma capacidade, exercitada em contextos muito diferentes."
+    },
+    {
+      "titulo": "Ponto de situação a meio do curso",
+      "texto": "A tarefa desta semana marca o ponto médio do curso de forma deliberada: voltar à lista de cinco pessoas que escreveste na Semana zero e escrever, para cada uma, duas ou três frases sobre o que mudou. É um exercício de confronto honesto com o progresso real, não com a intenção."
+    }
+  ],
+  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-06.html",
+  "link_curso_completo": "https://personal-system-hs5.pages.dev/personal-development/carnegie/curso-completo.html"
+}

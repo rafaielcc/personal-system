@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossiê de Candidatura — Ensino Superior 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --paper: #EFEAE0;
+    --paper-2: #E6DFD0;
+    --ink: #1F2A22;
+    --ink-soft: #4A5348;
+    --line: #C9BFA8;
+    --forest: #2E4632;
+    --forest-deep: #1B2B20;
+    --gold: #A9773A;
+    --gold-soft: #C79A5C;
+    --rust: #9B4A34;
+    --card: #F8F5EC;
+    --shadow: rgba(31,42,34,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    line-height:1.55;
+  }
+
+  ::selection{background:var(--gold-soft); color:var(--forest-deep);}
+
+  /* Texture */
+  body::before{
+    content:"";
+    position:fixed; inset:0;
+    background-image:
+      radial-gradient(circle at 20% 20%, rgba(46,70,50,0.035) 0, transparent 45%),
+      radial-gradient(circle at 80% 70%, rgba(169,119,58,0.05) 0, transparent 50%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:0.02em;}
+
+  /* ===== HEADER ===== */
+  header.masthead{
+    position:relative;
+    padding:56px 24px 40px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, var(--paper-2), var(--paper));
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:18px;
+  }
+  h1.title{
+    font-family:'Fraunces', serif;
+    font-optical-sizing:auto;
+    font-weight:600;
+    font-size:clamp(2.1rem, 5vw, 3.4rem);
+    margin:0 0 10px;
+    color:var(--forest-deep);
+    letter-spacing:-0.01em;
+  }
+  .subtitle{
+    font-size:1.05rem;
+    color:var(--ink-soft);
+    font-style:italic;
+    max-width:560px;
+    margin:0 auto;
+  }
+  .student-line{
+    margin-top:26px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--forest);
+    letter-spacing:0.05em;
+  }
+
+  /* ===== TABS ===== */
+  nav.tabs{
+    position:sticky; top:0; z-index:50;
+    display:flex;
+    overflow-x:auto;
+    background:var(--forest-deep);
+    border-bottom:2px solid var(--gold);
+    scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{display:none;}
+  nav.tabs button{
+    flex:0 0 auto;
+    background:none;
+    border:none;
+    color:#CFE0D2;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:16px 18px;
+    cursor:pointer;
+    border-right:1px solid rgba(255,255,255,0.08);
+    transition:background 0.2s, color 0.2s;
+    white-space:nowrap;
+  }
+  nav.tabs button:hover{background:rgba(255,255,255,0.06); color:#fff;}
+  nav.tabs button.active{
+    background:var(--gold);
+    color:var(--forest-deep);
+    font-weight:600;
+  }
+
+  main{
+    position:relative;
+    z-index:1;
+    max-width:980px;
+    margin:0 auto;
+    padding:48px 24px 100px;
+  }
+
+  section.pane{display:none; animation:fade 0.35s ease;}
+  section.pane.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+  h2.pane-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.9rem;
+    color:var(--forest-deep);
+    margin:0 0 6px;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+  }
+  h2.pane-title .num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.9rem;
+    color:var(--gold);
+    font-weight:500;
+  }
+  .pane-lede{
+    color:var(--ink-soft);
+    font-style:italic;
+    margin:0 0 34px;
+    font-size:1.02rem;
+    max-width:680px;
+  }
+
+  h3.block-title{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.25rem;
+    color:var(--forest);
+    margin:38px 0 14px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+
+  p{margin:0 0 14px;}
+
+  /* CARDS */
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:22px 24px;
+    margin-bottom:18px;
+    box-shadow:0 2px 10px var(--shadow);
+  }
+  .card.accent{border-left:4px solid var(--gold);}
+  .card.warn{border-left:4px solid var(--rust);}
+  .card.good{border-left:4px solid var(--forest);}
+
+  /* TABLES */
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0 28px;
+    font-size:0.92rem;
+    background:var(--card);
+  }
+  caption{
+    text-align:left;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-bottom:8px;
+  }
+  th, td{
+    padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    text-align:left;
+  }
+  thead th{
+    background:var(--forest-deep);
+    color:#EFEAE0;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    font-weight:500;
+  }
+  tbody tr:nth-child(even){background:rgba(169,119,58,0.06);}
+  tbody tr:hover{background:rgba(169,119,58,0.14);}
+  td.num, th.num{font-family:'IBM Plex Mono', monospace; text-align:right;}
+  td.highlight{color:var(--forest); font-weight:600;}
+  .table-wrap{overflow-x:auto;}
+
+  /* PILLS */
+  .pill{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    padding:3px 9px;
+    border-radius:20px;
+    background:var(--forest);
+    color:#EFEAE0;
+  }
+  .pill.gold{background:var(--gold); color:var(--forest-deep);}
+  .pill.rust{background:var(--rust); color:#fff;}
+  .pill.outline{background:none; border:1px solid var(--forest); color:var(--forest);}
+
+  /* GRID CARDS - universities */
+  .uni-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+    gap:18px;
+    margin:20px 0 36px;
+  }
+  .uni-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:20px;
+    position:relative;
+    box-shadow:0 2px 10px var(--shadow);
+  }
+  .uni-card .rank{
+    position:absolute; top:-10px; left:20px;
+    background:var(--forest-deep);
+    color:var(--gold);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    padding:3px 10px;
+    letter-spacing:0.05em;
+  }
+  .uni-card h4{
+    font-family:'Fraunces', serif;
+    font-size:1.15rem;
+    margin:10px 0 4px;
+    color:var(--forest-deep);
+  }
+  .uni-card .loc{
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    font-style:italic;
+    margin-bottom:12px;
+  }
+  .uni-card dl{margin:0; font-size:0.86rem;}
+  .uni-card dt{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    color:var(--gold);
+    margin-top:10px;
+  }
+  .uni-card dd{margin:2px 0 0; color:var(--ink);}
+  .uni-card .score{
+    margin-top:14px;
+    padding-top:12px;
+    border-top:1px dashed var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .uni-card .score .val{
+    font-family:'Fraunces', serif;
+    font-size:1.7rem;
+    font-weight:600;
+    color:var(--forest);
+  }
+  .uni-card .score .lbl{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px;
+    color:var(--ink-soft);
+    text-transform:uppercase;
+  }
+
+  /* Secondary uni list (others suggested) */
+  .other-uni{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(240px,1fr));
+    gap:16px;
+    margin:18px 0 30px;
+  }
+  .other-card{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    padding:16px 18px;
+  }
+  .other-card h5{
+    font-family:'Fraunces', serif;
+    font-size:1.02rem;
+    margin:0 0 6px;
+    color:var(--forest-deep);
+  }
+  .other-card p{font-size:0.85rem; color:var(--ink-soft); margin:0;}
+  .other-card .tag-row{margin-top:10px;}
+
+  /* CALC EXPLANATION */
+  .formula{
+    font-family:'IBM Plex Mono', monospace;
+    background:var(--forest-deep);
+    color:#EFEAE0;
+    padding:16px 20px;
+    font-size:0.88rem;
+    line-height:1.7;
+    margin:14px 0 22px;
+    overflow-x:auto;
+    border-left:4px solid var(--gold);
+  }
+  .formula .op{color:var(--gold-soft);}
+  .formula .res{color:#9FD8AE; font-weight:600;}
+
+  .step{
+    display:flex;
+    gap:16px;
+    margin-bottom:16px;
+    align-items:flex-start;
+  }
+  .step .stepnum{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:1.3rem;
+    color:var(--gold);
+    min-width:32px;
+  }
+  .step .steptext{flex:1;}
+  .step .steptext strong{color:var(--forest-deep);}
+
+  /* TIMELINE */
+  .timeline{
+    position:relative;
+    margin:30px 0;
+    padding-left:28px;
+    border-left:2px solid var(--line);
+  }
+  .tl-item{
+    position:relative;
+    margin-bottom:26px;
+  }
+  .tl-item::before{
+    content:"";
+    position:absolute;
+    left:-34px; top:4px;
+    width:12px; height:12px;
+    border-radius:50%;
+    background:var(--gold);
+    border:2px solid var(--forest-deep);
+  }
+  .tl-item.done::before{background:var(--ink-soft); border-color:var(--ink-soft);}
+  .tl-item.today::before{
+    background:var(--rust);
+    box-shadow:0 0 0 5px rgba(155,74,52,0.2);
+  }
+  .tl-date{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+  }
+  .tl-item.done .tl-date{color:var(--ink-soft);}
+  .tl-item.today .tl-date{color:var(--rust); font-weight:600;}
+  .tl-title{
+    font-family:'Fraunces', serif;
+    font-size:1.1rem;
+    color:var(--forest-deep);
+    margin:2px 0 4px;
+  }
+  .tl-desc{font-size:0.92rem; color:var(--ink-soft); margin:0;}
+
+  /* CHART */
+  .chart-wrap{
+    background:var(--card);
+    border:1px solid var(--line);
+    padding:24px;
+    margin:20px 0 34px;
+    box-shadow:0 2px 10px var(--shadow);
+  }
+  .chart-legend{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    margin-top:16px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+  }
+  .chart-legend span{display:flex; align-items:center; gap:6px;}
+  .chart-legend i{width:12px; height:12px; display:inline-block; border-radius:2px;}
+
+  /* FOOTER NOTE */
+  .foot-note{
+    margin-top:60px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+    font-size:0.82rem;
+    color:var(--ink-soft);
+    font-style:italic;
+    text-align:center;
+  }
+
+  /* Responsive */
+  @media (max-width:640px){
+    .uni-grid, .other-uni{grid-template-columns:1fr;}
+    h1.title{font-size:1.8rem;}
+    main{padding:32px 16px 80px;}
+  }
+
+  details.src{
+    margin-top:6px;
+    font-size:0.78rem;
+    color:var(--ink-soft);
+  }
+  details.src summary{cursor:pointer; font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:0.04em; text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="eyebrow">Concurso Nacional de Acesso ao Ensino Superior · 2026</div>
+  <h1 class="title">Dossiê de Candidatura</h1>
+  <p class="subtitle">Relações Internacionais &amp; Ciência Política — um guia de referência para acompanhar cada etapa da candidatura</p>
+  <div class="student-line">CURSO SECUNDÁRIO · HUMANIDADES — AGRUPAMENTO DE ESCOLAS VERGÍLIO FERREIRA, LISBOA</div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button data-pane="p1" class="active">01 · Resumo</button>
+  <button data-pane="p2">02 · Notas &amp; Cálculo</button>
+  <button data-pane="p3">03 · As 4 Escolhas</button>
+  <button data-pane="p4">04 · Notas de Corte</button>
+  <button data-pane="p5">05 · Outras Universidades</button>
+  <button data-pane="p6">06 · Calendário</button>
+  <button data-pane="p7">07 · Esclarecimentos</button>
+</nav>
+
+<main>
+
+  <!-- ================= PANE 1 : RESUMO ================= -->
+  <section class="pane active" id="p1">
+    <h2 class="pane-title"><span class="num">01</span> Resumo Executivo</h2>
+    <p class="pane-lede">O essencial desta candidatura, num relance.</p>
+
+    <div class="card accent">
+      <p style="margin:0"><strong>Curso pretendido:</strong> Relações Internacionais / Ciência Política e Relações Internacionais<br>
+      <strong>Classificação Final de Curso (CFC):</strong> 15,4 valores — <span class="mono">154 pontos</span><br>
+      <strong>Melhor par de provas de ingresso:</strong> Filosofia (18 9 pontos) + Português (129 pontos)<br>
+      <strong>Nota de candidatura calculada:</strong> <span class="pill gold">156,5 pontos</span> — igual nas 4 instituições preferidas, dado que todas usam a fórmula 50% CFC + 50% provas de ingresso</p>
+    </div>
+
+    <h3 class="block-title">As quatro preferências, em ordem</h3>
+    <div class="uni-grid">
+      <div class="uni-card">
+        <span class="rank">1ª opção</span>
+        <h4>Universidade de Coimbra</h4>
+        <div class="loc">Faculdade de Economia · Relações Internacionais</div>
+        <div class="score"><span class="val">156,5</span><span class="lbl">pontos</span></div>
+      </div>
+      <div class="uni-card">
+        <span class="rank">2ª opção</span>
+        <h4>Universidade do Minho</h4>
+        <div class="loc">Braga · Relações Internacionais</div>
+        <div class="score"><span class="val">156,5</span><span class="lbl">pontos</span></div>
+      </div>
+      <div class="uni-card">
+        <span class="rank">3ª opção</span>
+        <h4>Universidade de Lisboa — ISCSP</h4>
+        <div class="loc">Campo Grande, Lisboa · Relações Internacionais</div>
+        <div class="score"><span class="val">156,5</span><span class="lbl">pontos</span></div>
+      </div>
+      <div class="uni-card">
+        <span class="rank">4ª opção</span>
+        <h4>Universidade Nova de Lisboa</h4>
+        <div class="loc">FCSH · Ciência Política e Relações Internacionais</div>
+        <div class="score"><span class="val">156,5</span><span class="lbl">pontos</span></div>
+      </div>
+    </div>
+
+    <h3 class="block-title">Pontos de atenção imediatos</h3>
+    <div class="card warn">
+      <p style="margin:0"><strong>Dia 20 de julho (segunda-feira):</strong> submissão da candidatura à 1ª fase do concurso nacional + inscrição para o exame de 2ª fase de Português. Ambos os prazos coincidem — não deixar para a última hora.</p>
+    </div>
+    <div class="card warn">
+      <p style="margin:0"><strong>Data corrigida:</strong> o exame de História A da 2ª fase é a <strong>23 de julho (quinta-feira)</strong>, não a 24 como foi inicialmente mencionado — mas como a decisão é não repetir História, isto não afeta o plano atual. Fica como nota de confirmação.</p>
+    </div>
+
+    <p style="margin-top:30px; font-size:0.85rem; color:var(--ink-soft);">Navegue pelas abas acima para o detalhe de cada tema: cálculo passo-a-passo, comparação histórica de notas de corte, calendário completo e esclarecimentos sobre as regras do concurso.</p>
+  </section>
+
+  <!-- ================= PANE 2 : NOTAS E CALCULO ================= -->
+  <section class="pane" id="p2">
+    <h2 class="pane-title"><span class="num">02</span> Histórico de Notas &amp; Cálculo</h2>
+    <p class="pane-lede">De onde vêm os números — o percurso escolar e a matemática por trás da nota final.</p>
+
+    <h3 class="block-title">11.º ano (2024/2025) — ano em que fez o exame de Filosofia</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Disciplina</th><th class="num">1º Sem.</th><th class="num">2º Sem.</th><th class="num">CIF</th><th class="num">Exame 1ª Fase</th><th class="num">Nota Final</th></tr></thead>
+      <tbody>
+        <tr><td>Português</td><td class="num">12</td><td class="num">13</td><td class="num">—</td><td class="num">—</td><td class="num highlight">13</td></tr>
+        <tr><td>Inglês</td><td class="num">17</td><td class="num">16</td><td class="num">18</td><td class="num">—</td><td class="num highlight">18</td></tr>
+        <tr><td>Filosofia</td><td class="num">17</td><td class="num">18</td><td class="num">18</td><td class="num">19</td><td class="num highlight">18</td></tr>
+        <tr><td>Educação Física</td><td class="num">13</td><td class="num">14</td><td class="num">—</td><td class="num">—</td><td class="num highlight">14</td></tr>
+        <tr><td>História A</td><td class="num">17</td><td class="num">19</td><td class="num">—</td><td class="num">—</td><td class="num highlight">19</td></tr>
+        <tr><td>Geografia A</td><td class="num">13</td><td class="num">14</td><td class="num">13</td><td class="num">—</td><td class="num highlight">13</td></tr>
+        <tr><td>Mat. Aplicada Ciências Sociais</td><td class="num">11</td><td class="num">10</td><td class="num">13</td><td class="num">—</td><td class="num highlight">13</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">12.º ano (2025/2026) — ano terminal, disciplinas do plano curricular final</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Disciplina</th><th class="num">1º Sem.</th><th class="num">2º Sem.</th><th class="num">CIF</th><th class="num">Exame 1ª Fase</th><th class="num">Nota Final</th><th>Anuidade</th></tr></thead>
+      <tbody>
+        <tr><td>Português</td><td class="num">15</td><td class="num">15</td><td class="num">15</td><td class="num">13</td><td class="num highlight">13</td><td><span class="pill outline">Trienal</span></td></tr>
+        <tr><td>Educação Física</td><td class="num">13</td><td class="num">15</td><td class="num">15</td><td class="num">—</td><td class="num highlight">15</td><td><span class="pill outline">Trienal</span></td></tr>
+        <tr><td>História A</td><td class="num">17</td><td class="num">18</td><td class="num">17</td><td class="num">15</td><td class="num highlight">17</td><td><span class="pill outline">Bienal</span></td></tr>
+        <tr><td>Sociologia</td><td class="num">16</td><td class="num">18</td><td class="num">18</td><td class="num">—</td><td class="num highlight">18</td><td><span class="pill outline">Anual</span></td></tr>
+        <tr><td>Direito</td><td class="num">17</td><td class="num">18</td><td class="num">18</td><td class="num">—</td><td class="num highlight">18</td><td><span class="pill outline">Anual</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">Provas de ingresso — pontuação em escala 0-200</h3>
+    <div class="table-wrap">
+    <table>
+      <caption>Notas finais dos exames nacionais, tal como registadas para efeitos de candidatura</caption>
+      <thead><tr><th>Exame</th><th>Ano de realização</th><th class="num">Nota (0-20)</th><th class="num">Pontos (0-200)</th></tr></thead>
+      <tbody>
+        <tr><td>Filosofia</td><td>11º ano · 1ª fase</td><td class="num">19</td><td class="num highlight">189</td></tr>
+        <tr><td>História A</td><td>12º ano · 1ª fase</td><td class="num">15</td><td class="num highlight">146</td></tr>
+        <tr><td>Português</td><td>12º ano · 1ª fase</td><td class="num">13</td><td class="num highlight">129</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">Passo 1 — Classificação Final de Curso (CFC)</h3>
+    <p>A CFC combina as 5 disciplinas do 12º ano, ponderadas pela sua anuidade (quantos anos cada disciplina foi lecionada).</p>
+    <div class="formula">
+CFC = (3×Port. + 3×EF + 2×Hist.A + 1×Soc. + 1×Dir.) / (3+3+2+1+1)<br>
+CFC = (3×13 + 3×15 + 2×17 + 1×18 + 1×18) / 10<br>
+CFC = (39 + 45 + 34 + 18 + 18) / 10<br>
+CFC = 154 / 10 = <span class="res">15,4 valores → 154 pontos</span>
+    </div>
+
+    <h3 class="block-title">Passo 2 — Nota de candidatura por instituição</h3>
+    <p>Todas as 4 instituições preferidas usam a mesma fórmula: <strong>50% CFC + 50% provas de ingresso</strong>, com as duas provas de ingresso (quando aplicável) a repartir os 50% em partes iguais (25% + 25%).</p>
+
+    <div class="step">
+      <div class="stepnum">1</div>
+      <div class="steptext"><strong>Componente CFC:</strong> 154 pontos × 50% = 77 pontos</div>
+    </div>
+    <div class="step">
+      <div class="stepnum">2</div>
+      <div class="steptext"><strong>Componente Filosofia:</strong> 189 pontos × 25% = 47,25 pontos</div>
+    </div>
+    <div class="step">
+      <div class="stepnum">3</div>
+      <div class="steptext"><strong>Componente Português:</strong> 129 pontos × 25% = 32,25 pontos</div>
+    </div>
+    <div class="step">
+      <div class="stepnum">=</div>
+      <div class="steptext"><strong>Nota final de candidatura:</strong> 77 + 47,25 + 32,25 = <span class="pill gold">156,5 pontos</span></div>
+    </div>
+
+    <div class="card good" style="margin-top:24px;">
+      <p style="margin:0"><strong>Porque é que a combinação Filosofia + Português é a mais forte:</strong> comparando com o par Português + História A (129 + 146), a média seria mais baixa do que Português + Filosofia (129 + 189). Por isso a estratégia de privilegiar Filosofia como prova de ingresso, dispensando História, é a escolha matematicamente mais vantajosa.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANE 3 : AS 4 ESCOLHAS ================= -->
+  <section class="pane" id="p3">
+    <h2 class="pane-title"><span class="num">03</span> As Quatro Escolhas</h2>
+    <p class="pane-lede">Detalhe de cada par instituição/curso, com vagas, provas de ingresso aceites e classificações mínimas exigidas.</p>
+
+    <div class="uni-grid">
+      <div class="uni-card">
+        <span class="rank">1ª opção</span>
+        <h4>Universidade de Coimbra</h4>
+        <div class="loc">Faculdade de Economia · Relações Internacionais</div>
+        <dl>
+          <dt>Vagas 2026/27</dt><dd>53</dd>
+          <dt>Provas de ingresso aceites</dt><dd>História, ou Português, ou História+Português, ou Matemática A+Português, ou Economia+Português, ou <strong>Filosofia+Português</strong></dd>
+          <dt>Mínimos exigidos</dt><dd>95 pontos (PI) · 95 pontos (candidatura)</dd>
+          <dt>Fórmula</dt><dd>50% CFC + 50% PI</dd>
+        </dl>
+        <div class="score"><span class="val">156,5</span><span class="lbl">nota calculada</span></div>
+      </div>
+
+      <div class="uni-card">
+        <span class="rank">2ª opção</span>
+        <h4>Universidade do Minho</h4>
+        <div class="loc">Braga · Relações Internacionais</div>
+        <dl>
+          <dt>Vagas 2026/27</dt><dd>67</dd>
+          <dt>Provas de ingresso aceites</dt><dd>Português, ou História, ou Economia+Português, ou <strong>Filosofia+Português</strong>, ou Filosofia+História, ou História+Português, ou Economia+Filosofia/História</dd>
+          <dt>Mínimos exigidos</dt><dd>100 pontos (PI) · 100 pontos (candidatura)</dd>
+          <dt>Fórmula</dt><dd>50% CFC + 50% PI</dd>
+        </dl>
+        <div class="score"><span class="val">156,5</span><span class="lbl">nota calculada</span></div>
+      </div>
+
+      <div class="uni-card">
+        <span class="rank">3ª opção</span>
+        <h4>Universidade de Lisboa</h4>
+        <div class="loc">ISCSP · Campo Grande, Lisboa · Relações Internacionais</div>
+        <dl>
+          <dt>Vagas 2026/27</dt><dd>68</dd>
+          <dt>Provas de ingresso aceites</dt><dd>Português, ou História, ou Geografia+Português, ou História+Português, ou Economia+Português, ou <strong>Filosofia+Português</strong></dd>
+          <dt>Mínimos exigidos</dt><dd>100 pontos (PI) · 100 pontos (candidatura)</dd>
+          <dt>Fórmula</dt><dd>50% CFC + 50% PI</dd>
+        </dl>
+        <div class="score"><span class="val">156,5</span><span class="lbl">nota calculada</span></div>
+      </div>
+
+      <div class="uni-card">
+        <span class="rank">4ª opção</span>
+        <h4>Universidade Nova de Lisboa</h4>
+        <div class="loc">FCSH · Ciência Política e Relações Internacionais</div>
+        <dl>
+          <dt>Vagas 2026/27</dt><dd>81</dd>
+          <dt>Provas de ingresso aceites</dt><dd>Economia+Português, ou <strong>Filosofia+Português</strong>, ou Geografia+Português, ou História+Português, ou Economia/História+Mat.Apl.Ciências Sociais</dd>
+          <dt>Mínimos exigidos</dt><dd>95 pontos (PI) · 100 pontos (candidatura)</dd>
+          <dt>Fórmula</dt><dd>50% CFC + 50% PI</dd>
+        </dl>
+        <div class="score"><span class="val">156,5</span><span class="lbl">nota calculada</span></div>
+      </div>
+    </div>
+
+    <div class="card accent">
+      <p style="margin:0"><strong>Nota sobre o nome do curso na Nova:</strong> chama-se oficialmente <em>"Ciência Política e Relações Internacionais"</em>, não apenas "Relações Internacionais" — é o par mais próximo do que procura nesta instituição, sediada na Faculdade de Ciências Sociais e Humanas (FCSH), em Lisboa.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANE 4 : NOTAS DE CORTE ================= -->
+  <section class="pane" id="p4">
+    <h2 class="pane-title"><span class="num">04</span> Notas de Corte — Últimos 3 Anos</h2>
+    <p class="pane-lede">Dados oficiais da DGES (2023, 2024 e 2025) para o último colocado pelo contingente geral, em cada par instituição/curso. É a base mais fiável disponível publicamente para estimar as hipóteses de entrada.</p>
+
+    <div class="chart-wrap">
+      <svg viewBox="0 0 760 380" style="width:100%; height:auto; font-family:'IBM Plex Mono',monospace;">
+        <!-- Axis -->
+        <line x1="60" y1="20" x2="60" y2="320" stroke="#C9BFA8" stroke-width="1"/>
+        <line x1="60" y1="320" x2="740" y2="320" stroke="#C9BFA8" stroke-width="1"/>
+        <!-- Y labels -->
+        <text x="52" y="324" text-anchor="end" font-size="10" fill="#4A5348">100</text>
+        <text x="52" y="254" text-anchor="end" font-size="10" fill="#4A5348">130</text>
+        <text x="52" y="184" text-anchor="end" font-size="10" fill="#4A5348">160</text>
+        <text x="52" y="114" text-anchor="end" font-size="10" fill="#4A5348">190</text>
+        <text x="52" y="44"  text-anchor="end" font-size="10" fill="#4A5348">220</text>
+        <!-- gridlines -->
+        <line x1="60" y1="250" x2="740" y2="250" stroke="#C9BFA8" stroke-width="0.5" stroke-dasharray="2,3"/>
+        <line x1="60" y1="180" x2="740" y2="180" stroke="#C9BFA8" stroke-width="0.5" stroke-dasharray="2,3"/>
+        <line x1="60" y1="110" x2="740" y2="110" stroke="#C9BFA8" stroke-width="0.5" stroke-dasharray="2,3"/>
+        <line x1="60" y1="40"  x2="740" y2="40"  stroke="#C9BFA8" stroke-width="0.5" stroke-dasharray="2,3"/>
+
+        <!-- Reference line: student's score 156.5 -->
+        <!-- scale: y = 320 - (value-100)*(280/120) -->
+        <line x1="60" y1="187" x2="740" y2="187" stroke="#9B4A34" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <text x="742" y="191" font-size="10" fill="#9B4A34" font-weight="600">156,5 (nota calculada)</text>
+
+        <!-- Coimbra group: 2023,2024,2025 last-placed candidature scores: 170.5, 175.0, 167.5 -->
+        <g>
+          <rect x="90"  y="97"  width="18" height="223" fill="#2E4632"/>
+          <rect x="112" y="87"  width="18" height="233" fill="#2E4632"/>
+          <rect x="134" y="107" width="18" height="213" fill="#2E4632"/>
+          <text x="112" y="335" text-anchor="middle" font-size="9.5" fill="#1F2A22">Coimbra</text>
+        </g>
+
+        <!-- Minho: 162.2, 168.0, 142.0 -->
+        <g>
+          <rect x="200" y="132" width="18" height="188" fill="#A9773A"/>
+          <rect x="222" y="119" width="18" height="201" fill="#A9773A"/>
+          <rect x="244" y="180" width="18" height="140" fill="#A9773A"/>
+          <text x="222" y="335" text-anchor="middle" font-size="9.5" fill="#1F2A22">Minho</text>
+        </g>
+
+        <!-- ISCSP: 168.0, 168.0, 160.8 -->
+        <g>
+          <rect x="310" y="119" width="18" height="201" fill="#C79A5C"/>
+          <rect x="332" y="119" width="18" height="201" fill="#C79A5C"/>
+          <rect x="354" y="145" width="18" height="175" fill="#C79A5C"/>
+          <text x="332" y="335" text-anchor="middle" font-size="9.5" fill="#1F2A22">ISCSP</text>
+        </g>
+
+        <!-- Nova FCSH (Ciência Política e RI): 176.5, 177.0, 170.5 -->
+        <g>
+          <rect x="420" y="63"  width="18" height="257" fill="#9B4A34"/>
+          <rect x="442" y="61"  width="18" height="259" fill="#9B4A34"/>
+          <rect x="464" y="97"  width="18" height="223" fill="#9B4A34"/>
+          <text x="442" y="335" text-anchor="middle" font-size="9.5" fill="#1F2A22">Nova FCSH</text>
+        </g>
+
+        <!-- mini legend inline for years -->
+        <text x="90" y="345" font-size="8" fill="#4A5348">23</text>
+        <text x="112" y="345" font-size="8" fill="#4A5348">24</text>
+        <text x="134" y="345" font-size="8" fill="#4A5348">25</text>
+        <text x="200" y="345" font-size="8" fill="#4A5348">23</text>
+        <text x="222" y="345" font-size="8" fill="#4A5348">24</text>
+        <text x="244" y="345" font-size="8" fill="#4A5348">25</text>
+        <text x="310" y="345" font-size="8" fill="#4A5348">23</text>
+        <text x="332" y="345" font-size="8" fill="#4A5348">24</text>
+        <text x="354" y="345" font-size="8" fill="#4A5348">25</text>
+        <text x="420" y="345" font-size="8" fill="#4A5348">23</text>
+        <text x="442" y="345" font-size="8" fill="#4A5348">24</text>
+        <text x="464" y="345" font-size="8" fill="#4A5348">25</text>
+      </svg>
+      <div class="chart-legend">
+        <span><i style="background:#2E4632"></i>Coimbra</span>
+        <span><i style="background:#A9773A"></i>Minho</span>
+        <span><i style="background:#C79A5C"></i>ISCSP</span>
+        <span><i style="background:#9B4A34"></i>Nova FCSH</span>
+        <span style="color:#9B4A34">┄ linha vermelha = nota calculada (156,5)</span>
+      </div>
+    </div>
+
+    <p style="font-size:0.85rem; color:var(--ink-soft);">Valores representados: nota de candidatura do último colocado pelo contingente geral, na 1ª fase, por ano (fonte: DGES — Guia da Candidatura, dados estatísticos oficiais).</p>
+
+    <h3 class="block-title">Universidade de Coimbra — Faculdade de Economia</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+      <tbody>
+        <tr><td>Vagas (1ª fase)</td><td class="num">53</td><td class="num">53</td><td class="num">53</td></tr>
+        <tr><td>Candidatos</td><td class="num">534</td><td class="num">534</td><td class="num">475</td></tr>
+        <tr><td>Nota candidatura média dos colocados</td><td class="num">175,0</td><td class="num">175,3</td><td class="num">174,0</td></tr>
+        <tr><td class="highlight">Último colocado (contingente geral)</td><td class="num highlight">170,5</td><td class="num highlight">175,0</td><td class="num highlight">167,5</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">Universidade do Minho</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+      <tbody>
+        <tr><td>Vagas (1ª fase)</td><td class="num">67</td><td class="num">67</td><td class="num">67</td></tr>
+        <tr><td>Candidatos</td><td class="num">438</td><td class="num">535</td><td class="num">165</td></tr>
+        <tr><td>Nota candidatura média dos colocados</td><td class="num">169,8</td><td class="num">171,5</td><td class="num">161,4</td></tr>
+        <tr><td class="highlight">Último colocado (contingente geral)</td><td class="num highlight">162,2</td><td class="num highlight">168,0</td><td class="num highlight">142,0</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">Universidade de Lisboa — ISCSP</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+      <tbody>
+        <tr><td>Vagas (1ª fase)</td><td class="num">70</td><td class="num">70</td><td class="num">70</td></tr>
+        <tr><td>Candidatos</td><td class="num">551</td><td class="num">458</td><td class="num">434</td></tr>
+        <tr><td>Nota candidatura média dos colocados</td><td class="num">172,2</td><td class="num">173,4</td><td class="num">168,5</td></tr>
+        <tr><td class="highlight">Último colocado (contingente geral)</td><td class="num highlight">168,0</td><td class="num highlight">168,0</td><td class="num highlight">160,8</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3 class="block-title">Universidade Nova de Lisboa — FCSH (Ciência Política e RI)</h3>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th></th><th class="num">2023</th><th class="num">2024</th><th class="num">2025</th></tr></thead>
+      <tbody>
+        <tr><td>Vagas (1ª fase)</td><td class="num">98</td><td class="num">98</td><td class="num">99</td></tr>
+        <tr><td>Candidatos</td><td class="num">973</td><td class="num">944</td><td class="num">848</td></tr>
+        <tr><td>Nota candidatura média dos colocados</td><td class="num">180,6</td><td class="num">180,2</td><td class="num">178,3</td></tr>
+        <tr><td class="highlight">Último colocado (contingente geral)</td><td class="num highlight">176,5</td><td class="num highlight">177,0</td><td class="num highlight">170,5</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="card warn">
+      <p style="margin:0"><strong>Leitura honesta dos números:</strong> com 156,5 pontos, a nota calculada fica <em>abaixo</em> do último colocado dos últimos 3 anos em todas as 4 instituições — mais próxima em Minho (142,0 em 2025, um ano de baixa procura) e mais distante em Nova FCSH (sempre acima de 170). Isto não significa impossibilidade — a concorrência varia de ano para ano, e a melhoria da nota de Português na 2ª fase pode alterar este quadro. Mas é importante gerir expectativas: convém considerar mais opções na lista de 6 possíveis do concurso, incluindo alternativas com maior margem de segurança.</p>
+    </div>
+
+    <div class="card good">
+      <p style="margin:0"><strong>Se a nota de Português subir, por exemplo, para 15 (150 pontos):</strong> a nota de candidatura passaria de 156,5 para 77 + 47,25 + 37,5 = <strong>161,75 pontos</strong> — ainda assim abaixo da média dos últimos anos nas 4 instituições, mas mais perto de Minho e ISCSP em anos de menor procura.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANE 5 : OUTRAS UNIVERSIDADES ================= -->
+  <section class="pane" id="p5">
+    <h2 class="pane-title"><span class="num">05</span> Outras Universidades a Considerar</h2>
+    <p class="pane-lede">O leque completo de instituições públicas e privadas que oferecem Relações Internacionais ou Ciência Política em Portugal — útil para compor as restantes posições das 6 possíveis no concurso nacional.</p>
+
+    <h3 class="block-title">Públicas — Relações Internacionais (código 9229)</h3>
+    <div class="other-uni">
+      <div class="other-card">
+        <h5>Universidade de Évora</h5>
+        <p>Escola de Ciências Sociais · 72 vagas. Menor procura histórica que Lisboa/Coimbra, o que costuma resultar em nota de corte mais acessível. <em>Nota: a candidata expressou preferência por não incluir esta opção.</em></p>
+        <div class="tag-row"><span class="pill outline">Alentejo</span></div>
+      </div>
+    </div>
+
+    <h3 class="block-title">Públicas — Ciência Política (código 9019)</h3>
+    <div class="other-uni">
+      <div class="other-card">
+        <h5>ISCTE — Instituto Universitário de Lisboa</h5>
+        <p>Ciência Política como curso autónomo. Boa reputação em ciências sociais aplicadas, forte ligação ao mercado de trabalho.</p>
+        <div class="tag-row"><span class="pill outline">Lisboa</span></div>
+      </div>
+      <div class="other-card">
+        <h5>ISCSP — Ciência Política</h5>
+        <p>Curso irmão da Relações Internacionais na mesma instituição (Campo Grande). Boa opção adicional na mesma faculdade já familiar à candidata.</p>
+        <div class="tag-row"><span class="pill outline">Lisboa</span></div>
+      </div>
+      <div class="other-card">
+        <h5>Universidade do Minho</h5>
+        <p>Ciência Política como curso autónomo, alternativa à Relações Internacionais na mesma instituição.</p>
+        <div class="tag-row"><span class="pill outline">Braga</span></div>
+      </div>
+    </div>
+
+    <h3 class="block-title">Públicas — Ciência Política e Relações Internacionais (código 9020)</h3>
+    <div class="other-uni">
+      <div class="other-card">
+        <h5>Universidade da Beira Interior</h5>
+        <p>35 vagas, Covilhã. Cidade universitária de menor custo de vida, com procura tipicamente mais baixa — boa opção de "rede de segurança".</p>
+        <div class="tag-row"><span class="pill outline">Beira Interior</span></div>
+      </div>
+    </div>
+
+    <h3 class="block-title">Privadas de referência (sugestão de qualidade)</h3>
+    <div class="other-uni">
+      <div class="other-card">
+        <h5>Universidade Autónoma de Lisboa</h5>
+        <p>Tradição de mais de três décadas na área, com licenciatura, mestrado e doutoramento em Relações Internacionais — uma das poucas instituições privadas a oferecer os três ciclos completos nesta área.</p>
+        <div class="tag-row"><span class="pill outline">Lisboa · Privada</span></div>
+      </div>
+      <div class="other-card">
+        <h5>Universidade Lusíada — Lisboa e Porto</h5>
+        <p>Programas duplos com Direito disponíveis em algumas variantes. Rede consolidada de escolas em Lisboa e no Porto.</p>
+        <div class="tag-row"><span class="pill outline">Lisboa / Porto · Privada</span></div>
+      </div>
+      <div class="other-card">
+        <h5>Universidade Europeia</h5>
+        <p>Vertente mais internacional, com forte aposta em mobilidade e parcerias estrangeiras.</p>
+        <div class="tag-row"><span class="pill outline">Lisboa · Privada</span></div>
+      </div>
+    </div>
+
+    <div class="card accent">
+      <p style="margin:0"><strong>Porque vale a pena considerar mais opções:</strong> o concurso nacional permite até 6 pares instituição/curso por fase, por ordem de preferência. Dado que a nota calculada (156,5) fica abaixo da média histórica das 4 preferências atuais, incluir pelo menos uma opção com nota de corte mais acessível (Évora, UBI, ou uma privada) nas posições 5ª/6ª pode ser uma rede de segurança sensata — sem custo algum para as primeiras 4 escolhas.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANE 6 : CALENDARIO ================= -->
+  <section class="pane" id="p6">
+    <h2 class="pane-title"><span class="num">06</span> Calendário — Daqui em Diante</h2>
+    <p class="pane-lede">Todas as datas que interessam a partir de hoje, sábado 18 de julho de 2026.</p>
+
+    <div class="timeline">
+      <div class="tl-item done">
+        <div class="tl-date">17 de julho (sexta-feira) — já aconteceu</div>
+        <div class="tl-title">Afixação das pautas da 1ª fase</div>
+        <p class="tl-desc">Resultados dos exames de Português (13) e História A (15) tornados públicos.</p>
+      </div>
+
+      <div class="tl-item today">
+        <div class="tl-date">Até 20 de julho (segunda-feira)</div>
+        <div class="tl-title">Prazo para pedido de consulta de prova</div>
+        <p class="tl-desc">Se pretender consultar a prova de Português antes de decidir sobre reapreciação, enviar pedido para reapreciacoes@aevf.pt.</p>
+      </div>
+
+      <div class="tl-item today">
+        <div class="tl-date">20 de julho (segunda-feira) — HOJE + 2 dias</div>
+        <div class="tl-title">Início da candidatura à 1ª fase do concurso nacional + inscrição no exame de 2ª fase</div>
+        <p class="tl-desc">Dia planeado para submeter a candidatura DGES com as notas atuais, e simultaneamente inscrever-se no exame de 2ª fase de Português (não repetir História).</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">21 de julho (terça-feira)</div>
+        <div class="tl-title">Exame de 2ª fase — Português (12º ano)</div>
+        <p class="tl-desc">9h30. Tentativa de melhoria da nota atual de 13 valores.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">20 e 21 de julho</div>
+        <div class="tl-title">Levantamento das cópias de prova (reapreciação)</div>
+        <p class="tl-desc">14h-16h, mediante pagamento na receção da escola, caso opte por avançar com pedido de reapreciação.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">21 a 23 de julho</div>
+        <div class="tl-title">Prazo para pedido de reapreciação de prova</div>
+        <p class="tl-desc">2 dias úteis após o levantamento da cópia — modelos 12 e 12-A/JNE.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">6 de agosto (quinta-feira)</div>
+        <div class="tl-title">Fecho da candidatura à 1ª fase do concurso nacional</div>
+        <p class="tl-desc">Último dia para submeter ou alterar a candidatura DGES.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">7 de agosto (sexta-feira)</div>
+        <div class="tl-title">Afixação de pautas da 2ª fase de exames + resultados de reapreciação</div>
+        <p class="tl-desc">Fica a saber-se se a nota de Português melhorou, tanto pela via do exame como pela via da reapreciação.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">22-23 de agosto</div>
+        <div class="tl-title">Resultados da 1ª fase do concurso nacional</div>
+        <p class="tl-desc">Listas de colocação disponibilizadas às instituições a 22, resultados divulgados a 23 de agosto.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">24 a 27 de agosto</div>
+        <div class="tl-title">Prazo de matrícula dos colocados na 1ª fase</div>
+        <p class="tl-desc">Decisão importante: matricular-se já, ou aguardar pela 2ª fase (ver aba "Esclarecimentos").</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">24 de agosto a 2 de setembro</div>
+        <div class="tl-title">Candidatura à 2ª fase do concurso nacional</div>
+        <p class="tl-desc">Aqui já pode usar a nota melhorada de Português (se aplicável), na eventualidade de não ter ficado satisfeita com a colocação da 1ª fase.</p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">13 de setembro</div>
+        <div class="tl-title">Resultados da 2ª fase do concurso nacional</div>
+        <p class="tl-desc"></p>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-date">14 a 16 de setembro</div>
+        <div class="tl-title">Matrícula dos colocados na 2ª fase</div>
+        <p class="tl-desc">Última etapa do processo, salvo necessidade de recorrer à 3ª fase.</p>
+      </div>
+    </div>
+
+    <div class="card warn">
+      <p style="margin:0"><strong>Verificar antes de agir:</strong> a filha mencionou o exame de História a 24 de julho — mas segundo o calendário oficial atualizado do IAVE, História A (12º ano) na 2ª fase é a <strong>23 de julho</strong>. Como a decisão é não repetir esta disciplina, não há impacto prático, mas vale confirmar com a escola para evitar confusões.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANE 7 : ESCLARECIMENTOS ================= -->
+  <section class="pane" id="p7">
+    <h2 class="pane-title"><span class="num">07</span> Esclarecimentos &amp; Orientações</h2>
+    <p class="pane-lede">Respostas às dúvidas levantadas ao longo do processo — para consulta sempre que surgir incerteza.</p>
+
+    <h3 class="block-title">1. Candidatar-se à 1ª fase impede tentar a 2ª fase?</h3>
+    <div class="card good">
+      <p><strong>Não.</strong> É permitido candidatar-se às duas fases. O que muda é o que acontece dependendo da decisão sobre matrícula:</p>
+      <div class="step">
+        <div class="stepnum">A</div>
+        <div class="steptext"><strong>Se ficar colocada na 1ª fase e NÃO se matricular</strong> (não completa o processo entre 24-27 agosto): a colocação caduca automaticamente. Pode concorrer livremente na 2ª fase, sem perder nada, porque nunca chegou a ocupar a vaga.</div>
+      </div>
+      <div class="step">
+        <div class="stepnum">B</div>
+        <div class="steptext"><strong>Se se matricular na 1ª fase</strong> (mesmo numa opção que não gostou muito, como a 5ª ou 6ª) e depois for colocada numa opção diferente na 2ª fase: a matrícula anterior é anulada e substituída pela nova — não há acumulação de duas colocações.</div>
+      </div>
+      <p style="margin-top:10px;"><strong>Estratégia mais limpa:</strong> candidatar-se normalmente na 1ª fase, mas adiar a decisão de matrícula até saber se compensa aguardar pela 2ª fase — evita a burocracia de anular uma matrícula já feita.</p>
+    </div>
+
+    <h3 class="block-title">2. Repetir Português na 2ª fase "faz perder" a nota da 1ª fase?</h3>
+    <div class="card good">
+      <p><strong>Não exatamente — é uma questão de "quando" a nota pode ser usada, não de perda.</strong> A regra:</p>
+      <ul style="margin:0 0 10px; padding-left:20px;">
+        <li>Se concorrer na <strong>1ª fase do concurso de acesso</strong>, só pode contar a nota do exame de Português feito na <strong>1ª fase de exames</strong> (13 valores / 129 pontos) — a nota da 2ª fase do exame ainda não é válida como prova de ingresso nessa candidatura.</li>
+        <li>Se concorrer na <strong>2ª fase do concurso de acesso</strong>, é considerada a <strong>melhor nota entre as duas tentativas</strong> — nunca fica prejudicada por ter tentado melhorar.</li>
+      </ul>
+      <p style="margin:0"><strong>Conclusão prática:</strong> tentar melhorar Português na 2ª fase de exames não tem risco algum para a nota — o único "custo" é ter de aguardar pela 2ª fase do concurso de acesso para poder usar essa nota melhorada, caso decida não se matricular já na 1ª fase.</p>
+    </div>
+
+    <h3 class="block-title">3. Descartar História A como prova de ingresso — faz sentido?</h3>
+    <div class="card good">
+      <p style="margin:0">Sim. Nas 4 instituições preferidas, o conjunto <strong>Filosofia + Português</strong> é sempre uma opção válida, e a nota de Filosofia (189 pontos) é substancialmente mais forte do que a de História A (146 pontos). Não repetir o exame de História na 2ª fase não traz qualquer desvantagem, dado que ela não fará falta em nenhuma das 4 combinações escolhidas.</p>
+    </div>
+
+    <h3 class="block-title">4. O que é a "reapreciação de prova" e como se compara com a 2ª fase de exame?</h3>
+    <div class="card">
+      <table>
+        <thead><tr><th></th><th>Reapreciação</th><th>2ª fase de exame</th></tr></thead>
+        <tbody>
+          <tr><td>O que é</td><td>Pede-se reavaliação da prova já feita</td><td>Faz-se um novo exame</td></tr>
+          <tr><td>Resultado pode</td><td>Subir, descer ou manter-se</td><td>Subir, descer ou manter-se (mas só conta a melhor)</td></tr>
+          <tr><td>Prazo do resultado</td><td>7 de agosto</td><td>7 de agosto</td></tr>
+          <tr><td>Risco de nota piorar</td><td class="highlight">Sim, existe esse risco</td><td>Não — mantém-se sempre a melhor nota</td></tr>
+        </tbody>
+      </table>
+      <p style="margin:10px 0 0;">Dada esta diferença de risco, repetir o exame na 2ª fase costuma ser a via mais segura quando o objetivo é melhorar a nota, porque nunca prejudica o que já foi conquistado.</p>
+    </div>
+
+    <h3 class="block-title">5. Quantos cursos posso incluir na candidatura?</h3>
+    <div class="card">
+      <p style="margin:0">Até <strong>6 pares instituição/curso</strong>, por ordem de preferência, em cada fase do concurso nacional. Isto significa que, além das 4 opções já definidas, ainda há espaço para 2 escolhas adicionais — uma boa oportunidade para incluir uma opção com nota de corte mais acessível como rede de segurança (ver aba "Outras Universidades").</p>
+    </div>
+
+  </section>
+
+</main>
+
+<div class="foot-note">Dossiê preparado com base no Guia Geral de Exames 2026, no Guia da Candidatura ao Ensino Superior Público 2026 (DGES) e nos dados oficiais do IAVE. Datas e notas de corte sujeitas a confirmação junto das fontes oficiais antes de decisões finais.</div>
+
+<script>
+  const buttons = document.querySelectorAll('#tabs button');
+  const panes = document.querySelectorAll('.pane');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      panes.forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.pane).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+</script>
+
+</body>
+</html>
