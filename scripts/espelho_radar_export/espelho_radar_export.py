@@ -2,8 +2,20 @@
 
 Roda 100% local (fora do Claude, sem consumir tokens). Le a aba "Main" da
 planilha Espelho Radar e devolve/grava um JSON estruturado ja separado em
-Carteira e Vigiar pela linha-marcador "vigiar" - ver AII_Z_Noticias_do_dia.md,
-Etapa 1A/Etapa 0, Leitura 2.
+Carteira e Vigiar - ver AII_Z_Noticias_do_dia.md, Etapa 1A/Etapa 0, Leitura 2.
+
+Estrutura real da folha (confirmada 18/ago/2026 via --raw):
+- Uma linha-marcador de secao com UMA UNICA celula nao vazia ("----------- CARTEIRA ... -----------",
+  depois mais abaixo "----------- VIGIAR ... -----------").
+- Logo a seguir a cada marcador, 1 ou mais linhas de cabecalho (a Carteira tem
+  o cabecalho partido em 2 linhas, ex.: "DPA"+"estimado" = "DPA estimado"; a
+  Vigiar tem so 1 linha de cabecalho) - o numero de linhas de cabecalho NAO e
+  fixo, por isso deteccao dinamica: a primeira linha que contem um ticker
+  (padrao B3 generico, 4 letras + 1-2 digitos) e a primeira linha de dados;
+  tudo antes disso, desde o marcador, e cabecalho a fundir.
+- Linhas em branco podem aparecer tanto entre seccoes como DENTRO da seccao
+  Vigiar (separadores visuais entre grupos sectoriais) - sao sempre
+  ignoradas, nunca tratadas como fim de seccao.
 
 Autenticacao: OAuth "installed app" via credentials.json + token.json
 (token.json ja contem client_id/client_secret/refresh_token, por isso
@@ -34,11 +46,19 @@ DEFAULT_SSOT_DIR = Path(r"G:\My Drive\Claude_PRJ")
 DEFAULT_CREDENTIALS_PATH = DEFAULT_SSOT_DIR / "credentials.json"
 DEFAULT_TOKEN_PATH = DEFAULT_SSOT_DIR / "token.json"
 
-# Deteccao tolerante da linha-marcador: a rotina ja viu variacoes de
-# formatacao ("------vigiar - - - - -", "----------- VIGIAR - - - - - - - - - -")
-# entre execucoes, por isso procuramos so a palavra "vigiar", case-insensitive,
-# nunca o traco exacto.
-MARKER_RE = re.compile(r"vigiar", re.IGNORECASE)
+# Uma linha-marcador de seccao tem EXACTAMENTE uma celula nao vazia contendo
+# a palavra-chave (nunca uma linha de cabeçalho normal que so mencione a
+# palavra numa das varias colunas - essa distincao e o que causava o falso
+# positivo da versao anterior, que apanhava uma coluna qualquer com "vigiar"
+# la dentro em vez do separador de seccao a serio).
+CARTEIRA_MARKER_RE = re.compile(r"carteira", re.IGNORECASE)
+VIGIAR_MARKER_RE = re.compile(r"vigiar", re.IGNORECASE)
+
+# Padrao generico de ticker B3 (4 letras + 1-2 digitos, ex.: BBAS3, TAEE11) -
+# usado so para decidir "esta linha e dados ou cabecalho", nao para validar
+# tickers concretos (por isso nao reaproveita a lista curada de
+# scripts/common/tickers.py, que so cobre os tickers ja conhecidos do Rafa).
+TICKER_CELL_RE = re.compile(r"^[A-Z]{4}\d{1,2}$")
 
 
 class EspelhoRadarError(Exception):
@@ -71,25 +91,70 @@ def fetch_main_tab(creds: Credentials, spreadsheet_id: str, range_name: str) -> 
     return result.get("values", [])
 
 
-def find_marker_row(rows: list[list[Any]]) -> int | None:
+def find_section_marker(rows: list[list[Any]], pattern: re.Pattern[str]) -> int | None:
     for idx, row in enumerate(rows):
-        joined = " ".join(str(cell) for cell in row)
-        if MARKER_RE.search(joined):
+        non_empty = [str(cell).strip() for cell in row if str(cell).strip()]
+        if len(non_empty) == 1 and pattern.search(non_empty[0]):
             return idx
     return None
 
 
-def rows_to_dicts(header: list[Any], rows: list[list[Any]]) -> list[dict[str, Any]]:
-    out: list[dict[str, Any]] = []
-    for row in rows:
+def is_ticker_cell(value: Any) -> bool:
+    return bool(TICKER_CELL_RE.match(str(value).strip()))
+
+
+def row_has_ticker(row: list[Any]) -> bool:
+    return any(is_ticker_cell(cell) for cell in row)
+
+
+def merge_header_rows(header_rows: list[list[Any]]) -> list[str]:
+    if not header_rows:
+        return []
+    width = max(len(row) for row in header_rows)
+    merged: list[str] = []
+    for col in range(width):
+        parts = []
+        for row in header_rows:
+            if col < len(row):
+                val = str(row[col]).strip()
+                if val:
+                    parts.append(val)
+        merged.append(" ".join(parts))
+    return merged
+
+
+def parse_section(rows: list[list[Any]], start: int, end: int) -> tuple[list[str], list[dict[str, Any]]]:
+    """Extrai cabecalho (1+ linhas fundidas) e dados de uma seccao [start, end).
+
+    A primeira linha (nao vazia) com um ticker marca o inicio dos dados;
+    tudo antes disso, desde `start`, e cabecalho. Linhas em branco sao
+    sempre ignoradas (tanto antes de encontrar dados como dentro deles -
+    a Vigiar usa-as como separador visual entre grupos sectoriais).
+    """
+    header_rows: list[list[Any]] = []
+    data_start: int | None = None
+    for i in range(start, end):
+        row = rows[i] if i < len(rows) else []
         if not any(str(cell).strip() for cell in row):
             continue
+        if row_has_ticker(row):
+            data_start = i
+            break
+        header_rows.append(row)
+
+    header = merge_header_rows(header_rows)
+    if data_start is None:
+        return header, []
+
+    data_rows = [rows[i] for i in range(data_start, end) if i < len(rows) and row_has_ticker(rows[i])]
+    items: list[dict[str, Any]] = []
+    for row in data_rows:
         item: dict[str, Any] = {}
-        for i, key in enumerate(header):
-            key_str = str(key).strip() or f"col_{i}"
-            item[key_str] = row[i] if i < len(row) else ""
-        out.append(item)
-    return out
+        for col, key in enumerate(header):
+            key_str = key or f"col_{col}"
+            item[key_str] = row[col] if col < len(row) else ""
+        items.append(item)
+    return header, items
 
 
 def build_snapshot(
@@ -104,25 +169,28 @@ def build_snapshot(
     if not rows:
         raise EspelhoRadarError("Nenhuma linha devolvida pela API para o range pedido.")
 
-    header = rows[0]
-    body = rows[1:]
-    marker_idx = find_marker_row(body)
+    carteira_marker = find_section_marker(rows, CARTEIRA_MARKER_RE)
+    vigiar_marker = find_section_marker(rows, VIGIAR_MARKER_RE)
 
-    if marker_idx is None:
-        carteira_rows, vigiar_rows, marker_found = body, [], False
-    else:
-        carteira_rows = body[:marker_idx]
-        vigiar_rows = body[marker_idx + 1 :]
-        marker_found = True
+    if carteira_marker is None or vigiar_marker is None:
+        raise EspelhoRadarError(
+            "Marcador de seccao nao encontrado (carteira="
+            f"{carteira_marker}, vigiar={vigiar_marker}) - nao vou adivinhar a "
+            "divisao. Confirma manualmente a estrutura da folha (--raw)."
+        )
+
+    carteira_header, carteira_items = parse_section(rows, carteira_marker + 1, vigiar_marker)
+    vigiar_header, vigiar_items = parse_section(rows, vigiar_marker + 1, len(rows))
 
     return {
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "spreadsheet_id": spreadsheet_id,
         "range": range_name,
-        "marker_found": marker_found,
-        "header": header,
-        "carteira": rows_to_dicts(header, carteira_rows),
-        "vigiar": rows_to_dicts(header, vigiar_rows),
+        "marker_found": True,
+        "carteira_header": carteira_header,
+        "carteira": carteira_items,
+        "vigiar_header": vigiar_header,
+        "vigiar": vigiar_items,
     }
 
 
