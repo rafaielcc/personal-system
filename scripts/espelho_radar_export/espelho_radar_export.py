@@ -28,8 +28,9 @@ SPREADSHEET_ID = "1g7JBnpEkaYZQl2SBGYmooZhOBYqOa0ER2o3F1yPkSnA"
 RANGE_NAME = "Main"
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
-# Ajustar se a pasta SSOT estiver noutro caminho.
-DEFAULT_SSOT_DIR = Path(r"G:\My Drive\Claude_PRJ\SSOT")
+# Pasta SSOT do Rafa = a raiz do projecto (confirmado 18/ago/2026), nao uma
+# subpasta "SSOT". Ajustar aqui se um dia mudar.
+DEFAULT_SSOT_DIR = Path(r"G:\My Drive\Claude_PRJ")
 DEFAULT_CREDENTIALS_PATH = DEFAULT_SSOT_DIR / "credentials.json"
 DEFAULT_TOKEN_PATH = DEFAULT_SSOT_DIR / "token.json"
 

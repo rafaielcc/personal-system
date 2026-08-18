@@ -10,9 +10,9 @@ de forma tolerante a variações de formatação — ver `MARKER_RE` no script).
 1. `pip install -r requirements.txt`
 2. Confirma que `credentials.json` e `token.json` (OAuth "installed app",
    scope `spreadsheets.readonly`) existem na pasta SSOT. Por defeito o script
-   procura em `G:\My Drive\Claude_PRJ\SSOT\` — ajusta `DEFAULT_SSOT_DIR` no
-   script, ou passa `--credentials`/`--token` explícitos, se o teu caminho for
-   outro.
+   procura em `G:\My Drive\Claude_PRJ\` (raiz do projecto) — ajusta
+   `DEFAULT_SSOT_DIR` no script, ou passa `--credentials`/`--token`
+   explícitos, se o teu caminho for outro.
 3. `token.json` já contém `client_id`/`client_secret`/`refresh_token`, por
    isso o script consegue renovar o `access_token` sozinho quando expira —
    `credentials.json` só é necessário se algum dia for preciso refazer o
