@@ -133,7 +133,24 @@ def main() -> int:
     parser.add_argument("--spreadsheet-id", default=SPREADSHEET_ID, help="ID da planilha Espelho Radar.")
     parser.add_argument("--range", default=RANGE_NAME, help='Range/aba a ler (default: "Main").')
     parser.add_argument("--out", help="Caminho do JSON de saida; sem isto, imprime em stdout.")
+    parser.add_argument(
+        "--raw",
+        type=int,
+        metavar="N",
+        help="Modo de diagnostico: imprime as primeiras N linhas em bruto (todas as colunas, com indice), sem tentar separar Carteira/Vigiar. Nao mexe em nada, so para inspeccionar a estrutura real da folha.",
+    )
     args = parser.parse_args()
+
+    if args.raw is not None:
+        try:
+            creds = load_credentials(Path(args.credentials), Path(args.token))
+        except EspelhoRadarError as exc:
+            print(json.dumps({"status": "error", "error": str(exc)}, ensure_ascii=False))
+            return 1
+        rows = fetch_main_tab(creds, args.spreadsheet_id, args.range)
+        for idx, row in enumerate(rows[: args.raw]):
+            print(json.dumps({"row": idx, "values": row}, ensure_ascii=False))
+        return 0
 
     try:
         snapshot = build_snapshot(
