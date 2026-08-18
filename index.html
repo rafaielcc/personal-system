@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<!--
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 DARK · render mecânico, 18 Ago 2026)
+  =============================================================================
+  Consumido por render.py (mesma pasta Drive): a LLM produz apenas o JSON
+  canónico do módulo dashboard; este ficheiro é preenchido por substituição
+  de texto pura, sem juízo de conteúdo. Placeholders {{TOKEN}} — ver schema
+  no cabeçalho de render.py. Blocos condicionais marcados com um par de
+  comentários HTML por nome (abertura NOME, fecho barra-NOME) — DRAWDOWN_DOT,
+  DRAWDOWN_PAINEL, DRAWDOWN_LEITURA — removidos inteiros pelo render.py
+  quando não aplicáveis (drawdown null). NUNCA escrever a sintaxe literal
+  desses marcadores dentro deste comentário de cabeçalho — a sequência "--"
+  seguida de ">" fecha um comentário HTML prematuramente em qualquer
+  parser/browser, e isso já causou este bloco inteiro a vazar como texto
+  visível na página numa versão anterior deste ficheiro.
+
+  Mudanças v3 (27 Jul 2026, pedido do Rafa):
+  - Grelha promovida de 8 para 9 ícones: novo ícone 📄 Artigos Científicos
+    (→ artigos/index.html), acrescentado antes só ao HTML publicado, agora
+    promovido ao template canónico.
+  - Secção Curso deixa de usar tokens {{COURSE_*}}/render.py — o cartão
+    (data-curso="carnegie") faz fetch ao vivo, client-side, de
+    personal-development/carnegie/data/estado-atual.json (mesmo domínio,
+    sem CORS) e preenche semana/tema/resumo/links via JS no arranque, com
+    fallback silencioso ("sem atualização recente") se o fetch falhar. A
+    LLM/render.py já não precisam de gerar conteúdo de curso — o campo
+    "course" deixou de ser obrigatório no JSON canónico (ver render.py).
+    Blocos AUDIO_PAINEL/AUDIO_LEITURA (áudio do curso) removidos por já não
+    haver token de curso vindo do JSON — se um script de áudio persistido
+    vier a ser necessário no futuro, terá de ser outra fonte de dados.
+
+  MODELO sem dados em tempo real (excepto o cartão do curso, que já é ao
+  vivo). Hub leve: cabeçalho condensado + grid de ícones soltos (sem caixa/
+  cartão por trás) que apontam, por link real <a href>, para os módulos já
+  publicados.
+
+  VARIANTE DARK: fundo navy profundo em toda a página, texto claro brilhante,
+  círculos de ícones em pastel (destacam sobre o escuro). Alto contraste.
+
+  HOSTING (actual): Cloudflare Pages serve o repositório GitHub
+  rafaielcc/personal-system automaticamente. Site base:
+    https://personal-system-hs5.pages.dev/
+  Estrutura publicada (caminhos SEMPRE minúsculos):
+    agendas/index.html            ← ESTE ficheiro (o Dashboard É a raiz de agendas/)
+    agendas/briefing/index.html   ← briefing diário (tabs internas; áudio no topo da tab Hoje)
+    agendas/hff/index.html        ← painel HFF pessoal
+    agendas/bo/index.html         ← lista cirúrgica da equipa (sem ícone — intencional)
+    agendas/lazer/index.html      ← agenda de lazer
+    agendas/noticiasB3/index.html ← página standalone Notícias/Finanças B3 (rotina AII)
+    agendas/artigos/index.html    ← Artigos Científicos (trigger próprio, ver skill artigos)
+  Como este ficheiro vive em agendas/, os links relativos abaixo são
+  directos às subpastas (hff/index.html, briefing/index.html#tarefas, ...).
+
+  GRELHA — 9 ícones (4×2, o 9º sozinho na 3ª linha):
+    🎧 Briefing (1ª posição — uso diário; abre a tab Hoje, áudio no topo)
+    🏥 HFF · ✅ Tarefas · 📅 Calendário · 📧 Email · 🎭 Lazer ·
+    📈 Notícias/Finanças B3 (fundidos; ponto de alerta condicional) · 🌤️ Tempo ·
+    📄 Artigos Científicos
+
+  TOPBAR — LINHA ÚNICA: data com dia da semana (formato curto PT-PT,
+  ex: "Sex, 3 Jul") · chip 📅 eventos · chip ✅ tarefas · toggle
+  Painel/Leitura. O chip "🎯 [N]" do v1 foi removido (sem significado
+  atribuído), o chip do tempo também (a meteorologia vive só na barra
+  08h/16h/20h com ícones de actividade) e o chip "tipo de dia" também
+  (redundante — o tipo de dia vive na Nota do dia do banner e no cartão
+  "Dia de hoje" do modo Leitura).
+
+  NOTA TÉCNICA — deep link para tabs do briefing:
+  Os links Tarefas/Calendário/Email/Tempo usam fragmentos (#tarefas,
+  #calendario, #email, #tempo — tabs existentes no briefing v12.0). Para
+  abrir já na tab certa, o briefing precisa de um pequeno hash-router no
+  arranque:
+    window.addEventListener('DOMContentLoaded', () => {
+      const h = location.hash.replace('#','');
+      if (h) showTab(h);
+    });
+  (nota de implementação para o ficheiro de destino, não faz parte deste hub)
+
+  NOTA — ícones de actividade na barra do tempo:
+  Os ícones extra (🚲 bicicleta, 🍷 happy hour, ☕ café, 🎬 cinema) junto de
+  cada período do dia são preenchidos, na geração real, a partir das regras
+  do rafa_profile.md / Feedback_log.json (ex: bicicleta só para lazer dentro
+  de Lisboa depois de voltar a casa; happy hour com a Vanessa; café com a
+  Clarinha; cinema em noite de chuva). Aqui aparecem como placeholder —
+  a lógica de decisão não faz parte deste template.
+
+  BLOCOS CONDICIONAIS (marcados no corpo):
+  · Alerta drawdown >20% — remover o bloco se nenhum ticker da carteira
+    estiver em drawdown >20% no relatório AII do dia.
+  · Ponto vermelho no ícone Notícias/B3 — mesmo critério.
+
+  Expansíveis nativos (<details>/<summary>) — sem JS adicional para as abas;
+  apenas o cartão do curso faz fetch de estado vivo.
+-->
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda · Início</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0C1E2A;
+    --bg-2:#0A1822;
+    --navy:#1A3D52;
+    --navy-2:#102B3A;
+    --card:#16303F;
+    --border:#28495C;
+    --ink:#F3EDE0;          /* texto principal — creme brilhante */
+    --ink-strong:#FFFFFF;
+    --muted:#9FB4C2;
+    --terracotta:#E07A4B;
+    --gold:#E3B858;
+    --sage:#8FBE95;
+    --teal:#2CC7B4;
+    --red:#E36A5A;
+    --blue:#7FAFD9;
+    --radius:16px;
+    --radius-sm:12px;
+    --shadow:0 1px 3px rgba(0,0,0,.35), 0 6px 16px rgba(0,0,0,.30);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:linear-gradient(180deg, var(--bg), var(--bg-2));
+    color:var(--ink);
+    font-family:'DM Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
+  a{ text-decoration:none; color:inherit; }
+  .wrap{ max-width:680px; margin:0 auto; padding:0 14px 32px; }
+
+  /* ===== TOPBAR — linha única, condensado ===== */
+  .topbar{
+    position:sticky; top:0; z-index:20;
+    background:linear-gradient(160deg, var(--navy), var(--navy-2));
+    padding:12px 14px 10px;
+    border-bottom:1px solid var(--border);
+  }
+  .topbar-inner{ max-width:680px; margin:0 auto; }
+  .topbar-row1{
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  }
+  .datebig{
+    font-family:'Fraunces', serif; font-size:17px; font-weight:700; color:var(--ink-strong);
+    letter-spacing:.01em; white-space:nowrap;
+  }
+  .seg{
+    display:inline-flex; background:rgba(255,255,255,.08); border:1px solid var(--border);
+    border-radius:999px; padding:2px; gap:2px; flex:0 0 auto; margin-left:auto;
+  }
+  .seg button{
+    border:none; background:transparent; color:var(--muted);
+    font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
+    padding:5px 11px; border-radius:999px; cursor:pointer;
+  }
+  .seg button.active{ background:var(--gold); color:#102B3A; }
+  .chip{
+    font-size:12px; font-weight:700; color:var(--ink);
+    background:rgba(255,255,255,.08); border:1px solid var(--border);
+    border-radius:999px; padding:4px 9px;
+    display:flex; align-items:center; gap:5px; white-space:nowrap;
+  }
+  .chip b{ color:var(--gold); font-size:12.5px; }
+
+  /* ===== BARRA DO TEMPO + ACTIVIDADES ===== */
+  .wbar{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm);
+    margin:12px 0 14px; padding:9px 6px;
+    display:grid; grid-template-columns:repeat(3,1fr);
+  }
+  .wbar-cell{
+    text-align:center; font-size:12px; font-weight:600; color:var(--ink);
+    display:flex; flex-direction:column; align-items:center; gap:1px;
+    border-right:1px solid var(--border);
+  }
+  .wbar-cell:last-child{ border-right:none; }
+  .wbar-time{ font-size:10px; color:var(--muted); font-weight:700; }
+  .wbar-main{ font-size:13px; }
+  .wbar-activity{ font-size:14px; margin-top:1px; }
+
+  .content{ padding-top:4px; }
+
+  /* ===== BANNER ===== */
+  .banner{
+    border-radius:var(--radius-sm); padding:10px 13px; margin-bottom:14px;
+    display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600;
+    border:1px solid var(--border); background:var(--card); color:var(--sage);
+  }
+  .banner-alert{ color:var(--red); border-color:#6A3730; }
+
+  /* ===== GRID DE ÍCONES — soltos, sem caixa ===== */
+  .grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:18px;
+  }
+  .tile{
+    display:flex; align-items:center; justify-content:center;
+    padding:8px 0; position:relative; transition:transform .12s;
+  }
+  .tile:active{ transform:scale(.90); }
+  .tile-circle{
+    width:50px; height:50px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:23px;
+    box-shadow:var(--shadow);
+  }
+  .c-terracotta{ background:#F7DCC9; }
+  .c-sage{ background:#DCEBDD; }
+  .c-blue{ background:#DCE9F7; }
+  .c-gold{ background:#F8EBC9; }
+  .c-red{ background:#FAD9D4; }
+  .c-teal{ background:#CFF2EC; }
+  .c-navy{ background:#D8E3EA; }
+  .c-cream{ background:#F5F0E8; }
+  .tile-alert{
+    position:absolute; top:6px; right:14px; width:9px; height:9px;
+    border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(227,106,90,.30);
+  }
+
+  /* ===== WIDGETS (Prioridades / B3) ===== */
+  .section-label{
+    font-size:11px; text-transform:uppercase; letter-spacing:.1em;
+    color:var(--muted); font-weight:700; margin:0 0 8px 2px;
+  }
+  .widgets{ display:flex; flex-direction:column; gap:10px; margin-bottom:6px; }
+  .card{
+    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
+    padding:14px 15px;
+  }
+  .card-title{
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink-strong);
+    display:flex; align-items:center; gap:7px; margin-bottom:8px;
+  }
+  .card-title .stripe{ width:4px; height:15px; border-radius:3px; background:var(--gold); display:inline-block; }
+  .card p{ font-size:13.5px; line-height:1.5; color:var(--ink); margin:0 0 5px; }
+  .card .muted{ color:var(--muted); font-size:12px; }
+  .priority-list{ list-style:none; margin:0; padding:0; }
+  .priority-list li{
+    font-size:13.5px; padding:6px 0; border-bottom:1px dashed var(--border);
+    display:flex; align-items:flex-start; gap:8px; color:var(--ink); font-weight:500;
+  }
+  .priority-list li:last-child{ border-bottom:none; }
+  .priority-list li .num{
+    background:var(--terracotta); color:#FFF8EE; font-size:10.5px; font-weight:700;
+    border-radius:50%; width:16px; height:16px; flex:0 0 16px;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .alert-strip{
+    margin-top:9px; padding:8px 11px; border-radius:var(--radius-sm);
+    background:#3C2320; border:1px solid #6A3730; color:#F5A79B;
+    font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px;
+  }
+
+  /* ===== CURSO — cartões expansíveis no fundo ===== */
+  details.card{ padding:0; overflow:hidden; }
+  details.card summary{
+    list-style:none; cursor:pointer; padding:14px 15px;
+    display:flex; align-items:center; gap:7px;
+    font-family:'Fraunces', serif; font-size:15px; font-weight:600; color:var(--ink-strong);
+  }
+  details.card summary::-webkit-details-marker{ display:none; }
+  details.card summary .stripe{ width:4px; height:15px; border-radius:3px; background:var(--sage); display:inline-block; }
+  details.card summary .chev{ margin-left:auto; font-size:12px; color:var(--muted); transition:transform .15s; }
+  details.card[open] summary .chev{ transform:rotate(180deg); }
+  details.card .details-body{ padding:0 15px 14px; }
+  details.card .details-body p{ font-size:13.5px; line-height:1.55; color:var(--ink); margin:0 0 7px; }
+  details.card .details-body .muted{ color:var(--muted); font-size:12px; }
+  .audio-script p{ font-size:13.5px; line-height:1.65; }
+
+  /* ===== FOOTER ===== */
+  .footer{ text-align:center; margin-top:18px; }
+  .footer p{ font-size:11px; color:var(--muted); margin:0; }
+
+  /* ===== LEITURA ===== */
+  #leitura{ display:none; }
+  body[data-mode="leitura"] #painel{ display:none; }
+  body[data-mode="leitura"] #leitura{ display:block; }
+  .read-stack{ display:flex; flex-direction:column; gap:10px; }
+  .shortcuts{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
+  .shortcut-link{
+    width:36px; height:36px; border-radius:50%;
+    font-size:17px;
+    display:flex; align-items:center; justify-content:center;
+  }
+</style>
+</head>
+<body data-mode="painel">
+
+  <!-- ===== TOPBAR — linha única, condensado ===== -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-row1">
+        <!-- Linha única: data (dia da semana + dia + mês) · eventos · tarefas · toggle -->
+        <div class="datebig">Ter, 18 Ago</div>
+        <span class="chip">📅 <b>2</b></span>
+        <span class="chip">✅ <b>4</b></span>
+        <div class="seg">
+          <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
+          <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ===== TIRA DO TEMPO + ACTIVIDADES — compacta ===== -->
+    <div class="wbar">
+      <div class="wbar-cell">
+        <span class="wbar-time">08h</span>
+        <span class="wbar-main">☁️ 21°</span>
+        <span class="wbar-activity" title="Arranque leve; café se couber">☕</span>
+      </div>
+      <div class="wbar-cell">
+        <span class="wbar-time">16h</span>
+        <span class="wbar-main">☀️ 27°</span>
+        <span class="wbar-activity" title="Boa janela para deslocações curtas ou corpo">🚲</span>
+      </div>
+      <div class="wbar-cell">
+        <span class="wbar-time">20h</span>
+        <span class="wbar-main">☀️ 24°</span>
+        <span class="wbar-activity" title="Game Night at Amelia Cafe às 19h">🎲</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ===================== MODO PAINEL ===================== -->
+      <div id="painel">
+
+        <div class="banner banner-alert">
+          ⚠️ Resolver o voo Tirana-Lisboa primeiro; o resto do dia fica leve se essa pendência sair da cabeça.
+        </div>
+
+        <!-- 9 ícones: Briefing em 1º (uso diário — áudio no topo da tab Hoje).
+             Notícias e Finanças B3 fundidos num só (→ noticiasB3/). 9º ícone
+             (Artigos Científicos) sozinho na 3ª linha da grelha 4×N. -->
+        <div class="grid">
+          <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing — áudio do dia">
+            <span class="tile-circle c-cream">🎧</span>
+          </a>
+          <a class="tile" href="hff/index.html" title="HFF" aria-label="HFF">
+            <span class="tile-circle c-terracotta">🏥</span>
+          </a>
+          <a class="tile" href="briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
+            <span class="tile-circle c-sage">✅</span>
+          </a>
+          <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
+            <span class="tile-circle c-blue">📅</span>
+          </a>
+          <a class="tile" href="briefing/index.html#email" title="Email" aria-label="Email">
+            <span class="tile-circle c-gold">📧</span>
+          </a>
+          <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
+            <span class="tile-circle c-teal">🎭</span>
+          </a>
+          <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
+            <span class="tile-circle c-red">📈</span>
+            
+          </a>
+          <a class="tile" href="briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
+            <span class="tile-circle c-navy">🌤️</span>
+          </a>
+          <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
+            <span class="tile-circle c-cream">📄</span>
+          </a>
+        </div>
+
+        <div class="section-label">Hoje</div>
+        <div class="widgets">
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
+            <ol class="priority-list">
+              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
+              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
+              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
+            </ol>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
+            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
+            
+            <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:16px;">Curso</div>
+        <div class="widgets">
+          <details class="card" data-curso="carnegie">
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
+            <div class="details-body">
+              <p class="curso-fase-tema"><b>Reduzir Resistência</b></p>
+              <p class="curso-resumo">As pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+              <p class="muted curso-status" style="display:none;"></p>
+              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
+                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
+                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
+              </div>
+              <p class="muted" style="margin-top:8px;">Fonte: personal-development/carnegie/data/estado-atual.json (fetch ao vivo, mesmo domínio)</p>
+            </div>
+          </details>
+        </div>
+
+      </div>
+
+      <!-- ===================== MODO LEITURA ===================== -->
+      <div id="leitura">
+        <div class="read-stack">
+
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
+            <p><b>Prevenção HFF activa — sem BO hoje</b> · 2 eventos · 4 tarefas pendentes.</p>
+            <p class="muted">Dia relativamente leve no calendário, mas com duas frentes a não deixar escorregar: viagem e organização financeira. O Briefing de hoje está fresco; HFF/BO, Artigos e B3 precisam de regeneração própria para ficarem 100% alinhados.</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
+            <p>08h 21° ☁️ · 16h 27° ☀️ 🚲 · 20h 24° ☀️ 🎲</p>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
+            <ol class="priority-list">
+              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
+              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
+              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
+            </ol>
+          </div>
+
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
+            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
+            
+          </div>
+
+          <details class="card" data-curso="carnegie">
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
+            <div class="details-body">
+              <p class="curso-resumo">Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
+              <p class="muted curso-status" style="display:none;"></p>
+              <div class="curso-links" style="display:flex; gap:8px; margin-top:8px;">
+                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
+                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
+              </div>
+            </div>
+          </details>
+
+          <div class="card">
+            <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
+            <div class="shortcuts">
+              <a class="shortcut-link c-cream" href="briefing/index.html" title="Briefing · áudio do dia">🎧</a>
+              <a class="shortcut-link c-terracotta" href="hff/index.html" title="HFF">🏥</a>
+              <a class="shortcut-link c-sage" href="briefing/index.html#tarefas" title="Tarefas">✅</a>
+              <a class="shortcut-link c-blue" href="briefing/index.html#calendario" title="Calendário">📅</a>
+              <a class="shortcut-link c-gold" href="briefing/index.html#email" title="Email">📧</a>
+              <a class="shortcut-link c-teal" href="lazer/index.html" title="Lazer">🎭</a>
+              <a class="shortcut-link c-red" href="noticiasB3/index.html" title="Notícias · Finanças B3">📈</a>
+              <a class="shortcut-link c-navy" href="briefing/index.html#tempo" title="Tempo">🌤️</a>
+              <a class="shortcut-link c-cream" href="artigos/index.html" title="Artigos Científicos">📄</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>Hub leve · modelo · toca num ícone para abrir o módulo</p>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  function setMode(m){
+    document.body.dataset.mode = m;
+    document.getElementById('btn-painel').classList.toggle('active', m === 'painel');
+    document.getElementById('btn-leitura').classList.toggle('active', m === 'leitura');
+  }
+
+  // ===== Atalho Personal Development (Carnegie) — fetch ao vivo, mesmo domínio =====
+  (function(){
+    function aplicarEstadoCurso(dados){
+      document.querySelectorAll('[data-curso="carnegie"]').forEach(card => {
+        const titulo = card.querySelector('.curso-titulo');
+        const tema = card.querySelector('.curso-fase-tema');
+        const resumo = card.querySelector('.curso-resumo');
+        const linkSemana = card.querySelector('.curso-link-semana');
+        const linkCompleto = card.querySelector('.curso-link-completo');
+        if (titulo && dados.semana_atual && dados.total_semanas){
+          titulo.textContent = '📖 Carnegie · Semana ' + dados.semana_atual + ' de ' + dados.total_semanas;
+        }
+        if (tema && dados.tema){
+          tema.innerHTML = '<b>' + dados.tema.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + '</b>';
+        }
+        if (resumo && dados.resumo_curto){
+          resumo.textContent = dados.resumo_curto;
+        }
+        if (linkSemana && dados.link_semana_html) linkSemana.href = dados.link_semana_html;
+        if (linkCompleto && dados.link_curso_completo) linkCompleto.href = dados.link_curso_completo;
+      });
+    }
+
+    function mostrarFallback(msg){
+      document.querySelectorAll('[data-curso="carnegie"] .curso-status').forEach(el => {
+        el.textContent = msg;
+        el.style.display = 'block';
+      });
+    }
+
+    fetch('../personal-development/carnegie/data/estado-atual.json')
+      .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
+      .then(dados => aplicarEstadoCurso(dados))
+      .catch(err => {
+        console.warn('Não foi possível carregar o estado do curso Carnegie:', err);
+        mostrarFallback('Sem atualização recente do curso.');
+      });
+  })();
+</script>
+
+</body>
+</html>
