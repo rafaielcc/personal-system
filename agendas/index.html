@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 DARK · render mecânico, 27 Jul 2026)
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 DARK · render mecânico, 18 Ago 2026)
   =============================================================================
   Consumido por render.py (mesma pasta Drive): a LLM produz apenas o JSON
   canónico do módulo dashboard; este ficheiro é preenchido por substituição
@@ -89,7 +89,8 @@
     estiver em drawdown >20% no relatório AII do dia.
   · Ponto vermelho no ícone Notícias/B3 — mesmo critério.
 
-  Expansíveis nativos (<details>/<summary>) — sem JS adicional, offline.
+  Expansíveis nativos (<details>/<summary>) — sem JS adicional para as abas;
+  apenas o cartão do curso faz fetch de estado vivo.
 -->
 <html lang="pt-PT">
 <head>
@@ -293,9 +294,9 @@
     <div class="topbar-inner">
       <div class="topbar-row1">
         <!-- Linha única: data (dia da semana + dia + mês) · eventos · tarefas · toggle -->
-        <div class="datebig">Ter, 4 Ago</div>
-        <span class="chip">📅 <b>1</b></span>
-        <span class="chip">✅ <b>1</b></span>
+        <div class="datebig">Ter, 18 Ago</div>
+        <span class="chip">📅 <b>2</b></span>
+        <span class="chip">✅ <b>4</b></span>
         <div class="seg">
           <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
           <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
@@ -310,18 +311,18 @@
     <div class="wbar">
       <div class="wbar-cell">
         <span class="wbar-time">08h</span>
-        <span class="wbar-main">☀️ 20°</span>
-        <span class="wbar-activity" title="">·</span>
+        <span class="wbar-main">☁️ 21°</span>
+        <span class="wbar-activity" title="Arranque leve; café se couber">☕</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">16h</span>
-        <span class="wbar-main">☀️ 25°</span>
-        <span class="wbar-activity" title="Boa para Lisbora (ciclismo)">🚲</span>
+        <span class="wbar-main">☀️ 27°</span>
+        <span class="wbar-activity" title="Boa janela para deslocações curtas ou corpo">🚲</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">20h</span>
-        <span class="wbar-main">🌙 21°</span>
-        <span class="wbar-activity" title="Game Night at Amelia Cafe, 19:00">🎲</span>
+        <span class="wbar-main">☀️ 24°</span>
+        <span class="wbar-activity" title="Game Night at Amelia Cafe às 19h">🎲</span>
       </div>
     </div>
 
@@ -330,8 +331,8 @@
       <!-- ===================== MODO PAINEL ===================== -->
       <div id="painel">
 
-        <div class="banner ">
-          ℹ️ Terça sem BO — dia de hábitos de rotina, Lisbora à tarde e Game Night à noite.
+        <div class="banner banner-alert">
+          ⚠️ Resolver o voo Tirana-Lisboa primeiro; o resto do dia fica leve se essa pendência sair da cabeça.
         </div>
 
         <!-- 9 ícones: Briefing em 1º (uso diário — áudio no topo da tab Hoje).
@@ -373,14 +374,14 @@
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Lisbora (ciclismo)</li>
-              <li><span class="num">2</span> Atualizar CV · organizar gavetas · café com a Clara</li>
-              <li><span class="num">3</span> Game Night at Amelia Cafe, 19:00</li>
+              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
+              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
+              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
             </ol>
           </div>
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sentimento neutro a levemente positivo (relatório de 30 Jul 2026, não regenerado neste ciclo — Notícias/B3 fora do âmbito desta corrida); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
+            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
             
             <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
           </div>
@@ -411,27 +412,27 @@
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
-            <p><b>Sem BO — terça-feira</b> · 1 eventos · 1 tarefas pendentes.</p>
-            <p class="muted">Dia leve: hábitos de rotina (CV, gavetas, café com a Clara) + Lisbora (ciclismo) de tarde e Game Night at Amelia Cafe às 19h.</p>
+            <p><b>Prevenção HFF activa — sem BO hoje</b> · 2 eventos · 4 tarefas pendentes.</p>
+            <p class="muted">Dia relativamente leve no calendário, mas com duas frentes a não deixar escorregar: viagem e organização financeira. O Briefing de hoje está fresco; HFF/BO, Artigos e B3 precisam de regeneração própria para ficarem 100% alinhados.</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
-            <p>08h 20° ☀️ · 16h 25° ☀️ 🚲 · 20h 21° 🌙 🎲</p>
+            <p>08h 21° ☁️ · 16h 27° ☀️ 🚲 · 20h 24° ☀️ 🎲</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Lisbora (ciclismo)</li>
-              <li><span class="num">2</span> Atualizar CV · organizar gavetas · café com a Clara</li>
-              <li><span class="num">3</span> Game Night at Amelia Cafe, 19:00</li>
+              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
+              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
+              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
             </ol>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sentimento neutro a levemente positivo (relatório de 30 Jul 2026, não regenerado neste ciclo — Notícias/B3 fora do âmbito desta corrida); CPFE3 dentro do gatilho de entrada; minério de ferro em zona de acumulação para CMIN3; resultado da AGE da Engie ainda por confirmar.</p>
+            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
             
           </div>
 
