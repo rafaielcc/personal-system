@@ -1,53 +1,48 @@
 {
-  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-06.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-07.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
   "curso": "carnegie",
   "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
-  "semana_atual": 6,
+  "semana_atual": 7,
   "total_semanas": 17,
-  "fase": "Fase 2 — Presença Emocional",
-  "tema": "Autoridade Calma",
-  "progresso": { "semanas_concluidas": 6, "total_semanas": 17 },
+  "fase": "Fase 3 — Relações Profundas",
+  "tema": "Ser Conhecido (Vulnerabilidade e Abertura)",
+  "progresso": { "semanas_concluidas": 7, "total_semanas": 17 },
   "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
-  "ultima_atualizacao": "2026-08-04",
-  "resumo_curto": "Semana 6 de 17 · Fase 2 — Presença Emocional (última semana da fase): Autoridade Calma. Tornares-te alguém em quem as pessoas confiam e seguem naturalmente — não por dominância, mas por firmeza serena.",
+  "ultima_atualizacao": "2026-08-19",
+  "resumo_curto": "Semana 7 de 17 · Fase 3 — Relações Profundas (início de fase): Ser Conhecido. Criar segurança para a profundidade, em ti e nos outros — vulnerabilidade seletiva como convite.",
   "topicos": [
-    "Falar mais devagar em momentos importantes — cerca de 80% do teu ritmo normal",
-    "Curiosidade acima de exibição: uma pergunta a mais antes de partilhares a tua perspetiva",
-    "Proteger o clima emocional: seres a pessoa menos reativa quando os outros escalam",
-    "Tarefa 6-A — Ponto de situação a meio do curso: revisitar a lista de 5 pessoas da Semana 0"
+    "Partilha algo real uma vez por dia — não performance, não excesso, apenas verdade",
+    "A pergunta em três camadas: superfície, intermédia, profunda",
+    "Família: uma pergunta mais profunda por semana com quem queres conhecer melhor"
   ],
   "exemplos_chave": [
-    "Conversas difíceis: antes de responderes a um desacordo, abranda o ritmo da fala para cerca de 80% do normal — comunica controlo, não pressa.",
-    "Trabalho sob pressão: quando a situação escala, sê a pessoa menos reativa presente — não acompanhes a energia, baixa-a."
+    "Amigos: tem uma conversa real esta semana — não a de pôr a par de superfície, mas troca genuína.",
+    "Companheira: substitui uma troca de rotina por \"Há algo que eu pudesse compreender melhor sobre como te tens sentido ultimamente?\""
   ],
-  "sintese_falada": "Estás na Semana 6 do curso Carnegie, a última da Fase 2 — Presença Emocional. Depois de duas semanas sobre tom e calor, esta semana liga tudo isso a influência. A ideia central é que, em qualquer grupo, a pessoa mais regulada emocionalmente tende a ter a maior influência sobre o tom geral — não por dominância, mas por firmeza serena.\n\nHá três práticas esta semana: falar mais devagar em momentos de alto risco emocional, a cerca de 80% do teu ritmo normal; ter curiosidade acima de exibição, fazendo mais uma pergunta antes de partilhares a tua perspetiva; e proteger o clima emocional, sendo deliberadamente a pessoa menos reativa quando os outros escalam.\n\nHá também uma tarefa especial esta semana — a Tarefa 6-A, um ponto de situação a meio do curso. Volta à lista das cinco pessoas que escreveste na Semana zero e escreve, para cada uma, duas ou três frases sobre o que mudou.\n\nO teu fio condutor continua o mesmo: antes de falar, perguntar se estás ali para perceber ou para corrigir. Esta noite, pergunta-te: a minha presença reduziu o stress à minha volta, ou espalhou-o?",
-  "leitura_detalhada": "A Semana 6 fecha a Fase 2 com a ideia que mais diretamente liga presença emocional a influência: em qualquer grupo — família, amigos, equipa — a pessoa mais regulada emocionalmente da sala tende a ter, com o tempo, a maior influência sobre o tom geral. Isto acontece porque os estados emocionais são contagiosos por natureza; alguém tem de definir a temperatura, e essa pessoa raramente é quem fala mais alto — é quem se mantém mais estável quando tudo à volta escala.\n\nFalar mais devagar em momentos de alto risco emocional — desacordos, conversas difíceis, ensino — é uma das ferramentas mais simples e mais contra-intuitivas do curso. O instinto sob pressão é acelerar: falar mais depressa para \"resolver\" mais depressa. Mas a velocidade do discurso é lida, a um nível quase pré-consciente, como um sinal de urgência ou nervosismo, o que aumenta a tensão em vez de a baixar. Falar a cerca de 80% do ritmo habitual comunica o oposto: que a situação, por mais séria que seja, está sob controlo suficiente para não exigir pressa.\n\nA curiosidade acima de exibição pede um adiamento deliberado: antes de mostrares o que sabes, fazer mais uma pergunta. Isto parece sacrificar a oportunidade de demonstrar competência, mas na prática constrói mais confiança do que a exibiria — porque as pessoas confiam mais em quem parece genuinamente interessado em compreender do que em quem parece ansioso por mostrar perícia.\n\nProteger o clima emocional é, no fundo, uma aplicação prática de tudo o resto: em situações de stress, ser deliberadamente a pessoa menos reativa presente. Quando outros escalam, o movimento natural é acompanhar essa energia. Mas contrariar, baixando em vez de subir, é exatamente o que quebra o ciclo. Isto aplica-se indiferentemente a um jantar de família tenso ou a uma sala de operações sob pressão — é a mesma capacidade, exercitada em contextos muito diferentes.\n\nA tarefa 6-A marca o ponto médio do curso de forma deliberada: voltar à lista de cinco pessoas da Semana 0 e escrever, para cada uma, duas ou três frases sobre o que mudou. É um exercício de confronto honesto com o progresso real, não com a intenção.",
+  "sintese_falada": "Estás na Semana 7 do curso Carnegie, o início da Fase 3 — Relações Profundas. As duas fases anteriores construíram a base: segurança nas conversas e o tom emocional que fica depois delas. Esta fase é sobre ir mais longe — da interação agradável para a proximidade genuína.\n\nA Semana 7 chama-se Ser Conhecido, e começa pela peça mais contra-intuitiva de todas: para que os outros se abram, tens tu de te mostrares primeiro como real. Vulnerabilidade seletiva e apropriada não é fraqueza — é convite.\n\nHá duas práticas centrais: partilhar algo real uma vez por dia — não desabafar tudo, só uma frase verdadeira em vez de uma frase de fachada; e usar a pergunta em três camadas, sobretudo a camada profunda: \"Há algo em que tens pensado e sobre o qual não falaste muito?\"\n\nO teu fio condutor continua o mesmo: antes de falar, perguntar se estás ali para perceber ou para corrigir. Esta noite, pergunta-te: deixei alguém entrar hoje? Deixei-me entrar nalgum lado?",
+  "leitura_detalhada": "A Fase 3 marca uma transição importante: as duas fases anteriores construíram a base — segurança (rapport) e tom emocional (presença) — que torna possível ir mais longe. Agora entra-se em território de profundidade real, e a Semana 7 começa pela peça mais contra-intuitiva de todas: para que os outros se abram, tens tu de te mostrares primeiro como real. Vulnerabilidade seletiva e apropriada não é fraqueza — é convite. Quando alguém sente que a outra pessoa também tem inseguranças, cansaço, dúvidas, sente-se autorizado a mostrar as suas.\n\nPartilhar algo real uma vez por dia não significa desabafar tudo constantemente — significa dizer, de vez em quando, uma frase verdadeira em vez de uma frase de fachada social. Este tipo de frase é pequena o suficiente para não sobrecarregar quem ouve, e verdadeira o suficiente para mudar a qualidade da conversa.\n\nA pergunta em três camadas é uma das ferramentas mais úteis e reutilizáveis do curso inteiro. Superfície: \"Como estás?\" — a pergunta social por defeito. Intermédia: \"Qual foi a melhor ou pior parte da tua semana?\" — já pede uma resposta específica. Profunda: \"Há algo em que tens pensado e sobre o qual não falaste muito?\" — abre espaço deliberado para o que normalmente fica por dizer. Não é preciso ir sempre à camada profunda; saber que ela existe, e escolhê-la conscientemente de vez em quando, já muda a qualidade das relações.\n\nNo domínio familiar, a prática torna-se específica: escolher um familiar que se queira conhecer mais a fundo e fazer, deliberadamente, uma pergunta mais profunda por semana. Com uma companheira ou parceira, a mesma lógica aplica-se a substituir uma troca de rotina por algo que assuma, implicitamente, que ainda há coisas para descobrir mesmo depois de anos juntos.",
   "audio_segmentos": [
     {
       "titulo": "Resumo da semana",
-      "texto": "Estás na Semana 6 do curso Carnegie, a última da Fase 2 — Presença Emocional. Depois de duas semanas sobre tom e calor, esta semana liga tudo isso a influência. A ideia central é que, em qualquer grupo, a pessoa mais regulada emocionalmente tende a ter a maior influência sobre o tom geral — não por dominância, mas por firmeza serena. Nos próximos áudios vou explicar as três práticas da semana: falar mais devagar, curiosidade acima de exibição, e proteger o clima emocional. E há também uma tarefa especial — um ponto de situação a meio do curso."
+      "texto": "Estás na Semana 7 do curso Carnegie, o início da Fase 3 — Relações Profundas. As duas fases anteriores construíram a base: segurança nas conversas e o tom emocional que fica depois delas. Esta fase é sobre ir mais longe — da interação agradável para a proximidade genuína. A Semana 7 chama-se Ser Conhecido, e começa pela peça mais contra-intuitiva de todas: para que os outros se abram, tens tu de te mostrares primeiro como real. Nos próximos áudios vou explicar as práticas da semana: partilhar algo real, e a pergunta em três camadas."
     },
     {
-      "titulo": "A pessoa mais regulada tem a maior influência",
-      "texto": "A Semana 6 fecha a Fase 2 com a ideia que mais diretamente liga presença emocional a influência: em qualquer grupo — família, amigos, equipa — a pessoa mais regulada emocionalmente da sala tende a ter, com o tempo, a maior influência sobre o tom geral. Isto acontece porque os estados emocionais são contagiosos por natureza; alguém tem de definir a temperatura, e essa pessoa raramente é quem fala mais alto — é quem se mantém mais estável quando tudo à volta escala."
+      "titulo": "Vulnerabilidade seletiva é convite",
+      "texto": "A Fase 3 marca uma transição importante: as duas fases anteriores construíram a base — segurança (rapport) e tom emocional (presença) — que torna possível ir mais longe. Agora entra-se em território de profundidade real, e a Semana 7 começa pela peça mais contra-intuitiva de todas: para que os outros se abram, tens tu de te mostrares primeiro como real. Vulnerabilidade seletiva e apropriada não é fraqueza — é convite. Quando alguém sente que a outra pessoa também tem inseguranças, cansaço, dúvidas, sente-se autorizado a mostrar as suas."
     },
     {
-      "titulo": "Falar mais devagar",
-      "texto": "Falar mais devagar em momentos de alto risco emocional — desacordos, conversas difíceis, ensino — é uma das ferramentas mais simples e mais contra-intuitivas do curso. O instinto sob pressão é acelerar: falar mais depressa para resolver mais depressa. Mas a velocidade do discurso é lida, a um nível quase pré-consciente, como um sinal de urgência ou nervosismo, o que aumenta a tensão em vez de a baixar. Falar a cerca de 80% do ritmo habitual comunica o oposto: que a situação, por mais séria que seja, está sob controlo suficiente para não exigir pressa."
+      "titulo": "Partilhar algo real",
+      "texto": "Partilhar algo real uma vez por dia não significa desabafar tudo constantemente — significa dizer, de vez em quando, uma frase verdadeira em vez de uma frase de fachada social. Este tipo de frase é pequena o suficiente para não sobrecarregar quem ouve, e verdadeira o suficiente para mudar a qualidade da conversa."
     },
     {
-      "titulo": "Curiosidade acima de exibição",
-      "texto": "A curiosidade acima de exibição pede um adiamento deliberado: antes de mostrares o que sabes, fazer mais uma pergunta. Isto parece sacrificar a oportunidade de demonstrar competência, mas na prática constrói mais confiança do que a exibiria — porque as pessoas confiam mais em quem parece genuinamente interessado em compreender do que em quem parece ansioso por mostrar perícia."
+      "titulo": "A pergunta em três camadas",
+      "texto": "A pergunta em três camadas é uma das ferramentas mais úteis e reutilizáveis do curso inteiro. Superfície: Como estás? — a pergunta social por defeito. Intermédia: Qual foi a melhor ou pior parte da tua semana? — já pede uma resposta específica. Profunda: Há algo em que tens pensado e sobre o qual não falaste muito? — abre espaço deliberado para o que normalmente fica por dizer. Não é preciso ir sempre à camada profunda; saber que ela existe, e escolhê-la conscientemente de vez em quando, já muda a qualidade das relações."
     },
     {
-      "titulo": "Proteger o clima emocional",
-      "texto": "Proteger o clima emocional é, no fundo, uma aplicação prática de tudo o resto: em situações de stress, ser deliberadamente a pessoa menos reativa presente. Quando outros escalam, o movimento natural é acompanhar essa energia. Mas contrariar, baixando em vez de subir, é exatamente o que quebra o ciclo. Isto aplica-se indiferentemente a um jantar de família tenso ou a uma sala de operações sob pressão — é a mesma capacidade, exercitada em contextos muito diferentes."
-    },
-    {
-      "titulo": "Ponto de situação a meio do curso",
-      "texto": "A tarefa desta semana marca o ponto médio do curso de forma deliberada: voltar à lista de cinco pessoas que escreveste na Semana zero e escrever, para cada uma, duas ou três frases sobre o que mudou. É um exercício de confronto honesto com o progresso real, não com a intenção."
+      "titulo": "Em casa e com a companheira",
+      "texto": "No domínio familiar, a prática torna-se específica: escolher um familiar que se queira conhecer mais a fundo e fazer, deliberadamente, uma pergunta mais profunda por semana. Com uma companheira ou parceira, a mesma lógica aplica-se a substituir uma troca de rotina por algo que assuma, implicitamente, que ainda há coisas para descobrir mesmo depois de anos juntos."
     }
   ],
-  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-06.html",
+  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-07.html",
   "link_curso_completo": "https://personal-system-hs5.pages.dev/personal-development/carnegie/curso-completo.html"
 }
