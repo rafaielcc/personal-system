@@ -20,13 +20,6 @@
   semanal "Equipa esta semana" (presença era por semana, não por dia) —
   substituída por um indicador por dia/sessão: "Equipa completa" ou
   "Fulano ausente" (nunca o motivo, mantendo a regra de página pública).
-
-  v4 — 19 Jul 2026 (feedback da Vanessa, colega que testou a lista):
-  · Destaque FDR (linhas de cirurgia + banner "FDR hoje") passa de vermelho
-    para azul — confundia-se visualmente com o badge de cirurgião ausente
-    (também vermelho).
-  · Ícone ℹ️ de observações expansíveis aumentado (10px→15px, opacidade
-    .6→.9) — estava demasiado pequeno/discreto.
 -->
 <html lang="pt-PT">
 <head>
@@ -55,7 +48,6 @@
     --red:#C0392B;
     --red-bg:#FAD9D4;
     --blue:#4A7FAD;
-    --blue-bg:#DCE7EE;
     --orange:#FF9900;
     --green:#6AA84F;
     --purple:#8E6FA8;
@@ -156,15 +148,13 @@
   }
   table.surg td{ padding:7px 6px; border-bottom:1px dashed var(--border); vertical-align:top; }
   table.surg tr:last-child td{ border-bottom:none; }
-  /* Cor mudada de vermelho para azul (v4) — o vermelho confundia-se visualmente
-     com o badge de cirurgião ausente (também vermelho), feedback da Vanessa. */
-  table.surg tr.fdr-row{ background:var(--blue-bg); }
-  table.surg tr.fdr-row td:first-child{border-left:3px solid var(--blue); }
+  table.surg tr.fdr-row{ background:var(--red-bg); }
+  table.surg tr.fdr-row td:first-child{border-left:3px solid var(--red); }
   .proc-num{ font-family:monospace; font-size:11.5px; color:var(--muted); }
 
   .fdr-box{
-    border:1.5px solid var(--blue); background:var(--blue-bg); border-radius:var(--radius-sm);
-    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--blue); font-weight:600;
+    border:1.5px solid var(--red); background:var(--red-bg); border-radius:var(--radius-sm);
+    padding:8px 11px; margin:6px 0; font-size:12.5px; color:var(--red); font-weight:600;
   }
   .fdr-box .fdr-note{ font-weight:400; color:var(--ink); margin-top:3px; }
 
@@ -182,9 +172,8 @@
   details.collapse .collapse-body{ padding:0 11px 11px; }
 
   /* ===== LINHA DE DOENTE CLICÁVEL (expande observações) ===== */
-  /* Ícone aumentado (v4) — estava demasiado pequeno/discreto, feedback da Vanessa. */
   table.surg tr.has-obs{ cursor:pointer; }
-  table.surg tr.has-obs td:last-child::after{ content:'ℹ️'; margin-left:6px; font-size:15px; opacity:.9; }
+  table.surg tr.has-obs td:last-child::after{ content:'ℹ️'; margin-left:5px; font-size:10px; opacity:.6; }
   table.surg tr.obs-row{ display:none; }
   table.surg tr.obs-row.open{ display:table-row; }
   table.surg tr.obs-row td{ background:var(--ink-light); color:var(--muted); font-style:italic; font-size:12px; border-bottom:1px dashed var(--border); }
@@ -213,20 +202,20 @@
       <div class="topbar-row1">
         <div class="greet">🪒 Lista BO</div>
       </div>
-      <div class="subtitle">Cirurgia Pediátrica · oHFF — actualizado Domingo, 16 Ago · 18:44</div>
+      <div class="subtitle">Cirurgia Pediátrica · oHFF — actualizado Quinta, 20 Ago · 08:15</div>
     </div>
   </div>
 
   <!-- ===== TABBAR POR SEMANA ===== -->
   <div class="tabbar">
 
-    <button class="tabbtn active" onclick="showTab('semana1')">Semana 17 Ago – 19 Ago</button>
+    <button class="tabbtn active" onclick="showTab('semana1')">Semana 24 Ago – 26 Ago</button>
 
-    <button class="tabbtn " onclick="showTab('semana2')">Semana 24 Ago – 26 Ago</button>
+    <button class="tabbtn " onclick="showTab('semana2')">Semana 31 Ago – 2 Set</button>
 
-    <button class="tabbtn " onclick="showTab('semana3')">Semana 31 Ago – 2 Set</button>
+    <button class="tabbtn " onclick="showTab('semana3')">Semana 7 Set – 9 Set</button>
 
-    <button class="tabbtn " onclick="showTab('semana4')">Semana 7 Set – 9 Set</button>
+    <button class="tabbtn " onclick="showTab('semana4')">Semana 14 Set – 16 Set</button>
 
   </div>
 
@@ -240,27 +229,24 @@
 
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Segunda, 17 Ago <span class="badge-completa">✓ Equipa completa</span></div>
+          <div class="session-header"><span class="stripe"></span>Segunda, 24 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1345844</td><td>s/d</td><td>ANTONIO BENICIO FONSECA GIL</td><td>Lingua Presa</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1223037</td><td>—</td><td>Edhanya Domingos</td><td>Sinovite E Tenossinovite, Soe</td></tr>
               <tr class="obs-row"><td colspan="4"></td></tr>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1258863</td><td>s/d</td><td>BRYAN RODRIGUES FREITAS</td><td>Testiculo Ectopico, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
-
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1323153</td><td>s/d</td><td>LEONOR FURTADO MARQUES</td><td>Hernia Inguinal, Unil, Recor</td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1340300</td><td>—</td><td>Letson Jose Lopes Varela</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
               <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1328346</td><td>s/d</td><td>MERELDES CAPESSA CAZUA</td><td>Lingua Presa</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">982847</td><td>—</td><td>Joao Alexandre Lima Nogueira</td><td>Testículo N Descido, Soe, Unil</td></tr>
+              <tr class="obs-row"><td colspan="4">Obeso, toma medicação hiperactividade</td></tr>
 
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">939740</td><td>s/d</td><td>MICHAEL SALOMAO SEMEDO SOARES</td><td>Hernia Inguinal, Unil, Recor</td></tr>
-              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1343967</td><td>—</td><td>Ibrahim Hakime Seidi Cambai</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">Interna véspera UCIP 11h</td></tr>
 
             </tbody>
           </table>
@@ -271,24 +257,24 @@
         </div>
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Quarta, 19 Ago <span class="badge-completa">✓ Equipa completa</span></div>
+          <div class="session-header"><span class="stripe"></span>Quarta, 26 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1345212</td><td>s/d</td><td>ENZI COSTA MARQUES MATCHE</td><td>Hernia Inguinal Bilat</td></tr>
-              <tr class="obs-row"><td colspan="4">a confirmar int vesp</td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1323890</td><td>s/d</td><td>LUANY LUKENY ALVES COSTA LUCIANO</td><td>BIOPSIA RETAL</td></tr>
-              <tr class="obs-row"><td colspan="4">int vesp 10h</td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1314730</td><td>s/d</td><td>SALVADOR FERNANDES SANTOS</td><td>Granuloma Umbilical</td></tr>
-              <tr class="obs-row"><td colspan="4">ainda tem</td></tr>
-
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1343447</td><td>s/d</td><td>KAIO ALEXANDRE SOTO VEIGA</td><td>LINGUA</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">828954</td><td>—</td><td>Debora Sofia Moreira Marques</td><td>Hipertrofia Vulva, Soe</td></tr>
               <tr class="obs-row"><td colspan="4"></td></tr>
+
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1073612</td><td>—</td><td>Gabriel Semedo Moreira</td><td>Hidrocelo, Soe</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1348448</td><td>—</td><td>Noah Diogo Lopes Fernandes</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">Vem de 8/06</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1352326</td><td>—</td><td>Benjamim Cruz Neto</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">Aguarda análises</td></tr>
 
             </tbody>
           </table>
@@ -307,24 +293,15 @@
 
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Segunda, 24 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Segunda, 31 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1223037</td><td>s/d</td><td>EDHANYA DOMINGOS</td><td>Sinovite E Tenossinovite, Soe</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1343967</td><td>s/d</td><td>IBRAHIM HAKIME SEIDI CAMBAI</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">interna vespera ucip 11h</td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">982847</td><td>s/d</td><td>JOAO ALEXANDRE LIMA NOGUEIRA</td><td>Testiculo N Descido, Soe, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">OBESO toma medicacao hiperactividade para ?</td></tr>
-
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1340300</td><td>s/d</td><td>LETSON JOSE LOPES VARELA</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1214438</td><td>—</td><td>Benjamim Junior Santos Indi</td><td>Hipospádia Penoscrotal</td></tr>
+              <tr class="obs-row"><td colspan="4">2 tempo STAC</td></tr>
 
             </tbody>
           </table>
@@ -335,24 +312,21 @@
         </div>
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Quarta, 26 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Quarta, 2 Set <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1352326</td><td>s/d</td><td>BENJAMIM CRUZ NETO</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">ANALISES</td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1300907</td><td>—</td><td>Iris Fernandes Martins</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">828954</td><td>s/d</td><td>DEBORA SOFIA MOREIRA MARQUES</td><td>Hipertrofia Vulva, Soe</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">949712</td><td>—</td><td>Joao Paulo Praia Antonio</td><td>CVL</td></tr>
+              <tr class="obs-row"><td colspan="4">Drepanocitose; vem de 05-08, UCIP a 01-09</td></tr>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1073612</td><td>s/d</td><td>GABRIEL SEMEDO MOREIRA</td><td>Hidrocelo, Soe</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1348448</td><td>s/d</td><td>NOAH DIOGO LOPES FERNANDES</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">vem 8/06</td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1291854</td><td>—</td><td>Noah Ratinho Pereira</td><td>Cripto e fimose</td></tr>
+              <tr class="obs-row"><td colspan="4">Programado</td></tr>
 
             </tbody>
           </table>
@@ -371,15 +345,24 @@
 
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Segunda, 31 Ago <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Segunda, 7 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1214438</td><td>s/d</td><td>BENJAMIM JUNIOR SANTOS INDI</td><td>Hipospadia Penoscrotal</td></tr>
-              <tr class="obs-row"><td colspan="4">2 TEMPO STAC</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1346547</td><td>—</td><td>Mariana Caneira Costa</td><td>Seio E Quisto Pré-Auricular</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
+
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1169065</td><td>—</td><td>Stefan Alexandre Ramos Spataru</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1276681</td><td>—</td><td>Joao Pedro Cruz Braga</td><td>Testículo N Descido, Soe, Bilat</td></tr>
+              <tr class="obs-row"><td colspan="4">Reparação bilateral, abordagem aberta</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">828454</td><td>—</td><td>Antonio Borralho</td><td>Hidrocelo</td></tr>
+              <tr class="obs-row"><td colspan="4">Reparação túnica vaginal esquerda</td></tr>
 
             </tbody>
           </table>
@@ -390,21 +373,27 @@
         </div>
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Quarta, 2 Set <span class="badge-ausente">⚠️ Isabel Franca ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Quarta, 9 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1300907</td><td>s/d</td><td>IRIS FERNANDES MARTINS</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
-
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1291854</td><td>s/d</td><td>NOAH RATINHO PEREIRA</td><td>CRIPTO E FIMOSE</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1325783</td><td>—</td><td>Amadu Bamba Pires Dahaba</td><td>Criptorquidia Inguinal Unilateral</td></tr>
               <tr class="obs-row"><td colspan="4"></td></tr>
 
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">949712</td><td>s/d</td><td>JOAO PAULO PRAIA ANTONIO</td><td>CVL</td></tr>
-              <tr class="obs-row"><td colspan="4">Drepa, vem de 05-08, UCIP a 01-09</td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1064450</td><td>—</td><td>Caio Rafael Tavares Silva</td><td>Hidrocelo</td></tr>
+              <tr class="obs-row"><td colspan="4">Tem quisto</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1302717</td><td>—</td><td>Henry Santos Mendes</td><td>Criptorquidia Inguinal Unilateral</td></tr>
+              <tr class="obs-row"><td colspan="4">Técnica de Bianchi</td></tr>
+
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1253773</td><td>—</td><td>Duarte Alexandre Lopes Videira</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">Quisto do cordão</td></tr>
+
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1354037</td><td>—</td><td>Caio Mendes Cruz</td><td>Polidactilia Dedos Mão</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
 
             </tbody>
           </table>
@@ -423,24 +412,18 @@
 
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Segunda, 7 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Segunda, 14 Set <span class="badge-completa">✓ Equipa completa</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1346547</td><td>s/d</td><td>MARIANA CANEIRA COSTA</td><td>Seio E Quisto Pre-Auricular</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1354608</td><td>—</td><td>Simao Guerreiro Mimoso</td><td>Dédos e língua / criptorquidia / hérnia inguinal unilateral</td></tr>
               <tr class="obs-row"><td colspan="4"></td></tr>
 
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">828454</td><td>s/d</td><td>ANTONIO BORRALHO</td><td>HIDROCELO PROG</td></tr>
-              <tr class="obs-row"><td colspan="4">Reparacao Da Tunica Vaginal Esquerda</td></tr>
-
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1276681</td><td>s/d</td><td>JOAO PEDRO CRUZ BRAGA</td><td>Testiculo N Descido, Soe, Bilat</td></tr>
-              <tr class="obs-row"><td colspan="4">Reparacao De Testiculos Bilaterais</td></tr>
-
-              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1169065</td><td>8,0a</td><td>STEFAN ALEXANDRE RAMOS SPATARU</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1317070</td><td>—</td><td>Vasco Amorim Almeida</td><td>Hipospádia Peniana distal</td></tr>
+              <tr class="obs-row"><td colspan="4"></td></tr>
 
             </tbody>
           </table>
@@ -451,24 +434,24 @@
         </div>
 
         <div class="session-card">
-          <div class="session-header"><span class="stripe"></span>Quarta, 9 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span></div>
+          <div class="session-header"><span class="stripe"></span>Quarta, 16 Set <span class="badge-ausente">⚠️ Rodrigo Roquette ausente</span></div>
 
           <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
           <table class="surg">
             <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
             <tbody>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1354037</td><td>s/d</td><td>CAIO MENDES CRUZ</td><td>Polidactilia Dedos Mao</td></tr>
+              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1348132</td><td>—</td><td>Heloise Vitoria Santos Rocha</td><td>Seio E Quisto Pré-Auricular</td></tr>
               <tr class="obs-row"><td colspan="4"></td></tr>
 
-              <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1064450</td><td>s/d</td><td>CAIO RAFAEL TAVARES SILVA</td><td>O Hidrocelo</td></tr>
-              <tr class="obs-row"><td colspan="4"></td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1341611</td><td>—</td><td>Matilde Luis Silva Cardoso</td><td>Hidronefrose C/Estreitamento Ureter Ncop</td></tr>
+              <tr class="obs-row"><td colspan="4">Cistoscopia/ureterocelo</td></tr>
 
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1253773</td><td>s/d</td><td>DUARTE ALEXANDRE LOPES VIDEIRA</td><td>Hernia Inguinal, Unil</td></tr>
-              <tr class="obs-row"><td colspan="4">quisto cordao</td></tr>
+              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1355984</td><td>—</td><td>Sanjaya Sapkota</td><td>Hérnia Inguinal Bilat, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">Obs: se não aceitam saem LE</td></tr>
 
-              <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1302717</td><td>s/d</td><td>HENRY SANTOS MENDES</td><td>Criptorquidia Inguinal Unilateral</td></tr>
-              <tr class="obs-row"><td colspan="4">Bianchi</td></tr>
+              <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1280482</td><td>—</td><td>Ayla Rafaela Martins Lopes</td><td>Hérnia Inguinal Bilat, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
+              <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
 
             </tbody>
           </table>
@@ -485,7 +468,7 @@
     </div>
 
     <div class="footer">
-      <p>Lista BO · Cirurgia Pediátrica HFF · gerado às 18:44</p>
+      <p>Lista BO · Cirurgia Pediátrica HFF · gerado às 08:15</p>
     </div>
   </div>
 
