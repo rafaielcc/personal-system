@@ -42,16 +42,21 @@
   .meta{color:var(--muted);font-size:13px}
   .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .btn[aria-pressed="true"]{box-shadow:0 0 0 3px rgba(47,111,159,.18)}
   .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
   .btn.green{background:var(--green);border-color:var(--green);color:white}
   .btn.amber{background:var(--amber);border-color:var(--amber);color:white}
   .btn.red{background:var(--red);border-color:var(--red);color:white}
   .btn.icon{padding:7px 10px}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
   details{border:1px solid var(--line);border-radius:8px;background:#fbfcfc;margin-top:12px}
   summary{cursor:pointer;padding:12px 13px;font-weight:900}
   details .body{padding:0 13px 13px}
   .options{display:grid;gap:8px;margin:10px 0}
-  .option{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfcfc}
+  .option{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfcfc;display:flex;gap:9px;align-items:flex-start;cursor:pointer}
+  .option input{margin-top:3px}
+  .option.selected{border-color:var(--blue);background:#eef6fb}
+  .progress{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
   .question-card{border-top:1px solid var(--line);padding:14px 0}
   .question-card:first-child{border-top:0;padding-top:0}
   textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical;background:white}
@@ -62,6 +67,7 @@
   .bar span{display:block;height:100%;background:var(--blue);width:0}
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1e2428;color:white;padding:10px 13px;border-radius:8px;font-size:13px;display:none}
   .empty{color:var(--muted);font-style:italic}
+  .notice{border:1px solid #ead39c;background:#fff8e8;color:#6f4b0c;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.45;margin-bottom:12px}
   @media (max-width:760px){
     header{display:block}
     .status{justify-content:flex-start;margin-top:10px}
@@ -98,6 +104,32 @@
 const DATA = JSON.parse(document.getElementById('testme-data').textContent);
 const $ = (sel, root=document) => root.querySelector(sel);
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STORE_KEY = 'testme:state:v1';
+const QUEUE_KEY = 'testme:pendingActions:v1';
+const localState = loadLocalState();
+
+function loadLocalState(){
+  try {
+    return JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalState(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(localState));
+}
+
+function queueLocalAction(body){
+  let queue = [];
+  try {
+    queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+  } catch {
+    queue = [];
+  }
+  queue.push(body);
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+}
 
 function toast(msg){
   const el = $('#toast');
@@ -118,36 +150,62 @@ async function postAction(type, payload){
   const url = DATA.config?.apps_script_url;
   const body = {type, created_at:new Date().toISOString(), payload};
   if (!url){
-    localStorage.setItem('testme:lastAction', JSON.stringify(body));
-    toast('Acao guardada localmente; Apps Script ainda nao configurado.');
-    return;
+    queueLocalAction(body);
+    toast('Guardado neste browser. Falta ligar o Apps Script para gravar na Sheet.');
+    return {queued:true};
   }
   await fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body)});
-  toast('Guardado.');
+  toast('Gravado na Sheet.');
+  return {posted:true};
 }
 
 function renderStatus(){
   const q = DATA.current_question || {};
   const e = DATA.current_exam || {};
+  const examState = getExamState();
   $('#statusChips').innerHTML = [
     `Pergunta: ${esc(q.status || 'ativa')}`,
-    `Simulado: ${esc(e.status || 'novo')}`,
-    `Banco: ${esc(DATA.question_bank_summary?.total_saved ?? 0)}`
+    `Simulado: ${esc(examState.status || e.status || 'novo')}`,
+    `Banco: ${esc(DATA.question_bank_summary?.total_saved ?? 0)}`,
+    `Por gravar: ${pendingActionCount()}`
   ].map(x => `<span class="chip">${x}</span>`).join('');
+}
+
+function pendingActionCount(){
+  try {
+    return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]').length;
+  } catch {
+    return 0;
+  }
 }
 
 function renderQuestion(){
   const q = DATA.current_question;
-  const options = (q.options || []).map(opt => `<div class="option"><b>${esc(opt.label)}.</b> ${esc(opt.text)}</div>`).join('');
+  if (!q) {
+    $('#questoes').innerHTML = '<div class="panel"><p class="empty">Ainda nao ha pergunta ativa.</p></div>';
+    return;
+  }
+  resetQuestionLocalStateIfNeeded();
+  const qState = localState.currentQuestion || {};
+  const isSaved = !!qState.saved;
+  const isSeen = !!qState.seen;
+  const wantsNext = !!qState.wants_next;
+  const selected = qState.selected_option || '';
+  const options = (q.options || []).map(opt => `
+    <label class="option ${selected === opt.label ? 'selected' : ''}">
+      <input type="radio" name="current_question_answer" value="${esc(opt.label)}" ${selected === opt.label ? 'checked' : ''} onchange="selectCurrentAnswer('${esc(opt.label)}')">
+      <span><b>${esc(opt.label)}.</b> ${esc(opt.text)}</span>
+    </label>`).join('');
   $('#questoes').innerHTML = `
     <div class="panel">
+      ${DATA.config?.apps_script_url ? '' : '<div class="notice">Acoes ficam guardadas neste browser ate o Apps Script estar ligado. Ainda nao gravam na Sheet.</div>'}
       <div class="row">
         <span class="chip">${esc(q.topic)}</span>
         <span class="chip">${q.format === 'mcq' ? 'Escolha multipla' : 'Discursiva'}</span>
         <button class="btn icon" onclick="speak(DATA.current_question.stem)">Ouvir pergunta</button>
       </div>
       <p class="stem">${esc(q.stem)}</p>
-      ${q.format === 'mcq' ? `<div class="options">${options}</div>` : `<textarea placeholder="Resposta livre"></textarea>`}
+      ${q.format === 'mcq' ? `<div class="options">${options}</div>` : `<textarea id="currentDiscursiveAnswer" placeholder="Resposta livre" oninput="selectCurrentAnswer(this.value)">${esc(qState.response_text || '')}</textarea>`}
       <details>
         <summary>Resposta e justificacao</summary>
         <div class="body">
@@ -157,33 +215,94 @@ function renderQuestion(){
         </div>
       </details>
       <div class="actions">
-        <button class="btn" onclick="postAction('question_seen',{question_id:DATA.current_question.question_id})">Vista</button>
-        <button class="btn green" onclick="postAction('question_save',{question_id:DATA.current_question.question_id})">Salvar</button>
-        <button class="btn amber" onclick="postAction('question_skip',{question_id:DATA.current_question.question_id})">Novas questoes, sem responder</button>
+        <button class="btn" aria-pressed="${isSeen}" onclick="markCurrentSeen()">${isSeen ? 'Vista marcada' : 'Vista'}</button>
+        <button class="btn green" aria-pressed="${isSaved}" onclick="toggleCurrentSave()">${isSaved ? 'Salva - clicar para retirar' : 'Salvar'}</button>
+        <button class="btn amber" aria-pressed="${wantsNext}" onclick="requestNextQuestion()">${wantsNext ? 'Proxima pedida' : 'Pedir proxima pergunta'}</button>
       </div>
+      <p class="meta">A proxima pergunta aparece depois de correr <b>Atualizar TestMe</b>.</p>
     </div>`;
+}
+
+function resetQuestionLocalStateIfNeeded(){
+  const qid = DATA.current_question?.question_id;
+  if (localState.currentQuestion?.question_id !== qid){
+    localState.currentQuestion = {question_id: qid};
+    saveLocalState();
+  }
+}
+
+function selectCurrentAnswer(value){
+  resetQuestionLocalStateIfNeeded();
+  const q = DATA.current_question || {};
+  if (q.format === 'mcq') localState.currentQuestion.selected_option = value;
+  else localState.currentQuestion.response_text = value;
+  saveLocalState();
+  renderQuestion();
+}
+
+function markCurrentSeen(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.seen = true;
+  saveLocalState();
+  postAction('question_seen', {
+    question_id: DATA.current_question.question_id,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
+}
+
+function toggleCurrentSave(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.saved = !localState.currentQuestion.saved;
+  saveLocalState();
+  postAction('question_save_toggle', {
+    question_id: DATA.current_question.question_id,
+    saved: localState.currentQuestion.saved,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
+}
+
+function requestNextQuestion(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.wants_next = true;
+  saveLocalState();
+  postAction('question_next_requested', {
+    question_id: DATA.current_question.question_id,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
 }
 
 function renderExam(){
   const e = DATA.current_exam || {};
   const questions = e.questions || [];
+  resetExamLocalStateIfNeeded();
+  const examState = getExamState();
+  const isFinished = examState.status === 'terminado' || e.status === 'terminado' || e.status === 'corrigido';
+  const answered = questions.filter(q => hasExamAnswer(q.question_id)).length;
   const cards = questions.map((q, idx) => `
     <div class="question-card">
       <div class="row"><span class="chip">${idx+1}</span><span class="chip">${esc(q.topic)}</span><span class="chip">${esc(q.format)}</span></div>
       <p>${esc(q.stem)}</p>
       ${q.format === 'mcq'
-        ? `<select data-q="${esc(q.question_id)}"><option value="">Resposta...</option>${(q.options||[]).map(o => `<option value="${esc(o.label)}">${esc(o.label)}. ${esc(o.text)}</option>`).join('')}</select>`
-        : `<textarea data-q="${esc(q.question_id)}" placeholder="Resposta discursiva"></textarea>`}
+        ? `<select data-q="${esc(q.question_id)}" data-topic="${esc(q.topic)}" data-format="${esc(q.format)}" onchange="setExamAnswer('${esc(q.question_id)}', this.value)" ${isFinished ? 'disabled' : ''}><option value="">Resposta...</option>${(q.options||[]).map(o => `<option value="${esc(o.label)}" ${getExamAnswer(q.question_id) === o.label ? 'selected' : ''}>${esc(o.label)}. ${esc(o.text)}</option>`).join('')}</select>`
+        : `<textarea data-q="${esc(q.question_id)}" data-topic="${esc(q.topic)}" data-format="${esc(q.format)}" placeholder="Resposta discursiva" oninput="setExamAnswer('${esc(q.question_id)}', this.value)" ${isFinished ? 'disabled' : ''}>${esc(getExamAnswer(q.question_id))}</textarea>`}
     </div>`).join('');
   $('#simulado').innerHTML = `
     <div class="split">
       <div class="panel">
         <h2>Simulado atual</h2>
-        <p class="meta">Estado: ${esc(e.status || 'novo')} · ${questions.length} perguntas</p>
+        ${DATA.config?.apps_script_url ? '' : '<div class="notice">Salvar/Terminado ficam guardados neste browser ate o Apps Script estar ligado. Ainda nao gravam na Sheet.</div>'}
+        <p class="meta">Estado: ${esc(examState.status || e.status || 'novo')} · ${questions.length} perguntas</p>
+        <div class="progress"><span class="chip" id="examAnsweredChip">${answered}/${questions.length} respondidas</span><span class="chip" id="examSavedChip">${examState.saved_at ? 'Salvo: ' + esc(examState.saved_at) : 'Ainda nao salvo'}</span></div>
         ${cards || '<p class="empty">Ainda nao ha simulado gerado.</p>'}
         <div class="actions">
-          <button class="btn green" onclick="saveExam()">Salvar</button>
-          <button class="btn red" onclick="finishExam()">Terminado</button>
+          <button class="btn green" onclick="saveExam()" ${isFinished ? 'disabled' : ''}>Salvar</button>
+          <button class="btn red" onclick="finishExam()" ${isFinished ? 'disabled' : ''}>Terminado</button>
           <button class="btn" onclick="exportExam()">Exportar</button>
         </div>
       </div>
@@ -196,19 +315,75 @@ function renderExam(){
     </div>`;
 }
 
+function resetExamLocalStateIfNeeded(){
+  const simuladoId = DATA.current_exam?.simulado_id;
+  if (localState.currentExam?.simulado_id !== simuladoId){
+    localState.currentExam = {simulado_id: simuladoId, status: DATA.current_exam?.status || 'em_andamento', answers:{}};
+    saveLocalState();
+  }
+  localState.currentExam.answers ||= {};
+}
+
+function getExamState(){
+  resetExamLocalStateIfNeeded();
+  return localState.currentExam;
+}
+
+function getExamAnswer(questionId){
+  return getExamState().answers?.[questionId] || '';
+}
+
+function hasExamAnswer(questionId){
+  return String(getExamAnswer(questionId)).trim().length > 0;
+}
+
+function setExamAnswer(questionId, value){
+  const examState = getExamState();
+  if (examState.status === 'terminado') return;
+  examState.answers[questionId] = value;
+  saveLocalState();
+  renderStatus();
+  updateExamProgressUI();
+}
+
+function updateExamProgressUI(){
+  const questions = DATA.current_exam?.questions || [];
+  const answered = questions.filter(q => hasExamAnswer(q.question_id)).length;
+  const answeredChip = $('#examAnsweredChip');
+  const savedChip = $('#examSavedChip');
+  if (answeredChip) answeredChip.textContent = `${answered}/${questions.length} respondidas`;
+  if (savedChip) savedChip.textContent = getExamState().saved_at ? `Salvo: ${getExamState().saved_at}` : 'Ainda nao salvo';
+}
+
 function collectExamAnswers(){
   return Array.from(document.querySelectorAll('#simulado [data-q]')).map(el => ({
     question_id: el.dataset.q,
-    answer: el.value || ''
+    topic: el.dataset.topic || '',
+    format: el.dataset.format || '',
+    answer: getExamAnswer(el.dataset.q),
+    selected_option: el.tagName === 'SELECT' ? getExamAnswer(el.dataset.q) : '',
+    response_text: el.tagName === 'TEXTAREA' ? getExamAnswer(el.dataset.q) : '',
+    answered_at: getExamAnswer(el.dataset.q) ? new Date().toISOString() : ''
   }));
 }
 
 function saveExam(){
+  const examState = getExamState();
+  examState.saved_at = new Date().toLocaleString('pt-PT');
+  saveLocalState();
   postAction('exam_save',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+  renderStatus();
+  renderExam();
 }
 
 function finishExam(){
+  const examState = getExamState();
+  examState.status = 'terminado';
+  examState.saved_at = new Date().toLocaleString('pt-PT');
+  saveLocalState();
   postAction('exam_finish',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+  renderStatus();
+  renderExam();
 }
 
 async function exportExam(){
