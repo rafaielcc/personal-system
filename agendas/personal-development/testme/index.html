@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestMe</title>
+<style>
+  :root{
+    --bg:#f6f3ee;
+    --surface:#ffffff;
+    --ink:#1e2428;
+    --muted:#65727b;
+    --line:#d9dedf;
+    --blue:#2f6f9f;
+    --green:#3b7a57;
+    --amber:#b67818;
+    --red:#b94d45;
+    --lilac:#7a5c99;
+    --shadow:0 8px 24px rgba(30,36,40,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+  button,input,select,textarea{font:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:18px 14px 42px}
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+  h1{margin:0;font-size:28px;letter-spacing:0}
+  .sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+  .status{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
+  .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--muted)}
+  .tabs{display:flex;gap:6px;overflow:auto;border-bottom:1px solid var(--line);margin-bottom:16px}
+  .tab-btn{border:0;background:transparent;padding:11px 10px;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;white-space:nowrap;cursor:pointer}
+  .tab-btn.active{color:var(--blue);border-color:var(--blue)}
+  .tab{display:none}
+  .tab.active{display:block}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .split{display:grid;grid-template-columns:1fr 300px;gap:14px}
+  h2{font-size:20px;margin:0 0 10px}
+  h3{font-size:16px;margin:0 0 8px}
+  p{line-height:1.5}
+  .stem{font-size:18px;line-height:1.55;margin:12px 0}
+  .meta{color:var(--muted);font-size:13px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
+  .btn.green{background:var(--green);border-color:var(--green);color:white}
+  .btn.amber{background:var(--amber);border-color:var(--amber);color:white}
+  .btn.red{background:var(--red);border-color:var(--red);color:white}
+  .btn.icon{padding:7px 10px}
+  details{border:1px solid var(--line);border-radius:8px;background:#fbfcfc;margin-top:12px}
+  summary{cursor:pointer;padding:12px 13px;font-weight:900}
+  details .body{padding:0 13px 13px}
+  .options{display:grid;gap:8px;margin:10px 0}
+  .option{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfcfc}
+  .question-card{border-top:1px solid var(--line);padding:14px 0}
+  .question-card:first-child{border-top:0;padding-top:0}
+  textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical;background:white}
+  select,input[type="number"]{border:1px solid var(--line);border-radius:8px;padding:8px;background:white}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .stat{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfcfc}
+  .bar{height:8px;background:#e7eaeb;border-radius:99px;overflow:hidden;margin-top:8px}
+  .bar span{display:block;height:100%;background:var(--blue);width:0}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1e2428;color:white;padding:10px 13px;border-radius:8px;font-size:13px;display:none}
+  .empty{color:var(--muted);font-style:italic}
+  @media (max-width:760px){
+    header{display:block}
+    .status{justify-content:flex-start;margin-top:10px}
+    .split{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>TestMe</h1>
+      <p class="sub">Cirurgia pediatrica · pratica escrita · gerado em 2026-08-24T13:55:00+01:00</p>
+    </div>
+    <div class="status" id="statusChips"></div>
+  </header>
+
+  <nav class="tabs" aria-label="Abas TestMe">
+    <button class="tab-btn active" data-tab="questoes">Questoes</button>
+    <button class="tab-btn" data-tab="simulado">Simulado</button>
+    <button class="tab-btn" data-tab="correcao">Correcao</button>
+    <button class="tab-btn" data-tab="evolucao">Evolucao</button>
+  </nav>
+
+  <section class="tab active" id="questoes"></section>
+  <section class="tab" id="simulado"></section>
+  <section class="tab" id="correcao"></section>
+  <section class="tab" id="evolucao"></section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="testme-data" type="application/json">{"meta":{"module":"testme","date":"2026-08-24","generated_at":"2026-08-24T13:55:00+01:00","mode":"sample","sheet_id":"1umzy0T45iQlN2Fv52OV73PzRpWmgF5GWHUUMBO0Y7wo","sheet_url":"https://docs.google.com/spreadsheets/d/1umzy0T45iQlN2Fv52OV73PzRpWmgF5GWHUUMBO0Y7wo"},"config":{"apps_script_url":"","default_simulado_size":5,"next_simulado_size":5,"next_simulado_topics":[]},"current_question":{"question_id":"q_sample_20260824_001","status":"ativa","generated_at":"2026-08-24T13:55:00+01:00","topic":"Upper GI","format":"mcq","stem":"Lactente de 5 semanas apresenta vomitos nao biliosos progressivos apos as mamadas, perda ponderal ligeira e alcalose metabolica hipocloremica. Qual e o exame de primeira linha mais apropriado para confirmar o diagnostico suspeito?","options":[{"label":"A","text":"Ecografia abdominal dirigida ao piloro"},{"label":"B","text":"Transito esofagogastroduodenal como exame inicial obrigatorio"},{"label":"C","text":"TC abdominal com contraste intravenoso"},{"label":"D","text":"Endoscopia digestiva alta"}],"correct_answer":"A","explanation":"O quadro e sugestivo de estenose hipertrofica do piloro. A ecografia abdominal e o exame inicial habitual por ser nao invasiva e permitir avaliar espessura e comprimento do canal pilorico. O transito pode ser util se a ecografia for inconclusiva ou se houver duvida diagnostica.","source_type":"generated_practice","source_ref":"sample_v1"},"question_bank_summary":{"total_saved":0,"by_topic":{},"by_format":{}},"current_exam":{"simulado_id":"sim_sample_20260824_001","status":"em_andamento","generated_at":"2026-08-24T13:55:00+01:00","size":5,"requested_topics":[],"format_mix":{"mcq":3,"discursiva":2},"questions":[{"question_id":"sim_q_001","topic":"Neonatologia","format":"mcq","stem":"Recem-nascido com distensao abdominal, atraso na eliminacao de meconio e suspeita de doenca de Hirschsprung. Qual achado histologico confirma o diagnostico?","options":[{"label":"A","text":"Ausencia de celulas ganglionares no plexo submucoso e mioenterico"},{"label":"B","text":"Hiperplasia isolada da mucosa colica"},{"label":"C","text":"Necrose transmural segmentar"},{"label":"D","text":"Eosinofilia predominante da muscular propria"}],"correct_answer":"A","explanation":"A doenca de Hirschsprung e confirmada por biopsia retal demonstrando aganglionose."},{"question_id":"sim_q_002","topic":"Trauma","format":"mcq","stem":"Crianca hemodinamicamente estavel apos trauma abdominal fechado, com dor no quadrante superior esquerdo. Qual abordagem e geralmente preferida se houver lesao esplenica sem instabilidade?","options":[{"label":"A","text":"Tratamento nao operatorio com vigilancia adequada"},{"label":"B","text":"Esplenectomia imediata"},{"label":"C","text":"Laparotomia exploradora sistematica"},{"label":"D","text":"Alta imediata sem observacao"}],"correct_answer":"A","explanation":"Em criancas estaveis, a maioria das lesoes esplenicas por trauma fechado e manejada de forma nao operatoria com monitorizacao."},{"question_id":"sim_q_003","topic":"Urologia","format":"mcq","stem":"Menino com testiculo nao palpavel unilateral. Que principio e correto na avaliacao/tratamento?","options":[{"label":"A","text":"A laparoscopia pode ser diagnostica e terapeutica quando o testiculo e nao palpavel"},{"label":"B","text":"Aguardar sempre ate a adolescencia"},{"label":"C","text":"Biopsia contralateral sistematica"},{"label":"D","text":"Tratamento hormonal e definitivo na maioria"}],"correct_answer":"A","explanation":"O testiculo nao palpavel pode requerer laparoscopia para localizar e tratar, conforme os achados."},{"question_id":"sim_q_004","topic":"Oncologia","format":"discursiva","stem":"Descreve os elementos essenciais da abordagem inicial de uma massa abdominal suspeita de tumor de Wilms numa crianca.","options":[],"correct_answer":"Resposta esperada: estabilizacao e avaliacao clinica, controlo de hipertensao se presente, imagem adequada para caracterizacao e estadiamento, avaliacao contralateral, articulacao com oncologia pediatrica, evitar ruptura tumoral e planear tratamento conforme protocolo institucional.","explanation":"A resposta deve demonstrar prioridade a estadiamento, seguranca oncologica, equipa multidisciplinar e respeito pelo protocolo local."},{"question_id":"sim_q_005","topic":"Lower GI","format":"discursiva","stem":"Num lactente com fissura anal recorrente e obstipacao, que pontos da historia e exame ajudam a distinguir obstipacao funcional de patologia organica?","options":[],"correct_answer":"Resposta esperada: idade de inicio, eliminacao de meconio, crescimento, distensao, vomitos biliosos, exame neurologico e perineal, posicao anal, ampola retal, sinais de alarme, dieta, dor e ciclo retencao-dor.","explanation":"A resposta deve separar sinais de alarme de uma historia tipica de retencao funcional."}]},"recent_correction":{"simulado_id":null,"corrected_at":null,"total_score":null,"max_score":null,"items":[]},"evolution":{"by_topic":{"Upper GI":{"percent":0,"answered":0},"Neonatologia":{"percent":0,"answered":0}},"by_format":{"mcq":{"percent":0,"answered":0},"discursiva":{"percent":0,"answered":0}},"history":[]}}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('testme-data').textContent);
+const $ = (sel, root=document) => root.querySelector(sel);
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2600);
+}
+
+function speak(text){
+  if (!('speechSynthesis' in window)) return toast('Audio indisponivel neste browser.');
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'pt-PT';
+  window.speechSynthesis.speak(utterance);
+}
+
+async function postAction(type, payload){
+  const url = DATA.config?.apps_script_url;
+  const body = {type, created_at:new Date().toISOString(), payload};
+  if (!url){
+    localStorage.setItem('testme:lastAction', JSON.stringify(body));
+    toast('Acao guardada localmente; Apps Script ainda nao configurado.');
+    return;
+  }
+  await fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body)});
+  toast('Guardado.');
+}
+
+function renderStatus(){
+  const q = DATA.current_question || {};
+  const e = DATA.current_exam || {};
+  $('#statusChips').innerHTML = [
+    `Pergunta: ${esc(q.status || 'ativa')}`,
+    `Simulado: ${esc(e.status || 'novo')}`,
+    `Banco: ${esc(DATA.question_bank_summary?.total_saved ?? 0)}`
+  ].map(x => `<span class="chip">${x}</span>`).join('');
+}
+
+function renderQuestion(){
+  const q = DATA.current_question;
+  const options = (q.options || []).map(opt => `<div class="option"><b>${esc(opt.label)}.</b> ${esc(opt.text)}</div>`).join('');
+  $('#questoes').innerHTML = `
+    <div class="panel">
+      <div class="row">
+        <span class="chip">${esc(q.topic)}</span>
+        <span class="chip">${q.format === 'mcq' ? 'Escolha multipla' : 'Discursiva'}</span>
+        <button class="btn icon" onclick="speak(DATA.current_question.stem)">Ouvir pergunta</button>
+      </div>
+      <p class="stem">${esc(q.stem)}</p>
+      ${q.format === 'mcq' ? `<div class="options">${options}</div>` : `<textarea placeholder="Resposta livre"></textarea>`}
+      <details>
+        <summary>Resposta e justificacao</summary>
+        <div class="body">
+          <div class="row"><button class="btn icon" onclick="speak(DATA.current_question.explanation)">Ouvir resposta</button></div>
+          <p><b>Resposta:</b> ${esc(q.correct_answer)}</p>
+          <p>${esc(q.explanation)}</p>
+        </div>
+      </details>
+      <div class="actions">
+        <button class="btn" onclick="postAction('question_seen',{question_id:DATA.current_question.question_id})">Vista</button>
+        <button class="btn green" onclick="postAction('question_save',{question_id:DATA.current_question.question_id})">Salvar</button>
+        <button class="btn amber" onclick="postAction('question_skip',{question_id:DATA.current_question.question_id})">Novas questoes, sem responder</button>
+      </div>
+    </div>`;
+}
+
+function renderExam(){
+  const e = DATA.current_exam || {};
+  const questions = e.questions || [];
+  const cards = questions.map((q, idx) => `
+    <div class="question-card">
+      <div class="row"><span class="chip">${idx+1}</span><span class="chip">${esc(q.topic)}</span><span class="chip">${esc(q.format)}</span></div>
+      <p>${esc(q.stem)}</p>
+      ${q.format === 'mcq'
+        ? `<select data-q="${esc(q.question_id)}"><option value="">Resposta...</option>${(q.options||[]).map(o => `<option value="${esc(o.label)}">${esc(o.label)}. ${esc(o.text)}</option>`).join('')}</select>`
+        : `<textarea data-q="${esc(q.question_id)}" placeholder="Resposta discursiva"></textarea>`}
+    </div>`).join('');
+  $('#simulado').innerHTML = `
+    <div class="split">
+      <div class="panel">
+        <h2>Simulado atual</h2>
+        <p class="meta">Estado: ${esc(e.status || 'novo')} · ${questions.length} perguntas</p>
+        ${cards || '<p class="empty">Ainda nao ha simulado gerado.</p>'}
+        <div class="actions">
+          <button class="btn green" onclick="saveExam()">Salvar</button>
+          <button class="btn red" onclick="finishExam()">Terminado</button>
+          <button class="btn" onclick="exportExam()">Exportar</button>
+        </div>
+      </div>
+      <aside class="panel">
+        <h3>Proximo simulado</h3>
+        <p class="meta">A escolha aplica na proxima geracao.</p>
+        <label>Tamanho<br><select id="nextSize">${[5,10,15,25,30].map(n => `<option ${n===(DATA.config?.next_simulado_size||5)?'selected':''}>${n}</option>`).join('')}</select></label>
+        <div class="actions"><button class="btn" onclick="postAction('exam_preferences',{size:Number($('#nextSize').value)})">Guardar pedido</button></div>
+      </aside>
+    </div>`;
+}
+
+function collectExamAnswers(){
+  return Array.from(document.querySelectorAll('#simulado [data-q]')).map(el => ({
+    question_id: el.dataset.q,
+    answer: el.value || ''
+  }));
+}
+
+function saveExam(){
+  postAction('exam_save',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+}
+
+function finishExam(){
+  postAction('exam_finish',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+}
+
+async function exportExam(){
+  const answers = collectExamAnswers();
+  const text = [
+    `Estas sao as minhas respostas do simulado TestMe de ${DATA.current_exam?.generated_at || DATA.meta?.date}.`,
+    'Corrige-as, atribui nota geral e por topico/formato, comenta respostas discursivas, e prepara a atualizacao do historico de evolucao.',
+    '',
+    JSON.stringify({simulado:DATA.current_exam, respostas:answers}, null, 2)
+  ].join('\\n');
+  await navigator.clipboard.writeText(text);
+  toast('Texto de exportacao copiado.');
+}
+
+function renderCorrection(){
+  const c = DATA.recent_correction || {};
+  const items = c.items || [];
+  $('#correcao').innerHTML = `
+    <div class="panel">
+      <h2>Correcao recente</h2>
+      <p class="meta">Nota: ${esc(c.total_score ?? '-')} / ${esc(c.max_score ?? '-')} · ${esc(c.corrected_at || '')}</p>
+      ${items.map((it, idx) => `
+        <div class="question-card">
+          <div class="row"><span class="chip">${idx+1}</span><span class="chip">${esc(it.topic)}</span><span class="chip">${esc(it.score)}/${esc(it.max_points)}</span></div>
+          <p><b>Resposta do Rafael:</b> ${esc(it.rafael_answer)}</p>
+          <p><b>Resposta correta:</b> ${esc(it.correct_answer)}</p>
+          <p>${esc(it.llm_comment)}</p>
+        </div>`).join('') || '<p class="empty">Ainda nao ha correcao processada.</p>'}
+    </div>`;
+}
+
+function statBlock(label, percent){
+  const width = Math.max(0, Math.min(100, Number(percent || 0)));
+  return `<div class="stat"><b>${esc(label)}</b><div class="meta">${width}%</div><div class="bar"><span style="width:${width}%"></span></div></div>`;
+}
+
+function renderEvolution(){
+  const ev = DATA.evolution || {};
+  const topicStats = ev.by_topic || {};
+  const formatStats = ev.by_format || {};
+  $('#evolucao').innerHTML = `
+    <div class="panel">
+      <h2>Evolucao</h2>
+      <h3>Por topico</h3>
+      <div class="stat-grid">${Object.entries(topicStats).map(([k,v]) => statBlock(k, v.percent)).join('') || '<p class="empty">Sem dados.</p>'}</div>
+      <h3 style="margin-top:18px">Por formato</h3>
+      <div class="stat-grid">${Object.entries(formatStats).map(([k,v]) => statBlock(k, v.percent)).join('') || '<p class="empty">Sem dados.</p>'}</div>
+    </div>`;
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === btn.dataset.tab));
+}));
+
+renderStatus();
+renderQuestion();
+renderExam();
+renderCorrection();
+renderEvolution();
+</script>
+</body>
+</html>
+

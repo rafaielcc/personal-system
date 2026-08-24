@@ -1,0 +1,31 @@
+{
+  "module": "testme",
+  "updated_at": "2026-08-24T13:55:00+01:00",
+  "status_label": "Pratica escrita",
+  "question": {
+    "available": true,
+    "status": "ativa",
+    "topic": "Upper GI",
+    "format": "mcq",
+    "question_id": "q_sample_20260824_001"
+  },
+  "exam": {
+    "simulado_id": "sim_sample_20260824_001",
+    "status": "em_andamento",
+    "size": 5,
+    "question_count": 5
+  },
+  "correction": {
+    "has_recent": false,
+    "corrected_at": null,
+    "total_score": null,
+    "max_score": null
+  },
+  "evolution": {
+    "history_count": 0
+  },
+  "links": {
+    "page": "personal-development/testme/index.html",
+    "state": "personal-development/testme/data/estado-atual.json"
+  }
+}
