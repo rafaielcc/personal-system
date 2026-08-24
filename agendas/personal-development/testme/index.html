@@ -151,6 +151,7 @@ async function postAction(type, payload){
   const body = {type, created_at:new Date().toISOString(), payload};
   if (!url){
     queueLocalAction(body);
+    renderStatus();
     toast('Guardado neste browser. Falta ligar o Apps Script para gravar na Sheet.');
     return {queued:true};
   }
@@ -237,7 +238,7 @@ function selectCurrentAnswer(value){
   if (q.format === 'mcq') localState.currentQuestion.selected_option = value;
   else localState.currentQuestion.response_text = value;
   saveLocalState();
-  renderQuestion();
+  if (q.format === 'mcq') renderQuestion();
 }
 
 function markCurrentSeen(){
