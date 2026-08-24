@@ -405,16 +405,6 @@
               <p class="muted" style="margin-top:8px;">Fonte: personal-development/carnegie/data/estado-atual.json (fetch ao vivo, mesmo domínio)</p>
             </div>
           </details>
-          <details class="card" data-testme>
-            <summary><span class="stripe"></span><span class="testme-titulo">🧪 TestMe</span><span class="chev">▼</span></summary>
-            <div class="details-body">
-              <p class="testme-resumo">Pergunta ativa e simulado curto de cirurgia pediátrica.</p>
-              <p class="muted testme-status">A carregar estado...</p>
-              <div style="display:flex; gap:8px; margin-top:10px;">
-                <a class="shortcut-link c-blue testme-link" href="/personal-development/testme/index.html" title="Abrir TestMe">🧪</a>
-              </div>
-            </div>
-          </details>
         </div>
 
       </div>
@@ -532,39 +522,13 @@
         mostrarFallback('Sem atualização recente do curso.');
       });
   })();
-  // ===== TestMe — estado ao vivo, mesmo dominio =====
+  // ===== TestMe — atalho direto =====
   (function(){
     function setTestMeLinks(){
-      const href = location.pathname.includes('/agendas/') || location.pathname.endsWith('/agendas/')
-        ? '/personal-development/testme/index.html'
-        : '/personal-development/testme/index.html';
+      const href = '/personal-development/testme/index.html';
       document.querySelectorAll('.testme-link').forEach(a => a.href = href);
     }
-    function aplicarEstadoTestMe(dados){
-      document.querySelectorAll('[data-testme]').forEach(card => {
-        const titulo = card.querySelector('.testme-titulo');
-        const resumo = card.querySelector('.testme-resumo');
-        const status = card.querySelector('.testme-status');
-        const q = dados.question || {};
-        const e = dados.exam || {};
-        if (titulo) titulo.textContent = '🧪 TestMe · ' + (q.available ? 'pergunta pronta' : 'sem pergunta');
-        if (resumo) resumo.textContent = 'Pergunta: ' + (q.topic || 'sem topico') + ' · Simulado: ' + (e.status || 'sem estado') + ' (' + (e.question_count || 0) + ' perguntas).';
-        if (status) status.textContent = 'Atualizado: ' + (dados.updated_at || 'sem data');
-      });
-    }
-    function fallback(msg){
-      document.querySelectorAll('[data-testme] .testme-status').forEach(el => el.textContent = msg);
-    }
-    function fetchJson(url){
-      return fetch(url).then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.json(); });
-    }
     setTestMeLinks();
-    fetchJson('/personal-development/testme/data/estado-atual.json')
-      .then(dados => aplicarEstadoTestMe(dados))
-      .catch(err => {
-        console.warn('Não foi possível carregar o estado do TestMe:', err);
-        fallback('Sem atualização recente do TestMe.');
-      });
   })();
 </script>
 

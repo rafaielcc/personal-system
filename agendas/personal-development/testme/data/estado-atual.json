@@ -7,10 +7,10 @@
     "status": "ativa",
     "topic": "Upper GI",
     "format": "mcq",
-    "question_id": "q_sample_20260824_001"
+    "question_id": "q_sample_20260824_002"
   },
   "exam": {
-    "simulado_id": "sim_sample_20260824_001",
+    "simulado_id": "sim_sample_20260824_002",
     "status": "em_andamento",
     "size": 5,
     "question_count": 5
