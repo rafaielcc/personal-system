@@ -51,19 +51,18 @@ Outras acções mencionadas no system prompt ("continuar viagem em curso", "ver 
 | `questionario_pre_viagem.jsx` | `1TaN61ozZvoinLf1TajM0ZNLVuiVGMB6H` | Interface do questionário pré-viagem, incremental/retomável (usado no `/planear-viagem`) |
 | `questionario_pos_viagem.json` / `.jsx` | `1hWxb_Lk5iOZX7X6zafaZuedmW6-3l2xe` / `15dFQf2aBG_3EBjcFyFyuTKunZhQytT-7` | Perguntas + interface do questionário pós-viagem |
 
-## Publicação no GitHub — `trips/<Destino>/` (prática actual, não documentada nos ficheiros do Drive)
+## Publicação no GitHub — `agendas/viagem-atual/` (caminho live, servido pelo Cloudflare Pages)
 
-Além dos ficheiros criados no Google Drive, o guia de cada viagem e a app de Travel Log já são publicados neste repo, na raiz (pasta `trips/`, ao lado de `agendas/` e `AII/`) — confirmado pelo Rafa como o fluxo real, mesmo os documentos do Drive não mencionando isto:
+**Desde 2026-08, o caminho canónico de publicação é `agendas/viagem-atual/index.html`** — não `trips/<Destino>/`. Motivo: o Cloudflare Pages deste projecto só serve o conteúdo dentro da pasta `agendas/` (ver `agendas/CLAUDE.md`); qualquer coisa fora dessa pasta fica no GitHub mas não fica acessível como página web em qualquer dispositivo. `trips/<Destino>/` (usado numa fase anterior, ex. `trips/Aljezur/`) não é servido ao vivo por omissão — fica só como ficheiro no repo, o que na prática significa "inacessível" para o Rafa fora do desktop onde o gerou.
 
 ```
-trips/
-  <Destino>/
-    index.html          ← guia da viagem (mesmo conteúdo gerado seguindo INSTRUCOES_HTML_VIAGEM.md)
-    feedback/index.html ← app "Travel Log" (genérica, grava localmente via localStorage no telemóvel — sem dados do destino embutidos)
+agendas/
+  viagem-atual/
+    index.html   ← guia da viagem em curso (mesmo conteúdo gerado seguindo INSTRUCOES_HTML_VIAGEM.md)
 ```
 
-Exemplo já publicado: `trips/Aljezur/`. Note-se que `trips/Aljezur/trip_aljezur_2026-06.html` é uma cópia de backup pontual (upload manual) — não é uma convenção a repetir; para novas viagens, o par a publicar é só `index.html` + `feedback/index.html`.
+`viagem-atual` é um caminho **fixo e reutilizável** — cada nova viagem substitui o `index.html` anterior neste mesmo caminho, para o link ficar sempre igual e não obrigar o Rafa a guardar um URL novo por viagem. Não criar pastas por destino (`agendas/albania/`, `agendas/aljezur/`, etc.) — é sempre `viagem-atual`, sobrescrito.
 
-Nome da pasta = nome do destino, capitalizado (ex: `Aljezur`, não `aljezur`) — o GitHub é case-sensitive, ao contrário do Cloudflare/hosting que possa servir o conteúdo.
+Não há app "Travel Log" separada publicada junto (isso ficou associado ao padrão antigo `trips/<Destino>/feedback/`); se o Rafa pedir feedback pós-viagem, seguir a rotina `/pos-viagem` normalmente, que não depende deste caminho.
 
-Publicar aqui (commit/push) é uma acção visível no repo partilhado — confirmar com o Rafa antes de dar push, tal como para qualquer outro módulo.
+Publicar aqui (commit/push) é uma acção visível no repo partilhado — confirmar com o Rafa antes de dar push, tal como para qualquer outro módulo. Ficheiros antigos em `trips/<Destino>/` de viagens anteriores a esta mudança podem ficar como estão (histórico), não é preciso migrá-los.
