@@ -35,6 +35,7 @@ Todos os documentos de instrução dos módulos da Agenda (e o `SYSTEM_PROMPT_v6
 | "agenda de lazer", "eventos em Lisboa", "o que há para fazer" | `agenda-de-lazer` | `AGENDA_LAZER_INSTRUCOES*` (mais recente, sem sufixo fixo — ver nota acima) | `agendas/lazer/index.html` |
 | "painel hff", "agenda de trabalho", "cirurgias hoje", "lista bo" | `agenda-de-trabalho` | `INSTRUCOES_PAINEL_HFF_v5.0.md` | `agendas/Hff/index.html` + `agendas/BO/index.html` |
 | "artigos científicos", "gera os artigos", "/artigos" | `artigos` | `INSTRUCOES_ARTIGOS_v1.0.md` (ou mais recente) | `agendas/artigos/index.html` |
+| "atualizar testme", "test me", "simulado cirurgia pediátrica" | `testme` | `TESTME.md` (sem sufixo de versão no nome) | `agendas/personal-development/testme/index.html` |
 
 ## Padrão de publicação (todos os módulos)
 
@@ -53,6 +54,7 @@ agendas/
   lazer/index.html     ← Agenda de Lazer (Módulo 2)
   noticiasB3/          ← gerado por outro projecto, só verificado aqui
   artigos/index.html   ← Artigos Científicos (trigger próprio, ver nota abaixo)
+  personal-development/testme/index.html ← TestMe, prep. Assist. Graduado (trigger próprio, skill `testme`)
 ```
 Nomes de pastas em maiúscula/minúscula têm de respeitar exactamente o que está acima (`Hff`, `BO` maiúsculas; `briefing`, `lazer` minúsculas) — o Cloudflare serve tudo case-insensitive, mas o GitHub não, e uma caixa errada cria pasta duplicada.
 
