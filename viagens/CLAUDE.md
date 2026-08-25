@@ -21,6 +21,7 @@ Há também uma pasta `.obsidian` na pasta Viagens (metadata do vault do Obsidia
 - O Drive não edita ficheiros in-place — uma actualização pode gerar uma cópia nova com o mesmo título. **Se uma busca devolver mais do que um resultado com o mesmo título, usar sempre o de `createdTime` mais recente.**
 - Ficheiros de viagem individual seguem o padrão `trip_[destino]_[YYYY-MM].md` / `.html`; iterações da mesma viagem podem gerar sufixo `_v2`, `_v3`, etc. (o Drive não substitui o ficheiro anterior).
 - Ficheiros de feedback pós-viagem (pasta Trips Passadas): `trip_[destino]_[YYYY-MM]_feedback.md`.
+- **Viagem em preparação (onboarding incremental, jul/2026):** cada viagem ainda por fechar tem uma subpasta própria dentro da pasta Viagens, `[Destino]_[YYYY-MM]` (mesma chave destino+mês/ano que o Rafa usa para identificar as viagens). Dentro dela: `trip_[destino]_[YYYY-MM]_dados.md` (ficheiro-mãe com as respostas acumuladas do Questionário Pré-Viagem, que agora aceita preenchimento parcial/retomável) e `trip_[destino]_[YYYY-MM]_itinerario_preliminar.md` (rascunho leve, gerado a pedido, para discutir com o Rafa antes de fechar a viagem). Os ficheiros finais `.md`/`.html` só nascem quando a viagem é confirmada como fechada — ver `System_prompt_Viagens.md.md`, Trigger 2 e Trigger 2b.
 
 ## Regra importante: ler o system prompt do projecto primeiro
 
@@ -37,7 +38,7 @@ Isto aplica-se mesmo quando o documento da própria rotina disser que isso "não
 | Comando | Rotina | Documento de instrução no Drive |
 |---|---|---|
 | `/sugestao-destinos` | Consultor de destinos — sugere destinos personalizados a partir do perfil + questionário | `INSTRUCOES_SUGESTAO_DESTINOS.md` |
-| `/planear-viagem` | Onboarding de viagem (questionário pré-viagem) + geração do guia HTML | `INSTRUCOES_HTML_VIAGEM.md` (não há um `INSTRUCOES_PRE_VIAGEM.md` separado — a lógica do questionário pré-viagem está descrita no próprio `System_prompt_Viagens.md.md`, Trigger 2) |
+| `/planear-viagem` | Onboarding de viagem — questionário pré-viagem incremental/retomável (Trigger 2), itinerário preliminar a pedido (Trigger 2b) + geração do guia HTML final quando o Rafa fechar a viagem | `INSTRUCOES_HTML_VIAGEM.md` (não há um `INSTRUCOES_PRE_VIAGEM.md` separado — a lógica do questionário pré-viagem está descrita no próprio `System_prompt_Viagens.md.md`, Triggers 2 e 2b) |
 | `/pos-viagem` | Feedback pós-viagem — questionário, actualização do `travel_log.md`, ficheiro de feedback individual | `INSTRUCOES_POS_VIAGEM.md` |
 
 Outras acções mencionadas no system prompt ("continuar viagem em curso", "ver viagens passadas") são simples leituras de ficheiro existente — não têm rotina/skill própria, basta localizar e ler o ficheiro certo na pasta Viagens ou Trips Passadas.
@@ -47,22 +48,21 @@ Outras acções mencionadas no system prompt ("continuar viagem em curso", "ver 
 | Ficheiro | Google Drive ID | Descrição |
 |---|---|---|
 | `questionario_destinos.json` / `.jsx` | `1IjfcrLg9ebUoCFNjc9VqrdbwOlFD4y03` / `1WnLnFfArHIbLIC_D2eG2pkEEouftgZHR` | Perguntas + interface do questionário de sugestão de destinos |
-| `questionario_pre_viagem.jsx` | `1SaMtH3IneRstUcr8vcc_bO124L7XgSEB` | Interface do questionário pré-viagem (usado no `/planear-viagem`) |
+| `questionario_pre_viagem.jsx` | `1TaN61ozZvoinLf1TajM0ZNLVuiVGMB6H` | Interface do questionário pré-viagem, incremental/retomável (usado no `/planear-viagem`) |
 | `questionario_pos_viagem.json` / `.jsx` | `1hWxb_Lk5iOZX7X6zafaZuedmW6-3l2xe` / `15dFQf2aBG_3EBjcFyFyuTKunZhQytT-7` | Perguntas + interface do questionário pós-viagem |
 
-## Publicação no GitHub — `trips/<Destino>/` (prática actual, não documentada nos ficheiros do Drive)
+## Publicação no GitHub — `agendas/viagem-atual/` (caminho live, servido pelo Cloudflare Pages)
 
-Além dos ficheiros criados no Google Drive, o guia de cada viagem e a app de Travel Log já são publicados neste repo, na raiz (pasta `trips/`, ao lado de `agendas/` e `AII/`) — confirmado pelo Rafa como o fluxo real, mesmo os documentos do Drive não mencionando isto:
+**Desde 2026-08, o caminho canónico de publicação é `agendas/viagem-atual/index.html`** — não `trips/<Destino>/`. Motivo: o Cloudflare Pages deste projecto só serve o conteúdo dentro da pasta `agendas/` (ver `agendas/CLAUDE.md`); qualquer coisa fora dessa pasta fica no GitHub mas não fica acessível como página web em qualquer dispositivo. `trips/<Destino>/` (usado numa fase anterior, ex. `trips/Aljezur/`) não é servido ao vivo por omissão — fica só como ficheiro no repo, o que na prática significa "inacessível" para o Rafa fora do desktop onde o gerou.
 
 ```
-trips/
-  <Destino>/
-    index.html          ← guia da viagem (mesmo conteúdo gerado seguindo INSTRUCOES_HTML_VIAGEM.md)
-    feedback/index.html ← app "Travel Log" (genérica, grava localmente via localStorage no telemóvel — sem dados do destino embutidos)
+agendas/
+  viagem-atual/
+    index.html   ← guia da viagem em curso (mesmo conteúdo gerado seguindo INSTRUCOES_HTML_VIAGEM.md)
 ```
 
-Exemplo já publicado: `trips/Aljezur/`. Note-se que `trips/Aljezur/trip_aljezur_2026-06.html` é uma cópia de backup pontual (upload manual) — não é uma convenção a repetir; para novas viagens, o par a publicar é só `index.html` + `feedback/index.html`.
+`viagem-atual` é um caminho **fixo e reutilizável** — cada nova viagem substitui o `index.html` anterior neste mesmo caminho, para o link ficar sempre igual e não obrigar o Rafa a guardar um URL novo por viagem. Não criar pastas por destino (`agendas/albania/`, `agendas/aljezur/`, etc.) — é sempre `viagem-atual`, sobrescrito.
 
-Nome da pasta = nome do destino, capitalizado (ex: `Aljezur`, não `aljezur`) — o GitHub é case-sensitive, ao contrário do Cloudflare/hosting que possa servir o conteúdo.
+Não há app "Travel Log" separada publicada junto (isso ficou associado ao padrão antigo `trips/<Destino>/feedback/`); se o Rafa pedir feedback pós-viagem, seguir a rotina `/pos-viagem` normalmente, que não depende deste caminho.
 
-Publicar aqui (commit/push) é uma acção visível no repo partilhado — confirmar com o Rafa antes de dar push, tal como para qualquer outro módulo.
+Publicar aqui (commit/push) é uma acção visível no repo partilhado — confirmar com o Rafa antes de dar push, tal como para qualquer outro módulo. Ficheiros antigos em `trips/<Destino>/` de viagens anteriores a esta mudança podem ficar como estão (histórico), não é preciso migrá-los.
