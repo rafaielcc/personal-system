@@ -22,8 +22,9 @@
   - Modo Polegar (novo): faixa fixa à esquerda com as 3 Prioridades de Hoje
     (só leitura) + grelha de 12 ícones deslocada para a direita — a zona de
     alcance natural do polegar quando o telemóvel é seguro com uma mão.
-    Deliberadamente mais magro que o Clássico (sem cartão B3/Curso) —
-    é o modo de navegação rápida, não de leitura.
+    Cartão do Curso mantido por baixo da grelha (uso diário, o Rafa sentiu
+    falta na primeira versão sem ele); cartão B3 fica de fora — para o
+    resumo financeiro completo muda para Clássico ou Leitura.
   - Modo Clássico = o antigo modo "Painel" (grelha centrada 4 colunas +
     cartões Hoje/Curso), renomeado, sem mudança de conteúdo.
   - Grelha promovida de 10 para 12 ícones e reordenada: Áudio, Tarefas,
@@ -429,7 +430,24 @@
             </a>
           </div>
         </div>
-        <p class="polegar-hint">Modo rápido — para prioridades completas, B3 e curso, muda para Clássico ou Leitura em baixo.</p>
+
+        <div class="section-label" style="margin-top:16px;">Curso</div>
+        <div class="widgets">
+          <details class="card" data-curso="carnegie">
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
+            <div class="details-body">
+              <p class="curso-fase-tema"></p>
+              <p class="curso-resumo"></p>
+              <p class="muted curso-status" style="display:none;"></p>
+              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
+                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
+                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <p class="polegar-hint">Modo rápido — para prioridades completas e B3, muda para Clássico ou Leitura em baixo.</p>
       </div>
 
       <!-- ===================== MODO CLÁSSICO ===================== -->
