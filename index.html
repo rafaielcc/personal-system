@@ -1,6 +1,6 @@
-<!doctype html>
+<!DOCTYPE html>
 <!--
-  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v4 DARK · três modos + rodapé, 24 Ago 2026)
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v3 DARK · render mecânico, 18 Ago 2026)
   =============================================================================
   Consumido por render.py (mesma pasta Drive): a LLM produz apenas o JSON
   canónico do módulo dashboard; este ficheiro é preenchido por substituição
@@ -11,34 +11,28 @@
   quando não aplicáveis (drawdown null). NUNCA escrever a sintaxe literal
   desses marcadores dentro deste comentário de cabeçalho — a sequência "--"
   seguida de ">" fecha um comentário HTML prematuramente em qualquer
-  parser/browser.
+  parser/browser, e isso já causou este bloco inteiro a vazar como texto
+  visível na página numa versão anterior deste ficheiro.
 
-  Mudanças v4 (24 Ago 2026, pedido do Rafa — protótipo "Alcance do Polegar"
-  aprovado em 3 iterações fora do template antes de aqui entrar):
-  - Alternador de modo sai do topbar e desce para uma barra fixa no rodapé
-    do ecrã, sempre ao alcance do polegar. Passa de 2 para 3 modos:
-    Leitura · Clássico · Polegar — Polegar é o modo por omissão (novo
-    atributo body[data-mode="polegar"]).
-  - Modo Polegar (novo): faixa fixa à esquerda com as 3 Prioridades de Hoje
-    (só leitura) + grelha de 12 ícones deslocada para a direita — a zona de
-    alcance natural do polegar quando o telemóvel é seguro com uma mão.
-    Cartão do Curso mantido por baixo da grelha (uso diário, o Rafa sentiu
-    falta na primeira versão sem ele); cartão B3 fica de fora — para o
-    resumo financeiro completo muda para Clássico ou Leitura.
-  - Modo Clássico = o antigo modo "Painel" (grelha centrada 4 colunas +
-    cartões Hoje/Curso), renomeado, sem mudança de conteúdo.
-  - Grelha promovida de 10 para 12 ícones e reordenada: Áudio, Tarefas,
-    Calendário, Email, Notícias·B3, Clima, Painel HFF, Cirurgias HFF (novo,
-    → hff/index.html#cirurgias), Artigos, TestMe, Lazer, Viagem atual (novo,
-    → viagem-atual/index.html).
-  - Cada ícone ganha uma legenda pequena por baixo do círculo
-    (.tile-label) — não existia antes desta versão.
-  - Corrigido o link do Painel HFF: apontava para "hff/index.html"
-    (minúsculas) mas a pasta real chama-se "Hff/" — GitHub e Cloudflare
-    Pages são case-sensitive, o ícone dava 404. Agora "Hff/index.html".
+  Mudanças v3 (27 Jul 2026, pedido do Rafa):
+  - Grelha promovida de 8 para 9 ícones: novo ícone 📄 Artigos Científicos
+    (→ artigos/index.html), acrescentado antes só ao HTML publicado, agora
+    promovido ao template canónico.
+  - Secção Curso deixa de usar tokens {{COURSE_*}}/render.py — o cartão
+    (data-curso="carnegie") faz fetch ao vivo, client-side, de
+    personal-development/carnegie/data/estado-atual.json (mesmo domínio,
+    sem CORS) e preenche semana/tema/resumo/links via JS no arranque, com
+    fallback silencioso ("sem atualização recente") se o fetch falhar. A
+    LLM/render.py já não precisam de gerar conteúdo de curso — o campo
+    "course" deixou de ser obrigatório no JSON canónico (ver render.py).
+    Blocos AUDIO_PAINEL/AUDIO_LEITURA (áudio do curso) removidos por já não
+    haver token de curso vindo do JSON — se um script de áudio persistido
+    vier a ser necessário no futuro, terá de ser outra fonte de dados.
 
   MODELO sem dados em tempo real (excepto o cartão do curso, que já é ao
-  vivo, e o atalho TestMe, que aponta para módulo próprio publicado).
+  vivo). Hub leve: cabeçalho condensado + grid de ícones soltos (sem caixa/
+  cartão por trás) que apontam, por link real <a href>, para os módulos já
+  publicados.
 
   VARIANTE DARK: fundo navy profundo em toda a página, texto claro brilhante,
   círculos de ícones em pastel (destacam sobre o escuro). Alto contraste.
@@ -46,25 +40,36 @@
   HOSTING (actual): Cloudflare Pages serve o repositório GitHub
   rafaielcc/personal-system automaticamente. Site base:
     https://personal-system-hs5.pages.dev/
-  Estrutura publicada (caminhos SEMPRE tal como no GitHub — atenção a
-  maiúsculas/minúsculas, é case-sensitive):
+  Estrutura publicada (caminhos SEMPRE minúsculos):
     agendas/index.html            ← ESTE ficheiro (o Dashboard É a raiz de agendas/)
     agendas/briefing/index.html   ← briefing diário (tabs internas; áudio no topo da tab Hoje)
-    agendas/Hff/index.html        ← painel HFF pessoal (H maiúsculo!)
+    agendas/hff/index.html        ← painel HFF pessoal
     agendas/bo/index.html         ← lista cirúrgica da equipa (sem ícone — intencional)
     agendas/lazer/index.html      ← agenda de lazer
     agendas/noticiasB3/index.html ← página standalone Notícias/Finanças B3 (rotina AII)
     agendas/artigos/index.html    ← Artigos Científicos (trigger próprio, ver skill artigos)
-    agendas/viagem-atual/index.html ← guia da viagem em curso (caminho fixo, reescrito a cada viagem)
-    personal-development/testme/index.html ← módulo TestMe (caminho absoluto, ver atalho JS no fim)
   Como este ficheiro vive em agendas/, os links relativos abaixo são
-  directos às subpastas (Hff/index.html, briefing/index.html#tarefas, ...).
+  directos às subpastas (hff/index.html, briefing/index.html#tarefas, ...).
+
+  GRELHA — 9 ícones (4×2, o 9º sozinho na 3ª linha):
+    🎧 Briefing (1ª posição — uso diário; abre a tab Hoje, áudio no topo)
+    🏥 HFF · ✅ Tarefas · 📅 Calendário · 📧 Email · 🎭 Lazer ·
+    📈 Notícias/Finanças B3 (fundidos; ponto de alerta condicional) · 🌤️ Tempo ·
+    📄 Artigos Científicos
+
+  TOPBAR — LINHA ÚNICA: data com dia da semana (formato curto PT-PT,
+  ex: "Sex, 3 Jul") · chip 📅 eventos · chip ✅ tarefas · toggle
+  Painel/Leitura. O chip "🎯 [N]" do v1 foi removido (sem significado
+  atribuído), o chip do tempo também (a meteorologia vive só na barra
+  08h/16h/20h com ícones de actividade) e o chip "tipo de dia" também
+  (redundante — o tipo de dia vive na Nota do dia do banner e no cartão
+  "Dia de hoje" do modo Leitura).
 
   NOTA TÉCNICA — deep link para tabs do briefing:
   Os links Tarefas/Calendário/Email/Tempo usam fragmentos (#tarefas,
-  #calendario, #email, #tempo — tabs existentes no briefing). Para abrir já
-  na tab certa, o briefing precisa de um pequeno hash-router no arranque —
-  o painel HFF já tem isto (ver Hff/index.html), o briefing ainda não:
+  #calendario, #email, #tempo — tabs existentes no briefing v12.0). Para
+  abrir já na tab certa, o briefing precisa de um pequeno hash-router no
+  arranque:
     window.addEventListener('DOMContentLoaded', () => {
       const h = location.hash.replace('#','');
       if (h) showTab(h);
@@ -74,7 +79,9 @@
   NOTA — ícones de actividade na barra do tempo:
   Os ícones extra (🚲 bicicleta, 🍷 happy hour, ☕ café, 🎬 cinema) junto de
   cada período do dia são preenchidos, na geração real, a partir das regras
-  do rafa_profile.md / Feedback_log.json. Aqui aparecem como placeholder —
+  do rafa_profile.md / Feedback_log.json (ex: bicicleta só para lazer dentro
+  de Lisboa depois de voltar a casa; happy hour com a Vanessa; café com a
+  Clarinha; cinema em noite de chuva). Aqui aparecem como placeholder —
   a lógica de decisão não faz parte deste template.
 
   BLOCOS CONDICIONAIS (marcados no corpo):
@@ -82,7 +89,8 @@
     estiver em drawdown >20% no relatório AII do dia.
   · Ponto vermelho no ícone Notícias/B3 — mesmo critério.
 
-  Expansíveis nativos (<details>/<summary>) — sem JS adicional, offline.
+  Expansíveis nativos (<details>/<summary>) — sem JS adicional para as abas;
+  apenas o cartão do curso faz fetch de estado vivo.
 -->
 <html lang="pt-PT">
 <head>
@@ -121,7 +129,6 @@
     font-family:'DM Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
-    padding-bottom:78px; /* espaço para a barra de modo fixa no rodapé */
   }
   h1,h2,h3{ font-family:'Fraunces', serif; margin:0; }
   a{ text-decoration:none; color:inherit; }
@@ -142,6 +149,16 @@
     font-family:'Fraunces', serif; font-size:17px; font-weight:700; color:var(--ink-strong);
     letter-spacing:.01em; white-space:nowrap;
   }
+  .seg{
+    display:inline-flex; background:rgba(255,255,255,.08); border:1px solid var(--border);
+    border-radius:999px; padding:2px; gap:2px; flex:0 0 auto; margin-left:auto;
+  }
+  .seg button{
+    border:none; background:transparent; color:var(--muted);
+    font-family:'DM Sans', sans-serif; font-size:11.5px; font-weight:700;
+    padding:5px 11px; border-radius:999px; cursor:pointer;
+  }
+  .seg button.active{ background:var(--gold); color:#102B3A; }
   .chip{
     font-size:12px; font-weight:700; color:var(--ink);
     background:rgba(255,255,255,.08); border:1px solid var(--border);
@@ -176,21 +193,20 @@
   }
   .banner-alert{ color:var(--red); border-color:#6A3730; }
 
-  /* ===== GRID DE ÍCONES — soltos, sem caixa, com legenda ===== */
+  /* ===== GRID DE ÍCONES — soltos, sem caixa ===== */
   .grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:2px; margin-bottom:16px;
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px; margin-bottom:18px;
   }
   .tile{
-    display:flex; flex-direction:column; align-items:center; gap:4px;
+    display:flex; align-items:center; justify-content:center;
     padding:8px 0; position:relative; transition:transform .12s;
   }
   .tile:active{ transform:scale(.90); }
   .tile-circle{
-    width:44px; height:44px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center; font-size:19px;
-    box-shadow:var(--shadow); position:relative;
+    width:50px; height:50px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:23px;
+    box-shadow:var(--shadow);
   }
-  .tile-label{ font-size:8px; color:var(--muted); text-align:center; line-height:1.15; }
   .c-terracotta{ background:#F7DCC9; }
   .c-sage{ background:#DCEBDD; }
   .c-blue{ background:#DCE9F7; }
@@ -199,10 +215,8 @@
   .c-teal{ background:#CFF2EC; }
   .c-navy{ background:#D8E3EA; }
   .c-cream{ background:#F5F0E8; }
-  .c-coral{ background:#F5CBB8; }
-  .c-periwinkle{ background:#DEE2F6; }
   .tile-alert{
-    position:absolute; top:0; right:6px; width:9px; height:9px;
+    position:absolute; top:6px; right:14px; width:9px; height:9px;
     border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(227,106,90,.30);
   }
 
@@ -240,36 +254,6 @@
     font-size:12.5px; font-weight:700; display:flex; align-items:center; gap:7px;
   }
 
-  /* ===== POLEGAR — faixa esquerda (prioridades) + grelha à direita ===== */
-  .prop-band{ display:flex; gap:10px; align-items:stretch; }
-  .prop-rail{ flex:0 0 118px; }
-  .rail-priority{
-    background:var(--card); border:1px solid var(--border); border-radius:var(--radius);
-    padding:12px 10px; height:100%;
-  }
-  .rail-priority .rail-k{
-    font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase;
-    letter-spacing:.06em; display:flex; align-items:center; gap:4px;
-  }
-  .rail-priority ul{ list-style:none; margin:9px 0 0; padding:0; }
-  .rail-priority li{
-    font-size:11px; line-height:1.4; color:var(--ink); text-align:left;
-    padding:7px 0; border-bottom:1px dashed var(--border); display:flex; gap:6px;
-  }
-  .rail-priority li:last-child{ border-bottom:none; }
-  .rail-priority .num{
-    background:var(--terracotta); color:#FFF8EE; font-size:9px; font-weight:700; border-radius:50%;
-    width:14px; height:14px; flex:0 0 14px; display:flex; align-items:center; justify-content:center; margin-top:1px;
-  }
-  .thumb-zone{
-    flex:1; display:grid; grid-template-columns:repeat(3,1fr); gap:10px 6px;
-    background:radial-gradient(130% 100% at 100% 100%, rgba(227,184,88,0.12), transparent 65%);
-    border-radius:var(--radius); padding:8px 4px 4px;
-  }
-  .thumb-zone .tile-circle{ width:48px; height:48px; font-size:21px; margin:0 auto; }
-  .thumb-zone .tile{ padding:4px 0; }
-  .polegar-hint{ text-align:center; font-size:11px; color:var(--muted); margin:12px 0 6px; }
-
   /* ===== CURSO — cartões expansíveis no fundo ===== */
   details.card{ padding:0; overflow:hidden; }
   details.card summary{
@@ -286,15 +270,14 @@
   details.card .details-body .muted{ color:var(--muted); font-size:12px; }
   .audio-script p{ font-size:13.5px; line-height:1.65; }
 
-  /* ===== FOOTER (texto pequeno, fica antes da barra de modo) ===== */
+  /* ===== FOOTER ===== */
   .footer{ text-align:center; margin-top:18px; }
   .footer p{ font-size:11px; color:var(--muted); margin:0; }
 
-  /* ===== MODOS — Leitura / Clássico / Polegar ===== */
-  #view-leitura, #view-classico, #view-polegar{ display:none; }
-  body[data-mode="leitura"] #view-leitura{ display:block; }
-  body[data-mode="classico"] #view-classico{ display:block; }
-  body[data-mode="polegar"] #view-polegar{ display:block; }
+  /* ===== LEITURA ===== */
+  #leitura{ display:none; }
+  body[data-mode="leitura"] #painel{ display:none; }
+  body[data-mode="leitura"] #leitura{ display:block; }
   .read-stack{ display:flex; flex-direction:column; gap:10px; }
   .shortcuts{ display:flex; flex-wrap:wrap; gap:10px; margin-top:2px; }
   .shortcut-link{
@@ -302,37 +285,22 @@
     font-size:17px;
     display:flex; align-items:center; justify-content:center;
   }
-
-  /* ===== BARRA DE MODO — fixa no rodapé, ao alcance do polegar ===== */
-  .modebar{
-    position:fixed; left:0; right:0; bottom:0; z-index:30;
-    background:var(--navy-2); border-top:1px solid var(--border);
-    padding:8px 14px calc(8px + env(safe-area-inset-bottom, 0px));
-  }
-  .modebar-inner{ max-width:680px; margin:0 auto; }
-  .modeseg{
-    display:flex; background:rgba(255,255,255,.06); border:1px solid var(--border);
-    border-radius:999px; padding:3px; gap:2px;
-  }
-  .modeseg button{
-    flex:1; border:none; background:transparent; color:var(--muted);
-    font-family:'DM Sans', sans-serif; font-size:11px; font-weight:700;
-    padding:8px 4px; border-radius:999px; cursor:pointer;
-    display:flex; flex-direction:column; align-items:center; gap:2px;
-  }
-  .modeseg button .ic{ font-size:16px; }
-  .modeseg button.active{ background:var(--gold); color:#102B3A; }
 </style>
 </head>
-<body data-mode="polegar">
+<body data-mode="painel">
 
-  <!-- ===== TOPBAR — linha única, condensado (sem toggle — mudou para o rodapé) ===== -->
+  <!-- ===== TOPBAR — linha única, condensado ===== -->
   <div class="topbar">
     <div class="topbar-inner">
       <div class="topbar-row1">
-        <div class="datebig">Ter, 18 Ago</div>
-        <span class="chip">📅 <b>2</b></span>
-        <span class="chip">✅ <b>4</b></span>
+        <!-- Linha única: data (dia da semana + dia + mês) · eventos · tarefas · toggle -->
+        <div class="datebig">Ter, 25 Ago</div>
+        <span class="chip">📅 <b>3</b></span>
+        <span class="chip">✅ <b>3</b></span>
+        <div class="seg">
+          <button id="btn-painel" class="active" onclick="setMode('painel')">▦ Painel</button>
+          <button id="btn-leitura" onclick="setMode('leitura')">☰ Leitura</button>
+        </div>
       </div>
     </div>
   </div>
@@ -343,166 +311,64 @@
     <div class="wbar">
       <div class="wbar-cell">
         <span class="wbar-time">08h</span>
-        <span class="wbar-main">☁️ 21°</span>
-        <span class="wbar-activity" title="Arranque leve; café se couber">☕</span>
+        <span class="wbar-main">☁️ 19°°</span>
+        <span class="wbar-activity" title="Manha calma">🏠</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">16h</span>
-        <span class="wbar-main">☀️ 27°</span>
-        <span class="wbar-activity" title="Boa janela para deslocações curtas ou corpo">🚲</span>
+        <span class="wbar-main">☁️ 23°°</span>
+        <span class="wbar-activity" title="Tennis antes do fim da tarde">🎾</span>
       </div>
       <div class="wbar-cell">
         <span class="wbar-time">20h</span>
-        <span class="wbar-main">☀️ 24°</span>
-        <span class="wbar-activity" title="Game Night at Amelia Cafe às 19h">🎲</span>
+        <span class="wbar-main">☁️ 21°°</span>
+        <span class="wbar-activity" title="Game Night">🎲</span>
       </div>
     </div>
 
     <div class="content">
 
-      <div class="banner banner-alert">
-        ⚠️ Resolver o voo Tirana-Lisboa primeiro; o resto do dia fica leve se essa pendência sair da cabeça.
-      </div>
+      <!-- ===================== MODO PAINEL ===================== -->
+      <div id="painel">
 
-      <!-- ===================== MODO POLEGAR (por omissão) ===================== -->
-      <div id="view-polegar">
-        <div class="prop-band">
-          <div class="prop-rail">
-            <div class="rail-priority">
-              <div class="rail-k">⚡ Hoje</div>
-              <ul>
-                <li><span class="num">1</span>Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
-                <li><span class="num">2</span>Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
-                <li><span class="num">3</span>Avançar CV update e chegar à Game Night sem ruído pendente</li>
-              </ul>
-            </div>
-          </div>
-          <!-- 12 ícones, mesma ordem/conteúdo da grelha Clássico abaixo — ver nota GRELHA -->
-          <div class="thumb-zone">
-            <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing — áudio do dia">
-              <span class="tile-circle c-cream">🎧</span>
-              <span class="tile-label">Áudio</span>
-            </a>
-            <a class="tile" href="briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
-              <span class="tile-circle c-sage">✅</span>
-              <span class="tile-label">Tarefas</span>
-            </a>
-            <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
-              <span class="tile-circle c-blue">📅</span>
-              <span class="tile-label">Calendário</span>
-            </a>
-            <a class="tile" href="briefing/index.html#email" title="Email" aria-label="Email">
-              <span class="tile-circle c-gold">📧</span>
-              <span class="tile-label">Email</span>
-            </a>
-            <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
-              <span class="tile-circle c-red">📈</span>
-              
-              <span class="tile-label">Notícias</span>
-            </a>
-            <a class="tile" href="briefing/index.html#tempo" title="Clima" aria-label="Clima">
-              <span class="tile-circle c-navy">🌤️</span>
-              <span class="tile-label">Clima</span>
-            </a>
-            <a class="tile" href="Hff/index.html" title="Painel HFF" aria-label="Painel HFF">
-              <span class="tile-circle c-terracotta">🏥</span>
-              <span class="tile-label">HFF</span>
-            </a>
-            <a class="tile" href="Hff/index.html#cirurgias" title="Cirurgias HFF" aria-label="Cirurgias HFF">
-              <span class="tile-circle c-coral">🪒</span>
-              <span class="tile-label">Cirurgias</span>
-            </a>
-            <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
-              <span class="tile-circle c-cream">📄</span>
-              <span class="tile-label">Artigos</span>
-            </a>
-            <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
-              <span class="tile-circle c-blue">🧪</span>
-              <span class="tile-label">TestMe</span>
-            </a>
-            <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
-              <span class="tile-circle c-teal">🎭</span>
-              <span class="tile-label">Lazer</span>
-            </a>
-            <a class="tile" href="viagem-atual/index.html" title="Viagem atual" aria-label="Viagem atual">
-              <span class="tile-circle c-periwinkle">✈️</span>
-              <span class="tile-label">Viagem</span>
-            </a>
-          </div>
+        <div class="banner banner-alert">
+          ⚠️ Briefing, HFF, BO, B3 e artigos estavam desatualizados no preflight; o Dashboard foi renderizado com dados frescos recolhidos hoje e avisos nos modulos dependentes.
         </div>
 
-        <div class="section-label" style="margin-top:16px;">Curso</div>
-        <div class="widgets">
-          <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
-            <div class="details-body">
-              <p class="curso-fase-tema"></p>
-              <p class="curso-resumo"></p>
-              <p class="muted curso-status" style="display:none;"></p>
-              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
-                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
-                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
-              </div>
-            </div>
-          </details>
-        </div>
-
-        <p class="polegar-hint">Modo rápido — para prioridades completas e B3, muda para Clássico ou Leitura em baixo.</p>
-      </div>
-
-      <!-- ===================== MODO CLÁSSICO ===================== -->
-      <div id="view-classico">
-
-        <!-- 12 ícones (4×3): mesma ordem do modo Polegar acima. -->
+        <!-- 9 ícones: Briefing em 1º (uso diário — áudio no topo da tab Hoje).
+             Notícias e Finanças B3 fundidos num só (→ noticiasB3/). 9º ícone
+             (Artigos Científicos) sozinho na 3ª linha da grelha 4×N. -->
         <div class="grid">
           <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing — áudio do dia">
             <span class="tile-circle c-cream">🎧</span>
-            <span class="tile-label">Áudio</span>
+          </a>
+          <a class="tile" href="hff/index.html" title="HFF" aria-label="HFF">
+            <span class="tile-circle c-terracotta">🏥</span>
           </a>
           <a class="tile" href="briefing/index.html#tarefas" title="Tarefas" aria-label="Tarefas">
             <span class="tile-circle c-sage">✅</span>
-            <span class="tile-label">Tarefas</span>
           </a>
           <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
             <span class="tile-circle c-blue">📅</span>
-            <span class="tile-label">Calendário</span>
           </a>
           <a class="tile" href="briefing/index.html#email" title="Email" aria-label="Email">
             <span class="tile-circle c-gold">📧</span>
-            <span class="tile-label">Email</span>
-          </a>
-          <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
-            <span class="tile-circle c-red">📈</span>
-            
-            <span class="tile-label">Notícias</span>
-          </a>
-          <a class="tile" href="briefing/index.html#tempo" title="Clima" aria-label="Clima">
-            <span class="tile-circle c-navy">🌤️</span>
-            <span class="tile-label">Clima</span>
-          </a>
-          <a class="tile" href="Hff/index.html" title="Painel HFF" aria-label="Painel HFF">
-            <span class="tile-circle c-terracotta">🏥</span>
-            <span class="tile-label">HFF</span>
-          </a>
-          <a class="tile" href="Hff/index.html#cirurgias" title="Cirurgias HFF" aria-label="Cirurgias HFF">
-            <span class="tile-circle c-coral">🪒</span>
-            <span class="tile-label">Cirurgias</span>
-          </a>
-          <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
-            <span class="tile-circle c-cream">📄</span>
-            <span class="tile-label">Artigos</span>
-          </a>
-          <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
-            <span class="tile-circle c-blue">🧪</span>
-            <span class="tile-label">TestMe</span>
           </a>
           <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
             <span class="tile-circle c-teal">🎭</span>
-            <span class="tile-label">Lazer</span>
           </a>
-          <a class="tile" href="viagem-atual/index.html" title="Viagem atual" aria-label="Viagem atual">
-            <span class="tile-circle c-periwinkle">✈️</span>
-            <span class="tile-label">Viagem</span>
+          <a class="tile" href="noticiasB3/index.html" title="Notícias · Finanças B3" aria-label="Notícias e Finanças B3">
+            <span class="tile-circle c-red">📈</span>
+            <span class="tile-alert" title="Alerta — drawdown &gt;20%: ROMI3"></span>
+          </a>
+          <a class="tile" href="briefing/index.html#tempo" title="Tempo" aria-label="Tempo">
+            <span class="tile-circle c-navy">🌤️</span>
+          </a>
+          <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
+            <span class="tile-circle c-cream">📄</span>
+          </a>
+          <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
+            <span class="tile-circle c-blue">🧪</span>
           </a>
         </div>
 
@@ -511,15 +377,15 @@
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
-              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
-              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
+              <li><span class="num">1</span> Confirmar os doentes SIGIC/BO desta semana, sobretudo a lista de 26/08 e o bloco de 31/08.</li>
+              <li><span class="num">2</span> Resolver as tarefas de hoje: aula de tennis, matricula da Clara e nota clinica Ninfoplastia/vagina septada.</li>
+              <li><span class="num">3</span> Aproveitar o fim de tarde social: Garden Balthazar as 18h e Game Night as 19h.</li>
             </ol>
           </div>
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
-            
+            <p>Ibovespa em recuperacao no dia, com Vale a puxar o indice. Dolar perto de R$5,15 e foco em tensao EUA-Irao, dados de emprego dos EUA, risco fiscal no Brasil e Braskem em recuperacao extrajudicial. Na carteira, ROMI3 e LREN3 continuam como principais pontos de drawdown.</p>
+            <div class="alert-strip">⚠️ Drawdown &gt;20%: ROMI3 (-42%) — secção obrigatória no Full B3</div>
             <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
           </div>
         </div>
@@ -527,10 +393,10 @@
         <div class="section-label" style="margin-top:16px;">Curso</div>
         <div class="widgets">
           <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
             <div class="details-body">
-              <p class="curso-fase-tema"></p>
-              <p class="curso-resumo"></p>
+              <p class="curso-fase-tema"><b>Reduzir Resistência</b></p>
+              <p class="curso-resumo">As pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
               <p class="muted curso-status" style="display:none;"></p>
               <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
                 <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
@@ -544,39 +410,39 @@
       </div>
 
       <!-- ===================== MODO LEITURA ===================== -->
-      <div id="view-leitura">
+      <div id="leitura">
         <div class="read-stack">
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🏥 Dia de hoje</div>
-            <p><b>Prevenção HFF activa — sem BO hoje</b> · 2 eventos · 4 tarefas pendentes.</p>
-            <p class="muted">Dia relativamente leve no calendário, mas com duas frentes a não deixar escorregar: viagem e organização financeira. O Briefing de hoje está fresco; HFF/BO, Artigos e B3 precisam de regeneração própria para ficarem 100% alinhados.</p>
+            <p><b>Dia leve com lazer marcado</b> · 3 eventos · 3 tarefas pendentes.</p>
+            <p class="muted">Dia sem bloco HFF visivel no calendario. Mantem a tarde curta para fechar pendencias e chega ao Garden Balthazar sem pressa antes da Game Night.</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>☀️ Tempo</div>
-            <p>08h 21° ☁️ · 16h 27° ☀️ 🚲 · 20h 24° ☀️ 🎲</p>
+            <p>08h 19°° ☁️ · 16h 23°° ☁️ 🎾 · 20h 21°° ☁️ 🎲</p>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>⚡ 3 Prioridades de Hoje</div>
             <ol class="priority-list">
-              <li><span class="num">1</span> Resolver ou acompanhar a alteração do voo Tirana-Lisboa</li>
-              <li><span class="num">2</span> Fechar bloco viagem/finanças: itinerário Albânia + Custódia/Holding</li>
-              <li><span class="num">3</span> Avançar CV update e chegar à Game Night sem ruído pendente</li>
+              <li><span class="num">1</span> Confirmar os doentes SIGIC/BO desta semana, sobretudo a lista de 26/08 e o bloco de 31/08.</li>
+              <li><span class="num">2</span> Resolver as tarefas de hoje: aula de tennis, matricula da Clara e nota clinica Ninfoplastia/vagina septada.</li>
+              <li><span class="num">3</span> Aproveitar o fim de tarde social: Garden Balthazar as 18h e Game Night as 19h.</li>
             </ol>
           </div>
 
           <div class="card">
             <div class="card-title"><span class="stripe"></span>📈 B3 hoje</div>
-            <p>Sem relatório AII de 18 Ago encontrado no preflight. A página Notícias/B3 publicada aponta para 17 Ago; para decisão financeira de hoje, regenerar B3 antes de usar os sinais.</p>
-            
+            <p>Ibovespa em recuperacao no dia, com Vale a puxar o indice. Dolar perto de R$5,15 e foco em tensao EUA-Irao, dados de emprego dos EUA, risco fiscal no Brasil e Braskem em recuperacao extrajudicial. Na carteira, ROMI3 e LREN3 continuam como principais pontos de drawdown.</p>
+            <div class="alert-strip">⚠️ Drawdown &gt;20%: ROMI3 (-42%)</div>
           </div>
 
           <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
+            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie · Semana 2 de 17</span><span class="chev">▼</span></summary>
             <div class="details-body">
-              <p class="curso-resumo"></p>
+              <p class="curso-resumo">Reduzir Resistência: as pessoas não resistem às tuas ideias — resistem a sentir-se erradas.</p>
               <p class="muted curso-status" style="display:none;"></p>
               <div class="curso-links" style="display:flex; gap:8px; margin-top:8px;">
                 <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
@@ -589,17 +455,15 @@
             <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
             <div class="shortcuts">
               <a class="shortcut-link c-cream" href="briefing/index.html" title="Briefing · áudio do dia">🎧</a>
+              <a class="shortcut-link c-terracotta" href="hff/index.html" title="HFF">🏥</a>
               <a class="shortcut-link c-sage" href="briefing/index.html#tarefas" title="Tarefas">✅</a>
               <a class="shortcut-link c-blue" href="briefing/index.html#calendario" title="Calendário">📅</a>
               <a class="shortcut-link c-gold" href="briefing/index.html#email" title="Email">📧</a>
+              <a class="shortcut-link c-teal" href="lazer/index.html" title="Lazer">🎭</a>
               <a class="shortcut-link c-red" href="noticiasB3/index.html" title="Notícias · Finanças B3">📈</a>
-              <a class="shortcut-link c-navy" href="briefing/index.html#tempo" title="Clima">🌤️</a>
-              <a class="shortcut-link c-terracotta" href="Hff/index.html" title="Painel HFF">🏥</a>
-              <a class="shortcut-link c-coral" href="Hff/index.html#cirurgias" title="Cirurgias HFF">🪒</a>
+              <a class="shortcut-link c-navy" href="briefing/index.html#tempo" title="Tempo">🌤️</a>
               <a class="shortcut-link c-cream" href="artigos/index.html" title="Artigos Científicos">📄</a>
               <a class="shortcut-link c-blue testme-link" href="/personal-development/testme/index.html" title="TestMe">🧪</a>
-              <a class="shortcut-link c-teal" href="lazer/index.html" title="Lazer">🎭</a>
-              <a class="shortcut-link c-periwinkle" href="viagem-atual/index.html" title="Viagem atual">✈️</a>
             </div>
           </div>
 
@@ -613,30 +477,12 @@
     </div>
   </div>
 
-  <!-- ===== BARRA DE MODO — fixa no rodapé ===== -->
-  <div class="modebar">
-    <div class="modebar-inner">
-      <div class="modeseg">
-        <button id="btn-leitura" data-mode="leitura" onclick="setMode('leitura')"><span class="ic">☰</span>Leitura</button>
-        <button id="btn-classico" data-mode="classico" onclick="setMode('classico')"><span class="ic">▦</span>Clássico</button>
-        <button id="btn-polegar" data-mode="polegar" class="active" onclick="setMode('polegar')"><span class="ic">👍</span>Polegar</button>
-      </div>
-    </div>
-  </div>
-
 <script>
   function setMode(m){
     document.body.dataset.mode = m;
-    ['leitura','classico','polegar'].forEach(function(k){
-      document.getElementById('btn-' + k).classList.toggle('active', m === k);
-    });
+    document.getElementById('btn-painel').classList.toggle('active', m === 'painel');
+    document.getElementById('btn-leitura').classList.toggle('active', m === 'leitura');
   }
-
-  // ===== Atalho TestMe — path absoluto, funciona tanto em agendas/index.html como no espelho na raiz =====
-  (function(){
-    var href = '/personal-development/testme/index.html';
-    document.querySelectorAll('.testme-link').forEach(function(a){ a.href = href; });
-  })();
 
   // ===== Atalho Personal Development (Carnegie) — fetch ao vivo, mesmo domínio =====
   (function(){
@@ -676,7 +522,18 @@
         mostrarFallback('Sem atualização recente do curso.');
       });
   })();
+
+  // ===== TestMe — atalho direto =====
+  (function(){
+    function setTestMeLinks(){
+      const href = '/personal-development/testme/index.html';
+      document.querySelectorAll('.testme-link').forEach(a => a.href = href);
+    }
+    setTestMeLinks();
+  })();
 </script>
 
 </body>
 </html>
+
+
