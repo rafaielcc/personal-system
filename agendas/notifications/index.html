@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Triagem de Notificacoes</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f6f8;
+      --ink: #172026;
+      --muted: #62707a;
+      --line: #d9e0e6;
+      --panel: #ffffff;
+      --blue: #1769aa;
+      --green: #26734d;
+      --red: #b3261e;
+      --amber: #a45d00;
+      --amber-bg: #fff3d6;
+      --shadow: 0 10px 28px rgba(23, 32, 38, .08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(255,255,255,.96);
+      border-bottom: 1px solid var(--line);
+      padding: 16px;
+      backdrop-filter: blur(8px);
+    }
+    .wrap { max-width: 1120px; margin: 0 auto; }
+    h1 { margin: 0; font-size: 28px; letter-spacing: 0; }
+    .sub { color: var(--muted); margin-top: 4px; font-size: 15px; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .stat {
+      background: #eef3f7;
+      border-radius: 8px;
+      padding: 10px;
+      min-height: 68px;
+    }
+    .stat b { display: block; font-size: 22px; }
+    .stat span { color: var(--muted); font-size: 13px; }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    button, .button {
+      border: 0;
+      border-radius: 7px;
+      padding: 11px 13px;
+      font-size: 16px;
+      background: var(--blue);
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    button.secondary { background: #596873; }
+    button.toggle.active { background: var(--green); }
+    main { padding: 16px; }
+    section { margin: 0 auto 18px; max-width: 1120px; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .section-title h2 { margin: 0; font-size: 22px; }
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+    .highlight-item, .group-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .highlight-item { padding: 14px; border-left: 5px solid var(--amber); }
+    .highlight-item h3 { margin: 8px 0 6px; font-size: 19px; }
+    .highlight-item p { margin: 0 0 8px; }
+    .highlight-item small { color: var(--muted); display: block; }
+    .origin-pill {
+      margin-top: 10px;
+      display: inline-block;
+      background: #eef3f7;
+      color: #33424d;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 13px;
+    }
+    .group-card { padding: 15px; margin-bottom: 12px; }
+    .group-card.is-highlight { border-left: 5px solid var(--amber); }
+    .group-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .group-head h2 { margin: 0; font-size: 21px; }
+    .meta { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .priority {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .priority.alta { background: #fde7e9; color: #8b1a10; }
+    .priority.media { background: var(--amber-bg); color: var(--amber); }
+    .priority.baixa { background: #e8eef3; color: #46545f; }
+    .priority.ruido { background: #ece7f5; color: #513b78; }
+    .summary {
+      margin: 12px 0 8px;
+      font-size: 18px;
+    }
+    .reason {
+      margin: 0 0 10px;
+      color: var(--amber);
+      background: var(--amber-bg);
+      padding: 9px 10px;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+    .messages {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+    .messages li { margin-bottom: 10px; }
+    .messages p { margin: 2px 0; }
+    .msg-time, .msg-flags {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .msg-flags {
+      display: inline-block;
+      background: #eef3f7;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .card-actions .neutral { background: #596873; }
+    .card-actions .danger { background: var(--red); }
+    .card-actions .primary { background: var(--green); }
+    .empty {
+      padding: 22px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+    }
+    .toast {
+      position: fixed;
+      left: 16px;
+      right: 16px;
+      bottom: 16px;
+      background: #172026;
+      color: #fff;
+      padding: 12px 14px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: .2s ease;
+      z-index: 20;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    [hidden] { display: none !important; }
+    @media (max-width: 680px) {
+      body { font-size: 18px; }
+      header { padding: 14px; }
+      h1 { font-size: 25px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .group-head { display: block; }
+      .priority { margin-top: 8px; }
+      button, .button { width: auto; min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Triagem de Notificacoes</h1>
+      <div class="sub">Gerado em 2026-08-30 20:25 Europe/Lisbon</div>
+      <div class="stats">
+        <div class="stat"><b>74</b><span>ativas</span></div>
+        <div class="stat"><b>10</b><span>origens</span></div>
+        <div class="stat"><b>0</b><span>revisar</span></div>
+        <div class="stat"><b>5</b><span>highlights</span></div>
+      </div>
+      <div class="toolbar">
+        <button class="toggle" data-filter="review">Mostrar so revisar</button>
+        <button class="toggle" data-filter="highlight">Mostrar so highlights</button>
+        <button class="toggle active" data-filter="noise">Ocultar ruido WhatsApp</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="section-title"><h2>Highlights</h2></div>
+      <div class="highlight-grid">
+    <article class="highlight-item">
+      <span class="priority alta">alta</span>
+      <h3>Jogos de voleibol voltam em 8 de setembro</h3>
+      <p>Foi anunciado que os jogos voltam na terça-feira, 8 de setembro, com o primeiro jogo da temporada a ser lançado em breve.</p>
+      <small>Tem data concreta e parece relevante para lazer recorrente.</small>
+      <div class="origin-pill">Power Rangers do Voleibol</div>
+    </article>
+    
+
+    <article class="highlight-item">
+      <span class="priority alta">alta</span>
+      <h3>Ponto de encontro e localização partilhados</h3>
+      <p>Houve mensagens sobre espera pela localização, pedido de ponto de encontro e envio de location. Parece ser coordenação prática de encontro.</p>
+      <small>Mensagens logísticas tendem a exigir ação rápida no próprio dia.</small>
+      <div class="origin-pill">Hiking @ Lisbon</div>
+    </article>
+    
+
+    <article class="highlight-item">
+      <span class="priority media">media</span>
+      <h3>Possível evento a agendar na quinta-feira</h3>
+      <p>A conversa indica dúvida entre aguardar resultado de evento/discussão ou marcar algo para quinta-feira.</p>
+      <small>Pode virar plano concreto, mas ainda está indefinido.</small>
+      <div class="origin-pill">Social games</div>
+    </article>
+    
+
+    <article class="highlight-item">
+      <span class="priority media">media</span>
+      <h3>Pedido por mais participantes</h3>
+      <p>A mensagem &#x27;Mais alguém?&#x27; sugere chamada para completar jogo ou atividade.</p>
+      <small>Pode ser oportunidade de entrar num jogo, mas falta contexto.</small>
+      <div class="origin-pill">Marcação de jogos</div>
+    </article>
+    
+
+    <article class="highlight-item">
+      <span class="priority media">media</span>
+      <h3>Possível plano para terça-feira</h3>
+      <p>A mensagem &#x27;Tuesday?&#x27; parece continuação de organização social para meio da semana.</p>
+      <small>Há indicação de dia, mas pouca informação isolada.</small>
+      <div class="origin-pill">Friends &amp; plans - Beyond Hello</div>
+    </article>
+    </div>
+    </section>
+
+    <section>
+      <div class="section-title"><h2>Origens</h2></div>
+      
+    <article class="group-card is-highlight" data-priority="alta" data-highlight="true" data-review="false" data-suggested="revisar">
+      <div class="group-head">
+        <div>
+          <h2>Power Rangers do Voleibol</h2>
+          <div class="meta">
+            1 msgs · 0 revisar · ultima: 30/08/2026 15:36:57
+          </div>
+        </div>
+        <span class="priority alta">alta</span>
+      </div>
+      <p class="summary">Jogos de voleibol voltam na terça-feira, 8 de setembro. Vale revisar porque parece anúncio oficial do início da temporada.</p>
+      <p class="reason">Data concreta e assunto alinhado com atividades de lazer.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:36:57</span><p>Bom dia, os jogos vão voltar, terça feira, 8 de setembro, brevemente será lançado o primeiro jogo da temporada!</p><span class="msg-flags">importante</span></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card is-highlight" data-priority="alta" data-highlight="true" data-review="false" data-suggested="revisar">
+      <div class="group-head">
+        <div>
+          <h2>Hiking @ Lisbon</h2>
+          <div class="meta">
+            9 msgs · 0 revisar · ultima: 30/08/2026 20:18:08
+          </div>
+        </div>
+        <span class="priority alta">alta</span>
+      </div>
+      <p class="summary">Há coordenação prática de encontro: pessoas pedem ponto de encontro, aguardam localização, e Rimma enviou location e pediu desculpa pelo atraso.</p>
+      <p class="reason">Quando envolve location/ponto de encontro, pode exigir resposta ou deslocação.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:47:12</span><p>I am waiting for your location, boss</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">30/08/2026 15:54:26</span><p>Can we have a meeting point please</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">30/08/2026 15:58:38</span><p>Location</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">30/08/2026 15:59:20</span><p>The meeting point, sorry, guys for the delay</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">30/08/2026 20:18:08</span><p>9 new messages</p></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Hiking%20%40%20Lisbon" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Hiking%20%40%20Lisbon" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Hiking%20%40%20Lisbon" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card is-highlight" data-priority="media" data-highlight="true" data-review="false" data-suggested="manter">
+      <div class="group-head">
+        <div>
+          <h2>Social games</h2>
+          <div class="meta">
+            2 msgs · 0 revisar · ultima: 30/08/2026 18:46:53
+          </div>
+        </div>
+        <span class="priority media">media</span>
+      </div>
+      <p class="summary">Há uma conversa sobre se o evento é para discussão e se devem marcar algo para quinta-feira. Ainda parece indefinido.</p>
+      <p class="reason">Pode virar plano concreto de social games.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:36:57</span><p>Nono i just said what i read</p></li>
+<li><span class="msg-time">30/08/2026 18:46:53</span><p>Oh the event is for discussion, not to play games, my bad. Should we wait for the results of the event then? Or do we schedule for Thursday?</p><span class="msg-flags">importante</span></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Social%20games" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Social%20games" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Social%20games" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card is-highlight" data-priority="media" data-highlight="true" data-review="false" data-suggested="manter">
+      <div class="group-head">
+        <div>
+          <h2>Marcação de jogos</h2>
+          <div class="meta">
+            1 msgs · 0 revisar · ultima: 30/08/2026 15:36:57
+          </div>
+        </div>
+        <span class="priority media">media</span>
+      </div>
+      <p class="summary">Mensagem curta pedindo mais alguém. Provavelmente chamada para completar uma atividade, mas falta contexto para decidir.</p>
+      <p class="reason">Pode ser oportunidade de entrar num jogo.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:36:57</span><p>Mais alguém?</p><span class="msg-flags">importante</span></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card is-highlight" data-priority="media" data-highlight="true" data-review="false" data-suggested="manter">
+      <div class="group-head">
+        <div>
+          <h2>Friends &amp; plans - Beyond Hello</h2>
+          <div class="meta">
+            1 msgs · 0 revisar · ultima: 30/08/2026 20:02:01
+          </div>
+        </div>
+        <span class="priority media">media</span>
+      </div>
+      <p class="summary">Há uma pergunta &#x27;Tuesday?&#x27; que parece ligada a plano social anterior. Sozinha não basta para agir, mas vale manter se quiser acompanhar.</p>
+      <p class="reason">Indica possível plano em dia específico.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 20:02:01</span><p>Tuesday?</p><span class="msg-flags">importante</span></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card is-highlight" data-priority="media" data-highlight="true" data-review="false" data-suggested="manter">
+      <div class="group-head">
+        <div>
+          <h2>Yoga</h2>
+          <div class="meta">
+            3 msgs · 0 revisar · ultima: 30/08/2026 17:33:57
+          </div>
+        </div>
+        <span class="priority media">media</span>
+      </div>
+      <p class="summary">Há interesse em saber se o yoga acontece todos os domingos às 18h, mas a resposta diz que ainda não está definido e que será postado no grupo.</p>
+      <p class="reason">Pode virar atividade recorrente, mas ainda não exige ação.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:36:57</span><p>Huuuulll estarei lá :)</p></li>
+<li><span class="msg-time">30/08/2026 16:30:26</span><p>É todos os Domingos as 18h?</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">30/08/2026 17:33:57</span><p>Ainda nao sei. Vou postando aqui</p></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Yoga" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Yoga" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Yoga" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card " data-priority="baixa" data-highlight="false" data-review="false" data-suggested="manter">
+      <div class="group-head">
+        <div>
+          <h2>Volleyball</h2>
+          <div class="meta">
+            2 msgs · 0 revisar · ultima: 30/08/2026 15:35:04
+          </div>
+        </div>
+        <span class="priority baixa">baixa</span>
+      </div>
+      <p class="summary">Há mensagens gerais sobre informação do grupo/eventos e uma pergunta de localização. Nada parece exigir ação imediata.</p>
+      
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:33:46</span><p>All the new people who joined... here is our group and events information.</p></li>
+<li><span class="msg-time">30/08/2026 15:35:04</span><p>Where?</p></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Volleyball" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Volleyball" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Volleyball" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card " data-priority="baixa" data-highlight="false" data-review="false" data-suggested="tratado">
+      <div class="group-head">
+        <div>
+          <h2>LisBORA | 3a 20h Atrium Saldanha</h2>
+          <div class="meta">
+            1 msgs · 0 revisar · ultima: 30/08/2026 15:57:11
+          </div>
+        </div>
+        <span class="priority baixa">baixa</span>
+      </div>
+      <p class="summary">Mensagem social sobre cargo bike. Não há convite, horário novo ou ação clara.</p>
+      
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 15:57:11</span><p>Uma cargo bike igual à minha até na cor!! Uau!!! espero que nos cruzemos por aí!!</p></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+
+    <article class="group-card " data-priority="ruido" data-highlight="false" data-review="false" data-suggested="descartar">
+      <div class="group-head">
+        <div>
+          <h2>Lisbon Hiking and Meditation</h2>
+          <div class="meta">
+            45 msgs · 0 revisar · ultima: 30/08/2026 20:04:51
+          </div>
+        </div>
+        <span class="priority ruido">ruido</span>
+      </div>
+      <p class="summary">Grande volume de notificações de fotos e elogios após atividade. Não há ação clara; parece arquivo social do evento.</p>
+      <p class="reason">Ruído alto: muitas fotos podem inflar a fila sem demandar decisão.</p>
+      <ul class="messages">
+        <li><span class="msg-time">30/08/2026 19:02:54</span><p>Photo</p></li>
+<li><span class="msg-time">30/08/2026 19:03:12</span><p>The bridge</p></li>
+<li><span class="msg-time">30/08/2026 19:06:55</span><p>75 new messages</p></li>
+<li><span class="msg-time">30/08/2026 19:49:59</span><p>Wow wow wow amazing pictures</p></li>
+      </ul>
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=manter_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-after-status="manter_origem">Manter</button><button class="neutral" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=tratado_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-after-status="tratado_origem">Marcar tratada</button><button class="danger" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=descartar_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-after-status="descartar_origem">Descartar origem</button>
+      </div>
+    </article>
+    
+    </section>
+  </main>
+  <div class="toast" id="toast">Acao enviada. A proxima geracao da pagina vai refletir a mudanca.</div>
+  <script>
+    const state = { review:false, highlight:false, noise:true };
+    const toast = document.getElementById('toast');
+
+    function applyFilters() {
+      document.querySelectorAll('.group-card').forEach(card => {
+        let visible = true;
+        if (state.review && card.dataset.review !== 'true') visible = false;
+        if (state.highlight && card.dataset.highlight !== 'true') visible = false;
+        if (state.noise && card.dataset.priority === 'ruido') visible = false;
+        card.hidden = !visible;
+      });
+    }
+
+    document.querySelectorAll('[data-filter]').forEach(button => {
+      button.addEventListener('click', () => {
+        const key = button.dataset.filter;
+        state[key] = !state[key];
+        button.classList.toggle('active', state[key]);
+        applyFilters();
+      });
+    });
+
+    document.querySelectorAll('[data-action-url]').forEach(button => {
+      button.addEventListener('click', () => {
+        const url = button.dataset.actionUrl;
+        if (!url || url === '#') return;
+        const ping = new Image();
+        ping.src = url + '&_=' + Date.now();
+        const card = button.closest('.group-card');
+        if (card) {
+          card.style.opacity = '.45';
+          card.dataset.sent = 'true';
+        }
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3200);
+      });
+    });
+
+    applyFilters();
+  </script>
+</body>
+</html>
