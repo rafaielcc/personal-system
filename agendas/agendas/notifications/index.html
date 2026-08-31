@@ -45,20 +45,6 @@
       font-weight: 700;
       font-size: 15px;
     }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .stat {
-      background: #eef3f7;
-      border-radius: 8px;
-      padding: 10px;
-      min-height: 68px;
-    }
-    .stat b { display: block; font-size: 22px; }
-    .stat span { color: var(--muted); font-size: 13px; }
     .filter-bar {
       position: fixed;
       left: 0;
@@ -300,7 +286,6 @@
       body { font-size: 18px; }
       header { padding: 14px; }
       h1 { font-size: 25px; }
-      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .group-top { display: block; }
       .priority { margin-top: 8px; }
       button, .button { min-height: 44px; }
@@ -323,13 +308,7 @@
     <div class="wrap">
       <h1>Triagem de Notificacoes</h1>
       <div class="sub">Gerado em 2026-08-31 12:15 Europe/Lisbon</div>
-      <div class="total-line">16 origens · 121 msgs · 41% review · 47% importantes · 6% ruido</div>
-      <div class="stats">
-        <div class="stat"><b>16</b><span>origens</span></div>
-        <div class="stat"><b>121</b><span>mensagens</span></div>
-        <div class="stat"><b>7</b><span>review</span></div>
-        <div class="stat"><b>8</b><span>importantes</span></div>
-      </div>
+      <div class="total-line">16 origens · 121 msgs · Review 7 (41%) · Importantes 8 (47%) · Ruido 1 (6%)</div>
     </div>
   </header>
 
@@ -337,7 +316,7 @@
     <section>
       <div class="section-title"><h2>Highlights</h2></div>
       <div class="highlight-grid">
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Daina Lituania Voley Tennis" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Daina Lituania Voley Tennis</div>
       <div class="highlight-title">
         <h3>Combinar tenis/volei ainda em aberto</h3>
@@ -345,10 +324,33 @@
       </div>
       <p>Ha uma conversa pratica sobre disponibilidade, precos, locais e reservas. Parece precisar de decisao sobre dia, horario e campo.</p>
       <small>E uma conversa direta e acionavel; se ficar para depois, a disponibilidade de campo pode desaparecer.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="read" data-origin-action="Daina Lituania Voley Tennis" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="review" data-origin-action="Daina Lituania Voley Tennis">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">30/08/2026 23:40:28</span><p>Perguntaram se durante a semana estas disponivel depois das 16h.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 10:39:29</span><p>Pediram para dizer em que dias podes jogar.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 11:01:43</span><p>Os horarios da noite parecem ja reservados; durante o dia e mais barato.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 11:41:31</span><p>A conversa compara localizacao e preco para decidir o campo mais conveniente.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=importante&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Ha%20uma%20conversa%20pratica%20sobre%20disponibilidade%2C%20precos%2C%20locais%20e%20reservas.%20Parece%20precisar%20de%20decisao%20sobre%20dia%2C%20horario%20e%20campo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=nao_importante&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Ha%20uma%20conversa%20pratica%20sobre%20disponibilidade%2C%20precos%2C%20locais%20e%20reservas.%20Parece%20precisar%20de%20decisao%20sobre%20dia%2C%20horario%20e%20campo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=ruido&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Ha%20uma%20conversa%20pratica%20sobre%20disponibilidade%2C%20precos%2C%20locais%20e%20reservas.%20Parece%20precisar%20de%20decisao%20sobre%20dia%2C%20horario%20e%20campo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Marcação de jogos" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Marcação de jogos</div>
       <div class="highlight-title">
         <h3>Campo no Jamor na quarta</h3>
@@ -356,10 +358,30 @@
       </div>
       <p>Ha convite para jogar na quarta-feira, das 18h as 20h, no Jamor, com campo ja marcado.</p>
       <small>Tem data, horario e local definidos; provavelmente exige resposta rapida se houver interesse.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="read" data-origin-action="Marcação de jogos" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="review" data-origin-action="Marcação de jogos">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">31/08/2026 07:42:12</span><p>Convite para jogar na quarta-feira, das 18h as 20h, no Jamor.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=importante&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20no%20Jamor%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=nao_importante&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20no%20Jamor%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=ruido&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20no%20Jamor%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Cycling" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Cycling</div>
       <div class="highlight-title">
         <h3>Convite para pedalar hoje</h3>
@@ -367,10 +389,30 @@
       </div>
       <p>Apareceu convite para andar de bicicleta hoje.</p>
       <small>E sensivel ao tempo: se interessar, deve ser visto no mesmo dia.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cycling" data-card-action="read" data-origin-action="Cycling" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cycling&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cycling" data-card-action="review" data-origin-action="Cycling">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">31/08/2026 10:37:27</span><p>Perguntaram se alguem quer pedalar hoje.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=importante&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Apareceu%20convite%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=nao_importante&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Apareceu%20convite%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=ruido&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Apareceu%20convite%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Friends &amp; plans - Beyond Hello" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Friends &amp; plans - Beyond Hello</div>
       <div class="highlight-title">
         <h3>Plano social no Miradouro Monte Agudo</h3>
@@ -378,10 +420,32 @@
       </div>
       <p>O grupo esta alinhando encontro para amanha depois das 19h30 e o local indicado passou a ser o Miradouro Monte Agudo.</p>
       <small>Ainda ha alguma coordenacao de local, mas ja existe uma referencia concreta no mapa.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="read" data-origin-action="Friends &amp; plans - Beyond Hello" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="review" data-origin-action="Friends &amp; plans - Beyond Hello">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">31/08/2026 11:43:26</span><p>Alguem disse que consegue amanha depois das 19h30.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 12:08:09</span><p>Perguntaram onde fica o miradouro.</p></li>
+<li><span class="msg-time">31/08/2026 12:12:37</span><p>Foi partilhado um link de mapa para o Miradouro Monte Agudo.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=importante&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20alinhando%20encontro%20para%20amanha%20depois%20das%2019h30%20e%20o%20local%20indicado%20passou%20a%20ser%20o%20Miradouro%20Monte%20Agudo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=nao_importante&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20alinhando%20encontro%20para%20amanha%20depois%20das%2019h30%20e%20o%20local%20indicado%20passou%20a%20ser%20o%20Miradouro%20Monte%20Agudo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=ruido&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20alinhando%20encontro%20para%20amanha%20depois%20das%2019h30%20e%20o%20local%20indicado%20passou%20a%20ser%20o%20Miradouro%20Monte%20Agudo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Other activities" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Other activities</div>
       <div class="highlight-title">
         <h3>Bilhete extra disponivel</h3>
@@ -389,10 +453,30 @@
       </div>
       <p>Alguem ofereceu um bilhete extra para quem quiser juntar-se.</p>
       <small>Pode ser oportunidade pontual; falta contexto do evento.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Other%20activities" data-card-action="read" data-origin-action="Other activities" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Other%20activities&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Other%20activities" data-card-action="review" data-origin-action="Other activities">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">30/08/2026 23:01:04</span><p>Alguem disse que tem um bilhete extra disponivel.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=importante&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Alguem%20ofereceu%20um%20bilhete%20extra%20para%20quem%20quiser%20juntar-se.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=nao_importante&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Alguem%20ofereceu%20um%20bilhete%20extra%20para%20quem%20quiser%20juntar-se.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=ruido&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Alguem%20ofereceu%20um%20bilhete%20extra%20para%20quem%20quiser%20juntar-se.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Cinema" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="origin-name">Cinema</div>
       <div class="highlight-title">
         <h3>Abertura de inscricao/bilhetes</h3>
@@ -400,10 +484,31 @@
       </div>
       <p>Varias notificacoes repetem que algo abriu, aparentemente relacionado a bilhetes ou inscricoes.</p>
       <small>O conteudo e curto, mas pode indicar janela de reserva aberta.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cinema" data-card-action="read" data-origin-action="Cinema" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cinema&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cinema" data-card-action="review" data-origin-action="Cinema">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">30/08/2026 23:10:58</span><p>Mensagem curta indicando que abriu.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 00:50:03</span><p>A mesma indicacao foi repetida mais de uma vez.</p></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=importante&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Varias%20notificacoes%20repetem%20que%20algo%20abriu%2C%20aparentemente%20relacionado%20a%20bilhetes%20ou%20inscricoes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=nao_importante&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Varias%20notificacoes%20repetem%20que%20algo%20abriu%2C%20aparentemente%20relacionado%20a%20bilhetes%20ou%20inscricoes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=ruido&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Varias%20notificacoes%20repetem%20que%20algo%20abriu%2C%20aparentemente%20relacionado%20a%20bilhetes%20ou%20inscricoes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     
 
-    <article class="highlight-item">
+    <article class="highlight-item" data-origin="Volleyball" data-priority="media" data-important="true" data-review="false" data-read="false">
       <div class="origin-name">Volleyball</div>
       <div class="highlight-title">
         <h3>Lista de espera aprovada</h3>
@@ -411,6 +516,28 @@
       </div>
       <p>O grupo discutiu vagas e rede extra; a ultima mensagem indica que, por agora, todos estao aprovados.</p>
       <small>Pode confirmar participacao em atividade de volei.</small>
+      
+      <div class="card-actions">
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Volleyball" data-card-action="read" data-origin-action="Volleyball" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Volleyball&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Volleyball" data-card-action="review" data-origin-action="Volleyball">↗ Review</button>
+        <button class="secondary" data-expand>+ Expandir</button>
+      </div>
+      <div class="details" hidden>
+        <div class="details-head">
+          <strong>Mensagens usadas na conclusao</strong>
+          <a class="open-app" href="https://web.whatsapp.com/" target="_blank" rel="noopener">Abrir WhatsApp</a>
+        </div>
+        <ul class="messages">
+          <li><span class="msg-time">31/08/2026 09:38:07</span><p>Perguntaram se ainda dava para aparecer mesmo na lista de espera.</p></li>
+<li><span class="msg-time">31/08/2026 09:46:07</span><p>A capacidade foi aumentada porque conseguiram uma rede extra.</p><span class="msg-flags">importante</span></li>
+<li><span class="msg-time">31/08/2026 09:50:49</span><p>Por agora, todos estao aprovados.</p><span class="msg-flags">importante</span></li>
+        </ul>
+        <div class="feedback">
+          <span>Ensinar a triagem:</span>
+          <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=importante&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas%20e%20rede%20extra%3B%20a%20ultima%20mensagem%20indica%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=nao_importante&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas%20e%20rede%20extra%3B%20a%20ultima%20mensagem%20indica%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=ruido&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas%20e%20rede%20extra%3B%20a%20ultima%20mensagem%20indica%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
+        </div>
+      </div>
+    
     </article>
     </div>
     </section>
@@ -418,7 +545,7 @@
     <section>
       <div class="section-title"><h2>Origens</h2></div>
       
-    <article class="group-card is-important" data-priority="alta" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Daina Lituania Voley Tennis" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Daina Lituania Voley Tennis</div>
@@ -431,9 +558,10 @@
       </div>
       <p class="summary">Conversa direta para organizar jogo: ha discussao de disponibilidade depois das 16h, precos de campo, locais como Lambert/Lumiar/Amoreiras e alternativas mais convenientes para cada pessoa.</p>
       <p class="reason">Precisa provavelmente de uma resposta tua para fechar dia, local e reserva.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="read" data-origin-action="Daina Lituania Voley Tennis" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Daina%20Lituania%20Voley%20Tennis" data-card-action="review" data-origin-action="Daina Lituania Voley Tennis">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -452,10 +580,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=importante&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Conversa%20direta%20para%20organizar%20jogo%3A%20ha%20discussao%20de%20disponibilidade%20depois%20das%2016h%2C%20precos%20de%20campo%2C%20locais%20como%20Lambert/Lumiar/Amoreiras%20e%20alternativas%20mais%20convenientes%20para%20cada%20pessoa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=nao_importante&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Conversa%20direta%20para%20organizar%20jogo%3A%20ha%20discussao%20de%20disponibilidade%20depois%20das%2016h%2C%20precos%20de%20campo%2C%20locais%20como%20Lambert/Lumiar/Amoreiras%20e%20alternativas%20mais%20convenientes%20para%20cada%20pessoa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Daina%20Lituania%20Voley%20Tennis&amp;feedback=ruido&amp;titulo=Combinar%20tenis/volei%20ainda%20em%20aberto&amp;resumo=Conversa%20direta%20para%20organizar%20jogo%3A%20ha%20discussao%20de%20disponibilidade%20depois%20das%2016h%2C%20precos%20de%20campo%2C%20locais%20como%20Lambert/Lumiar/Amoreiras%20e%20alternativas%20mais%20convenientes%20para%20cada%20pessoa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="alta" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Marcação de jogos" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Marcação de jogos</div>
@@ -468,9 +597,10 @@
       </div>
       <p class="summary">Ha convite para jogar no Jamor na quarta-feira, das 18h as 20h, com campo ja marcado.</p>
       <p class="reason">Convite objetivo, com horario definido, que pode precisar de resposta.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="read" data-origin-action="Marcação de jogos" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos" data-card-action="review" data-origin-action="Marcação de jogos">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -486,10 +616,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=importante&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20no%20Jamor%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=nao_importante&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20no%20Jamor%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Marca%C3%A7%C3%A3o%20de%20jogos&amp;feedback=ruido&amp;titulo=Campo%20no%20Jamor%20na%20quarta&amp;resumo=Ha%20convite%20para%20jogar%20no%20Jamor%20na%20quarta-feira%2C%20das%2018h%20as%2020h%2C%20com%20campo%20ja%20marcado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="alta" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Cycling" data-priority="alta" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Cycling</div>
@@ -502,9 +633,10 @@
       </div>
       <p class="summary">Convite simples para andar de bicicleta hoje.</p>
       <p class="reason">E sensivel ao dia; deve ser visto antes de perder utilidade.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cycling" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cycling&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cycling" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cycling" data-card-action="read" data-origin-action="Cycling" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cycling&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cycling" data-card-action="review" data-origin-action="Cycling">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -520,10 +652,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=importante&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Convite%20simples%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=nao_importante&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Convite%20simples%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cycling&amp;feedback=ruido&amp;titulo=Convite%20para%20pedalar%20hoje&amp;resumo=Convite%20simples%20para%20andar%20de%20bicicleta%20hoje.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="media" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Friends &amp; plans - Beyond Hello" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Friends &amp; plans - Beyond Hello</div>
@@ -536,9 +669,10 @@
       </div>
       <p class="summary">O grupo esta combinando um encontro, aparentemente amanha depois das 19h30. O local foi esclarecido como Miradouro Monte Agudo, com link de mapa.</p>
       <p class="reason">E um plano social possivelmente interessante, mas ainda depende de confirmares se queres ir.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="read" data-origin-action="Friends &amp; plans - Beyond Hello" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello" data-card-action="review" data-origin-action="Friends &amp; plans - Beyond Hello">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -556,10 +690,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=importante&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20combinando%20um%20encontro%2C%20aparentemente%20amanha%20depois%20das%2019h30.%20O%20local%20foi%20esclarecido%20como%20Miradouro%20Monte%20Agudo%2C%20com%20link%20de%20mapa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=nao_importante&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20combinando%20um%20encontro%2C%20aparentemente%20amanha%20depois%20das%2019h30.%20O%20local%20foi%20esclarecido%20como%20Miradouro%20Monte%20Agudo%2C%20com%20link%20de%20mapa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Friends%20%26%20plans%20-%20Beyond%20Hello&amp;feedback=ruido&amp;titulo=Plano%20social%20no%20Miradouro%20Monte%20Agudo&amp;resumo=O%20grupo%20esta%20combinando%20um%20encontro%2C%20aparentemente%20amanha%20depois%20das%2019h30.%20O%20local%20foi%20esclarecido%20como%20Miradouro%20Monte%20Agudo%2C%20com%20link%20de%20mapa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="media" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Other activities" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Other activities</div>
@@ -572,9 +707,10 @@
       </div>
       <p class="summary">Existe um bilhete extra disponivel para quem quiser juntar-se a uma atividade.</p>
       <p class="reason">Pode ser oportunidade pontual, mas o contexto do evento nao veio completo na notificacao.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Other%20activities" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Other%20activities&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Other%20activities" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Other%20activities" data-card-action="read" data-origin-action="Other activities" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Other%20activities&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Other%20activities" data-card-action="review" data-origin-action="Other activities">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -590,10 +726,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=importante&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Existe%20um%20bilhete%20extra%20disponivel%20para%20quem%20quiser%20juntar-se%20a%20uma%20atividade.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=nao_importante&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Existe%20um%20bilhete%20extra%20disponivel%20para%20quem%20quiser%20juntar-se%20a%20uma%20atividade.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Other%20activities&amp;feedback=ruido&amp;titulo=Bilhete%20extra%20disponivel&amp;resumo=Existe%20um%20bilhete%20extra%20disponivel%20para%20quem%20quiser%20juntar-se%20a%20uma%20atividade.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="media" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Cinema" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Cinema</div>
@@ -606,9 +743,10 @@
       </div>
       <p class="summary">Ha mensagens repetidas dizendo que algo abriu, provavelmente inscricao, sessao ou bilhetes.</p>
       <p class="reason">Pode haver janela curta para garantir lugar.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cinema" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cinema&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cinema" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Cinema" data-card-action="read" data-origin-action="Cinema" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Cinema&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Cinema" data-card-action="review" data-origin-action="Cinema">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -625,10 +763,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=importante&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Ha%20mensagens%20repetidas%20dizendo%20que%20algo%20abriu%2C%20provavelmente%20inscricao%2C%20sessao%20ou%20bilhetes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=nao_importante&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Ha%20mensagens%20repetidas%20dizendo%20que%20algo%20abriu%2C%20provavelmente%20inscricao%2C%20sessao%20ou%20bilhetes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Cinema&amp;feedback=ruido&amp;titulo=Abertura%20de%20inscricao/bilhetes&amp;resumo=Ha%20mensagens%20repetidas%20dizendo%20que%20algo%20abriu%2C%20provavelmente%20inscricao%2C%20sessao%20ou%20bilhetes.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="media" data-important="true" data-review="false" data-read="false">
+    <article class="group-card is-important" data-origin="Volleyball" data-priority="media" data-important="true" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Volleyball</div>
@@ -641,9 +780,10 @@
       </div>
       <p class="summary">O grupo discutiu vagas/lista de espera. A organizacao conseguiu uma rede extra e indicou que, por agora, todos estao aprovados.</p>
       <p class="reason">Pode confirmar que ha espaco para participar, mas nao parece exigir acao imediata se ja estas inscrito.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Volleyball" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Volleyball&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Volleyball" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Volleyball" data-card-action="read" data-origin-action="Volleyball" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Volleyball&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Volleyball" data-card-action="review" data-origin-action="Volleyball">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -661,10 +801,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=importante&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas/lista%20de%20espera.%20A%20organizacao%20conseguiu%20uma%20rede%20extra%20e%20indicou%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=nao_importante&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas/lista%20de%20espera.%20A%20organizacao%20conseguiu%20uma%20rede%20extra%20e%20indicou%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Volleyball&amp;feedback=ruido&amp;titulo=Lista%20de%20espera%20aprovada&amp;resumo=O%20grupo%20discutiu%20vagas/lista%20de%20espera.%20A%20organizacao%20conseguiu%20uma%20rede%20extra%20e%20indicou%20que%2C%20por%20agora%2C%20todos%20estao%20aprovados.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card is-important" data-priority="media" data-important="true" data-review="true" data-read="false">
+    <article class="group-card is-important" data-origin="Tennis" data-priority="media" data-important="true" data-review="true" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Tennis</div>
@@ -677,9 +818,10 @@
       </div>
       <p class="summary">Ha convites e conversa sobre jogo de tenis, incluindo horario de manha e nivel intermediario/avancado.</p>
       <p class="reason">Pode ser relevante se quiser encaixar tenis na semana.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Tennis" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Tennis&amp;status=revisar">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Tennis" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Tennis" data-card-action="read" data-origin-action="Tennis" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Tennis&amp;status=revisar">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Tennis" data-card-action="review" data-origin-action="Tennis">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -695,10 +837,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Tennis&amp;feedback=importante&amp;titulo=Pode%20valer%20rever&amp;resumo=Ha%20convites%20e%20conversa%20sobre%20jogo%20de%20tenis%2C%20incluindo%20horario%20de%20manha%20e%20nivel%20intermediario/avancado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Tennis&amp;feedback=nao_importante&amp;titulo=Pode%20valer%20rever&amp;resumo=Ha%20convites%20e%20conversa%20sobre%20jogo%20de%20tenis%2C%20incluindo%20horario%20de%20manha%20e%20nivel%20intermediario/avancado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Tennis&amp;feedback=ruido&amp;titulo=Pode%20valer%20rever&amp;resumo=Ha%20convites%20e%20conversa%20sobre%20jogo%20de%20tenis%2C%20incluindo%20horario%20de%20manha%20e%20nivel%20intermediario/avancado.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="true">
+    <article class="group-card " data-origin="LisBORA | 3a 20h Atrium Saldanha" data-priority="baixa" data-important="false" data-review="false" data-read="true">
       <div class="group-top">
         <div>
           <div class="origin-name">LisBORA | 3a 20h Atrium Saldanha</div>
@@ -711,9 +854,10 @@
       </div>
       <p class="summary">A conversa sobre bicicletas bloqueadas foi resolvida com ajuda externa. Depois houve comentarios e aviso de novo site/nome do grupo.</p>
       <p class="reason">Parece informativo e ja encerrado; so vale manter se quiseres acompanhar novidades do grupo.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-card-action="read" data-origin-action="LisBORA | 3a 20h Atrium Saldanha" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha" data-card-action="review" data-origin-action="LisBORA | 3a 20h Atrium Saldanha">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -730,10 +874,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=A%20conversa%20sobre%20bicicletas%20bloqueadas%20foi%20resolvida%20com%20ajuda%20externa.%20Depois%20houve%20comentarios%20e%20aviso%20de%20novo%20site/nome%20do%20grupo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=A%20conversa%20sobre%20bicicletas%20bloqueadas%20foi%20resolvida%20com%20ajuda%20externa.%20Depois%20houve%20comentarios%20e%20aviso%20de%20novo%20site/nome%20do%20grupo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=LisBORA%20%7C%203a%2020h%20Atrium%20Saldanha&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=A%20conversa%20sobre%20bicicletas%20bloqueadas%20foi%20resolvida%20com%20ajuda%20externa.%20Depois%20houve%20comentarios%20e%20aviso%20de%20novo%20site/nome%20do%20grupo.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Power Rangers do Voleibol" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Power Rangers do Voleibol</div>
@@ -746,9 +891,10 @@
       </div>
       <p class="summary">Mensagem informa que os jogos voltam na terca-feira, 8 de setembro.</p>
       <p class="reason">Nao parece urgente hoje, mas e uma data futura util.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Power%20Rangers%20do%20Voleibol&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-card-action="read" data-origin-action="Power Rangers do Voleibol" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Power%20Rangers%20do%20Voleibol&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Power%20Rangers%20do%20Voleibol" data-card-action="review" data-origin-action="Power Rangers do Voleibol">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -764,10 +910,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Power%20Rangers%20do%20Voleibol&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagem%20informa%20que%20os%20jogos%20voltam%20na%20terca-feira%2C%208%20de%20setembro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Power%20Rangers%20do%20Voleibol&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagem%20informa%20que%20os%20jogos%20voltam%20na%20terca-feira%2C%208%20de%20setembro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Power%20Rangers%20do%20Voleibol&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagem%20informa%20que%20os%20jogos%20voltam%20na%20terca-feira%2C%208%20de%20setembro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Social games" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Social games</div>
@@ -780,9 +927,10 @@
       </div>
       <p class="summary">Ha mensagens curtas de coordenacao, mas sem informacao suficiente para virar highlight.</p>
       <p class="reason">Pode ser ruido leve ou continuacao de conversa ja entendida.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Social%20games" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Social%20games&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Social%20games" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Social%20games" data-card-action="read" data-origin-action="Social games" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Social%20games&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Social%20games" data-card-action="review" data-origin-action="Social games">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -798,10 +946,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Social%20games&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Ha%20mensagens%20curtas%20de%20coordenacao%2C%20mas%20sem%20informacao%20suficiente%20para%20virar%20highlight.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Social%20games&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Ha%20mensagens%20curtas%20de%20coordenacao%2C%20mas%20sem%20informacao%20suficiente%20para%20virar%20highlight.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Social%20games&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Ha%20mensagens%20curtas%20de%20coordenacao%2C%20mas%20sem%20informacao%20suficiente%20para%20virar%20highlight.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Yoga" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Yoga</div>
@@ -814,9 +963,10 @@
       </div>
       <p class="summary">Mensagens de atividade de yoga sem indicacao clara de acao imediata.</p>
       <p class="reason">Guardar apenas se quiseres revisar oportunidades de bem-estar depois.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Yoga" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Yoga&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Yoga" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Yoga" data-card-action="read" data-origin-action="Yoga" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Yoga&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Yoga" data-card-action="review" data-origin-action="Yoga">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -832,10 +982,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Yoga&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20de%20atividade%20de%20yoga%20sem%20indicacao%20clara%20de%20acao%20imediata.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Yoga&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20de%20atividade%20de%20yoga%20sem%20indicacao%20clara%20de%20acao%20imediata.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Yoga&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20de%20atividade%20de%20yoga%20sem%20indicacao%20clara%20de%20acao%20imediata.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="true">
+    <article class="group-card " data-origin="Hiking @ Lisbon" data-priority="baixa" data-important="false" data-review="false" data-read="true">
       <div class="group-top">
         <div>
           <div class="origin-name">Hiking @ Lisbon</div>
@@ -847,10 +998,11 @@
         9 msgs · 0 review · ultima: 30/08/2026 20:18:22
       </div>
       <p class="summary">As mensagens parecem ligadas a logistica e fotos de caminhada anterior, com pouca acao futura clara.</p>
-      <p class="reason">Provavelmente pode ser marcado como tratado se o evento ja passou.</p>
+      <p class="reason">Provavelmente pode ser marcado como lido se o evento ja passou.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Hiking%20%40%20Lisbon" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Hiking%20%40%20Lisbon&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Hiking%20%40%20Lisbon" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Hiking%20%40%20Lisbon" data-card-action="read" data-origin-action="Hiking @ Lisbon" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Hiking%20%40%20Lisbon&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Hiking%20%40%20Lisbon" data-card-action="review" data-origin-action="Hiking @ Lisbon">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -866,10 +1018,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Hiking%20%40%20Lisbon&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=As%20mensagens%20parecem%20ligadas%20a%20logistica%20e%20fotos%20de%20caminhada%20anterior%2C%20com%20pouca%20acao%20futura%20clara.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Hiking%20%40%20Lisbon&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=As%20mensagens%20parecem%20ligadas%20a%20logistica%20e%20fotos%20de%20caminhada%20anterior%2C%20com%20pouca%20acao%20futura%20clara.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Hiking%20%40%20Lisbon&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=As%20mensagens%20parecem%20ligadas%20a%20logistica%20e%20fotos%20de%20caminhada%20anterior%2C%20com%20pouca%20acao%20futura%20clara.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Dancing" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Dancing</div>
@@ -882,9 +1035,10 @@
       </div>
       <p class="summary">Conversa sobre locais para dancar em Braga e referencia a um grupo de forro.</p>
       <p class="reason">Pode ser util se estiveres a procurar opcoes em Braga; caso contrario, baixa prioridade.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Dancing" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Dancing&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Dancing" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Dancing" data-card-action="read" data-origin-action="Dancing" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Dancing&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Dancing" data-card-action="review" data-origin-action="Dancing">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -900,10 +1054,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Dancing&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20sobre%20locais%20para%20dancar%20em%20Braga%20e%20referencia%20a%20um%20grupo%20de%20forro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Dancing&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20sobre%20locais%20para%20dancar%20em%20Braga%20e%20referencia%20a%20um%20grupo%20de%20forro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Dancing&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20sobre%20locais%20para%20dancar%20em%20Braga%20e%20referencia%20a%20um%20grupo%20de%20forro.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Off-topic" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Off-topic</div>
@@ -916,9 +1071,10 @@
       </div>
       <p class="summary">Mensagens dispersas de horario/organizacao, sem contexto suficiente para destaque.</p>
       <p class="reason">Nao ha acao clara pela notificacao isolada.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Off-topic" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Off-topic&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Off-topic" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Off-topic" data-card-action="read" data-origin-action="Off-topic" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Off-topic&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Off-topic" data-card-action="review" data-origin-action="Off-topic">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -934,10 +1090,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Off-topic&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20dispersas%20de%20horario/organizacao%2C%20sem%20contexto%20suficiente%20para%20destaque.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Off-topic&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20dispersas%20de%20horario/organizacao%2C%20sem%20contexto%20suficiente%20para%20destaque.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Off-topic&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Mensagens%20dispersas%20de%20horario/organizacao%2C%20sem%20contexto%20suficiente%20para%20destaque.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="baixa" data-important="false" data-review="false" data-read="false">
+    <article class="group-card " data-origin="Los Três Mosqueteros!!" data-priority="baixa" data-important="false" data-review="false" data-read="false">
       <div class="group-top">
         <div>
           <div class="origin-name">Los Três Mosqueteros!!</div>
@@ -950,9 +1107,10 @@
       </div>
       <p class="summary">Conversa pessoal/familiar com fotos e comentarios. Nao ha sinal de evento ou tarefa externa.</p>
       <p class="reason">Foi mantida resumida por privacidade; parece conversa normal, nao triagem de lazer.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21" data-card-action="read" data-origin-action="Los Três Mosqueteros!!" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21" data-card-action="review" data-origin-action="Los Três Mosqueteros!!">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -968,10 +1126,11 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21&amp;feedback=importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20pessoal/familiar%20com%20fotos%20e%20comentarios.%20Nao%20ha%20sinal%20de%20evento%20ou%20tarefa%20externa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21&amp;feedback=nao_importante&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20pessoal/familiar%20com%20fotos%20e%20comentarios.%20Nao%20ha%20sinal%20de%20evento%20ou%20tarefa%20externa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Los%20Tr%C3%AAs%20Mosqueteros%21%21&amp;feedback=ruido&amp;titulo=Atualizacao%20capturada&amp;resumo=Conversa%20pessoal/familiar%20com%20fotos%20e%20comentarios.%20Nao%20ha%20sinal%20de%20evento%20ou%20tarefa%20externa.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
 
-    <article class="group-card " data-priority="ruido" data-important="false" data-review="false" data-read="true">
+    <article class="group-card " data-origin="Lisbon Hiking and Meditation" data-priority="ruido" data-important="false" data-review="false" data-read="true">
       <div class="group-top">
         <div>
           <div class="origin-name">Lisbon Hiking and Meditation</div>
@@ -984,9 +1143,10 @@
       </div>
       <p class="summary">Grande volume de agradecimentos, fotos e elogios relacionados a fotos de caminhada.</p>
       <p class="reason">E principalmente ruido social; a pagina oculta este tipo por defeito.</p>
+      
       <div class="card-actions">
-        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-card-action="read" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation&amp;status=novo">✓ Lida</button>
-        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-card-action="review">↗ Review</button>
+        <button class="primary" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=lido_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-card-action="read" data-origin-action="Lisbon Hiking and Meditation" data-undo-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=status_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation&amp;status=novo">✓ Lida</button>
+        <button class="review" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=review_origem&amp;origem=Lisbon%20Hiking%20and%20Meditation" data-card-action="review" data-origin-action="Lisbon Hiking and Meditation">↗ Review</button>
         <button class="secondary" data-expand>+ Expandir</button>
       </div>
       <div class="details" hidden>
@@ -1003,6 +1163,7 @@
           <button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Lisbon%20Hiking%20and%20Meditation&amp;feedback=importante&amp;titulo=Provavel%20ruido&amp;resumo=Grande%20volume%20de%20agradecimentos%2C%20fotos%20e%20elogios%20relacionados%20a%20fotos%20de%20caminhada.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Importante"><span aria-hidden="true">👍</span><span>Importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Lisbon%20Hiking%20and%20Meditation&amp;feedback=nao_importante&amp;titulo=Provavel%20ruido&amp;resumo=Grande%20volume%20de%20agradecimentos%2C%20fotos%20e%20elogios%20relacionados%20a%20fotos%20de%20caminhada.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Nao importante"><span aria-hidden="true">↓</span><span>Nao importante</span></button><button class="icon-action" data-action-url="https://script.google.com/macros/s/AKfycbyTu2fiqHm24Y4oPTbNQC1cFW6oVUbg0PSDf4-UM2felWnG_smqDZR7O39dmQBNZi_Z/exec?action=feedback_notificacao&amp;origem=Lisbon%20Hiking%20and%20Meditation&amp;feedback=ruido&amp;titulo=Provavel%20ruido&amp;resumo=Grande%20volume%20de%20agradecimentos%2C%20fotos%20e%20elogios%20relacionados%20a%20fotos%20de%20caminhada.&amp;generated_at=2026-08-31%2012%3A15%20Europe/Lisbon&amp;row_refs=" data-toast="Feedback guardado: Ruido"><span aria-hidden="true">🚫</span><span>Ruido</span></button>
         </div>
       </div>
+    
     </article>
     
     </section>
@@ -1032,13 +1193,16 @@
     function visibleByLayer(card) {
       if (card.dataset.read === 'true' && !state.read) return false;
       if (card.dataset.priority === 'ruido' && !state.noise) return false;
-      if (card.dataset.review === 'true') return state.review;
-      if (card.dataset.important === 'true') return state.important;
+      const isReview = card.dataset.review === 'true';
+      const isImportant = card.dataset.important === 'true';
+      if (isReview || isImportant) {
+        return (isReview && state.review) || (isImportant && state.important);
+      }
       return true;
     }
 
     function applyFilters() {
-      document.querySelectorAll('.group-card').forEach(card => {
+      document.querySelectorAll('.group-card, .highlight-item').forEach(card => {
         card.hidden = !visibleByLayer(card);
       });
       document.querySelectorAll('[data-layer]').forEach(button => {
@@ -1090,16 +1254,22 @@
       button.addEventListener('click', () => {
         const url = button.dataset.actionUrl;
         sendAction(url);
-        const card = button.closest('.group-card');
+        const card = button.closest('.group-card, .highlight-item');
+        const origin = button.dataset.originAction;
+        const relatedCards = origin
+          ? document.querySelectorAll('[data-origin="' + CSS.escape(origin) + '"]')
+          : [];
         if (button.dataset.cardAction === 'read' && card) {
-          card.dataset.read = 'true';
+          relatedCards.forEach(item => item.dataset.read = 'true');
           applyFilters();
           showToast('Origem marcada como lida.', { card, url: button.dataset.undoUrl, previousRead: 'false' });
           return;
         }
         if (button.dataset.cardAction === 'review' && card) {
-          card.dataset.review = 'true';
-          card.dataset.read = 'false';
+          relatedCards.forEach(item => {
+            item.dataset.review = 'true';
+            item.dataset.read = 'false';
+          });
           applyFilters();
           showToast('Origem enviada para Review.');
           return;
@@ -1112,7 +1282,10 @@
       if (!undoPayload) return;
       if (undoPayload.url) sendAction(undoPayload.url);
       if (undoPayload.card) {
-        undoPayload.card.dataset.read = undoPayload.previousRead || 'false';
+        const origin = undoPayload.card.dataset.origin;
+        document.querySelectorAll('[data-origin="' + CSS.escape(origin) + '"]').forEach(item => {
+          item.dataset.read = undoPayload.previousRead || 'false';
+        });
         applyFilters();
       }
       toast.classList.remove('show');
