@@ -36,6 +36,7 @@ Todos os documentos de instrução dos módulos da Agenda (e o `SYSTEM_PROMPT_v6
 | "painel hff", "agenda de trabalho", "cirurgias hoje", "lista bo" | `agenda-de-trabalho` | `INSTRUCOES_PAINEL_HFF_v5.0.md` | `agendas/Hff/index.html` + `agendas/BO/index.html` |
 | "artigos científicos", "gera os artigos", "/artigos" | `artigos` | `INSTRUCOES_ARTIGOS_v1.0.md` (ou mais recente) | `agendas/artigos/index.html` |
 | "atualizar testme", "test me", "simulado cirurgia pediátrica" | `testme` | `TESTME.md` (sem sufixo de versão no nome) | `agendas/personal-development/testme/index.html` |
+| "$notificacoes", "notificacoes", "triagem de notificacoes", "espelho notificacoes" | `notificacoes` | `instrucoes_notificacoes.md` (sem sufixo de versão no nome) | `agendas/notificacoes/index.html` + `agendas/agendas/notificacoes/index.html` (espelho, exigido pelo `destination_dir=agendas` do Cloudflare Pages) |
 
 ## Padrão de publicação (todos os módulos)
 
@@ -55,6 +56,8 @@ agendas/
   noticiasB3/          ← gerado por outro projecto, só verificado aqui
   artigos/index.html   ← Artigos Científicos (trigger próprio, ver nota abaixo)
   personal-development/testme/index.html ← TestMe, prep. Assist. Graduado (trigger próprio, skill `testme`)
+  notificacoes/index.html ← Triagem de Notificações WhatsApp (trigger próprio, skill `notificacoes`)
+  agendas/notificacoes/index.html ← espelho do mesmo HTML, exigido pelo destination_dir do Cloudflare Pages
 ```
 Nomes de pastas em maiúscula/minúscula têm de respeitar exactamente o que está acima (`Hff`, `BO` maiúsculas; `briefing`, `lazer` minúsculas) — o Cloudflare serve tudo case-insensitive, mas o GitHub não, e uma caixa errada cria pasta duplicada.
 
