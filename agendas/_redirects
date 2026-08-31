@@ -1,4 +1,0 @@
-/agendas/notificacoes/ /notificacoes/index.html 200
-/agendas/notificacoes/* /notificacoes/:splat 200
-/agendas/notifications/ /notifications/index.html 200
-/agendas/notifications/* /notifications/:splat 200
