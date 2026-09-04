@@ -1032,7 +1032,7 @@
 
     <section class="maintenance">
       <h2>Limpeza por data</h2>
-      <p class="summary">Marcar como lidas as mensagens fora da janela escolhida. 1 dia mantem apenas hoje; 2 dias mantem hoje e ontem. A limpeza fisica fica para o preflight Python no desktop.</p>
+      <p class="summary">Excluir diretamente as mensagens fora da janela escolhida. 1 dia mantem apenas hoje; 2 dias mantem hoje e ontem. O preflight Python aplica a mesma regra no desktop.</p>
       <div class="maintenance-row">
         <label for="expire-days">Manter apenas os ultimos</label>
         <select id="expire-days">
@@ -1041,7 +1041,7 @@
           <option value="3">3 dias</option>
           <option value="5">5 dias</option>
         </select>
-        <button id="expire-button" data-url-1="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=marcar_antigas_lidas&amp;days=1" data-url-2="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=marcar_antigas_lidas&amp;days=2" data-url-3="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=marcar_antigas_lidas&amp;days=3" data-url-5="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=marcar_antigas_lidas&amp;days=5">Marcar fora da janela como lidas</button>
+        <button id="expire-button" data-url-1="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=excluir_antigas&amp;days=1" data-url-2="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=excluir_antigas&amp;days=2" data-url-3="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=excluir_antigas&amp;days=3" data-url-5="https://script.google.com/macros/s/AKfycbwiyhvH6TPwhYilpw0i30xC7F9wh5r6zFpR7Cf4FIa9U4CkAOfpSxoudzidbXbZRn-C/exec?action=excluir_antigas&amp;days=5">Excluir fora da janela</button>
       </div>
     </section>
   </main>
@@ -1228,7 +1228,7 @@
       const days = document.getElementById('expire-days').value;
       const url = event.currentTarget.getAttribute('data-url-' + days);
       sendAction(url);
-      showToast('Mensagens antigas marcadas como lidas para a proxima geracao.');
+      showToast('Mensagens fora da janela excluidas.');
     });
 
     applyFilters();
