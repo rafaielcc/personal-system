@@ -25,3 +25,13 @@ situação de conexão/escala, como esta viagem.
 
 **Condições:** muito calor no dia da visita (térmica de 36°C), o que limitou passar o dia
 inteiro na rua a explorar.
+
+### Restaurante — 5/5
+
+Localização: https://maps.app.goo.gl/wSQwj4JN6kuzC7HC9
+
+Avaliação: muito bom, aprova sem reservas — boa comida, preço bom, 5 estrelas em 5.
+
+- **Prato principal:** punjena pljeskavica.
+- **Entrada:** queijo sérvio (lembra muito o feta cheese) — gostou.
+- **Também gostou de:** páprica (pimento) e cerveja local de pressão.
