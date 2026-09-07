@@ -35,3 +35,18 @@ Avaliação: muito bom, aprova sem reservas — boa comida, preço bom, 5 estrel
 - **Prato principal:** punjena pljeskavica.
 - **Entrada:** queijo sérvio (lembra muito o feta cheese) — gostou.
 - **Também gostou de:** páprica (pimento) e cerveja local de pressão.
+
+---
+
+## Himarë — passeio de barco (reservado em 2026-09-07, para 2026-09-08)
+
+Decidiu fazer o **Grama Bay Boat Tour** (a versão longa, 5h30), em vez do "Pirates Cave Tour"
+mais curto (3h). Contactado via WhatsApp, recomendação do anfitrião da Vourtaréa Guesthouse
+(+355 69 639 9732).
+
+- **Preço de tabela:** 6.000 LEK/pessoa.
+- **Preço fechado com desconto:** 5.500 LEK (~€60).
+- Cobre Livadhi, Aquarium Bay, Jalë, Crystal Beach, Couples Beach, Secret/Turtles Cave, Pigeons
+  Cave, Gjipe, Monastery Cave, Pirates Cave, Dhërmi, Palasë, Thunder Canyon, St. Andreas Bay,
+  Blue Cave e Grama Bay (paragem principal, 1h30).
+- Inclui máscaras de snorkel, capitão/guia, água engarrafada e byrek tradicional.
