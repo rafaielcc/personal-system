@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestMe</title>
+<style>
+  :root{
+    --bg:#f6f3ee;
+    --surface:#ffffff;
+    --ink:#1e2428;
+    --muted:#65727b;
+    --line:#d9dedf;
+    --blue:#2f6f9f;
+    --green:#3b7a57;
+    --amber:#b67818;
+    --red:#b94d45;
+    --lilac:#7a5c99;
+    --shadow:0 8px 24px rgba(30,36,40,.10);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+  button,input,select,textarea{font:inherit}
+  .wrap{max-width:980px;margin:0 auto;padding:18px 14px 42px}
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:16px}
+  h1{margin:0;font-size:28px;letter-spacing:0}
+  .sub{margin:4px 0 0;color:var(--muted);font-size:14px}
+  .status{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end}
+  .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;color:var(--muted)}
+  .tabs{display:flex;gap:6px;overflow:auto;border-bottom:1px solid var(--line);margin-bottom:16px}
+  .tab-btn{border:0;background:transparent;padding:11px 10px;border-bottom:3px solid transparent;color:var(--muted);font-weight:800;white-space:nowrap;cursor:pointer}
+  .tab-btn.active{color:var(--blue);border-color:var(--blue)}
+  .tab{display:none}
+  .tab.active{display:block}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+  .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .split{display:grid;grid-template-columns:1fr 300px;gap:14px}
+  h2{font-size:20px;margin:0 0 10px}
+  h3{font-size:16px;margin:0 0 8px}
+  p{line-height:1.5}
+  .stem{font-size:18px;line-height:1.55;margin:12px 0}
+  .meta{color:var(--muted);font-size:13px}
+  .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
+  .btn[aria-pressed="true"]{box-shadow:0 0 0 3px rgba(47,111,159,.18)}
+  .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
+  .btn.green{background:var(--green);border-color:var(--green);color:white}
+  .btn.amber{background:var(--amber);border-color:var(--amber);color:white}
+  .btn.red{background:var(--red);border-color:var(--red);color:white}
+  .btn.icon{padding:7px 10px}
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  details{border:1px solid var(--line);border-radius:8px;background:#fbfcfc;margin-top:12px}
+  summary{cursor:pointer;padding:12px 13px;font-weight:900}
+  details .body{padding:0 13px 13px}
+  .options{display:grid;gap:8px;margin:10px 0}
+  .option{border:1px solid var(--line);border-radius:8px;padding:10px;background:#fbfcfc;display:flex;gap:9px;align-items:flex-start;cursor:pointer}
+  .option input{margin-top:3px}
+  .option.selected{border-color:var(--blue);background:#eef6fb}
+  .progress{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0}
+  .question-card{border-top:1px solid var(--line);padding:14px 0}
+  .question-card:first-child{border-top:0;padding-top:0}
+  textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical;background:white}
+  select,input[type="number"]{border:1px solid var(--line);border-radius:8px;padding:8px;background:white}
+  .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+  .stat{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fbfcfc}
+  .bar{height:8px;background:#e7eaeb;border-radius:99px;overflow:hidden;margin-top:8px}
+  .bar span{display:block;height:100%;background:var(--blue);width:0}
+  .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1e2428;color:white;padding:10px 13px;border-radius:8px;font-size:13px;display:none}
+  .empty{color:var(--muted);font-style:italic}
+  .notice{border:1px solid #ead39c;background:#fff8e8;color:#6f4b0c;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.45;margin-bottom:12px}
+  @media (max-width:760px){
+    header{display:block}
+    .status{justify-content:flex-start;margin-top:10px}
+    .split{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>TestMe</h1>
+      <p class="sub">Cirurgia pediatrica · pratica escrita · gerado em 2026-09-05T20:45:43+01:00</p>
+    </div>
+    <div class="status" id="statusChips"></div>
+  </header>
+
+  <nav class="tabs" aria-label="Abas TestMe">
+    <button class="tab-btn active" data-tab="questoes">Questoes</button>
+    <button class="tab-btn" data-tab="simulado">Simulado</button>
+    <button class="tab-btn" data-tab="correcao">Correcao</button>
+    <button class="tab-btn" data-tab="evolucao">Evolucao</button>
+  </nav>
+
+  <section class="tab active" id="questoes"></section>
+  <section class="tab" id="simulado"></section>
+  <section class="tab" id="correcao"></section>
+  <section class="tab" id="evolucao"></section>
+</div>
+<div class="toast" id="toast"></div>
+
+<script id="testme-data" type="application/json">{"meta":{"module":"testme","date":"2026-09-05","generated_at":"2026-09-05T20:45:43+01:00","mode":"atualizar_testme","sheet_id":"1umzy0T45iQlN2Fv52OV73PzRpWmgF5GWHUUMBO0Y7wo","sheet_url":"https://docs.google.com/spreadsheets/d/1umzy0T45iQlN2Fv52OV73PzRpWmgF5GWHUUMBO0Y7wo"},"config":{"apps_script_url":"https://script.google.com/macros/s/AKfycbxUxAqhGpAxeNFJGbhfMTEeaGV7mgSPtEtYmmy1er7qK6c9WZUP87TsxJabJ9Sjdk9Ryg/exec","default_simulado_size":5,"next_simulado_size":5,"next_simulado_topics":[]},"current_question":{"question_id":"q_20260905_003","status":"ativa","generated_at":"2026-09-05T20:45:43+01:00","topic":"Neonatologia","format":"discursiva","difficulty":"assistente_graduado","stem":"Recem-nascido com gastrosquise em silo no 2.o dia apresenta aumento progressivo das pressoes ventilatorias, oliguria, perfusao intestinal mais lenta e pressao intravesical elevada durante tentativa de reducao. Descreve como decides entre continuar reducao/fecho, recuar no plano ou intervir, e que parametros monitorizas.","options":[],"correct_answer":"Resposta esperada: priorizar estabilidade fisiologica e viabilidade intestinal; reconhecer sindrome compartimental abdominal/fecho sob tensao; monitorizar ventilacao, retorno venoso/perfusao, lactato/base deficit, diurese, pressao intravesical, perfusao da parede e do intestino no silo; suspender ou reverter reducao se houver compromisso respiratorio, renal ou vascular; otimizar fluidos, analgesia/sedacao, temperatura e nutricao; manter ou reajustar silo/fecho faseado, reservando exploracao urgente para isquemia, perfuracao ou deterioracao nao controlada.","explanation":"A resposta deve valorizar decisao fisiologica e monitorizacao objetiva, nao apenas escolher uma tecnica de encerramento.","source_type":"generated_practice","source_ref":"atualizar_testme_20260905_run3"},"question_bank_summary":{"total_saved":2,"by_topic":{"Upper GI":1,"Trauma":1},"by_format":{"mcq":2}},"current_exam":{"simulado_id":"sim_20260905_003","status":"em_andamento","generated_at":"2026-09-05T20:45:43+01:00","size":5,"requested_topics":[],"format_mix":{"mcq":3,"discursiva":2},"questions":[{"question_id":"sim_20260905c_q001","topic":"Lower GI","format":"mcq","difficulty":"assistente_graduado","stem":"Lactente de 2 meses com doenca de Hirschsprung confirmada por biopsia, aguardando pull-through, chega com febre, distensao, diarreia explosiva, leucocitose e ansas dilatadas, sem pneumoperitoneu. Qual conduta inicial e mais defensavel?","options":[{"label":"A","text":"Reanimacao, antibiotico de largo espetro e irrigacoes retais/descompressao, escalando para derivacao se deteriorar ou nao responder"},{"label":"B","text":"Loperamida e alimentacao oral fracionada, porque a diarreia e o problema dominante"},{"label":"C","text":"Pull-through definitivo urgente durante o quadro septico para remover a zona aganglionica"},{"label":"D","text":"Enema contrastado antes de qualquer tratamento, para confirmar novamente o nivel de transicao"}],"correct_answer":"A","explanation":"A enterocolite associada a Hirschsprung e urgencia clinica. O tratamento inicial e suporte, antibiotico, descompressao/irrigacoes e vigilancia; cirurgia de derivacao entra se houver peritonite, perfuracao, instabilidade ou falha de resposta. Antidiarreicos, atraso diagnostico ou pull-through em sepsis aumentam risco."},{"question_id":"sim_20260905c_q002","topic":"Trauma","format":"mcq","difficulty":"assistente_graduado","stem":"Crianca de 10 anos com traumatismo esplenico grau IV, hemodinamicamente estavel apos bolus inicial, Hb em queda lenta e blush arterial pequeno na TC. Esta num hospital com radiologia de intervencao disponivel. Qual estrategia e mais adequada?","options":[{"label":"A","text":"Laparotomia imediata em todo grau IV, independentemente da resposta hemodinamica"},{"label":"B","text":"Alta precoce se estiver sem dor, porque o grau radiologico nao altera vigilancia"},{"label":"C","text":"Manejo nao operatorio em ambiente monitorizado, com limiar baixo para angioembolizacao se sangramento ativo persistir ou necessidade transfusional evoluir"},{"label":"D","text":"Esplenectomia profilatica para evitar pseudocisto e vacinacao tardia"}],"correct_answer":"C","explanation":"Em trauma esplenico pediatrico, estabilidade hemodinamica dirige tratamento nao operatorio. Lesao vascular/blush e queda de Hb exigem monitorizacao, disponibilidade de sangue e consideracao seletiva de angioembolizacao; laparotomia e para instabilidade ou falha de manejo conservador."},{"question_id":"sim_20260905c_q003","topic":"Hepatobiliar/Pancreatico","format":"mcq","difficulty":"assistente_graduado","stem":"Lactente com atresia biliar operada por Kasai aos 68 dias, agora com 7 meses, ictericia persistente, episodios repetidos de colangite e sinais iniciais de hipertensao portal. Qual proximo passo e mais defensavel?","options":[{"label":"A","text":"Repetir portoenterostomia para tentar atrasar qualquer discussao de transplante"},{"label":"B","text":"Suspender seguimento se houver algum fluxo biliar, porque a hipertensao portal e esperada e benigna"},{"label":"C","text":"Referenciar precocemente para avaliacao de transplante hepatico, mantendo otimizacao nutricional, controlo de colangite e vigilancia de complicacoes"},{"label":"D","text":"Fazer colecistectomia eletiva como tratamento da colangite recorrente"}],"correct_answer":"C","explanation":"Ictericia persistente, colangite recorrente e hipertensao portal apos Kasai sugerem falha ou evolucao desfavoravel e exigem avaliacao precoce para transplante, sem abandonar suporte nutricional e tratamento de complicacoes. Re-Kasai e excecional e dependente de contexto."},{"question_id":"sim_20260905c_q004","topic":"Upper GI","format":"discursiva","difficulty":"assistente_graduado","stem":"Recem-nascido com atresia esofagica long-gap apos controlo inicial de fistula e gastrostomia, clinicamente estavel. Discute principios para decidir entre preservacao do esofago nativo, anastomose diferida e substituicao esofagica.","options":[],"correct_answer":"Resposta esperada: confirmar tipo anatomico e medir gap por estudos contrastados/endoscopia conforme protocolo; manter aspiracao do coto, controlo de refluxo/aspiracao e nutricao por gastrostomia; preferir preservacao do esofago nativo quando viavel; considerar crescimento espontaneo, tracao/alongamento ou anastomose diferida em centro experiente; reconhecer limites de tensao e risco de leak/estenose; reservar substituicao gastrica/colonica/jejunal para quando o esofago nativo nao e recuperavel ou apos falhas, ponderando morbilidade a longo prazo.","explanation":"A correcao deve valorizar estrategia faseada, preservacao do esofago nativo e reconhecimento dos custos funcionais de substituicao."},{"question_id":"sim_20260905c_q005","topic":"Urologia","format":"discursiva","difficulty":"assistente_graduado","stem":"Rapaz com valvas da uretra posterior tratadas no periodo neonatal mantem hidroureteronefrose bilateral, refluxo de alto grau e infeccoes febris, com creatinina estavel mas bexiga trabeculada. Como estruturarias a avaliacao e tratamento antes de indicar cirurgia anti-refluxo?","options":[],"correct_answer":"Resposta esperada: confirmar se ha obstrucao residual/valvas persistentes e avaliar funcao renal diferencial; fazer ecografia seriada, cistografia conforme necessidade e estudo urodinamico; reconhecer que refluxo em bexiga de alta pressao nao se resolve com reimplante isolado; otimizar bexiga com miccao programada/CIC quando indicado, anticolinergico ou outra terapeutica, tratar obstipacao/disfuncao intestinal e profilaxia/controlo de ITU; considerar ampliacao/derivacao em casos selecionados; indicar reimplante apenas apos controlar pressao/compliance e definir objetivo renal/infeccioso.","explanation":"A resposta deve priorizar dinamica vesical e protecao renal, nao uma correcao anatomica isolada do refluxo."}]},"recent_correction":{"simulado_id":"sim_20260905_002","corrected_at":"2026-09-05T20:45:43+01:00","total_score":5,"max_score":7,"items":[{"question_id":"sim_20260905b_q001","topic":"Upper GI","format":"mcq","stem":"Recem-nascido com atresia esofagica tipo C foi submetido a laqueacao da fistula e anastomose primaria sob alguma tensao. No 5.o dia, drenagem salivar pequena pelo dreno cervical/toracico, sem instabilidade, sem colecao significativa e ventilacao em desmame. Qual conduta inicial e mais defensavel?","options":[{"label":"A","text":"Reoperar imediatamente para refazer a anastomose, porque qualquer fistula salivar implica falha tecnica"},{"label":"B","text":"Tratamento conservador com drenagem adequada, antibiotico/suporte nutricional e vigilancia estreita se a fuga for pequena e bem controlada"},{"label":"C","text":"Retirar o dreno para permitir encerramento espontaneo mais rapido"},{"label":"D","text":"Dilatar precocemente a anastomose para reduzir pressao intraluminal"}],"rafael_answer":"B","correct_answer":"B","score":1,"max_points":1,"llm_comment":"Correta. Reconheceste que uma fuga pequena, bem drenada e sem sepsis apos anastomose esofagica pode ser observada com drenagem, antibiotico e suporte nutricional."},{"question_id":"sim_20260905b_q002","topic":"Torax","format":"mcq","stem":"RN com hernia diafragmatica congenita esquerda, hipertensao pulmonar significativa e necessidade de ventilacao de alta frequencia estabiliza apos 48 horas, com lactato em queda e menor suporte vasoativo. A familia pergunta quando sera operado. Qual criterio e mais apropriado para timing de reparacao?","options":[{"label":"A","text":"Operar sempre nas primeiras 6 horas para permitir expansao pulmonar"},{"label":"B","text":"Aguardar estabilizacao fisiologica cardio-respiratoria antes da reparacao, sem perseguir cirurgia emergente apenas pela anatomia"},{"label":"C","text":"Adiar obrigatoriamente ate extubacao completa"},{"label":"D","text":"Colocar dreno toracico profilatico antes da reparacao para melhorar mediastino"}],"rafael_answer":"B","correct_answer":"B","score":1,"max_points":1,"llm_comment":"Correta. A prioridade na hernia diafragmatica congenita e estabilizacao cardio-respiratoria e controlo da hipertensao pulmonar antes da reparacao."},{"question_id":"sim_20260905b_q003","topic":"Urologia","format":"mcq","stem":"Lactente com hipospadias proximal, chordee acentuado e testiculo unilateral nao palpavel e referenciado para correcao. Qual passo deve preceder qualquer plano reconstrutivo definitivo?","options":[{"label":"A","text":"Circuncisao para facilitar higiene enquanto aguarda cirurgia"},{"label":"B","text":"Avaliar possibilidade de DSD com cariotipo/estudo endocrino e localizacao gonadal, alem de planear reconstrucao em equipa experiente"},{"label":"C","text":"Reparacao tubularizada em tempo unico sem estudo adicional se o meato for visivel"},{"label":"D","text":"Tratamento hormonal empirico como substituto da avaliacao anatomica"}],"rafael_answer":"B","correct_answer":"B","score":1,"max_points":1,"llm_comment":"Correta. Hipospadias proximal associado a gonada nao palpavel deve levantar suspeita de DSD e preceder reconstrucao com avaliacao endocrina/genetica e anatomica."},{"question_id":"sim_20260905b_q004","topic":"Oncologia","format":"discursiva","stem":"Crianca de 3 anos com massa suprarrenal, calcificacoes e envolvimento de vasos mesentericos/celiacos na imagem, sem instabilidade. Estrutura a abordagem inicial de um neuroblastoma suspeito com image-defined risk factors.","options":[],"rafael_answer":"1. É necessário fazer uma avaliação analítica laboratorial completa, avaliar a função renal, teste de coagulação e hemograma, para completar a avaliação do estado geral da criança.\n2. Tem que fazer o melhor estadiamento da lesão. Tem que verificar a extensão da lesão local através do exame de imagem, provavelmente um ato magnético, avaliar os órgãos abdominais, ver se tem extensão para órgãos distantes, avaliar os pulmões e discutir com a radiologia o diagnóstico do neuroblastoma também estabelecido.\n\n\nApós estes exames, eu defino o plano cirúrgico de acordo com o protocolo local da instituição.","correct_answer":"Confirmar extensao anatomica e metastatica com imagem adequada e MIBG/PET conforme protocolo; dosear catecolaminas e completar marcadores/medula; reconhecer IDRFs como razao para evitar resseccao primaria agressiva; obter tecido com seguranca para histologia e biologia molecular; estratificar risco em reuniao multidisciplinar e iniciar tratamento neoadjuvante quando indicado, reavaliando a ressecabilidade apos resposta.","score":0.75,"max_points":2,"llm_comment":"Resposta parcialmente correta: incluiste avaliacao geral, imagem local/metastatica e discussao com radiologia/protocolo. Faltou o nucleo decisivo do caso: IDRFs devem travar uma resseccao primaria agressiva; era preciso mencionar obtencao segura de tecido, histologia/biologia molecular, catecolaminas/MIBG ou equivalente, estratificacao de risco e tratamento neoadjuvante antes de reavaliar cirurgia."},{"question_id":"sim_20260905b_q005","topic":"Outros","format":"discursiva","stem":"Recem-nascido com malformacao linfatica cervicofacial extensa, estridor intermitente e dificuldade alimentar. Descreve prioridades de avaliacao e tratamento inicial, incluindo quando nao se deve precipitar uma excisao cirurgica.","options":[],"rafael_answer":"Inicialmente, tem que se avaliar a extensão e as características da lesão, também o exame de imagem, bem como se se trata de mesmo uma malformação linfática e, se for o caso, qual a característica da mesma: se é macrocística, microcística ou mista.\n\nSe for uma macrocística, ela pode ser até causada por uma tentativa de esclerose por punção com aspiração do líquido esclerose. Isso traz a vantagem de evitar uma cirurgia, mas de tipos mais extensos. Tem que ser avaliada bem se ela tem relação com as vias aéreas ou as vias digestivas, e se tem riscos de derramar para as meningocele, para evitar qualquer lesão mais grave aos orgaos da criança.","correct_answer":"Priorizar via aerea e alimentacao; definir extensao cervical/oral/mediastinica e componente macro/microcistico por imagem; envolver ORL, anestesia, cuidados intensivos e radiologia de intervencao; preparar via aerea dificil/traqueostomia se necessario; tratar infeccao ou hemorragia; considerar escleroterapia, terapias sistemicas selecionadas ou cirurgia faseada, evitando excisao agressiva inicial quando o risco funcional/neurovascular e alto.","score":1.25,"max_points":2,"llm_comment":"Boa direcao geral: valorizaste imagem, classificacao macro/microcistica, relacao com via aerea/digestiva e escleroterapia como alternativa a cirurgia. Para uma resposta de graduado faltou abrir pela prioridade de via aerea e alimentacao, explicitar equipa ORL/anestesia/UCIP/radiologia de intervencao, plano de intubacao dificil ou traqueostomia, e situacoes agudas como infeccao ou hemorragia. A parte sobre meningocele parece imprecisa."}]},"evolution":{"by_topic":{"Neonatologia":{"percent":100,"answered":1},"Hepatobiliar/Pancreatico":{"percent":100,"answered":1},"Urologia":{"percent":100,"answered":2},"Oncologia":{"percent":31,"answered":2},"Lower GI":{"percent":75,"answered":1},"Upper GI":{"percent":100,"answered":1},"Torax":{"percent":100,"answered":1},"Outros":{"percent":63,"answered":1}},"by_format":{"mcq":{"percent":100,"answered":6},"discursiva":{"percent":50,"answered":4}},"history":[{"simulado_id":"sim_20260905_001","corrected_at":"2026-09-05T19:12:40+01:00","total_score":5,"max_score":7,"percent":71,"score_by_topic":{"Neonatologia":100,"Hepatobiliar/Pancreatico":100,"Urologia":100,"Oncologia":25,"Lower GI":75}},{"simulado_id":"sim_20260905_002","corrected_at":"2026-09-05T20:45:43+01:00","total_score":5,"max_score":7,"percent":71,"score_by_topic":{"Upper GI":100,"Torax":100,"Urologia":100,"Oncologia":37.5,"Outros":62.5}}]}}</script>
+<script>
+const DATA = JSON.parse(document.getElementById('testme-data').textContent);
+const $ = (sel, root=document) => root.querySelector(sel);
+const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const STORE_KEY = 'testme:state:v1';
+const QUEUE_KEY = 'testme:pendingActions:v1';
+const localState = loadLocalState();
+
+function loadLocalState(){
+  try {
+    return JSON.parse(localStorage.getItem(STORE_KEY) || '{}');
+  } catch {
+    return {};
+  }
+}
+
+function saveLocalState(){
+  localStorage.setItem(STORE_KEY, JSON.stringify(localState));
+}
+
+function queueLocalAction(body){
+  let queue = [];
+  try {
+    queue = JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]');
+  } catch {
+    queue = [];
+  }
+  queue.push(body);
+  localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+}
+
+function toast(msg){
+  const el = $('#toast');
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => el.style.display = 'none', 2600);
+}
+
+function speak(text){
+  if (!('speechSynthesis' in window)) return toast('Audio indisponivel neste browser.');
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'pt-PT';
+  window.speechSynthesis.speak(utterance);
+}
+
+async function postAction(type, payload){
+  const url = DATA.config?.apps_script_url;
+  const body = {type, created_at:new Date().toISOString(), payload};
+  if (!url){
+    queueLocalAction(body);
+    renderStatus();
+    toast('Guardado neste browser. Falta ligar o Apps Script para gravar na Sheet.');
+    return {queued:true};
+  }
+  await fetch(url, {method:'POST', mode:'no-cors', headers:{'Content-Type':'text/plain'}, body:JSON.stringify(body)});
+  toast('Gravado na Sheet.');
+  return {posted:true};
+}
+
+function renderStatus(){
+  const q = DATA.current_question || {};
+  const e = DATA.current_exam || {};
+  const examState = getExamState();
+  $('#statusChips').innerHTML = [
+    `Pergunta: ${esc(q.status || 'ativa')}`,
+    `Simulado: ${esc(examState.status || e.status || 'novo')}`,
+    `Banco: ${esc(DATA.question_bank_summary?.total_saved ?? 0)}`,
+    `Por gravar: ${pendingActionCount()}`
+  ].map(x => `<span class="chip">${x}</span>`).join('');
+}
+
+function pendingActionCount(){
+  try {
+    return JSON.parse(localStorage.getItem(QUEUE_KEY) || '[]').length;
+  } catch {
+    return 0;
+  }
+}
+
+function renderQuestion(){
+  const q = DATA.current_question;
+  if (!q) {
+    $('#questoes').innerHTML = '<div class="panel"><p class="empty">Ainda nao ha pergunta ativa.</p></div>';
+    return;
+  }
+  resetQuestionLocalStateIfNeeded();
+  const qState = localState.currentQuestion || {};
+  const isSaved = !!qState.saved;
+  const isSeen = !!qState.seen;
+  const wantsNext = !!qState.wants_next;
+  const selected = qState.selected_option || '';
+  const options = (q.options || []).map(opt => `
+    <label class="option ${selected === opt.label ? 'selected' : ''}">
+      <input type="radio" name="current_question_answer" value="${esc(opt.label)}" ${selected === opt.label ? 'checked' : ''} onchange="selectCurrentAnswer('${esc(opt.label)}')">
+      <span><b>${esc(opt.label)}.</b> ${esc(opt.text)}</span>
+    </label>`).join('');
+  $('#questoes').innerHTML = `
+    <div class="panel">
+      ${DATA.config?.apps_script_url ? '' : '<div class="notice">Acoes ficam guardadas neste browser ate o Apps Script estar ligado. Ainda nao gravam na Sheet.</div>'}
+      <div class="row">
+        <span class="chip">${esc(q.topic)}</span>
+        <span class="chip">${q.format === 'mcq' ? 'Escolha multipla' : 'Discursiva'}</span>
+        <button class="btn icon" onclick="speak(DATA.current_question.stem)">Ouvir pergunta</button>
+      </div>
+      <p class="stem">${esc(q.stem)}</p>
+      ${q.format === 'mcq' ? `<div class="options">${options}</div>` : `<textarea id="currentDiscursiveAnswer" placeholder="Resposta livre" oninput="selectCurrentAnswer(this.value)">${esc(qState.response_text || '')}</textarea>`}
+      <details>
+        <summary>Resposta e justificacao</summary>
+        <div class="body">
+          <div class="row"><button class="btn icon" onclick="speak(DATA.current_question.explanation)">Ouvir resposta</button></div>
+          <p><b>Resposta:</b> ${esc(q.correct_answer)}</p>
+          <p>${esc(q.explanation)}</p>
+        </div>
+      </details>
+      <div class="actions">
+        <button class="btn" aria-pressed="${isSeen}" onclick="markCurrentSeen()">${isSeen ? 'Vista marcada' : 'Vista'}</button>
+        <button class="btn green" aria-pressed="${isSaved}" onclick="toggleCurrentSave()">${isSaved ? 'Salva - clicar para retirar' : 'Salvar'}</button>
+        <button class="btn amber" aria-pressed="${wantsNext}" onclick="requestNextQuestion()">${wantsNext ? 'Proxima pedida' : 'Pedir proxima pergunta'}</button>
+      </div>
+      <p class="meta">A proxima pergunta aparece depois de correr <b>Atualizar TestMe</b>.</p>
+    </div>`;
+}
+
+function resetQuestionLocalStateIfNeeded(){
+  const qid = DATA.current_question?.question_id;
+  if (localState.currentQuestion?.question_id !== qid){
+    localState.currentQuestion = {question_id: qid};
+    saveLocalState();
+  }
+}
+
+function selectCurrentAnswer(value){
+  resetQuestionLocalStateIfNeeded();
+  const q = DATA.current_question || {};
+  if (q.format === 'mcq') localState.currentQuestion.selected_option = value;
+  else localState.currentQuestion.response_text = value;
+  saveLocalState();
+  if (q.format === 'mcq') renderQuestion();
+}
+
+function markCurrentSeen(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.seen = true;
+  saveLocalState();
+  postAction('question_seen', {
+    question_id: DATA.current_question.question_id,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
+}
+
+function toggleCurrentSave(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.saved = !localState.currentQuestion.saved;
+  saveLocalState();
+  postAction('question_save_toggle', {
+    question_id: DATA.current_question.question_id,
+    saved: localState.currentQuestion.saved,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
+}
+
+function requestNextQuestion(){
+  resetQuestionLocalStateIfNeeded();
+  localState.currentQuestion.wants_next = true;
+  saveLocalState();
+  postAction('question_next_requested', {
+    question_id: DATA.current_question.question_id,
+    selected_option: localState.currentQuestion.selected_option || '',
+    response_text: localState.currentQuestion.response_text || ''
+  });
+  renderQuestion();
+}
+
+function renderExam(){
+  const e = DATA.current_exam || {};
+  const questions = e.questions || [];
+  resetExamLocalStateIfNeeded();
+  const examState = getExamState();
+  const isFinished = examState.status === 'terminado' || e.status === 'terminado' || e.status === 'corrigido';
+  const answered = questions.filter(q => hasExamAnswer(q.question_id)).length;
+  const cards = questions.map((q, idx) => `
+    <div class="question-card">
+      <div class="row"><span class="chip">${idx+1}</span><span class="chip">${esc(q.topic)}</span><span class="chip">${esc(q.format)}</span></div>
+      <p>${esc(q.stem)}</p>
+      ${q.format === 'mcq'
+        ? `<select data-q="${esc(q.question_id)}" data-topic="${esc(q.topic)}" data-format="${esc(q.format)}" onchange="setExamAnswer('${esc(q.question_id)}', this.value)" ${isFinished ? 'disabled' : ''}><option value="">Resposta...</option>${(q.options||[]).map(o => `<option value="${esc(o.label)}" ${getExamAnswer(q.question_id) === o.label ? 'selected' : ''}>${esc(o.label)}. ${esc(o.text)}</option>`).join('')}</select>`
+        : `<textarea data-q="${esc(q.question_id)}" data-topic="${esc(q.topic)}" data-format="${esc(q.format)}" placeholder="Resposta discursiva" oninput="setExamAnswer('${esc(q.question_id)}', this.value)" ${isFinished ? 'disabled' : ''}>${esc(getExamAnswer(q.question_id))}</textarea>`}
+    </div>`).join('');
+  $('#simulado').innerHTML = `
+    <div class="split">
+      <div class="panel">
+        <h2>Simulado atual</h2>
+        ${DATA.config?.apps_script_url ? '' : '<div class="notice">Lock/Terminado ficam guardados neste browser ate o Apps Script estar ligado. Ainda nao gravam na Sheet.</div>'}
+        <p class="meta">Estado: ${esc(examState.status || e.status || 'novo')} · ${questions.length} perguntas</p>
+        <div class="progress"><span class="chip" id="examAnsweredChip">${answered}/${questions.length} respondidas</span><span class="chip" id="examSavedChip">${examState.saved_at ? 'Lock: ' + esc(examState.saved_at) : 'Ainda sem lock'}</span></div>
+        ${cards || '<p class="empty">Ainda nao ha simulado gerado.</p>'}
+        <div class="actions">
+          <button class="btn green" onclick="lockExam()" ${isFinished ? 'disabled' : ''}>Lock</button>
+          <button class="btn red" onclick="finishExam()" ${isFinished ? 'disabled' : ''}>Terminado</button>
+          <button class="btn" onclick="exportExam()">Exportar fallback</button>
+        </div>
+      </div>
+      <aside class="panel">
+        <h3>Proximo simulado</h3>
+        <p class="meta">A escolha aplica na proxima geracao.</p>
+        <label>Tamanho<br><select id="nextSize">${[5,10,15,25,30].map(n => `<option ${n===(DATA.config?.next_simulado_size||5)?'selected':''}>${n}</option>`).join('')}</select></label>
+        <div class="actions"><button class="btn" onclick="postAction('exam_preferences',{size:Number($('#nextSize').value)})">Guardar pedido</button></div>
+      </aside>
+    </div>`;
+}
+
+function resetExamLocalStateIfNeeded(){
+  const simuladoId = DATA.current_exam?.simulado_id;
+  if (localState.currentExam?.simulado_id !== simuladoId){
+    localState.currentExam = {simulado_id: simuladoId, status: DATA.current_exam?.status || 'em_andamento', answers:{}};
+    saveLocalState();
+  }
+  localState.currentExam.answers ||= {};
+}
+
+function getExamState(){
+  resetExamLocalStateIfNeeded();
+  return localState.currentExam;
+}
+
+function getExamAnswer(questionId){
+  return getExamState().answers?.[questionId] || '';
+}
+
+function hasExamAnswer(questionId){
+  return String(getExamAnswer(questionId)).trim().length > 0;
+}
+
+function setExamAnswer(questionId, value){
+  const examState = getExamState();
+  if (examState.status === 'terminado') return;
+  examState.answers[questionId] = value;
+  saveLocalState();
+  renderStatus();
+  updateExamProgressUI();
+}
+
+function updateExamProgressUI(){
+  const questions = DATA.current_exam?.questions || [];
+  const answered = questions.filter(q => hasExamAnswer(q.question_id)).length;
+  const answeredChip = $('#examAnsweredChip');
+  const savedChip = $('#examSavedChip');
+  if (answeredChip) answeredChip.textContent = `${answered}/${questions.length} respondidas`;
+  if (savedChip) savedChip.textContent = getExamState().saved_at ? `Lock: ${getExamState().saved_at}` : 'Ainda sem lock';
+}
+
+function collectExamAnswers(){
+  return Array.from(document.querySelectorAll('#simulado [data-q]')).map(el => ({
+    question_id: el.dataset.q,
+    topic: el.dataset.topic || '',
+    format: el.dataset.format || '',
+    answer: getExamAnswer(el.dataset.q),
+    selected_option: el.tagName === 'SELECT' ? getExamAnswer(el.dataset.q) : '',
+    response_text: el.tagName === 'TEXTAREA' ? getExamAnswer(el.dataset.q) : '',
+    answered_at: getExamAnswer(el.dataset.q) ? new Date().toISOString() : ''
+  }));
+}
+
+function lockExam(){
+  const examState = getExamState();
+  examState.saved_at = new Date().toLocaleString('pt-PT');
+  saveLocalState();
+  postAction('exam_save',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+  renderStatus();
+  renderExam();
+}
+
+function finishExam(){
+  const examState = getExamState();
+  examState.status = 'terminado';
+  examState.saved_at = new Date().toLocaleString('pt-PT');
+  saveLocalState();
+  postAction('exam_finish',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
+  renderStatus();
+  renderExam();
+}
+
+async function exportExam(){
+  const answers = collectExamAnswers();
+  const text = [
+    `Estas sao as minhas respostas do simulado TestMe de ${DATA.current_exam?.generated_at || DATA.meta?.date}.`,
+    'Corrige-as, atribui nota geral e por topico/formato, comenta respostas discursivas, e prepara a atualizacao do historico de evolucao.',
+    '',
+    JSON.stringify({simulado:DATA.current_exam, respostas:answers}, null, 2)
+  ].join('\\n');
+  await navigator.clipboard.writeText(text);
+  toast('Texto de exportacao copiado.');
+}
+
+function renderCorrection(){
+  const c = DATA.recent_correction || {};
+  const items = c.items || [];
+  $('#correcao').innerHTML = `
+    <div class="panel">
+      <h2>Correcao recente</h2>
+      <p class="meta">Nota: ${esc(c.total_score ?? '-')} / ${esc(c.max_score ?? '-')} · ${esc(c.corrected_at || '')}</p>
+      ${items.map((it, idx) => `
+        <div class="question-card">
+          <div class="row"><span class="chip">${idx+1}</span><span class="chip">${esc(it.topic)}</span><span class="chip">${esc(it.score)}/${esc(it.max_points)}</span></div>
+          ${it.stem ? `<details><summary>Pergunta</summary><div class="body"><p>${esc(it.stem)}</p>${(it.options||[]).length ? `<div class="options">${it.options.map(o => `<div class="option"><b>${esc(o.label)}.</b> <span>${esc(o.text)}</span></div>`).join('')}</div>` : ''}</div></details>` : ''}
+          <p><b>Resposta do Rafael:</b> ${esc(it.rafael_answer)}</p>
+          <p><b>Resposta correta:</b> ${esc(it.correct_answer)}</p>
+          <p>${esc(it.llm_comment)}</p>
+        </div>`).join('') || '<p class="empty">Ainda nao ha correcao processada.</p>'}
+    </div>`;
+}
+
+function statBlock(label, percent){
+  const width = Math.max(0, Math.min(100, Number(percent || 0)));
+  return `<div class="stat"><b>${esc(label)}</b><div class="meta">${width}%</div><div class="bar"><span style="width:${width}%"></span></div></div>`;
+}
+
+function renderEvolution(){
+  const ev = DATA.evolution || {};
+  const topicStats = ev.by_topic || {};
+  const formatStats = ev.by_format || {};
+  $('#evolucao').innerHTML = `
+    <div class="panel">
+      <h2>Evolucao</h2>
+      <h3>Por topico</h3>
+      <div class="stat-grid">${Object.entries(topicStats).map(([k,v]) => statBlock(k, v.percent)).join('') || '<p class="empty">Sem dados.</p>'}</div>
+      <h3 style="margin-top:18px">Por formato</h3>
+      <div class="stat-grid">${Object.entries(formatStats).map(([k,v]) => statBlock(k, v.percent)).join('') || '<p class="empty">Sem dados.</p>'}</div>
+    </div>`;
+}
+
+document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.id === btn.dataset.tab));
+}));
+
+renderStatus();
+renderQuestion();
+renderExam();
+renderCorrection();
+renderEvolution();
+</script>
+</body>
+</html>
+
