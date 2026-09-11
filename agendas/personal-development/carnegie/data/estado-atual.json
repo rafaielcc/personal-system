@@ -1,54 +1,54 @@
 {
-  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-09.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-10.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
   "curso": "carnegie",
   "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
-  "semana_atual": 9,
+  "semana_atual": 10,
   "total_semanas": 17,
-  "fase": "Fase 3 — Relações Profundas",
-  "tema": "Investir nas Pessoas ao Longo do Tempo",
-  "progresso": { "semanas_concluidas": 9, "total_semanas": 17 },
+  "fase": "Fase 4 — Conversas Difíceis",
+  "tema": "Discordar Sem Destruir",
+  "progresso": { "semanas_concluidas": 10, "total_semanas": 17 },
   "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
-  "ultima_atualizacao": "2026-09-07",
-  "resumo_curto": "Semana 9 de 17 · Fase 3 — Relações Profundas (última semana da fase): Investir nas Pessoas ao Longo do Tempo. A maioria das relações não se parte por conflito — esmorece por negligência. Manutenção é amor expresso em ação.",
+  "ultima_atualizacao": "2026-09-10",
+  "resumo_curto": "Semana 10 de 17 · Fase 4 — Conversas Difíceis (primeira semana da fase): Discordar Sem Destruir. O framework HEAR ajuda a partilhar a tua perspetiva sem fazer os outros sentirem-se atacados.",
   "topicos": [
-    "A regra dos 3 contactos: contacta 3 vezes antes de esperares reciprocidade",
-    "Lembrar e voltar: escreve o que te contam e volta a isso mais tarde",
-    "Revisão sazonal: de 3 em 3 meses, quem tenho negligenciado?",
-    "O princípio do aniversário: a especificidade separa o cuidado real da obrigação social"
+    "O framework HEAR: Hear (ouvir), Echo (ecoar), Acknowledge (reconhecer), Respond (responder)",
+    "Frases que mantêm portas abertas vs. frases que as fecham",
+    "Em casa: antes do próximo desacordo, o que realmente queres — ter razão ou voltar a sentir-te próximo?",
+    "No trabalho: separa a ideia da pessoa — discordar de um plano sem desvalorizar quem o propôs"
   ],
   "exemplos_chave": [
-    "\"Estava a pensar em ti\" diz à outra pessoa que ela existiu na tua mente sem nenhum estímulo externo.",
-    "Escreve nas notas o que te contam e volta a isso dias depois — lembrar é prática deliberada, não boa memória.",
-    "Tarefa 9-A: lista de 10 pessoas importantes, quando foi a última conversa real, e contactar 3 esta semana."
+    "\"Ajuda-me a perceber o teu raciocínio\" convida a continuar uma conversa difícil; \"Isso não é verdade\" encerra-a — a diferença está na estrutura, não no conteúdo.",
+    "Antes do próximo desacordo em casa, escreve o que realmente queres: ter razão, ou voltar a sentir-te próximo?",
+    "No trabalho, discordar de um plano não exige desvalorizar quem o propôs — a ideia e a pessoa são coisas diferentes."
   ],
-  "sintese_falada": "Estás na Semana 9 do curso Carnegie, a última da Fase 3 — Relações Profundas. As duas semanas anteriores foram sobre abrir-te primeiro, para que os outros se abram, e sobre dar atenção total a quem está à tua frente. Esta semana muda de escala de tempo: já não é sobre o que acontece dentro de uma conversa, é sobre o que acontece entre as conversas.\n\nA ideia central é desconfortável mas verdadeira: a maior parte das amizades e relações familiares não termina por conflito. Esmorece devagar, por negligência dos dois lados, com cada um à espera que o outro dê o próximo passo.\n\nHá quatro práticas esta semana. A regra dos três contactos: para quem te importa mesmo, contactar três vezes sem esperar reciprocidade. Lembrar e voltar: escrever o que te contam e voltar a isso mais tarde. A revisão sazonal: de três em três meses, perguntar quem tens negligenciado. E o princípio do aniversário: uma mensagem específica vale muito mais do que uma genérica.\n\nO teu fio condutor continua o mesmo. Esta noite, pergunta-te: quem é que eu deixei esmorecer por não dar o primeiro passo?",
-  "leitura_detalhada": "A Semana 9 fecha a Fase 3 com uma verdade pouco confortável: a maioria das amizades e relações familiares não termina por conflito dramático — esmorece lentamente por negligência mútua, cada parte à espera que a outra dê o próximo passo. A manutenção de relações é, neste sentido, uma forma concreta de amor em ação.\n\nA regra dos três contactos formaliza isto: para as pessoas que realmente importam, contactar pelo menos três vezes sem esperar reciprocidade automática. \"Estava a pensar em ti\" é, apesar de simples, uma das frases mais poderosas disponíveis — porque diz à outra pessoa que existiu na tua mente mesmo sem estímulo externo.\n\nLembrar e voltar transforma a memória num ato relacional: quando alguém partilha algo importante, escrever para não esquecer, e depois voltar deliberadamente a isso mais tarde. Este simples gesto de continuidade é frequentemente confundido com boa memória natural, mas é, na maior parte das vezes, prática deliberada.\n\nA revisão sazonal de relações — de três em três meses, perguntar quem se tem negligenciado, quem está a passar por algo difícil sem acompanhamento, quem merece mais atenção do que tem recebido — introduz um ritmo estrutural onde de outra forma só existiria reatividade ao acaso dos encontros. E o princípio do aniversário lembra que uma mensagem genérica de circunstância vale muito menos do que uma frase específica.\n\nA tarefa 9-A pede uma lista de dez pessoas importantes, com uma auditoria honesta de quando foi a última conversa real com cada uma, e o compromisso de contactar pelo menos três com presença genuína durante a semana.",
+  "sintese_falada": "Estás na Semana 10 do curso Carnegie, a primeira da Fase 4 — Conversas Difíceis. As três fases anteriores prepararam o terreno — rapport, presença emocional, relações profundas — e agora entras de frente no conflito.\n\nA ideia central desmonta um mito comum: a qualidade de uma relação não se mede pela ausência de conflito, mas por como o conflito é atravessado sem quebrar a ligação. A maior parte dos desacordos não é, no fundo, sobre a questão em disputa — é sobre sentir-se desvalorizado, desrespeitado ou não ouvido.\n\nEsta semana aprendes o framework HEAR: Hear, ouvir primeiro sem interromper; Echo, ecoar o que ouviste em forma de paráfrase; Acknowledge, reconhecer o sentimento por trás da posição, mesmo discordando da conclusão; e só depois, Respond, partilhar a tua própria perspetiva.\n\nO teu fio condutor continua o mesmo. Esta noite, pergunta-te: este desacordo aproximou-nos ou afastou-nos?",
+  "leitura_detalhada": "A Fase 4 aborda de frente o que as três fases anteriores prepararam o terreno para gerir melhor: o conflito. A premissa central desmonta um mito comum — a qualidade de uma relação não se mede pela ausência de conflito, mas por como o conflito é atravessado sem quebrar a ligação. E a chave para isso é perceber que a maior parte dos conflitos não é, no fundo, sobre a questão em disputa — é sobre sentir-se desvalorizado, desrespeitado ou não ouvido.\n\nO framework HEAR estrutura isto em quatro passos sequenciais. Hear (ouvir primeiro): deixar a outra pessoa dizer tudo, sem interromper. Echo (ecoar): devolver o que se ouviu em forma de paráfrase, que confirma compreensão antes de avançar. Acknowledge (reconhecer): validar o sentimento por trás da posição, mesmo discordando da conclusão a que chega. E só depois, Respond (responder): partilhar a própria perspetiva, agora que o terreno emocional está estabilizado.\n\nHá frases que mantêm portas abertas e frases que as fecham, e a diferença raramente está no conteúdo — está na estrutura. \"Ajuda-me a perceber o teu raciocínio\" convida a continuar; \"Isso não é verdade\" encerra. Mesmo \"Tudo bem\", dito com um tom frio, pode fechar uma porta tão eficazmente quanto um insulto — porque comunica desistência disfarçada de concordância.\n\nEm casa, a prática pede uma pausa antes do próximo desacordo: escrever, para si mesmo, o que se quer realmente como resultado — ter razão, ou voltar a sentir-se próximo. As duas coisas raramente são a mesma. No trabalho, a mesma lógica separa a ideia da pessoa: é possível discordar profundamente de um plano sem desvalorizar quem o propôs.",
   "audio_segmentos": [
     {
       "titulo": "Resumo da semana",
-      "texto": "Estás na Semana 9 do curso Carnegie, a última da Fase 3, Relações Profundas. As duas semanas anteriores foram sobre abrir-te primeiro e sobre dar atenção total a quem está à tua frente. Esta semana muda de escala de tempo: já não é sobre uma conversa, é sobre o que acontece entre as conversas. A ideia central é desconfortável mas verdadeira: a maior parte das relações não se parte por conflito, esmorece por negligência. Nos próximos áudios vou explicar as quatro práticas da semana — a regra dos três contactos, lembrar e voltar, a revisão sazonal, e o princípio do aniversário."
+      "texto": "Estás a começar a Fase 4 do curso Carnegie — Conversas Difíceis — com a Semana 10, Discordar Sem Destruir. As três fases anteriores prepararam o terreno: rapport, presença emocional, relações profundas. Agora entras de frente no conflito. A ideia central desmonta um mito comum: a qualidade de uma relação não se mede pela ausência de conflito, mas por como o conflito é atravessado sem quebrar a ligação. Esta semana vais conhecer o framework HEAR — Ouvir, Ecoar, Reconhecer, Responder — para discordar sem que a outra pessoa se sinta atacada. Nos próximos áudios explico o framework, as frases que abrem e fecham portas, e como aplicar isto em casa e no trabalho."
     },
     {
-      "titulo": "A negligência, não o conflito",
-      "texto": "A Semana 9 fecha a Fase 3 com uma verdade pouco confortável: a maioria das amizades e relações familiares não termina por conflito dramático — esmorece lentamente por negligência mútua, cada parte à espera que a outra dê o próximo passo. A manutenção de relações é, neste sentido, uma forma concreta de amor em ação."
+      "titulo": "Não é sobre a questão, é sobre sentir-se desvalorizado",
+      "texto": "A Fase 4 aborda de frente o que as três fases anteriores prepararam o terreno para gerir melhor: o conflito. A premissa central desmonta um mito comum — a qualidade de uma relação não se mede pela ausência de conflito, mas por como o conflito é atravessado sem quebrar a ligação. E a chave para isso é perceber que a maior parte dos conflitos não é, no fundo, sobre a questão em disputa — é sobre sentir-se desvalorizado, desrespeitado ou não ouvido."
     },
     {
-      "titulo": "A regra dos três contactos",
-      "texto": "A regra dos três contactos formaliza isto: para as pessoas que realmente importam, contactar pelo menos três vezes sem esperar reciprocidade automática. Estava a pensar em ti é, apesar de simples, uma das frases mais poderosas disponíveis — porque diz à outra pessoa que existiu na tua mente mesmo sem estímulo externo."
+      "titulo": "O framework HEAR",
+      "texto": "O framework HEAR estrutura isto em quatro passos sequenciais. Hear, ouvir primeiro: deixar a outra pessoa dizer tudo, sem interromper. Echo, ecoar: devolver o que se ouviu em forma de paráfrase, que confirma compreensão antes de avançar. Acknowledge, reconhecer: validar o sentimento por trás da posição, mesmo discordando da conclusão a que chega. E só depois, Respond, responder: partilhar a própria perspetiva, agora que o terreno emocional está estabilizado."
     },
     {
-      "titulo": "Lembrar e voltar",
-      "texto": "Lembrar e voltar transforma a memória num ato relacional: quando alguém partilha algo importante, escrever para não esquecer, e depois voltar deliberadamente a isso mais tarde. Este simples gesto de continuidade é frequentemente confundido com boa memória natural, mas é, na maior parte das vezes, prática deliberada."
+      "titulo": "Frases que abrem e fecham portas",
+      "texto": "Há frases que mantêm portas abertas e frases que as fecham, e a diferença raramente está no conteúdo — está na estrutura. Ajuda-me a perceber o teu raciocínio convida a continuar; isso não é verdade encerra. Mesmo tudo bem, dito com um tom frio, pode fechar uma porta tão eficazmente quanto um insulto — porque comunica desistência disfarçada de concordância."
     },
     {
-      "titulo": "Revisão sazonal e o princípio do aniversário",
-      "texto": "A revisão sazonal de relações — de três em três meses, perguntar quem se tem negligenciado, quem está a passar por algo difícil sem acompanhamento, quem merece mais atenção do que tem recebido — introduz um ritmo estrutural onde de outra forma só existiria reatividade ao acaso dos encontros. E o princípio do aniversário lembra que uma mensagem genérica de circunstância vale muito menos do que uma frase específica."
+      "titulo": "Em casa e no trabalho",
+      "texto": "Em casa, a prática pede uma pausa antes do próximo desacordo: escrever, para si mesmo, o que se quer realmente como resultado — ter razão, ou voltar a sentir-se próximo. As duas coisas raramente são a mesma. No trabalho, a mesma lógica separa a ideia da pessoa: é possível discordar profundamente de um plano sem desvalorizar quem o propôs."
     },
     {
-      "titulo": "A tarefa da semana",
-      "texto": "A tarefa nove A pede uma lista de dez pessoas importantes, com uma auditoria honesta de quando foi a última conversa real com cada uma, e o compromisso de contactar pelo menos três com presença genuína durante a semana."
+      "titulo": "As aplicações da semana",
+      "texto": "Esta semana, em casa, antes do próximo desacordo, escreve o que realmente queres como resultado — ter razão, ou voltar a sentir-te próximo. Com os amigos, se uma amizade ficar tensa, dá tu o primeiro passo para a reparar, sem esperar pelo outro. E no trabalho, separa sempre a ideia da pessoa — podes discordar profundamente de um plano sem desvalorizar quem o propôs."
     }
   ],
-  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-09.html",
+  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-10.html",
   "link_curso_completo": "https://personal-system-hs5.pages.dev/personal-development/carnegie/curso-completo.html"
 }
