@@ -202,6 +202,8 @@
   .c-cream{ background:#F5F0E8; }
   .c-coral{ background:#F5CBB8; }
   .c-periwinkle{ background:#DEE2F6; }
+  .c-rose{ background:#F3D9E2; }
+  .c-lilac{ background:#E3DAF2; }
   .tile-alert{
     position:absolute; top:0; right:6px; width:9px; height:9px;
     border-radius:50%; background:var(--red); box-shadow:0 0 0 2px rgba(227,106,90,.30);
@@ -417,9 +419,17 @@
               <span class="tile-circle c-cream">📄</span>
               <span class="tile-label">Artigos</span>
             </a>
+            <a class="tile" href="cirped/index.html" title="História · Cirurgia Pediátrica" aria-label="História — Cirurgia Pediátrica">
+              <span class="tile-circle c-rose">📜</span>
+              <span class="tile-label">História</span>
+            </a>
             <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
               <span class="tile-circle c-blue">🧪</span>
               <span class="tile-label">TestMe</span>
+            </a>
+            <a class="tile carnegie-link" href="/personal-development/carnegie/curso-completo.html" title="Carnegie" aria-label="Carnegie">
+              <span class="tile-circle c-lilac">📘</span>
+              <span class="tile-label">Carnegie</span>
             </a>
             <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
               <span class="tile-circle c-teal">🎭</span>
@@ -430,22 +440,6 @@
               <span class="tile-label">Viagem</span>
             </a>
           </div>
-        </div>
-
-        <div class="section-label" style="margin-top:16px;">Curso</div>
-        <div class="widgets">
-          <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
-            <div class="details-body">
-              <p class="curso-fase-tema"></p>
-              <p class="curso-resumo"></p>
-              <p class="muted curso-status" style="display:none;"></p>
-              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
-                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
-                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
-              </div>
-            </div>
-          </details>
         </div>
 
         <p class="polegar-hint">Modo rápido — para prioridades completas e B3, muda para Clássico ou Leitura em baixo.</p>
@@ -493,9 +487,17 @@
             <span class="tile-circle c-cream">📄</span>
             <span class="tile-label">Artigos</span>
           </a>
+          <a class="tile" href="cirped/index.html" title="História · Cirurgia Pediátrica" aria-label="História — Cirurgia Pediátrica">
+            <span class="tile-circle c-rose">📜</span>
+            <span class="tile-label">História</span>
+          </a>
           <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
             <span class="tile-circle c-blue">🧪</span>
             <span class="tile-label">TestMe</span>
+          </a>
+          <a class="tile carnegie-link" href="/personal-development/carnegie/curso-completo.html" title="Carnegie" aria-label="Carnegie">
+            <span class="tile-circle c-lilac">📘</span>
+            <span class="tile-label">Carnegie</span>
           </a>
           <a class="tile" href="lazer/index.html" title="Lazer" aria-label="Lazer">
             <span class="tile-circle c-teal">🎭</span>
@@ -523,23 +525,6 @@
             <div class="alert-strip">⚠️ Drawdown &gt;20%: ROMI3 (-40%) — secção obrigatória no Full B3</div>
             <p class="muted" style="margin-top:8px;">Detalhe completo → ícone 📈 acima (página Notícias · B3)</p>
           </div>
-        </div>
-
-        <div class="section-label" style="margin-top:16px;">Curso</div>
-        <div class="widgets">
-          <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
-            <div class="details-body">
-              <p class="curso-fase-tema"></p>
-              <p class="curso-resumo"></p>
-              <p class="muted curso-status" style="display:none;"></p>
-              <div class="curso-links" style="display:flex; gap:8px; margin-top:10px;">
-                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
-                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
-              </div>
-              <p class="muted" style="margin-top:8px;">Fonte: personal-development/carnegie/data/estado-atual.json (fetch ao vivo, mesmo domínio)</p>
-            </div>
-          </details>
         </div>
 
       </div>
@@ -574,18 +559,6 @@
             <div class="alert-strip">⚠️ Drawdown &gt;20%: ROMI3 (-40%)</div>
           </div>
 
-          <details class="card" data-curso="carnegie">
-            <summary><span class="stripe"></span><span class="curso-titulo">📖 Carnegie</span><span class="chev">▼</span></summary>
-            <div class="details-body">
-              <p class="curso-resumo"></p>
-              <p class="muted curso-status" style="display:none;"></p>
-              <div class="curso-links" style="display:flex; gap:8px; margin-top:8px;">
-                <a class="shortcut-link c-sage curso-link-semana" href="#" title="Ver lição da semana">📘</a>
-                <a class="shortcut-link c-gold curso-link-completo" href="#" title="Curso completo">📚</a>
-              </div>
-            </div>
-          </details>
-
           <div class="card">
             <div class="card-title"><span class="stripe"></span>🔗 Atalhos</div>
             <div class="shortcuts">
@@ -598,7 +571,9 @@
               <a class="shortcut-link c-terracotta" href="Hff/index.html" title="Painel HFF">🏥</a>
               <a class="shortcut-link c-coral" href="Hff/index.html#cirurgias" title="Cirurgias HFF">🪒</a>
               <a class="shortcut-link c-cream" href="artigos/index.html" title="Artigos Científicos">📄</a>
+              <a class="shortcut-link c-rose" href="cirped/index.html" title="História · Cirurgia Pediátrica">📜</a>
               <a class="shortcut-link c-blue testme-link" href="/personal-development/testme/index.html" title="TestMe">🧪</a>
+              <a class="shortcut-link c-lilac carnegie-link" href="/personal-development/carnegie/curso-completo.html" title="Carnegie">📘</a>
               <a class="shortcut-link c-teal" href="lazer/index.html" title="Lazer">🎭</a>
               <a class="shortcut-link c-periwinkle" href="viagem-atual/index.html" title="Viagem atual">✈️</a>
             </div>
@@ -639,43 +614,23 @@
     document.querySelectorAll('.testme-link').forEach(function(a){ a.href = href; });
   })();
 
-  // ===== Atalho Personal Development (Carnegie) — fetch ao vivo, mesmo domínio =====
+  // ===== Atalho Carnegie — ícone único no grid, aponta para a semana actual (fetch ao vivo, mesmo domínio) =====
   (function(){
-    function aplicarEstadoCurso(dados){
-      document.querySelectorAll('[data-curso="carnegie"]').forEach(card => {
-        const titulo = card.querySelector('.curso-titulo');
-        const tema = card.querySelector('.curso-fase-tema');
-        const resumo = card.querySelector('.curso-resumo');
-        const linkSemana = card.querySelector('.curso-link-semana');
-        const linkCompleto = card.querySelector('.curso-link-completo');
-        if (titulo && dados.semana_atual && dados.total_semanas){
-          titulo.textContent = '📖 Carnegie · Semana ' + dados.semana_atual + ' de ' + dados.total_semanas;
+    function aplicarLinkCarnegie(dados){
+      document.querySelectorAll('.carnegie-link').forEach(a => {
+        if (dados.link_semana_html) a.href = dados.link_semana_html;
+        if (dados.semana_atual && dados.total_semanas){
+          var label = 'Carnegie · Semana ' + dados.semana_atual + ' de ' + dados.total_semanas;
+          a.title = label;
+          a.setAttribute('aria-label', label);
         }
-        if (tema && dados.tema){
-          tema.innerHTML = '<b>' + dados.tema.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])) + '</b>';
-        }
-        if (resumo && dados.resumo_curto){
-          resumo.textContent = dados.resumo_curto;
-        }
-        if (linkSemana && dados.link_semana_html) linkSemana.href = dados.link_semana_html;
-        if (linkCompleto && dados.link_curso_completo) linkCompleto.href = dados.link_curso_completo;
-      });
-    }
-
-    function mostrarFallback(msg){
-      document.querySelectorAll('[data-curso="carnegie"] .curso-status').forEach(el => {
-        el.textContent = msg;
-        el.style.display = 'block';
       });
     }
 
     fetch('../personal-development/carnegie/data/estado-atual.json')
       .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
-      .then(dados => aplicarEstadoCurso(dados))
-      .catch(err => {
-        console.warn('Não foi possível carregar o estado do curso Carnegie:', err);
-        mostrarFallback('Sem atualização recente do curso.');
-      });
+      .then(dados => aplicarLinkCarnegie(dados))
+      .catch(err => console.warn('Não foi possível carregar o estado do curso Carnegie:', err));
   })();
 </script>
 
