@@ -317,8 +317,8 @@
         <a class="back-link" href="../index.html">← Início</a>
       </div>
       <div class="topbar-row2">
-        <span class="chip daytype">📅 <b>Terca, 1 Set</b></span>
-        <span class="chip">🩺 <b>Sem BO</b></span>
+        <span class="chip daytype">📅 <b>Segunda, 14 Set</b></span>
+        <span class="chip">🩺 <b>BO manha</b></span>
       </div>
     </div>
   </div>
@@ -340,29 +340,29 @@
 
         <div class="banner banner-alert">
           <span>⚠️</span>
-          <div class="banner-body"><ul class="banner-list"><li>8 doente(s) FDR na janela HFF</li><li>2 processo(s) duplicado(s) na mesma sessao</li><li>1 codigo(s) de ausencia ambiguo(s)</li></ul></div>
+          <div class="banner-body"><ul class="banner-list"><li>3 doente(s) FDR na janela HFF</li><li>1 processo(s) duplicado(s) na mesma sessao</li><li>1 codigo(s) de ausencia ambiguo(s)</li></ul></div>
         </div>
 
         <div class="section-label">Tipo de dia</div>
         <div class="card">
-          <p><b>Sem BO</b></p>
-          <p class="muted">Hoje é terca → sem BO (só Segunda/Quarta).</p>
+          <p><b>BO manha</b></p>
+          <p class="muted">Hoje é segunda → BO confirmado (Segunda/Quarta).</p>
         </div>
 
         <div class="section-label">Alertas</div>
         <div class="card">
-          <p>🤒 <b>On-call esta semana:</b> Rodrigo</p>
+          <p>🤒 <b>On-call esta semana:</b> Rafael</p>
 
         </div>
 
         <div class="section-label">Ausências relevantes</div>
         <div class="card">
 
-          <p>🏖️ <b>Rafael Correia</b> — Ferias: 2026-09-05 a 2026-09-12</p>
+          <p>🏖️ <b>Rafael Correia</b> — Ferias: 2026-10-01 a 2026-10-02</p>
 
-          <p>🏖️ <b>Rodrigo Roquette</b> — Curso: 2026-09-15 a 2026-09-16</p>
+          <p>🏖️ <b>Rodrigo Roquette</b> — Curso: 2026-09-15 a 2026-10-09</p>
 
-          <p>🏖️ <b>Rodrigo Roquette</b> — Ferias: 2026-09-28</p>
+          <p>🏖️ <b>Rodrigo Roquette</b> — Ferias: 2026-09-28 a 2026-10-08</p>
 
 
         </div>
@@ -375,7 +375,7 @@
 
         <div class="section-label">Próximo BO</div>
         <div class="card">
-          <p>📅 <b>Quarta, 2 Set</b> — 3 cirurgias agendadas</p>
+          <p>📅 <b>Segunda, 14 Set</b> — 4 cirurgias agendadas</p>
           <p class="muted">Ver detalhes na aba Cirurgias.</p>
         </div>
 
@@ -385,151 +385,36 @@
       <div id="tab-cirurgias" class="tabpanel">
 
 
+        <div class="section-label">BO de hoje — Segunda, 14 Set <span class="badge-ausente">⚠️ Rodrigo Roquette ausente</span></div>
+
+        <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+        <table class="surg">
+          <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+          <tbody>
+
+            <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1354608</td><td>s/d</td><td>SIMAO GUERREIRO MIMOSO</td><td>Criptorquidia / dedo e língua / hérnia inguinal</td></tr>
+            <tr class="obs-row"><td colspan="4">Processo aparecia em linhas separadas no Espelho; consolidado no postflight.</td></tr>
+
+            <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1317070</td><td>s/d</td><td>VASCO AMORIM ALMEIDA</td><td>Hipospádia Peniana</td></tr>
+            <tr class="obs-row"><td colspan="4">distal</td></tr>
+
+          </tbody>
+        </table>
 
 
-        <div class="banner banner-info">ℹ️ Sem BO hoje — próxima sessão: Quarta, 2 Set</div>
+        <div class="period-label"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+
+
+        <p class="muted">Sem SIGIC à tarde.</p>
+
+
+
 
 
         <div class="section-label">Próximos BOs</div>
 
 
         <div class="week-block">
-
-          <details class="collapse">
-            <summary>📅 Quarta, 2 Set <span class="badge-ausente">⚠️ Isabel Franca ausente</span> — 3 cirurgias manhã</summary>
-            <div class="collapse-body">
-              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
-              <table class="surg">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                  <tr class="fdr-row " onclick="toggleObs(this)"><td class="proc-num">1364570</td><td>s/d</td><td>JAYDEN TORRES</td><td>Cistoscopia, UCM</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class="fdr-row " onclick="toggleObs(this)"><td class="proc-num">931880</td><td>s/d</td><td>MARIANA BRAZIO SANTOS</td><td>CISTOSCOPIA, VLP, septo vaginal transverso</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">949712</td><td>13,0a</td><td>JOAO PAULO PRAIA ANTONIO</td><td>Colecistectomia VLP</td></tr>
-                  <tr class="obs-row"><td colspan="4">Drepa, vem de 05-08, UCIP a 01-09</td></tr>
-
-                </tbody>
-              </table>
-              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
-              <table class="surg" style="display:none">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </details>
-
-        </div>
-
-        <div class="week-block">
-
-          <details class="collapse">
-            <summary>📅 Segunda, 7 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span> — 5 cirurgias manhã</summary>
-            <div class="collapse-body">
-              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
-              <table class="surg">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                  <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">864011</td><td>8,0a</td><td>JOAO ALEXANDRE PINHEIRO VARELA</td><td>Excisão de adenomegalia subbmentoniana</td></tr>
-                  <tr class="obs-row"><td colspan="4">Excisão De Linfático Da Cabeça, Abordagem Aberta, Diagnóstico</td></tr>
-
-                  <tr class="fdr-row has-obs" onclick="toggleObs(this)"><td class="proc-num">1169065</td><td>8,0a</td><td>STEFAN ALEXANDRE RAMOS SPATARU</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
-                  <tr class="obs-row"><td colspan="4">LAPAROSCOPIA</td></tr>
-
-                  <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1346547</td><td>10,0a</td><td>MARIANA CANEIRA COSTA</td><td>Seio E Quisto Pré-Auricular</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1013663</td><td>12,0a</td><td>MATEUS ISIDORO GUEDES</td><td>Torsão Intravaginal Cordão Espermatico</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">828454</td><td>16,0a</td><td>ANTONIO BORRALHO</td><td>HIDROCELO</td></tr>
-                  <tr class="obs-row"><td colspan="4">Reparação Da Túnica Vaginal Esquerda, Abordagem Aberta</td></tr>
-
-                </tbody>
-              </table>
-              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
-              <table class="surg" style="display:none">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </details>
-
-          <details class="collapse">
-            <summary>📅 Quarta, 9 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span> — 6 cirurgias manhã</summary>
-            <div class="collapse-body">
-              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
-              <table class="surg">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                  <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1325783</td><td>s/d</td><td>AMADU BAMBA PIRES DAHABA</td><td>Criptorquidia Inguinal Unilateral</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1064450</td><td>s/d</td><td>CAIO RAFAEL TAVARES SILVA</td><td>O Hidrocelo</td></tr>
-                  <tr class="obs-row"><td colspan="4">Tem quisto</td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1253773</td><td>s/d</td><td>DUARTE ALEXANDRE LOPES VIDEIRA</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
-                  <tr class="obs-row"><td colspan="4">quisto cordao</td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1302717</td><td>s/d</td><td>HENRY SANTOS MENDES</td><td>Criptorquidia Inguinal Unilateral</td></tr>
-                  <tr class="obs-row"><td colspan="4">Bianchi</td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1343967</td><td>s/d</td><td>IBRAHIM HAKIME SEIDI CAMBAI</td><td>Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
-                  <tr class="obs-row"><td colspan="4">a confirmar com ORL</td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1291854</td><td>7,0a</td><td>NOAH RATINHO PEREIRA</td><td>Orquidopexia + Fimose</td></tr>
-                  <tr class="obs-row"><td colspan="4">nao mudar | autista</td></tr>
-
-                </tbody>
-              </table>
-              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
-              <table class="surg" style="display:none">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </details>
-
-        </div>
-
-        <div class="week-block">
-
-          <details class="collapse">
-            <summary>📅 Segunda, 14 Set <span class="badge-ausente">⚠️ Rodrigo Roquette ausente</span> — 2 cirurgias manhã</summary>
-            <div class="collapse-body">
-              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
-              <table class="surg">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                  <tr class=" " onclick="toggleObs(this)"><td class="proc-num">1354608</td><td>s/d</td><td>SIMAO GUERREIRO MIMOSO</td><td>Dedso e lingua + cripto + Hérnia Inguinal, Unil, S/Obstrução/Gangrena, Ne C/O Recor</td></tr>
-                  <tr class="obs-row"><td colspan="4"></td></tr>
-
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1317070</td><td>s/d</td><td>VASCO AMORIM ALMEIDA</td><td>Hipospádia Peniana</td></tr>
-                  <tr class="obs-row"><td colspan="4">distal</td></tr>
-
-                </tbody>
-              </table>
-              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
-              <table class="surg" style="display:none">
-                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
-                <tbody>
-
-                </tbody>
-              </table>
-            </div>
-          </details>
 
           <details class="collapse">
             <summary>📅 Quarta, 16 Set <span class="badge-ausente">⚠️ Rodrigo Roquette ausente</span> — 4 cirurgias manhã</summary>
@@ -575,7 +460,7 @@
                 <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
                 <tbody>
 
-                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">998956</td><td>s/d</td><td>MAYLEN VIE SILVA DABO</td><td>esplenectomia VLP UCIP vespera</td></tr>
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">998956</td><td>126,8a</td><td>MAYLEN VIE SILVA DABO</td><td>esplenectomia VLP UCIP vespera</td></tr>
                   <tr class="obs-row"><td colspan="4">vem de 10/08 int vesp</td></tr>
 
                 </tbody>
@@ -646,6 +531,65 @@
             </div>
           </details>
 
+          <details class="collapse">
+            <summary>📅 Quarta, 30 Set <span class="badge-ausente">⚠️ Rafael Correia ausente</span> — 4 cirurgias manhã</summary>
+            <div class="collapse-body">
+              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+              <table class="surg">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1292793</td><td>2,0a</td><td>DUARTE HENRIQUE GOMES FLORINDO</td><td>Criptorquidia Inguinal Unilateral</td></tr>
+                  <tr class="obs-row"><td colspan="4">Reposição Do Testículo Esquerdo, Abordagem Aberta</td></tr>
+
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1129142</td><td>6,0a</td><td>LORENZO AZEVEDO MARQUES</td><td>Orelhas Proeminentes</td></tr>
+                  <tr class="obs-row"><td colspan="4">Reparação Dos Ouvidos Externos, Abordagem Aberta</td></tr>
+
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1276681</td><td>10,0a</td><td>JOAO PEDRO CRUZ BRAGA</td><td>Testículo N Descido, Soe, Bilat</td></tr>
+                  <tr class="obs-row"><td colspan="4">Bianchi bilateral. vem de 07/09</td></tr>
+
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1221158</td><td>15,0a</td><td>FABIO ALMEIDA FERNANDES</td><td>Varizes Escroto (Varicocelo)</td></tr>
+                  <tr class="obs-row"><td colspan="4">Oclusão Do Cordão Espermático Esquerdo, Abordagem Percutânea Endoscópica</td></tr>
+
+                </tbody>
+              </table>
+              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+              <table class="surg" style="display:none">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </details>
+
+        </div>
+
+        <div class="week-block">
+
+          <details class="collapse">
+            <summary>📅 Quarta, 7 Out  — 1 cirurgias manhã</summary>
+            <div class="collapse-body">
+              <div class="period-label"><span class="dot dot-am"></span>Manhã</div>
+              <table class="surg">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                  <tr class=" has-obs" onclick="toggleObs(this)"><td class="proc-num">1304795</td><td>126,8a</td><td>VICENTE ALVES RIBEIRO LOPES SA</td><td>Hipospádia Peniana</td></tr>
+                  <tr class="obs-row"><td colspan="4">Dra Isabel Prieto</td></tr>
+
+                </tbody>
+              </table>
+              <div class="period-label" style="display:none"><span class="dot dot-pm"></span>Tarde / SIGIC</div>
+              <table class="surg" style="display:none">
+                <thead><tr><th>Processo</th><th>Idade</th><th>Nome</th><th>Cirurgia</th></tr></thead>
+                <tbody>
+
+                </tbody>
+              </table>
+            </div>
+          </details>
+
         </div>
 
 
@@ -656,10 +600,10 @@
 
         <div class="section-label">Escala de Prevenção — próximas semanas</div>
 
-        <div class="oncall-row current ">
+        <div class="oncall-row  ">
           <div>
             <b>31 Ago – 6 Set</b>
-            <div class="oncall-meta">RC: Ferias (2026-09-05)</div>
+            <div class="oncall-meta">RC: ausencia parte desta semana; motivo nao especificado na aba Ausencias</div>
           </div>
           <span class="badge badge-neutral">Rodrigo</span>
         </div>
@@ -667,12 +611,12 @@
         <div class="oncall-row  ">
           <div>
             <b>7 Set – 13 Set</b>
-            <div class="oncall-meta">RC: Ferias (2026-09-07, 2026-09-08, 2026-09-09, 2026-09-10, 2026-09-11, 2026-09-12)</div>
+            <div class="oncall-meta">RC: ausencia parte desta semana; motivo nao especificado na aba Ausencias</div>
           </div>
           <span class="badge badge-neutral">Isabel</span>
         </div>
 
-        <div class="oncall-row  is-rafa">
+        <div class="oncall-row current is-rafa">
           <div>
             <b>14 Set – 20 Set</b>
             <div class="oncall-meta">RR: Curso (2026-09-15, 2026-09-16)</div>
@@ -691,7 +635,7 @@
         <div class="oncall-row  ">
           <div>
             <b>28 Set – 4 Out</b>
-            <div class="oncall-meta">RC: ausencia parte desta semana; motivo nao especificado na aba Ausencias</div>
+            <div class="oncall-meta">RC: Ferias (2026-10-01, 2026-10-02)</div>
           </div>
           <span class="badge badge-neutral">Rodrigo</span>
         </div>
@@ -821,403 +765,207 @@
           <span>📋 SIGIC à tarde</span>
         </div>
         <div class="cal-grid">
-<div class="cal-day cal-empty"></div>
 
-          <button class="cal-day active " onclick="showCalDay('d0', this)">
-            <span class="cal-day-dow">ter</span>
-            <span class="cal-day-num">1</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d1', this)">
-            <span class="cal-day-dow">qua</span>
-            <span class="cal-day-num">2</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg">3🩺</span>
-          </button>
-
-          <button class="cal-day  " onclick="showCalDay('d2', this)">
-            <span class="cal-day-dow">qui</span>
-            <span class="cal-day-num">3</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  " onclick="showCalDay('d3', this)">
-            <span class="cal-day-dow">sex</span>
-            <span class="cal-day-num">4</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d4', this)">
-            <span class="cal-day-dow">sáb</span>
-            <span class="cal-day-num">5</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  " onclick="showCalDay('d5', this)">
-            <span class="cal-day-dow">dom</span>
-            <span class="cal-day-num">6</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d6', this)">
-            <span class="cal-day-dow">seg</span>
-            <span class="cal-day-num">7</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg">5🩺</span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d7', this)">
-            <span class="cal-day-dow">ter</span>
-            <span class="cal-day-num">8</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d8', this)">
-            <span class="cal-day-dow">qua</span>
-            <span class="cal-day-num">9</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg">7🩺</span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d9', this)">
-            <span class="cal-day-dow">qui</span>
-            <span class="cal-day-num">10</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d10', this)">
-            <span class="cal-day-dow">sex</span>
-            <span class="cal-day-num">11</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d11', this)">
-            <span class="cal-day-dow">sáb</span>
-            <span class="cal-day-num">12</span>
-            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  " onclick="showCalDay('d12', this)">
-            <span class="cal-day-dow">dom</span>
-            <span class="cal-day-num">13</span>
-            <span class="cal-day-dots"></span>
-            <span class="cal-day-surg"></span>
-          </button>
-
-          <button class="cal-day  has-event" onclick="showCalDay('d13', this)">
+          <button class="cal-day active has-event" onclick="showCalDay('d0', this)">
             <span class="cal-day-dow">seg</span>
             <span class="cal-day-num">14</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg">4🩺</span>
           </button>
 
-          <button class="cal-day  has-event" onclick="showCalDay('d14', this)">
+          <button class="cal-day  has-event" onclick="showCalDay('d1', this)">
             <span class="cal-day-dow">ter</span>
             <span class="cal-day-num">15</span>
             <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  has-event" onclick="showCalDay('d15', this)">
+          <button class="cal-day  has-event" onclick="showCalDay('d2', this)">
             <span class="cal-day-dow">qua</span>
             <span class="cal-day-num">16</span>
             <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
             <span class="cal-day-surg">4🩺</span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d16', this)">
+          <button class="cal-day  " onclick="showCalDay('d3', this)">
             <span class="cal-day-dow">qui</span>
             <span class="cal-day-num">17</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d17', this)">
+          <button class="cal-day  " onclick="showCalDay('d4', this)">
             <span class="cal-day-dow">sex</span>
             <span class="cal-day-num">18</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d18', this)">
+          <button class="cal-day  " onclick="showCalDay('d5', this)">
             <span class="cal-day-dow">sáb</span>
             <span class="cal-day-num">19</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d19', this)">
+          <button class="cal-day  " onclick="showCalDay('d6', this)">
             <span class="cal-day-dow">dom</span>
             <span class="cal-day-num">20</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  has-event" onclick="showCalDay('d20', this)">
+          <button class="cal-day  has-event" onclick="showCalDay('d7', this)">
             <span class="cal-day-dow">seg</span>
             <span class="cal-day-num">21</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg">1🩺</span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d21', this)">
+          <button class="cal-day  " onclick="showCalDay('d8', this)">
             <span class="cal-day-dow">ter</span>
             <span class="cal-day-num">22</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  has-event" onclick="showCalDay('d22', this)">
+          <button class="cal-day  has-event" onclick="showCalDay('d9', this)">
             <span class="cal-day-dow">qua</span>
             <span class="cal-day-num">23</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg">3🩺</span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d23', this)">
+          <button class="cal-day  " onclick="showCalDay('d10', this)">
             <span class="cal-day-dow">qui</span>
             <span class="cal-day-num">24</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d24', this)">
+          <button class="cal-day  " onclick="showCalDay('d11', this)">
             <span class="cal-day-dow">sex</span>
             <span class="cal-day-num">25</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d25', this)">
+          <button class="cal-day  " onclick="showCalDay('d12', this)">
             <span class="cal-day-dow">sáb</span>
             <span class="cal-day-num">26</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  " onclick="showCalDay('d26', this)">
+          <button class="cal-day  " onclick="showCalDay('d13', this)">
             <span class="cal-day-dow">dom</span>
             <span class="cal-day-num">27</span>
             <span class="cal-day-dots"></span>
             <span class="cal-day-surg"></span>
           </button>
 
-          <button class="cal-day  has-event" onclick="showCalDay('d27', this)">
+          <button class="cal-day  has-event" onclick="showCalDay('d14', this)">
             <span class="cal-day-dow">seg</span>
             <span class="cal-day-num">28</span>
             <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
             <span class="cal-day-surg">1🩺</span>
           </button>
 
+          <button class="cal-day  " onclick="showCalDay('d15', this)">
+            <span class="cal-day-dow">ter</span>
+            <span class="cal-day-num">29</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d16', this)">
+            <span class="cal-day-dow">qua</span>
+            <span class="cal-day-num">30</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg">4🩺</span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d17', this)">
+            <span class="cal-day-dow">qui</span>
+            <span class="cal-day-num">1</span>
+            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d18', this)">
+            <span class="cal-day-dow">sex</span>
+            <span class="cal-day-num">2</span>
+            <span class="cal-day-dots"><span class="team-dot dot-rafael"></span></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d19', this)">
+            <span class="cal-day-dow">sáb</span>
+            <span class="cal-day-num">3</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d20', this)">
+            <span class="cal-day-dow">dom</span>
+            <span class="cal-day-num">4</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d21', this)">
+            <span class="cal-day-dow">seg</span>
+            <span class="cal-day-num">5</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d22', this)">
+            <span class="cal-day-dow">ter</span>
+            <span class="cal-day-num">6</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d23', this)">
+            <span class="cal-day-dow">qua</span>
+            <span class="cal-day-num">7</span>
+            <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
+            <span class="cal-day-surg">1🩺</span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d24', this)">
+            <span class="cal-day-dow">qui</span>
+            <span class="cal-day-num">8</span>
+            <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  has-event" onclick="showCalDay('d25', this)">
+            <span class="cal-day-dow">sex</span>
+            <span class="cal-day-num">9</span>
+            <span class="cal-day-dots"><span class="team-dot dot-rodrigo"></span></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d26', this)">
+            <span class="cal-day-dow">sáb</span>
+            <span class="cal-day-num">10</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
+          <button class="cal-day  " onclick="showCalDay('d27', this)">
+            <span class="cal-day-dow">dom</span>
+            <span class="cal-day-num">11</span>
+            <span class="cal-day-dots"></span>
+            <span class="cal-day-surg"></span>
+          </button>
+
         </div>
         <div class="card">
 
           <div id="calday-d0" class="cal-day-panel active">
-            <div class="cal-day-panel-title">Terça, 1 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d1" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Quarta, 2 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>3</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d2" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Quinta, 3 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d3" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Sexta, 4 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d4" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Sábado, 5 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d5" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Domingo, 6 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d6" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Segunda, 7 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>5</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d7" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Terça, 8 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d8" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Quarta, 9 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>7</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d9" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Quinta, 10 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d10" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Sexta, 11 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d11" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Sábado, 12 Set</div>
-
-            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
-
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d12" class="cal-day-panel ">
-            <div class="cal-day-panel-title">Domingo, 13 Set</div>
-
-
-            <p class="muted">Sem ausências previstas.</p>
-
-            <div class="cal-day-panel-stats">
-              <div>🩺 <b>0</b> cirurgias de manhã</div>
-
-
-              <div class="muted">Sem SIGIC à tarde.</div>
-
-            </div>
-          </div>
-
-          <div id="calday-d13" class="cal-day-panel ">
             <div class="cal-day-panel-title">Segunda, 14 Set</div>
 
 
@@ -1232,7 +980,7 @@
             </div>
           </div>
 
-          <div id="calday-d14" class="cal-day-panel ">
+          <div id="calday-d1" class="cal-day-panel ">
             <div class="cal-day-panel-title">Terça, 15 Set</div>
 
             <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Curso</div>
@@ -1247,7 +995,7 @@
             </div>
           </div>
 
-          <div id="calday-d15" class="cal-day-panel ">
+          <div id="calday-d2" class="cal-day-panel ">
             <div class="cal-day-panel-title">Quarta, 16 Set</div>
 
             <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Curso</div>
@@ -1262,7 +1010,7 @@
             </div>
           </div>
 
-          <div id="calday-d16" class="cal-day-panel ">
+          <div id="calday-d3" class="cal-day-panel ">
             <div class="cal-day-panel-title">Quinta, 17 Set</div>
 
 
@@ -1277,7 +1025,7 @@
             </div>
           </div>
 
-          <div id="calday-d17" class="cal-day-panel ">
+          <div id="calday-d4" class="cal-day-panel ">
             <div class="cal-day-panel-title">Sexta, 18 Set</div>
 
 
@@ -1292,7 +1040,7 @@
             </div>
           </div>
 
-          <div id="calday-d18" class="cal-day-panel ">
+          <div id="calday-d5" class="cal-day-panel ">
             <div class="cal-day-panel-title">Sábado, 19 Set</div>
 
 
@@ -1307,7 +1055,7 @@
             </div>
           </div>
 
-          <div id="calday-d19" class="cal-day-panel ">
+          <div id="calday-d6" class="cal-day-panel ">
             <div class="cal-day-panel-title">Domingo, 20 Set</div>
 
 
@@ -1322,7 +1070,7 @@
             </div>
           </div>
 
-          <div id="calday-d20" class="cal-day-panel ">
+          <div id="calday-d7" class="cal-day-panel ">
             <div class="cal-day-panel-title">Segunda, 21 Set</div>
 
 
@@ -1337,7 +1085,7 @@
             </div>
           </div>
 
-          <div id="calday-d21" class="cal-day-panel ">
+          <div id="calday-d8" class="cal-day-panel ">
             <div class="cal-day-panel-title">Terça, 22 Set</div>
 
 
@@ -1352,7 +1100,7 @@
             </div>
           </div>
 
-          <div id="calday-d22" class="cal-day-panel ">
+          <div id="calday-d9" class="cal-day-panel ">
             <div class="cal-day-panel-title">Quarta, 23 Set</div>
 
 
@@ -1367,7 +1115,7 @@
             </div>
           </div>
 
-          <div id="calday-d23" class="cal-day-panel ">
+          <div id="calday-d10" class="cal-day-panel ">
             <div class="cal-day-panel-title">Quinta, 24 Set</div>
 
 
@@ -1382,7 +1130,7 @@
             </div>
           </div>
 
-          <div id="calday-d24" class="cal-day-panel ">
+          <div id="calday-d11" class="cal-day-panel ">
             <div class="cal-day-panel-title">Sexta, 25 Set</div>
 
 
@@ -1397,7 +1145,7 @@
             </div>
           </div>
 
-          <div id="calday-d25" class="cal-day-panel ">
+          <div id="calday-d12" class="cal-day-panel ">
             <div class="cal-day-panel-title">Sábado, 26 Set</div>
 
 
@@ -1412,7 +1160,7 @@
             </div>
           </div>
 
-          <div id="calday-d26" class="cal-day-panel ">
+          <div id="calday-d13" class="cal-day-panel ">
             <div class="cal-day-panel-title">Domingo, 27 Set</div>
 
 
@@ -1427,7 +1175,7 @@
             </div>
           </div>
 
-          <div id="calday-d27" class="cal-day-panel ">
+          <div id="calday-d14" class="cal-day-panel ">
             <div class="cal-day-panel-title">Segunda, 28 Set</div>
 
             <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Ferias</div>
@@ -1442,6 +1190,201 @@
             </div>
           </div>
 
+          <div id="calday-d15" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Terça, 29 Set</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d16" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Quarta, 30 Set</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>4</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d17" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Quinta, 1 Out</div>
+
+            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
+
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d18" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Sexta, 2 Out</div>
+
+            <div class="cal-ausencia-row"><span class="team-dot dot-rafael"></span> Rafael Correia — Ferias</div>
+
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d19" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Sábado, 3 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d20" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Domingo, 4 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d21" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Segunda, 5 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d22" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Terça, 6 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d23" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Quarta, 7 Out</div>
+
+            <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Curso</div>
+
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>1</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d24" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Quinta, 8 Out</div>
+
+            <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Ferias</div>
+
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d25" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Sexta, 9 Out</div>
+
+            <div class="cal-ausencia-row"><span class="team-dot dot-rodrigo"></span> Rodrigo Roquette — Curso</div>
+
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d26" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Sábado, 10 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
+          <div id="calday-d27" class="cal-day-panel ">
+            <div class="cal-day-panel-title">Domingo, 11 Out</div>
+
+
+            <p class="muted">Sem ausências previstas.</p>
+
+            <div class="cal-day-panel-stats">
+              <div>🩺 <b>0</b> cirurgias de manhã</div>
+
+
+              <div class="muted">Sem SIGIC à tarde.</div>
+
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -1449,7 +1392,7 @@
     </div>
 
     <div class="footer">
-      <p>Painel HFF · Terca, 1 Set · gerado às 14:21</p>
+      <p>Painel HFF · Segunda, 14 Set · gerado às 08:59</p>
     </div>
   </div>
 
