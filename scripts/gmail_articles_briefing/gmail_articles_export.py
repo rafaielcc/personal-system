@@ -8,9 +8,11 @@ import socket
 import glob
 import shutil
 import tempfile
+import argparse
 from email.header import decode_header
 from email.utils import parsedate_to_datetime, parseaddr
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from dotenv import load_dotenv
 import fitz  # pymupdf
@@ -19,14 +21,24 @@ import fitz  # pymupdf
 # BASE PATH
 # =========================
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LEGACY_ENV = r"G:\My Drive\Claude_PRJ\Relatorios\Sources\System\gmail_artigos_briefing\.env"
 
-load_dotenv(os.path.join(BASE_DIR, ".env"))
+if not load_dotenv(os.path.join(BASE_DIR, ".env")) and os.path.exists(LEGACY_ENV):
+    load_dotenv(LEGACY_ENV)
 
 GMAIL_ADDRESS = os.getenv("GMAIL_ADDRESS")
 GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 # Remetente prioritário (o próprio Rafa) — por omissão, a própria conta que faz
 # login, já que os artigos mais importantes são os que ele reenvia para si mesmo.
 OWNER_EMAIL = (os.getenv("OWNER_EMAIL") or GMAIL_ADDRESS or "").lower()
+
+# Espelho_artigos: fonte normal das decisoes Guardar/Excluir feitas na pagina
+# estatica. Ausencia de decisao nao escreve nada aqui e, portanto, deixa o
+# artigo pendente na label atual ate uma decisao real ser tomada.
+ARTIGOS_SHEET_ID = os.getenv("ARTIGOS_SHEET_ID", "1Sl67SXLz--uOaYlbo6tT97pXUu_O3qNvVCVAVDDZBp0")
+GOOGLE_TOKEN_PATH = Path(os.getenv("GOOGLE_TOKEN_PATH", r"G:\My Drive\Claude_PRJ\token.json"))
+GOOGLE_CREDENTIALS_PATH = Path(os.getenv("GOOGLE_CREDENTIALS_PATH", r"G:\My Drive\Claude_PRJ\credentials.json"))
+SHEETS_SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 # =========================
 # CONFIG
@@ -354,8 +366,215 @@ def aplicar_decisao(imap, pasta_all: str, pasta_trash: str, message_id: str, aca
     return False
 
 
+def _bool_sheet(valor) -> bool:
+    if isinstance(valor, bool):
+        return valor
+    return str(valor).strip().lower() in {"true", "1", "sim", "yes", "y"}
+
+
+def _rows_to_dicts(rows: list) -> list:
+    if not rows:
+        return []
+    headers = [str(c).strip() for c in rows[0]]
+    parsed = []
+    for row_number, row in enumerate(rows[1:], start=2):
+        if not any(str(c).strip() for c in row):
+            continue
+        padded = list(row) + [""] * max(0, len(headers) - len(row))
+        item = {headers[i]: padded[i] for i in range(len(headers))}
+        item["_row_number"] = row_number
+        parsed.append(item)
+    return parsed
+
+
+def renovar_google_token():
+    try:
+        from google_auth_oauthlib.flow import InstalledAppFlow
+    except ImportError as exc:
+        raise RuntimeError("google-auth-oauthlib nao esta instalado") from exc
+
+    if not GOOGLE_CREDENTIALS_PATH.exists():
+        raise RuntimeError(f"credentials.json nao encontrado: {GOOGLE_CREDENTIALS_PATH}")
+    flow = InstalledAppFlow.from_client_secrets_file(str(GOOGLE_CREDENTIALS_PATH), SHEETS_SCOPES)
+    creds = flow.run_local_server(port=0)
+    GOOGLE_TOKEN_PATH.write_text(creds.to_json(), encoding="utf-8")
+    return creds
+
+
+def carregar_sheets_service(force_refresh: bool = False):
+    """Cria cliente Sheets com permissao de leitura/escrita.
+
+    Se o token local tiver sido renovado apenas com escopo readonly, a rotina
+    ignora a Sheet e preserva o fallback legacy por ficheiro exportado.
+    """
+    if not ARTIGOS_SHEET_ID:
+        raise RuntimeError("ARTIGOS_SHEET_ID vazio")
+    try:
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        from googleapiclient.discovery import build
+    except ImportError as exc:
+        raise RuntimeError(
+            "Bibliotecas Google API ausentes. Instale google-api-python-client, "
+            "google-auth e google-auth-oauthlib."
+        ) from exc
+
+    if not GOOGLE_TOKEN_PATH.exists():
+        if force_refresh:
+            creds = renovar_google_token()
+            return build("sheets", "v4", credentials=creds)
+        raise RuntimeError(f"token.json nao encontrado: {GOOGLE_TOKEN_PATH}")
+
+    creds = Credentials.from_authorized_user_file(str(GOOGLE_TOKEN_PATH), SHEETS_SCOPES)
+    if not creds.has_scopes(SHEETS_SCOPES):
+        if force_refresh:
+            creds = renovar_google_token()
+            return build("sheets", "v4", credentials=creds)
+        raise RuntimeError(
+            "token.json nao tem escopo de escrita em Sheets. Renove OAuth com "
+            "https://www.googleapis.com/auth/spreadsheets."
+        )
+    if creds.expired and creds.refresh_token:
+        creds.refresh(Request())
+        GOOGLE_TOKEN_PATH.write_text(creds.to_json(), encoding="utf-8")
+
+    return build("sheets", "v4", credentials=creds)
+
+
+def ler_decisoes_sheet(service) -> list:
+    result = (
+        service.spreadsheets()
+        .values()
+        .get(spreadsheetId=ARTIGOS_SHEET_ID, range="decisoes_artigos!A1:N10000")
+        .execute()
+    )
+    return _rows_to_dicts(result.get("values", []))
+
+
+def selecionar_decisoes_pendentes(rows: list) -> tuple[list, list]:
+    """Devolve (acoes_efetivas, linhas_a_marcar).
+
+    A Sheet e append-only. Para cada message_id, a linha mais recente ainda
+    pendente manda. Se active=false, isso significa "sem decisao" e nao ha
+    acao no Gmail; a linha e marcada como ignored para nao reaparecer.
+    """
+    pendentes = []
+    for row in rows:
+        status = str(row.get("status", "")).strip().lower()
+        decision = str(row.get("decision", "")).strip().lower()
+        message_id = str(row.get("message_id", "")).strip()
+        if status in {"processed", "ignored", "seed", "failed"}:
+            continue
+        if not message_id or decision not in {"guardar", "excluir"}:
+            continue
+        pendentes.append(row)
+
+    por_msg = {}
+    linhas_por_msg = {}
+    for row in pendentes:
+        message_id = str(row.get("message_id", "")).strip()
+        por_msg[message_id] = row
+        linhas_por_msg.setdefault(message_id, []).append(row["_row_number"])
+
+    acoes = []
+    linhas = []
+    for message_id, latest in por_msg.items():
+        row_numbers = linhas_por_msg.get(message_id, [])
+        decision = str(latest.get("decision", "")).strip().lower()
+        active = _bool_sheet(latest.get("active"))
+        if active:
+            acoes.append({
+                "message_id": message_id,
+                "acao": decision,
+                "row_numbers": row_numbers,
+                "article_title": latest.get("article_title", ""),
+            })
+        else:
+            linhas.append({
+                "row_numbers": row_numbers,
+                "status": "ignored",
+                "notes": "Decisao desativada no site; artigo permanece pendente.",
+            })
+    return acoes, linhas
+
+
+def marcar_linhas_sheet(service, updates: list, run_id: str) -> None:
+    if not updates:
+        return
+    now = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+    data = []
+    for update in updates:
+        for row_number in update.get("row_numbers", []):
+            data.append({
+                "range": f"decisoes_artigos!K{row_number}:N{row_number}",
+                "values": [[
+                    now,
+                    run_id,
+                    update.get("status", ""),
+                    update.get("notes", ""),
+                ]],
+            })
+    if not data:
+        return
+    service.spreadsheets().values().batchUpdate(
+        spreadsheetId=ARTIGOS_SHEET_ID,
+        body={"valueInputOption": "USER_ENTERED", "data": data},
+    ).execute()
+
+
+def processar_decisoes_sheet_pendentes(imap, pasta_all: str, pasta_trash: str, run_id: str, force_refresh: bool = False) -> dict:
+    stats = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "ignorados": 0, "falhas": 0}
+    chave_stats = {"guardar": "guardados", "excluir": "excluidos"}
+
+    try:
+        service = carregar_sheets_service(force_refresh=force_refresh)
+        rows = ler_decisoes_sheet(service)
+        acoes, status_updates = selecionar_decisoes_pendentes(rows)
+    except Exception as exc:
+        print(f"  [aviso] nao consegui ler Espelho_artigos; usando fallback por ficheiro: {exc}")
+        return stats
+
+    if not acoes and not status_updates:
+        print("  [info] Espelho_artigos sem decisões pendentes.")
+        return stats
+
+    print(f"A processar decisões do Espelho_artigos: {len(acoes)} acao(oes), {len(status_updates)} noop(s)")
+    for acao in acoes:
+        ok = aplicar_decisao(imap, pasta_all, pasta_trash, acao["message_id"], acao["acao"])
+        if ok:
+            stats[chave_stats[acao["acao"]]] += 1
+            status_updates.append({
+                "row_numbers": acao["row_numbers"],
+                "status": "processed",
+                "notes": f"Aplicado no Gmail: {acao['acao']}",
+            })
+        else:
+            stats["falhas"] += 1
+            status_updates.append({
+                "row_numbers": acao["row_numbers"],
+                "status": "failed",
+                "notes": f"Falha ao aplicar no Gmail: {acao['acao']}",
+            })
+
+    stats["ignorados"] += sum(1 for item in status_updates if item.get("status") == "ignored")
+    try:
+        marcar_linhas_sheet(service, status_updates, run_id)
+    except Exception as exc:
+        print(f"  [aviso] decisoes aplicadas, mas falhou marcar linhas na Sheet: {exc}")
+
+    return stats
+
+
+def somar_stats(*items: dict) -> dict:
+    result = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "ignorados": 0, "falhas": 0}
+    for item in items:
+        for key, value in item.items():
+            result[key] = result.get(key, 0) + int(value or 0)
+    return result
+
+
 def processar_decisoes_pendentes(imap, pasta_all: str, pasta_trash: str) -> dict:
-    stats = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "falhas": 0}
+    stats = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "ignorados": 0, "falhas": 0}
     ficheiros = sorted(glob.glob(os.path.join(OUTPUT, "decisoes_*.json")))
 
     chave_stats = {"guardar": "guardados", "excluir": "excluidos", "manter": "mantidos_em_leitura"}
@@ -515,8 +734,9 @@ def extrair_em_leitura(imap) -> list:
     return [montar_artigo(c) for c in candidatos]
 
 
-def export():
+def export(force_refresh: bool = False):
     print("BASE_DIR:", BASE_DIR)
+    run_id = f"artigos_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 
     try:
         imap = imaplib.IMAP4_SSL("imap.gmail.com", timeout=IMAP_TIMEOUT_SECONDS)
@@ -530,8 +750,12 @@ def export():
     pasta_all = encontrar_pasta_todos_emails(imap)
     pasta_trash = encontrar_pasta_trash(imap)
 
-    print("A aplicar decisões pendentes (guardar/excluir/manter) da semana anterior...")
-    stats_decisoes = processar_decisoes_pendentes(imap, pasta_all, pasta_trash)
+    print("A aplicar decisões pendentes do Espelho_artigos (guardar/excluir)...")
+    stats_sheet = processar_decisoes_sheet_pendentes(imap, pasta_all, pasta_trash, run_id, force_refresh=force_refresh)
+
+    print("A aplicar decisões pendentes legacy por ficheiro JSON, se existirem...")
+    stats_legacy = processar_decisoes_pendentes(imap, pasta_all, pasta_trash)
+    stats_decisoes = somar_stats(stats_sheet, stats_legacy)
 
     print("A extrair novos artigos da label 'Artigos para ler'...")
     artigos = extrair_novos_artigos(imap)
@@ -543,8 +767,11 @@ def export():
 
     resultado = {
         "generated_at": datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
+        "run_id": run_id,
         "label_origem": LABEL_PARA_LER,
         "label_em_leitura": LABEL_EM_LEITURA,
+        "artigos_sheet_id": ARTIGOS_SHEET_ID,
+        "artigos_sheet_url": f"https://docs.google.com/spreadsheets/d/{ARTIGOS_SHEET_ID}",
         "batch_size": BATCH_SIZE,
         "decisoes_aplicadas": stats_decisoes,
         "articles": artigos,
@@ -568,6 +795,7 @@ def export():
     print(f"Decisões aplicadas — guardados: {stats_decisoes['guardados']}, "
           f"excluídos: {stats_decisoes['excluidos']}, "
           f"mantidos em leitura: {stats_decisoes['mantidos_em_leitura']}, "
+          f"ignorados/noop: {stats_decisoes['ignorados']}, "
           f"falhas: {stats_decisoes['falhas']}")
     print(f"Artigos novos extraídos: {len(artigos)}")
     print(f"  - com PDF/abstract encontrado: {sum(1 for a in artigos if a['abstract_text'])}")
@@ -579,4 +807,20 @@ def export():
 
 
 if __name__ == "__main__":
-    export()
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--force-refresh",
+        action="store_true",
+        help="Renova token Google local com escopo de escrita em Sheets antes de ler decisoes.",
+    )
+    parser.add_argument(
+        "--refresh-token-only",
+        action="store_true",
+        help="Apenas renova o token Google local e termina, sem tocar no Gmail.",
+    )
+    args = parser.parse_args()
+    if args.refresh_token_only:
+        renovar_google_token()
+        print(f"Token Google renovado em: {GOOGLE_TOKEN_PATH}")
+        raise SystemExit(0)
+    export(force_refresh=args.force_refresh)
