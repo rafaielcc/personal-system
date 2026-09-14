@@ -10,13 +10,15 @@ execução, sempre pela mesma ordem:
    - `guardar` → aplica a label `Paediatric Surgery/Artigos-Lidos` e remove
      `Paediatric Surgery/Artigos-ParaLer` e `Paediatric Surgery/Artigos-
      EmLeitura` (o artigo pode vir de qualquer uma das duas).
+   - `manter` → aplica a label `Paediatric Surgery/Artigos-EmLeitura` e
+     remove `Paediatric Surgery/Artigos-ParaLer`; o artigo sai do lote dos
+     10 novos e volta a aparecer na aba "Em leitura" até receber `guardar`
+     ou `excluir`.
    - `excluir` → copia para o Lixo (recuperável 30 dias, nunca apaga
      definitivamente) e remove das mesmas duas labels de origem.
    - Sem decisão nenhuma → não há linha efetiva na Sheet, o Gmail não é
      alterado e o artigo continua pendente na label atual até uma decisão real
      ser tomada.
-   - `manter` permanece aceito apenas para ficheiros legacy antigos; a UI nova
-     não oferece esse botão.
    - Ficheiros fallback processados são movidos para `decisoes_processadas/`
      (nunca apagados, para auditoria).
 2. **Extrai os próximos artigos** da label `Paediatric Surgery/Artigos-
@@ -103,6 +105,7 @@ A página HTML envia eventos para o Apps Script, que faz append em
 `message_id`:
 
 - `decision=guardar`, `active=TRUE` → guardar;
+- `decision=manter`, `active=TRUE` → mover para "Em leitura";
 - `decision=excluir`, `active=TRUE` → excluir;
 - `active=FALSE` → clique revertido; sem ação no Gmail.
 

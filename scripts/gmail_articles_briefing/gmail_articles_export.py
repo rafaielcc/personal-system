@@ -32,9 +32,9 @@ GMAIL_APP_PASSWORD = os.getenv("GMAIL_APP_PASSWORD")
 # login, já que os artigos mais importantes são os que ele reenvia para si mesmo.
 OWNER_EMAIL = (os.getenv("OWNER_EMAIL") or GMAIL_ADDRESS or "").lower()
 
-# Espelho_artigos: fonte normal das decisoes Guardar/Excluir feitas na pagina
-# estatica. Ausencia de decisao nao escreve nada aqui e, portanto, deixa o
-# artigo pendente na label atual ate uma decisao real ser tomada.
+# Espelho_artigos: fonte normal das decisoes Guardar/Em leitura/Excluir feitas
+# na pagina estatica. Ausencia de decisao nao escreve nada aqui e, portanto,
+# deixa o artigo pendente na label atual ate uma decisao real ser tomada.
 ARTIGOS_SHEET_ID = os.getenv("ARTIGOS_SHEET_ID", "1Sl67SXLz--uOaYlbo6tT97pXUu_O3qNvVCVAVDDZBp0")
 GOOGLE_TOKEN_PATH = Path(os.getenv("GOOGLE_TOKEN_PATH", r"G:\My Drive\Claude_PRJ\token.json"))
 GOOGLE_CREDENTIALS_PATH = Path(os.getenv("GOOGLE_CREDENTIALS_PATH", r"G:\My Drive\Claude_PRJ\credentials.json"))
@@ -465,7 +465,7 @@ def selecionar_decisoes_pendentes(rows: list) -> tuple[list, list]:
         message_id = str(row.get("message_id", "")).strip()
         if status in {"processed", "ignored", "seed", "failed"}:
             continue
-        if not message_id or decision not in {"guardar", "excluir"}:
+        if not message_id or decision not in {"guardar", "manter", "excluir"}:
             continue
         pendentes.append(row)
 
@@ -524,7 +524,7 @@ def marcar_linhas_sheet(service, updates: list, run_id: str) -> None:
 
 def processar_decisoes_sheet_pendentes(imap, pasta_all: str, pasta_trash: str, run_id: str, force_refresh: bool = False) -> dict:
     stats = {"guardados": 0, "excluidos": 0, "mantidos_em_leitura": 0, "ignorados": 0, "falhas": 0}
-    chave_stats = {"guardar": "guardados", "excluir": "excluidos"}
+    chave_stats = {"guardar": "guardados", "manter": "mantidos_em_leitura", "excluir": "excluidos"}
 
     try:
         service = carregar_sheets_service(force_refresh=force_refresh)
@@ -750,7 +750,7 @@ def export(force_refresh: bool = False):
     pasta_all = encontrar_pasta_todos_emails(imap)
     pasta_trash = encontrar_pasta_trash(imap)
 
-    print("A aplicar decisões pendentes do Espelho_artigos (guardar/excluir)...")
+    print("A aplicar decisões pendentes do Espelho_artigos (guardar/manter/excluir)...")
     stats_sheet = processar_decisoes_sheet_pendentes(imap, pasta_all, pasta_trash, run_id, force_refresh=force_refresh)
 
     print("A aplicar decisões pendentes legacy por ficheiro JSON, se existirem...")
