@@ -9,7 +9,7 @@ description: Use quando o Rafa pedir "história cirped", "história da cirurgia"
 
 1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler `SYSTEM_PROMPT_v6.1_FINAL.md`** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar pelo nome; usar a cópia de `createdTime` mais recente se houver duplicados). Obrigatório mesmo que o documento abaixo pareça auto-suficiente.
-3. Na mesma pasta Drive, procurar **`INSTRUCOES_CIRPED.md`** pelo nome (ID conhecido `1ZOs035FunktmhmDyXxDL6mpn9CclXacd`, mas confirmar sempre pelo nome/`createdTime` caso exista uma versão mais recente). Descarregar e seguir o contrato na íntegra — não resumir nem saltar secções.
+3. Na mesma pasta Drive, procurar **`INSTRUCOES_CIRPED.md`** pelo nome (ID conhecido `14VZ4cqJQsUhPP3lsBTZuc7vDLmy8jlBY`, mas confirmar sempre pelo nome/`createdTime` caso exista uma versão mais recente). Descarregar e seguir o contrato na íntegra — não resumir nem saltar secções.
 4. Seguir a rotina tal como descrita lá. Não inventar passos nem assumir o processo de cor — o documento é a fonte de verdade, este skill é só o ponteiro para ele.
 
 ## Notas específicas a ter em atenção (não substituem o documento — só orientação)
