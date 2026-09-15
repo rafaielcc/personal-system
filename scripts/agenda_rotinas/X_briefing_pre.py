@@ -255,6 +255,12 @@ def parse_date(value: Any, default_year: int | None = None) -> date | None:
     # text[:10] acima dava "qua., 28/1" e falhava tudo, deixando 26 linhas sem data e a
     # tab HFF vazia sem dizer porque. Procurar a data em qualquer ponto do texto resolve
     # esta e qualquer outra decoracao a volta dela.
+    # As abas Sigic e Prevencao guardam as datas como numero de serie da folha de
+    # calculo ("46027" = 2026-01-05). A API devolve-o como texto, portanto o ramo
+    # numerico acima nunca via estes valores e as duas abas saiam sempre vazias.
+    if text.isdigit() and 20000 <= int(text) <= 60000:
+        return date(1899, 12, 30) + timedelta(days=int(text))
+
     m = DATE_ISO_IN_TEXT_RE.search(text)
     if m:
         try:
@@ -1052,17 +1058,58 @@ def parse_sigic(rows: list[list[Any]], today: date, errors: list[str]) -> dict[s
     end = today + timedelta(days=HFF_WINDOW_DAYS - 1)
     listas = []
     anomalias = []
+    rotulo_mes: int | None = None   # a coluna MES so vem preenchida na 1a linha de cada mes
+    ilegiveis = 0
+    amostra_ilegiveis: list[str] = []
+
     for row_idx, row in enumerate(rows[header_idx + 1:], start=header_idx + 2):
+        rotulo = month_from_value(cell(row, mapping, "mes"))
+        if rotulo:
+            rotulo_mes = rotulo
         dia_value = cell(row, mapping, "dia")
         sigic_date = parse_date(dia_value, default_year=today.year)
-        if sigic_date is None and isinstance(dia_value, (int, float)):
-            month = month_from_value(cell(row, mapping, "mes"))
-            if month:
-                try:
-                    sigic_date = date(today.year, month, int(dia_value))
-                except ValueError:
-                    sigic_date = None
-        if sigic_date is None or not (today <= sigic_date <= end):
+        if sigic_date is None and isinstance(dia_value, (int, float)) and rotulo_mes:
+            try:
+                sigic_date = date(today.year, rotulo_mes, int(dia_value))
+            except ValueError:
+                sigic_date = None
+
+        if sigic_date is None:
+            if str(dia_value or "").strip():
+                ilegiveis += 1
+                if len(amostra_ilegiveis) < 5:
+                    amostra_ilegiveis.append(str(dia_value))
+            continue
+
+        # O rotulo do mes e a data tem de concordar. Na folha real, as linhas de Agosto a
+        # Dezembro traziam datas de 2025 — o calendario do ano anterior, nunca actualizado.
+        # Isto e um erro de dados, nao de leitura: assinala-se, nunca se corrige por conta
+        # propria (corrigir seria inventar uma lista cirurgica que ninguem marcou).
+        if rotulo_mes and sigic_date.month != rotulo_mes:
+            sugerida = None
+            try:
+                sugerida = date(today.year, rotulo_mes, sigic_date.day).isoformat()
+            except ValueError:
+                pass
+            anomalias.append({
+                "tipo": "sigic_mes_incoerente",
+                "linha": row_idx,
+                "date": sigic_date.isoformat(),
+                "mes_rotulado": rotulo_mes,
+                "sugestao": sugerida,
+                "nota": "A coluna MES e a data nao concordam; provavel ano errado na folha.",
+            })
+        elif rotulo_mes and sigic_date.year != today.year:
+            anomalias.append({
+                "tipo": "sigic_ano_incoerente",
+                "linha": row_idx,
+                "date": sigic_date.isoformat(),
+                "ano_esperado": today.year,
+                "sugestao": sigic_date.replace(year=today.year).isoformat(),
+                "nota": "Linha datada de outro ano; provavel calendario do ano anterior por actualizar.",
+            })
+
+        if not (today <= sigic_date <= end):
             continue
         item = {
             "date": sigic_date.isoformat(),
@@ -1075,53 +1122,88 @@ def parse_sigic(rows: list[list[Any]], today: date, errors: list[str]) -> dict[s
             anomalias.append({"tipo": "sigic_sem_cirurgiao", "linha": row_idx, "date": item["date"]})
         listas.append(item)
     listas.sort(key=lambda i: i["date"])
-    return {"ok": True, "listas": listas, "anomalias": anomalias}
+    return {
+        "ok": True,
+        "listas": listas,
+        "anomalias": anomalias,
+        "linhas_data_ilegivel": ilegiveis,
+        "amostra_datas_ilegiveis": amostra_ilegiveis,
+    }
 
 
-def infer_grid_date(rows: list[list[Any]], r: int, c: int, year: int) -> date | None:
-    """A aba Ausencias e uma grelha, nao uma tabela: a data vem da celula a esquerda/acima."""
-    explicit = parse_date(rows[r][c], default_year=year)
+def month_blocks(rows: list[list[Any]]) -> list[dict[str, int]]:
+    """Localiza os cabecalhos de mes da grelha (JANEIRO, FEVEREIRO, ...).
+
+    So aceita o NOME do mes escrito por extenso: um numero de 1 a 12 nesta grelha e
+    quase de certeza um dia do mes, nao um mes.
+    """
+    blocos = []
+    for r, row in enumerate(rows):
+        for c, value in enumerate(row):
+            if not isinstance(value, str):
+                continue
+            month = MONTHS_PT.get(norm(value))
+            if month:
+                blocos.append({"row": r, "col": c, "month": month})
+    return blocos
+
+
+def grid_year(rows: list[list[Any]], default: int) -> int:
+    """O ano vem do titulo da grelha ("CALENDARIO 2026"); se nao houver, usa o corrente."""
+    for row in rows[:6]:
+        for value in row:
+            m = re.search(r"\b(20\d{2})\b", str(value or ""))
+            if m:
+                return int(m.group(1))
+    return default
+
+
+def infer_grid_date(rows: list[list[Any]], r: int, c: int, year: int,
+                    blocos: list[dict[str, int]]) -> date | None:
+    """A aba Ausencias e um calendario anual com tres meses lado a lado, nao uma tabela.
+
+    Cada bloco de mes ocupa 7 colunas (D a S) e alterna linhas de numeros do dia com
+    linhas de codigos. O mes de um codigo e o cabecalho mais proximo acima cuja faixa
+    de colunas o cobre; o dia e o primeiro numero 1-31 que aparece a subir na MESMA
+    coluna, sem sair do bloco. A heuristica anterior olhava apenas 8 linhas acima e por
+    isso so datava a 1a semana de cada mes — 75 dos 83 codigos ficavam sem data.
+    """
+    try:
+        explicit = parse_date(rows[r][c], default_year=year)
+    except IndexError:
+        return None
     if explicit:
         return explicit
-    day: int | None = None
-    for rr, cc in ((r, c - 1), (r, c - 2), (r - 1, c), (r - 2, c), (r - 1, c - 1)):
-        if rr < 0 or cc < 0:
-            continue
+
+    cobrem = [b for b in blocos if b["row"] < r and b["col"] <= c <= b["col"] + 6]
+    if not cobrem:
+        return None
+    bloco = max(cobrem, key=lambda b: b["row"])
+
+    for rr in range(r - 1, bloco["row"], -1):
         try:
-            candidate = rows[rr][cc]
+            candidate = rows[rr][c]
         except IndexError:
             continue
-        parsed = parse_date(candidate, default_year=year)
-        if parsed:
-            return parsed
-        if isinstance(candidate, (int, float)) and 1 <= int(candidate) <= 31:
-            day = int(candidate)
-            break
-        if isinstance(candidate, str) and re.fullmatch(r"\d{1,2}", candidate.strip()):
-            day = int(candidate.strip())
-            break
-    if day is None:
-        return None
-    month = None
-    for rr in range(max(0, r - 8), min(len(rows), r + 3)):
-        for cc in range(max(0, c - 8), min(len(rows[rr]), c + 3)):
-            month = month_from_value(rows[rr][cc])
-            if month:
-                break
-        if month:
-            break
-    if not month:
-        return None
-    try:
-        return date(year, month, day)
-    except ValueError:
-        return None
+        text = str(candidate or "").strip()
+        if not re.fullmatch(r"\d{1,2}", text):
+            continue
+        day = int(text)
+        if not 1 <= day <= 31:
+            continue
+        try:
+            return date(year, bloco["month"], day)
+        except ValueError:
+            return None
+    return None
 
 
 def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
     """Codigos: Maiuscula = motivo (F/C/M) + minusculas = iniciais (if/rc/rr/a). Ex: 'Mif'.
     '*if' = folga. A aba Ausencias e autoritativa."""
     end = today + timedelta(days=HFF_WINDOW_DAYS - 1)
+    blocos = month_blocks(rows)
+    year = grid_year(rows, today.year)
     ausencias: list[dict[str, Any]] = []
     folgas: list[dict[str, Any]] = []
     ambiguos: list[dict[str, Any]] = []
@@ -1138,7 +1220,7 @@ def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
             ambiguous_single = compact.upper() in {"F", "C", "M"}
             if not (absence_match or day_off_match or ambiguous_single):
                 continue
-            parsed_date = infer_grid_date(rows, r_idx, c_idx, today.year)
+            parsed_date = infer_grid_date(rows, r_idx, c_idx, year, blocos)
             record = {"codigo": text, "celula": f"L{r_idx + 1}C{c_idx + 1}"}
             if parsed_date is None:
                 sem_data.append(record)
@@ -1174,7 +1256,9 @@ def parse_prevencao(rows: list[list[Any]], today: date, ausencias: dict[str, Any
         "inicio": ["Data Inicio", "Data Início", "Inicio", "Início"],
         "fim": ["Data Fim", "Fim"],
         "cirurgiao": ["Cirurgiao de prevencao", "Cirurgião de prevenção", "Cirurgiao a fazer a Prevencao"],
-        "madeira": ["Cirurgiao na Madeira", "Cirurgião na Madeira"],
+        "madeira": ["Cirurgiao na Madeira", "Cirurgião na Madeira",
+                    "Cirurgiao com alguns dias da semana na Madeira (Nao pode estar de prevencao)",
+                    "Cirurgião com alguns dias da semana na Madeira (Não pode estar de prevenção)"],
         "ausente": ["Cirurgiao de ferias/ausente", "Cirurgião de férias/ausente", "Cirurgiao de ferias ou ausente por outro motivo"],
         "obs": ["Observacoes", "Observações"],
     }
@@ -1302,6 +1386,24 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
             "sigic_tarde": sigic_by_date.get(day_key),
         })
 
+    incoerentes = sum(1 for a in sigic.get("anomalias", [])
+                      if a["tipo"] in {"sigic_mes_incoerente", "sigic_ano_incoerente"})
+    if incoerentes:
+        warnings.append(
+            f"Espelho HFF / SIGIC: {incoerentes} linha(s) com o mes rotulado a discordar da "
+            "data (provavel ano por actualizar na folha). Nao foram corrigidas: ver anomalias."
+        )
+    if ausencias.get("codigos_sem_data"):
+        warnings.append(
+            f"Espelho HFF / Ausencias: {len(ausencias['codigos_sem_data'])} codigo(s) sem data "
+            "atribuivel; confirmar o desenho da grelha."
+        )
+    if ausencias.get("codigos_ambiguos"):
+        warnings.append(
+            f"Espelho HFF / Ausencias: {len(ausencias['codigos_ambiguos'])} codigo(s) sem iniciais "
+            "(a cor da celula e que identifica a pessoa, e a cor nao e legivel por aqui)."
+        )
+
     tarefas_hff = [
         item for item in todoist.get("itens", [])
         if item["classificacao"] == "trabalho_hff"
@@ -1317,6 +1419,16 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
             "cirurgias_linhas_na_folha": max(0, len(sheets["cirurgias"] or []) - 1),
             "cirurgias_linhas_na_janela": cirurgias.get("linhas_na_janela", 0),
             "sigic_cabecalho_ok": bool(sigic.get("ok")),
+            "sigic_listas_na_janela": len(sigic.get("listas", [])),
+            "sigic_datas_ilegiveis": sigic.get("linhas_data_ilegivel", 0),
+            "sigic_amostra_ilegiveis": sigic.get("amostra_datas_ilegiveis", []),
+            "sigic_linhas_incoerentes": sum(
+                1 for a in sigic.get("anomalias", [])
+                if a["tipo"] in {"sigic_mes_incoerente", "sigic_ano_incoerente"}
+            ),
+            "ausencias_codigos_sem_data": len(ausencias.get("codigos_sem_data", [])),
+            "ausencias_codigos_ambiguos": len(ausencias.get("codigos_ambiguos", [])),
+            "prevencao_semanas": len(prevencao.get("semanas", [])),
             "prevencao_cabecalho_ok": bool(prevencao.get("ok")),
             "janela": {"inicio": key, "fim": (target + timedelta(days=HFF_WINDOW_DAYS - 1)).isoformat()},
         },
@@ -1737,6 +1849,12 @@ def self_test() -> int:
     check("parse_date com dia da semana 3", parse_date("qua., 16/09/26") == date(2026, 9, 16))
     check("parse_date ISO embebida", parse_date("Dia 2026-09-16 (quarta)") == date(2026, 9, 16))
     check("parse_date sem ano nao inventa", parse_date("vem de 09/09") is None)
+    # Serial da folha de calculo, que a API entrega como TEXTO (abas Sigic e Prevencao)
+    check("parse_date serial em texto", parse_date("46027") == date(2026, 1, 5))
+    check("parse_date serial em texto 2", parse_date("45994") == date(2025, 12, 3))
+    check("parse_date serial numerico", parse_date(46027) == date(2026, 1, 5))
+    check("parse_date nao confunde n.o processo", parse_date("1119760") is None)
+    check("parse_date nao confunde dia solto", parse_date("14") is None)
     check("parse_date dia impossivel", parse_date("qua., 32/13/26") is None)
 
     check("next_business_day sexta->segunda", next_business_day(date(2026, 9, 11)) == date(2026, 9, 14))
@@ -1846,15 +1964,51 @@ def self_test() -> int:
     check("espelho real: quarta e dia de BO",
           not any(a["tipo"] == "bo_em_dia_invalido" for a in real["anomalias"]))
 
+    # Grelha com a forma REAL da aba Ausencias: calendario anual, o dia por cima do
+    # codigo na mesma coluna, e o nome do mes varias linhas acima.
     grid = [
-        ["Setembro", "", ""],
-        ["14", "Mif", ""],
-        ["15", "*rc", ""],
+        ["CALENDARIO 2026"],
+        [],
+        ["", "SETEMBRO"],
+        ["", "D", "S", "T", "Q", "Q", "S", "S"],
+        ["", "", "", "1", "2", "3", "4", "5"],
+        ["", "", "", "Mif", "", "", "", ""],
+        ["", "6", "7", "8", "9", "10", "11", "12"],
+        ["", "", "*rc", "", "", "", "", ""],
+        ["", "13", "14", "15", "16", "17", "18", "19"],
+        ["", "", "", "", "F", "", "", ""],
+        ["", "20", "21", "22", "23", "24", "25", "26"],
+        ["", "", "Frr", "", "", "", "", ""],
     ]
-    ausencias = parse_ausencias(grid, date(2026, 9, 14))
-    check("ausencias 1 confirmada", len(ausencias["ausencias"]) == 1)
+    check("grid_year le o titulo", grid_year(grid, 1999) == 2026)
+    ausencias = parse_ausencias(grid, date(2026, 9, 1))
+    datas = {a["data"] for a in ausencias["ausencias"]}
+    check("ausencias 2 confirmadas", len(ausencias["ausencias"]) == 2)
     check("ausencias motivo Madeira", ausencias["ausencias"][0]["motivo"] == "Madeira")
+    check("ausencias 1a semana datada", "2026-09-01" in datas)
+    # A regressao que interessa: antes, um codigo 9 linhas abaixo do nome do mes
+    # ficava sem data (75 dos 83 codigos da folha real).
+    check("ausencias 4a semana datada", "2026-09-21" in datas)
     check("folgas 1", len(ausencias["folgas"]) == 1)
+    check("folga datada", ausencias["folgas"][0]["data"] == "2026-09-07")
+    check("codigo sem iniciais fica ambiguo", len(ausencias["codigos_ambiguos"]) == 1)
+    check("codigo ambiguo tem data", ausencias["codigos_ambiguos"][0].get("data") == "2026-09-16")
+    check("nenhum codigo sem data", len(ausencias["codigos_sem_data"]) == 0)
+
+    # SIGIC: rotulo do mes que nao bate com a data e erro de dados, nao de leitura
+    sigic_rows = [
+        ["MES", "DIA de Sigic", "Cirurgiao1", "Cirurgiao2"],
+        ["Setembro", "46283", "Rafael", "Rodrigo"],          # 2026-09-18, coerente
+        ["Outubro", "45931", "Isabel", "Afonso"],            # 2025-10-01, ano errado
+    ]
+    e_sig: list[str] = []
+    sig = parse_sigic(sigic_rows, date(2026, 9, 16), e_sig)
+    check("sigic le serial em texto", len(sig["listas"]) == 1)
+    check("sigic data certa", sig["listas"][0]["date"] == "2026-09-18")
+    check("sigic assinala ano incoerente",
+          any(a["tipo"].startswith("sigic_") for a in sig["anomalias"]))
+    check("sigic sugere a correccao",
+          any(a.get("sugestao", "").startswith("2026-") for a in sig["anomalias"]))
 
     draft = build_canonical_draft(
         date(2026, 9, 14), "B", "2026-09-14T08:00:00+01:00",
