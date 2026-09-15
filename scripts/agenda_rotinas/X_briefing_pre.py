@@ -102,6 +102,11 @@ GOOGLE_SCOPES = [
 
 ESPELHO_HFF_ID = "1culq10MksUxSd05P1_ejqOEzaoQrFLKT-vP0brqp7iU"
 
+# API unificada v1 do Todoist. A REST v2 foi desligada (HTTP 410) em Setembro de 2026.
+TODOIST_API_URL = "https://api.todoist.com/api/v1/tasks"
+TODOIST_PAGE_SIZE = 200      # tecto por pedido imposto pela propria API
+TODOIST_MAX_PAGES = 20       # travao de seguranca contra um cursor que nunca termina
+
 OUT_SUFFIX = "_briefing.json"  # o que distingue os ficheiros desta rotina na pasta X_Outputs
 
 # --------------------------------------------------------------------------------------
@@ -135,11 +140,22 @@ HABITS_BY_WEEKDAY = {
 GMAIL_QUERIES = {
     "inbox": f"in:inbox newer_than:{EMAIL_RECENT_DAYS}d",
     "snoozed": "in:snoozed",
-    "tarefas_sem_data": "label:tarefas-sem-data",
-    "pediatric_surgery": "label:pediatric-surgery",
-    "ulsasi": "label:ULSASI",
 }
+# Seccoes lidas por ID de etiqueta, nao por "label:" no texto da query. O operador label:
+# depende da grafia exacta (espacos viram hifens, "Paediatric" leva 'a') e parte em silencio
+# se a etiqueta for renomeada: devolve zero resultados sem erro nenhum. Resolver o ID a
+# partir do nome e pedir por labelIds e exacto e falha alto se o nome nao existir.
+GMAIL_LABEL_SECTIONS = {
+    "tarefas_sem_data": "Tarefas sem data",
+    "pediatric_surgery": "Paediatric Surgery",
+    "ulsasi": "ULSASI",
+}
+GMAIL_FORBIDDEN_LABEL = "Events"  # exclusivo da Agenda de Lazer; o briefing nunca o le
 GMAIL_MAX_PER_QUERY = 60
+
+# Conta Google que estas rotinas esperam. Serve so para assinalar em voz alta quando o
+# consentimento OAuth foi dado noutra conta (o sintoma e silencioso: tudo devolve zero).
+EXPECTED_GOOGLE_ACCOUNT = "rafaielcc@gmail.com"
 
 # Classificacao de calendarios (LEITURA_CALENDARIO v1.0, seccao 5)
 CALENDAR_TYPES = {
@@ -151,7 +167,9 @@ CALENDAR_SKIP = {"todoist"}  # lido directamente pela API do Todoist (que expoe 
 
 FLAG_PATTERNS = {
     "sigic": re.compile(r"\bsigic\b", re.IGNORECASE),
-    "prevencao": re.compile(r"preven", re.IGNORECASE),
+    # "preven" a seco apanhava "prevent"/"prevention" em descricoes de eventos em ingles
+    # (o Meetup do volei apareceu marcado como Prevencao do HFF). Exigir a palavra inteira.
+    "prevencao": re.compile(r"\bpreven[c\u00e7][a\u00e3]o\b", re.IGNORECASE),
     "viagem": re.compile(r"\b(voo|flight|viagem|check-?in|boarding)\b", re.IGNORECASE),
 }
 
@@ -394,6 +412,26 @@ def event_times(event: dict[str, Any]) -> tuple[str | None, str | None, bool]:
     return to_lisbon(s), to_lisbon(e), False
 
 
+def mark_duplicates(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """O mesmo evento importado por duas vias (ex.: Meetup + convite directo) aparece duas
+    vezes, com event_id diferente. Apanhar isto e trabalho mecanico — logo faz-se aqui, e
+    nao na cabeca do LLM. Marca as repeticoes com 'duplicado_de' e devolve os grupos."""
+    vistos: dict[tuple[str, str, str], list[str]] = defaultdict(list)
+    for item in items:
+        chave = (item["date"], item.get("inicio") or "", norm(item["titulo"]))
+        vistos[chave].append(item["event_id"])
+    duplicados = [
+        {"date": k[0], "inicio": k[1] or None, "titulo": k[2], "event_ids": ids, "n": len(ids)}
+        for k, ids in vistos.items() if len(ids) > 1
+    ]
+    repetidos = {eid for grupo in duplicados for eid in grupo["event_ids"][1:]}
+    primeiro = {eid: grupo["event_ids"][0] for grupo in duplicados for eid in grupo["event_ids"][1:]}
+    for item in items:
+        if item["event_id"] in repetidos:
+            item["duplicado_de"] = primeiro[item["event_id"]]
+    return duplicados
+
+
 def collect_calendar(service: Any, start_date: date, days: int, warnings: list[str]) -> dict[str, Any]:
     """Le TODOS os calendarios (excepto os de CALENDAR_SKIP) e devolve tudo em hora de Lisboa."""
     time_min = datetime.combine(start_date, datetime.min.time(), tzinfo=TZ)
@@ -476,7 +514,9 @@ def collect_calendar(service: Any, start_date: date, days: int, warnings: list[s
         calendars_meta.append(meta)
 
     items.sort(key=lambda i: (i["date"], i.get("inicio") or ""))
-    return {"calendarios": calendars_meta, "itens": items}
+
+    duplicados = mark_duplicates(items)
+    return {"calendarios": calendars_meta, "itens": items, "duplicados": duplicados}
 
 
 # ======================================================================================
@@ -520,10 +560,40 @@ def classify_priority(value: Any) -> str:
     return "baixa"
 
 
-def collect_todoist(token: str, target: date, warnings: list[str]) -> dict[str, Any]:
-    url = "https://api.todoist.com/rest/v2/tasks"
+def fetch_todoist_tasks(token: str, warnings: list[str]) -> list[dict[str, Any]]:
+    """Le todas as tarefas da API unificada v1 do Todoist, seguindo a paginacao por cursor.
+
+    A antiga REST v2 (api.todoist.com/rest/v2/tasks) foi desligada pelo Doist em Setembro
+    de 2026 e passou a responder HTTP 410 Gone — foi exactamente o que apanhamos na 1a
+    execucao real. A v1 devolve {"results": [...], "next_cursor": ...} em vez de uma lista
+    nua, por isso aceitamos as duas formas: se um dia voltar a ser lista, continua a andar.
+    """
     headers = {"Authorization": f"Bearer {token}", "User-Agent": "agenda-briefing-pre/1.0"}
-    tasks = http_get_json(url, headers=headers)
+    tasks: list[dict[str, Any]] = []
+    cursor: str | None = None
+    for _ in range(TODOIST_MAX_PAGES):
+        url = f"{TODOIST_API_URL}?limit={TODOIST_PAGE_SIZE}"
+        if cursor:
+            url += f"&cursor={urllib.parse.quote(cursor)}"
+        payload = http_get_json(url, headers=headers)
+        if isinstance(payload, list):          # forma antiga (v2)
+            tasks.extend(payload)
+            break
+        if not isinstance(payload, dict):
+            raise RuntimeError(f"resposta inesperada do Todoist: {type(payload).__name__}")
+        tasks.extend(payload.get("results") or [])
+        cursor = payload.get("next_cursor")
+        if not cursor:
+            break
+    else:
+        warnings.append(
+            f"Todoist: parei nas {TODOIST_MAX_PAGES} paginas; podem faltar tarefas."
+        )
+    return tasks
+
+
+def collect_todoist(token: str, target: date, warnings: list[str]) -> dict[str, Any]:
+    tasks = fetch_todoist_tasks(token, warnings)
 
     end = target + timedelta(days=TODOIST_LOOKAHEAD_DAYS - 1)
     itens: list[dict[str, Any]] = []
@@ -553,12 +623,18 @@ def collect_todoist(token: str, target: date, warnings: list[str]) -> dict[str, 
         })
     itens.sort(key=lambda i: (i["date"], i["texto"]))
 
-    por_dia: dict[str, list[str]] = defaultdict(list)
+    por_dia_local: dict[str, list[str]] = defaultdict(list)
     for item in itens:
-        por_dia[item["date"]].append(item["texto"])
+        por_dia_local[item["date"]].append(item["texto"])
     if sem_data:
         warnings.append(f"Todoist: {sem_data} tarefa(s) sem data ignoradas (nao entram no briefing).")
-    return {"itens": itens, "por_dia": dict(por_dia), "total_sem_data": sem_data}
+    return {
+        "itens": itens,
+        "por_dia": dict(por_dia_local),
+        "total_sem_data": sem_data,
+        "total_lidas": len(tasks),
+        "api": TODOIST_API_URL,
+    }
 
 
 # ======================================================================================
@@ -571,19 +647,88 @@ def header_value(payload: dict[str, Any], name: str) -> str:
     return ""
 
 
-def collect_gmail(service: Any, warnings: list[str]) -> dict[str, Any]:
-    assert "label:events" not in " ".join(GMAIL_QUERIES.values()), \
-        "O briefing nunca le label:events (pertence em exclusivo a Agenda de Lazer)."
+def gmail_account(service: Any, warnings: list[str]) -> str | None:
+    """Que caixa de correio e que esta credencial abre, afinal.
 
-    result: dict[str, Any] = {}
-    for section, query in GMAIL_QUERIES.items():
+    Sem isto, consentir o OAuth na conta errada e indistinguivel de uma caixa vazia:
+    todas as queries devolvem zero e nenhuma delas da erro.
+    """
+    try:
+        profile = service.users().getProfile(userId="me").execute()
+    except Exception as exc:
+        warnings.append(f"Gmail: nao consegui identificar a conta autenticada ({exc})")
+        return None
+    account = (profile.get("emailAddress") or "").strip()
+    if account and norm(account) != norm(EXPECTED_GOOGLE_ACCOUNT):
+        warnings.append(
+            f"Gmail: autenticado como {account}, mas as rotinas assumem "
+            f"{EXPECTED_GOOGLE_ACCOUNT}. Se as seccoes vierem vazias e por isto — "
+            "apagar token_agenda.json e voltar a consentir na conta certa."
+        )
+    return account or None
+
+
+def gmail_label_ids(service: Any, warnings: list[str]) -> dict[str, str | None]:
+    """Resolve nomes de etiqueta -> IDs. Um nome que nao exista fica None e da aviso."""
+    try:
+        listed = service.users().labels().list(userId="me").execute()
+    except Exception as exc:
+        warnings.append(f"Gmail: listagem de etiquetas falhou ({exc})")
+        return {section: None for section in GMAIL_LABEL_SECTIONS}
+    by_name = {norm(item.get("name", "")): item.get("id") for item in listed.get("labels", [])}
+    resolved: dict[str, str | None] = {}
+    for section, label_name in GMAIL_LABEL_SECTIONS.items():
+        label_id = by_name.get(norm(label_name))
+        if label_id is None:
+            warnings.append(
+                f"Gmail '{section}': etiqueta '{label_name}' nao existe nesta conta; "
+                "seccao fica vazia (verificar o nome exacto no Gmail)."
+            )
+        resolved[section] = label_id
+    return resolved
+
+
+def gmail_sections(email: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    """So as seccoes de mensagens: ignora chaves de metadados como '_conta'."""
+    return {k: v for k, v in email.items() if not k.startswith("_") and isinstance(v, dict)}
+
+
+def collect_gmail(service: Any, warnings: list[str]) -> dict[str, Any]:
+    forbidden = norm(GMAIL_FORBIDDEN_LABEL)
+    assert forbidden not in {norm(v) for v in GMAIL_LABEL_SECTIONS.values()}, \
+        "O briefing nunca le a etiqueta Events (pertence em exclusivo a Agenda de Lazer)."
+    assert forbidden not in norm(" ".join(GMAIL_QUERIES.values())), \
+        "O briefing nunca le a etiqueta Events (pertence em exclusivo a Agenda de Lazer)."
+
+    result: dict[str, Any] = {"_conta": gmail_account(service, warnings)}
+    label_ids = gmail_label_ids(service, warnings)
+
+    pedidos: list[tuple[str, str | None, str | None]] = [
+        (section, query, None) for section, query in GMAIL_QUERIES.items()
+    ] + [
+        (section, None, label_ids.get(section)) for section in GMAIL_LABEL_SECTIONS
+    ]
+
+    for section, query, label_id in pedidos:
+        origem = query if query else f"labelId:{label_id} ({GMAIL_LABEL_SECTIONS.get(section)})"
+        if query is None and label_id is None:
+            result[section] = {
+                "query": origem,
+                "total": 0,
+                "erro": "etiqueta inexistente nesta conta",
+                "mensagens": [],
+            }
+            continue
         try:
-            listed = service.users().messages().list(
-                userId="me", q=query, maxResults=GMAIL_MAX_PER_QUERY
-            ).execute()
+            params: dict[str, Any] = {"userId": "me", "maxResults": GMAIL_MAX_PER_QUERY}
+            if query:
+                params["q"] = query
+            else:
+                params["labelIds"] = [label_id]
+            listed = service.users().messages().list(**params).execute()
         except Exception as exc:
             warnings.append(f"Gmail '{section}': listagem falhou ({exc})")
-            result[section] = {"query": query, "erro": f"{type(exc).__name__}: {exc}", "mensagens": []}
+            result[section] = {"query": origem, "total": 0, "erro": f"{type(exc).__name__}: {exc}", "mensagens": []}
             continue
 
         mensagens = []
@@ -612,7 +757,7 @@ def collect_gmail(service: Any, warnings: list[str]) -> dict[str, Any]:
                 "nao_lido": "UNREAD" in (msg.get("labelIds") or []),
             })
         mensagens.sort(key=lambda m: m.get("recebido") or "", reverse=True)
-        result[section] = {"query": query, "total": len(mensagens), "mensagens": mensagens}
+        result[section] = {"query": origem, "total": len(mensagens), "mensagens": mensagens}
     return result
 
 
@@ -1112,6 +1257,17 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
     ]
 
     return {
+        "_diagnostico": {
+            # Sem isto, "sessoes: 0" e ambiguo: cabecalho nao reconhecido? folha vazia?
+            # cirurgias todas fora da janela? Agora a resposta vem no proprio JSON.
+            "cirurgias_cabecalho_ok": bool(cirurgias.get("ok")),
+            "cirurgias_cabecalhos_em_falta": cirurgias.get("missing_headers", []),
+            "cirurgias_linhas_na_folha": max(0, len(sheets["cirurgias"] or []) - 1),
+            "cirurgias_linhas_na_janela": cirurgias.get("linhas_na_janela", 0),
+            "sigic_cabecalho_ok": bool(sigic.get("ok")),
+            "prevencao_cabecalho_ok": bool(prevencao.get("ok")),
+            "janela": {"inicio": key, "fim": (target + timedelta(days=HFF_WINDOW_DAYS - 1)).isoformat()},
+        },
         "meta": {
             "date": key,
             "weekday": weekday_pt(target),
@@ -1351,14 +1507,36 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     if services:
         try:
             calendario = collect_calendar(services["calendar"], target, CALENDAR_WINDOW_DAYS, warnings)
-            fontes["calendario"] = {"ok": True, "calendarios": len(calendario["calendarios"]), "itens": len(calendario["itens"])}
+            fontes["calendario"] = {
+                "ok": True,
+                "calendarios": len(calendario["calendarios"]),
+                "itens": len(calendario["itens"]),
+                "duplicados": len(calendario.get("duplicados", [])),
+            }
+            if calendario.get("duplicados"):
+                warnings.append(
+                    f"Calendario: {len(calendario['duplicados'])} evento(s) repetido(s) "
+                    "(mesma data, hora e titulo); marcados com 'duplicado_de'."
+                )
         except Exception as exc:
             fontes["calendario"] = {"ok": False, "erro": f"{type(exc).__name__}: {exc}"}
             errors.append(f"Calendario: {exc}")
 
         try:
             email = collect_gmail(services["gmail"], warnings)
-            fontes["gmail"] = {"ok": True, "seccoes": {k: v.get("total", 0) for k, v in email.items()}}
+            seccoes = gmail_sections(email)
+            # ok=True so quando NENHUMA seccao falhou. Antes, cinco seccoes em erro davam
+            # cinco zeros e um ok=True — indistinguivel de uma caixa de correio vazia.
+            falhadas = sorted(k for k, v in seccoes.items() if v.get("erro"))
+            fontes["gmail"] = {
+                "ok": not falhadas,
+                "conta": email.get("_conta"),
+                "conta_esperada": EXPECTED_GOOGLE_ACCOUNT,
+                "seccoes": {k: v.get("total", 0) for k, v in seccoes.items()},
+                "seccoes_em_erro": {k: seccoes[k]["erro"] for k in falhadas},
+            }
+            if falhadas:
+                errors.append("Gmail: seccoes sem leitura: " + ", ".join(falhadas))
         except Exception as exc:
             fontes["gmail"] = {"ok": False, "erro": f"{type(exc).__name__}: {exc}"}
             errors.append(f"Gmail: {exc}")
@@ -1390,12 +1568,22 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 espelho = read_espelho(services["sheets"], args.espelho_id)
                 hff = build_hff_block(target, espelho, todoist, warnings, errors)
                 bo = build_bo_block(hff)
+                diagnostico = hff.get("_diagnostico", {})
                 fontes["espelho_hff"] = {
-                    "ok": True,
+                    "ok": bool(diagnostico.get("cirurgias_cabecalho_ok")),
                     "spreadsheet_id": args.espelho_id,
                     "abas": list(espelho.keys()),
                     "sessoes": len(hff["cirurgias"]["sessoes"]),
+                    **diagnostico,
                 }
+                if not hff["cirurgias"]["sessoes"]:
+                    warnings.append(
+                        "Espelho HFF: nenhuma sessao na janela de "
+                        f"{HFF_WINDOW_DAYS} dias "
+                        f"({diagnostico.get('cirurgias_linhas_na_folha', 0)} linhas na folha, "
+                        f"{diagnostico.get('cirurgias_linhas_na_janela', 0)} na janela). "
+                        "Nao inventar cirurgias: a tab HFF fica com o aviso."
+                    )
             except Exception as exc:
                 fontes["espelho_hff"] = {"ok": False, "erro": f"{type(exc).__name__}: {exc}"}
                 errors.append(f"Espelho HFF: {exc}")
@@ -1442,7 +1630,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "cobertura": {
             "calendario_itens": len(calendario.get("itens", [])),
             "todoist_itens": len(todoist.get("itens", [])),
-            "email_por_seccao": {k: v.get("total", 0) for k, v in email.items()},
+            "email_por_seccao": {k: v.get("total", 0) for k, v in gmail_sections(email).items()},
+            "email_conta": email.get("_conta"),
             "tempo_presente": weather is not None,
             "hff_presente": hff is not None,
             "bo_presente": bo is not None,
@@ -1522,6 +1711,31 @@ def self_test() -> int:
     check("classify_calendar cirped", classify_calendar("cirped.ulsasi@gmail.com") == "profissional")
     check("flags sigic", "sigic" in detect_flags("Sigic tarde"))
     check("flags viagem", "viagem" in detect_flags("Flight to Lisbon (FR 9903)"))
+    # Regressao real: um Meetup de volei em ingles vinha marcado como Prevencao do HFF
+    check("flags prevencao com cedilha", "prevencao" in detect_flags("Semana de Prevencao"))
+    check("flags prevencao acentuada", "prevencao" in detect_flags("Escala de Prevencao".replace("Prevencao", "Preven\u00e7\u00e3o")))
+    check("flags NAO apanha 'prevent'", "prevencao" not in detect_flags("warm up to prevent injuries"))
+    check("flags NAO apanha 'prevention'", "prevencao" not in detect_flags("Prevention of infection"))
+
+    # Duplicados de calendario
+    dup_items = [
+        {"date": "2026-09-16", "inicio": "2026-09-16T17:30+01:00", "titulo": "Grass Volleyball", "event_id": "A"},
+        {"date": "2026-09-16", "inicio": "2026-09-16T17:30+01:00", "titulo": "grass volleyball", "event_id": "B"},
+        {"date": "2026-09-16", "inicio": "2026-09-16T18:00+01:00", "titulo": "Jantar", "event_id": "C"},
+    ]
+    grupos = mark_duplicates(dup_items)
+    check("duplicados: 1 grupo", len(grupos) == 1)
+    check("duplicados: marca o segundo", dup_items[1].get("duplicado_de") == "A")
+    check("duplicados: nao marca o primeiro", "duplicado_de" not in dup_items[0])
+    check("duplicados: nao marca o distinto", "duplicado_de" not in dup_items[2])
+
+    # gmail_sections ignora metadados
+    check("gmail_sections ignora _conta", set(gmail_sections(
+        {"_conta": "x@y.pt", "inbox": {"total": 3}, "ulsasi": {"total": 0}}
+    )) == {"inbox", "ulsasi"})
+    check("etiqueta Events nunca lida",
+          norm(GMAIL_FORBIDDEN_LABEL) not in {norm(v) for v in GMAIL_LABEL_SECTIONS.values()})
+    check("Todoist aponta para a API v1", "/api/v1/" in TODOIST_API_URL)
 
     rows = [
         ["Data Cirurgia", "Periodo", "Processo", "Nome doente", "Idade", "Procedimento",
