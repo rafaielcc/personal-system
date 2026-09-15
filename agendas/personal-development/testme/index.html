@@ -43,6 +43,7 @@
   .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
   .btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:9px 12px;font-weight:800;cursor:pointer}
   .btn[aria-pressed="true"]{box-shadow:0 0 0 3px rgba(47,111,159,.18)}
+  .btn.green[aria-pressed="true"], .btn.red[aria-pressed="true"]{color:#c4ccd1}
   .btn.primary{background:var(--blue);border-color:var(--blue);color:white}
   .btn.green{background:var(--green);border-color:var(--green);color:white}
   .btn.amber{background:var(--amber);border-color:var(--amber);color:white}
@@ -69,7 +70,6 @@
   .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:#1e2428;color:white;padding:10px 13px;border-radius:8px;font-size:13px;display:none}
   .empty{color:var(--muted);font-style:italic}
   .notice{border:1px solid #ead39c;background:#fff8e8;color:#6f4b0c;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.45;margin-bottom:12px}
-  .danger-note{border:1px solid #efc4c0;background:#fff2f0;color:#7f2922;border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.45;margin:10px 0}
   @media (max-width:760px){
     header{display:block}
     .status{justify-content:flex-start;margin-top:10px}
@@ -288,7 +288,6 @@ function renderExam(){
   const isFinished = examState.status === 'terminado' || e.status === 'terminado' || e.status === 'corrigido';
   const isCorrected = e.status === 'corrigido';
   const isLocked = !!examState.saved_at && examState.status !== 'terminado';
-  const finishArmed = !!examState.finish_armed;
   const answered = questions.filter(q => hasExamAnswer(q.question_id)).length;
   const cards = questions.map((q, idx) => `
     <div class="question-card">
@@ -305,14 +304,10 @@ function renderExam(){
         ${DATA.config?.apps_script_url ? '' : '<div class="notice">Lock/Terminado ficam guardados neste browser ate o Apps Script estar ligado. Ainda nao gravam na Sheet.</div>'}
         <p class="meta">Estado: ${esc(examState.status || e.status || 'novo')} · ${questions.length} perguntas</p>
         <div class="progress"><span class="chip" id="examAnsweredChip">${answered}/${questions.length} respondidas</span><span class="chip" id="examSavedChip">${examState.saved_at ? 'Lock: ' + esc(examState.saved_at) : 'Ainda sem lock'}</span></div>
-        ${finishArmed && !isFinished ? '<div class="danger-note">Terminar bloqueia a edicao e sinaliza a correcao na proxima geracao. Clique em <b>Confirmar terminado</b> para gravar, ou cancele.</div>' : ''}
         ${cards || '<p class="empty">Ainda nao ha simulado gerado.</p>'}
         <div class="actions">
-          <button class="${isLocked ? 'btn green' : 'btn'}" aria-pressed="${isLocked}" onclick="toggleExamLock()" ${isFinished ? 'disabled' : ''}>Lock</button>
-          ${finishArmed && !isFinished
-            ? `<button class="btn red" aria-pressed="true" onclick="confirmFinishExam()">Confirmar terminado</button><button class="btn ghost" onclick="cancelFinishExam()">Cancelar</button>`
-            : `<button class="btn red" aria-pressed="${isFinished}" onclick="armFinishExam()" ${isFinished || isCorrected ? 'disabled' : ''}>${isFinished ? 'Terminado' : 'Terminado'}</button>`}
-          ${isFinished && !isCorrected ? '<button class="btn ghost" onclick="reopenExam()">Desfazer terminado</button>' : ''}
+          <button class="btn green" aria-pressed="${isLocked}" onclick="toggleExamLock()" ${isFinished ? 'disabled' : ''}>Lock</button>
+          <button class="btn red" aria-pressed="${isFinished}" onclick="toggleExamFinished()" ${isCorrected ? 'disabled' : ''}>Terminado</button>
           <button class="btn" onclick="exportExam()">Exportar fallback</button>
         </div>
       </div>
@@ -351,7 +346,6 @@ function setExamAnswer(questionId, value){
   const examState = getExamState();
   if (examState.status === 'terminado') return;
   examState.answers[questionId] = value;
-  examState.finish_armed = false;
   saveLocalState();
   renderStatus();
   updateExamProgressUI();
@@ -382,7 +376,6 @@ function toggleExamLock(){
   const examState = getExamState();
   if (examState.saved_at){
     examState.saved_at = '';
-    examState.finish_armed = false;
     saveLocalState();
     postAction('exam_unlock',{simulado_id:DATA.current_exam?.simulado_id});
     renderStatus();
@@ -390,34 +383,19 @@ function toggleExamLock(){
     return;
   }
   examState.saved_at = new Date().toLocaleString('pt-PT');
-  examState.finish_armed = false;
   saveLocalState();
   postAction('exam_save',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
   renderStatus();
   renderExam();
 }
 
-function armFinishExam(){
+function toggleExamFinished(){
   const examState = getExamState();
-  if (examState.status === 'terminado') return;
-  examState.finish_armed = true;
-  saveLocalState();
-  renderExam();
-}
-
-function cancelFinishExam(){
-  const examState = getExamState();
-  examState.finish_armed = false;
-  saveLocalState();
-  renderExam();
-}
-
-function confirmFinishExam(){
-  const examState = getExamState();
-  if (!examState.finish_armed) return armFinishExam();
+  if (examState.status === 'terminado' || DATA.current_exam?.status === 'terminado'){
+    return reopenExam();
+  }
   examState.status = 'terminado';
   examState.saved_at = new Date().toLocaleString('pt-PT');
-  examState.finish_armed = false;
   saveLocalState();
   postAction('exam_finish',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
   renderStatus();
@@ -427,7 +405,6 @@ function confirmFinishExam(){
 function reopenExam(){
   const examState = getExamState();
   examState.status = 'em_andamento';
-  examState.finish_armed = false;
   saveLocalState();
   postAction('exam_reopen',{simulado_id:DATA.current_exam?.simulado_id, answers:collectExamAnswers()});
   renderStatus();
