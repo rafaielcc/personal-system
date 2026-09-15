@@ -186,6 +186,14 @@ DAY_OFF_RE = re.compile(r"^\*(?P<who>if|rc|rr|a)$", re.IGNORECASE)
 MOTIVE_LABELS = {"F": "Ferias", "C": "Curso", "M": "Madeira"}
 BO_WEEKDAYS = {0, 2}  # BO = segunda e quarta APENAS
 
+# Data em qualquer ponto de uma celula, nao so no inicio (o Espelho prefixa o dia da semana)
+DATE_IN_TEXT_RE = re.compile(r"(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})")
+DATE_ISO_IN_TEXT_RE = re.compile(r"(\d{4})-(\d{1,2})-(\d{1,2})")
+
+# Um doente de cirurgia pediatrica nao tem 126 anos: quando a folha calcula a idade a
+# partir de uma data de nascimento em falta, sai a idade da data-zero da folha de calculo.
+MAX_IDADE_PLAUSIVEL_ANOS = 25
+
 MONTHS_PT = {
     "janeiro": 1, "jan": 1, "fevereiro": 2, "fev": 2, "marco": 3, "mar": 3,
     "abril": 4, "abr": 4, "maio": 5, "mai": 5, "junho": 6, "jun": 6,
@@ -243,6 +251,26 @@ def parse_date(value: Any, default_year: int | None = None) -> date | None:
             return datetime.strptime(text[:10], fmt).date()
         except ValueError:
             pass
+    # O Espelho HFF escreve a data como "qua., 28/10/26": dia da semana + data. O corte
+    # text[:10] acima dava "qua., 28/1" e falhava tudo, deixando 26 linhas sem data e a
+    # tab HFF vazia sem dizer porque. Procurar a data em qualquer ponto do texto resolve
+    # esta e qualquer outra decoracao a volta dela.
+    m = DATE_ISO_IN_TEXT_RE.search(text)
+    if m:
+        try:
+            return date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            pass
+    m = DATE_IN_TEXT_RE.search(text)
+    if m:
+        day, month, year = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        if year < 100:
+            year += 2000
+        try:
+            return date(year, month, day)
+        except ValueError:
+            pass
+
     m = re.match(r"^(\d{1,2})[/-](\d{1,2})$", text)
     if m and default_year:
         try:
@@ -668,13 +696,20 @@ def gmail_account(service: Any, warnings: list[str]) -> str | None:
     return account or None
 
 
-def gmail_label_ids(service: Any, warnings: list[str]) -> dict[str, str | None]:
+class LabelLookupError(str):
+    """Marca uma seccao cujo ID de etiqueta nao pode ser resolvido por falha da API
+    (e nao por a etiqueta nao existir). O texto e a mensagem de erro original."""
+
+
+def gmail_label_ids(service: Any, warnings: list[str]) -> dict[str, Any]:
     """Resolve nomes de etiqueta -> IDs. Um nome que nao exista fica None e da aviso."""
     try:
         listed = service.users().labels().list(userId="me").execute()
     except Exception as exc:
+        # Nao dizer "etiqueta inexistente" quando o que falhou foi a propria chamada:
+        # manda a pessoa procurar o problema no Gmail quando ele esta na API.
         warnings.append(f"Gmail: listagem de etiquetas falhou ({exc})")
-        return {section: None for section in GMAIL_LABEL_SECTIONS}
+        return {section: LabelLookupError(f"{type(exc).__name__}: {exc}") for section in GMAIL_LABEL_SECTIONS}
     by_name = {norm(item.get("name", "")): item.get("id") for item in listed.get("labels", [])}
     resolved: dict[str, str | None] = {}
     for section, label_name in GMAIL_LABEL_SECTIONS.items():
@@ -711,6 +746,14 @@ def collect_gmail(service: Any, warnings: list[str]) -> dict[str, Any]:
 
     for section, query, label_id in pedidos:
         origem = query if query else f"labelId:{label_id} ({GMAIL_LABEL_SECTIONS.get(section)})"
+        if query is None and isinstance(label_id, LabelLookupError):
+            result[section] = {
+                "query": f"etiqueta '{GMAIL_LABEL_SECTIONS.get(section)}' (por resolver)",
+                "total": 0,
+                "erro": f"nao foi possivel listar etiquetas: {label_id}",
+                "mensagens": [],
+            }
+            continue
         if query is None and label_id is None:
             result[section] = {
                 "query": origem,
@@ -935,11 +978,20 @@ def parse_cirurgias(rows: list[list[Any]], today: date, warnings: list[str], err
             if parse_bool(cell(row, mapping, field))
         ]
 
+        idade_valor = parse_float(cell(row, mapping, "idade"))
+        if idade_valor is not None and idade_valor > MAX_IDADE_PLAUSIVEL_ANOS:
+            anomalies.append({
+                "tipo": "idade_implausivel", "linha": row_idx, "date": surgery_date.isoformat(),
+                "valor": idade_valor,
+                "nota": "Provavel data de nascimento em falta na folha; tratada como sem dados.",
+            })
+            idade_valor = None
+
         doente = {
             "processo": processo,
             "nome": str(cell(row, mapping, "nome") or "").strip(),
-            "idade_raw": parse_float(cell(row, mapping, "idade")),
-            "idade_fmt": age_fmt(cell(row, mapping, "idade")),
+            "idade_raw": idade_valor,
+            "idade_fmt": age_fmt(idade_valor),
             "procedimento": str(cell(row, mapping, "procedimento") or "").strip(),
             "fdr": parse_bool(cell(row, mapping, "fdr")),
             "tempo_espera": parse_float(cell(row, mapping, "tempo_espera")),
@@ -1679,6 +1731,13 @@ def self_test() -> int:
     check("parse_date PT", parse_date("14/09/2026") == date(2026, 9, 14))
     check("parse_date serial", parse_date(46000) == date(1899, 12, 30) + timedelta(days=46000))
     check("parse_date lixo", parse_date("nao e data") is None)
+    # Formato real da coluna "Data Cirurgia" do Espelho: dia da semana + data
+    check("parse_date com dia da semana", parse_date("qua., 28/10/26") == date(2026, 10, 28))
+    check("parse_date com dia da semana 2", parse_date("seg., 03/08/26") == date(2026, 8, 3))
+    check("parse_date com dia da semana 3", parse_date("qua., 16/09/26") == date(2026, 9, 16))
+    check("parse_date ISO embebida", parse_date("Dia 2026-09-16 (quarta)") == date(2026, 9, 16))
+    check("parse_date sem ano nao inventa", parse_date("vem de 09/09") is None)
+    check("parse_date dia impossivel", parse_date("qua., 32/13/26") is None)
 
     check("next_business_day sexta->segunda", next_business_day(date(2026, 9, 11)) == date(2026, 9, 14))
     check("next_business_day sabado->segunda", next_business_day(date(2026, 9, 12)) == date(2026, 9, 14))
@@ -1754,6 +1813,38 @@ def self_test() -> int:
     check("cirurgias FDR", parsed["fdr_total"] == 1)
     check("cirurgias anomalia terca", any(a["tipo"] == "bo_em_dia_invalido" for a in parsed["anomalias"]))
     check("cirurgias ausente previsto", parsed["sessoes"][0]["ausentes_previstos"] == ["RC"])
+
+    # Cabecalho e linhas tal como estao mesmo na folha (coluna 6 vazia incluida)
+    reais = [
+        [""] * 14,
+        ["Data Cirurgia", "Periodo (Manha/Sigic (tarde))", "Processo", "Nome doente",
+         "FDR (Fora da Rotina)", "", "Tempo em Lista de Espera", "Idade", "Procedimento",
+         "Status Agendamento", "Observacao", "Previsao de IF estar ausente no dia",
+         "Previsao de RC estar ausente no dia", "Previsao de RR estar ausente no dia"],
+        ["qua., 16/09/26", "M", "1348132", "HELOISE VITORIA SANTOS ROCHA", "FALSE", "",
+         "4,6", "1,0", "Seio E Quisto Pre-Auricular", "1 - Agendado", "", "FALSE", "FALSE", "TRUE"],
+        ["qua., 16/09/26", "M", "1355984", "SANJAYA SAPKOTA", "FALSE", "",
+         "5,8", "", "Hernia Inguinal Bilat", "1 - Agendado", "", "FALSE", "FALSE", "TRUE"],
+        ["qua., 16/09/26", "M", "1256562", "Aquiles Otchaly Candeia Pinto Andrade", "FALSE", "",
+         "", "126,8", "", "7 - Planeado", "", "FALSE", "FALSE", "FALSE"],
+        ["seg., 03/08/26", "S", "1074935", "RODRIGO MIGUEL AMARAL CASTRO", "TRUE", "",
+         "3,8", "126,7", "Fimose", "1 - Agendado", "a confirmar", "FALSE", "FALSE", "FALSE"],
+    ]
+    w2: list[str] = []
+    e2: list[str] = []
+    real = parse_cirurgias(reais, date(2026, 9, 16), w2, e2)
+    check("espelho real: cabecalho reconhecido", real["ok"] is True)
+    check("espelho real: 1 sessao na janela", len(real["sessoes"]) == 1)
+    check("espelho real: 3 doentes", real["sessoes"][0]["n_doentes"] == 3)
+    check("espelho real: ignora a cirurgia passada", all(s["date"] >= "2026-09-16" for s in real["sessoes"]))
+    check("espelho real: idade 126 anos vira sem dados",
+          any(a["tipo"] == "idade_implausivel" for a in real["anomalias"]))
+    check("espelho real: idade implausivel nao e impressa",
+          all(d["idade_fmt"] != "126,8a" for d in real["sessoes"][0]["doentes"]))
+    check("espelho real: idade valida sobrevive",
+          any(d["idade_fmt"] == "1,0a" for d in real["sessoes"][0]["doentes"]))
+    check("espelho real: quarta e dia de BO",
+          not any(a["tipo"] == "bo_em_dia_invalido" for a in real["anomalias"]))
 
     grid = [
         ["Setembro", "", ""],
