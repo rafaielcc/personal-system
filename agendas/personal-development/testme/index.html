@@ -308,7 +308,7 @@ function renderExam(){
         ${finishArmed && !isFinished ? '<div class="danger-note">Terminar bloqueia a edicao e sinaliza a correcao na proxima geracao. Clique em <b>Confirmar terminado</b> para gravar, ou cancele.</div>' : ''}
         ${cards || '<p class="empty">Ainda nao ha simulado gerado.</p>'}
         <div class="actions">
-          <button class="btn green" aria-pressed="${isLocked}" onclick="lockExam()" ${isFinished ? 'disabled' : ''}>${isLocked ? 'Lock ativo' : 'Lock'}</button>
+          <button class="btn green" aria-pressed="${isLocked}" onclick="toggleExamLock()" ${isFinished ? 'disabled' : ''}>Lock</button>
           ${finishArmed && !isFinished
             ? `<button class="btn red" aria-pressed="true" onclick="confirmFinishExam()">Confirmar terminado</button><button class="btn ghost" onclick="cancelFinishExam()">Cancelar</button>`
             : `<button class="btn red" aria-pressed="${isFinished}" onclick="armFinishExam()" ${isFinished || isCorrected ? 'disabled' : ''}>${isFinished ? 'Terminado' : 'Terminado'}</button>`}
@@ -378,8 +378,17 @@ function collectExamAnswers(){
   }));
 }
 
-function lockExam(){
+function toggleExamLock(){
   const examState = getExamState();
+  if (examState.saved_at){
+    examState.saved_at = '';
+    examState.finish_armed = false;
+    saveLocalState();
+    postAction('exam_unlock',{simulado_id:DATA.current_exam?.simulado_id});
+    renderStatus();
+    renderExam();
+    return;
+  }
   examState.saved_at = new Date().toLocaleString('pt-PT');
   examState.finish_armed = false;
   saveLocalState();
