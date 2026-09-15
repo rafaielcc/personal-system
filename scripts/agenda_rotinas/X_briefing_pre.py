@@ -183,11 +183,11 @@ NAME_TO_INITIALS = {
 }
 # A partir do 2o semestre de 2026 (confirmado pelo Rafa) o codigo passou a levar sempre as
 # iniciais — deixou de depender da cor da celula para identificar quem. Letra do motivo:
-# F=Ferias, E=Madeira, C=Curso. "M" mantem-se aceite (motivo antigo, mesmo significado) por
-# seguranca, mas so E e' o que a folha escreve daqui em diante.
-ABSENCE_RE = re.compile(r"^(?P<motive>[FCME])(?P<who>if|rc|rr|a)$", re.IGNORECASE)
+# B=Baixa, F=Ferias, C=Curso, M=Madeira. "*" + iniciais = folga por compensacao de horario.
+ABSENCE_RE = re.compile(r"^(?P<motive>[BFCM])(?P<who>if|rc|rr|a)$", re.IGNORECASE)
 DAY_OFF_RE = re.compile(r"^\*(?P<who>if|rc|rr|a)$", re.IGNORECASE)
-MOTIVE_LABELS = {"F": "Ferias", "C": "Curso", "M": "Madeira", "E": "Madeira"}
+MOTIVE_LABELS = {"B": "Baixa", "F": "Ferias", "C": "Curso", "M": "Madeira"}
+FOLGA_MOTIVO = "Compensacao de horario"
 BO_WEEKDAYS = {0, 2}  # BO = segunda e quarta APENAS
 
 # Data em qualquer ponto de uma celula, nao so no inicio (o Espelho prefixa o dia da semana)
@@ -1219,8 +1219,8 @@ def infer_grid_date(rows: list[list[Any]], r: int, c: int, year: int,
 
 
 def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
-    """Codigos: Maiuscula = motivo (F/C/M) + minusculas = iniciais (if/rc/rr/a). Ex: 'Mif'.
-    '*if' = folga. A aba Ausencias e autoritativa."""
+    """Codigos: Maiuscula = motivo (B/F/C/M) + minusculas = iniciais (if/rc/rr/a). Ex: 'Mif'.
+    '*if' = folga por compensacao de horario. A aba Ausencias e autoritativa."""
     end = today + timedelta(days=HFF_WINDOW_DAYS - 1)
     blocos = month_blocks(rows)
     year = grid_year(rows, today.year)
@@ -1241,7 +1241,7 @@ def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
             # celula e' que identificava a pessoa) — dados anteriores ao 2o semestre de
             # 2026, fora da janela dos 28 dias. Mantido por seguranca, nunca deve ocorrer
             # em dados novos.
-            ambiguous_single = compact.upper() in {"F", "C", "M", "E"}
+            ambiguous_single = compact.upper() in {"B", "F", "C", "M"}
             if not (absence_match or day_off_match or ambiguous_single):
                 continue
             parsed_date = infer_grid_date(rows, r_idx, c_idx, year, blocos)
@@ -1260,7 +1260,11 @@ def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
                     **record,
                 })
             elif day_off_match:
-                folgas.append({"cir": day_off_match.group("who").upper(), **record})
+                folgas.append({
+                    "cir": day_off_match.group("who").upper(),
+                    "motivo": FOLGA_MOTIVO,
+                    **record,
+                })
             else:
                 ambiguos.append({"nota": "Codigo sem iniciais; nao atribuido.", **record})
 
@@ -1911,13 +1915,14 @@ def self_test() -> int:
     check("prioridade p2", classify_priority(3) == "media")
     check("prioridade p4", classify_priority(1) == "baixa")
 
-    check("ausencia Mif", bool(ABSENCE_RE.match(compact_norm("Mif"))))
-    check("ausencia Frc", bool(ABSENCE_RE.match(compact_norm("Frc"))))
-    # Esquema novo (2o semestre de 2026): E = Madeira, sempre com iniciais
-    check("ausencia Erc (Madeira, esquema novo)", bool(ABSENCE_RE.match(compact_norm("Erc"))))
-    check("Erc e Mrc tem o mesmo motivo", MOTIVE_LABELS["E"] == MOTIVE_LABELS["M"] == "Madeira")
+    check("ausencia Mif (Madeira)", bool(ABSENCE_RE.match(compact_norm("Mif"))))
+    check("ausencia Frc (Ferias)", bool(ABSENCE_RE.match(compact_norm("Frc"))))
+    check("ausencia Crr (Curso)", bool(ABSENCE_RE.match(compact_norm("Crr"))))
+    check("ausencia Bif (Baixa, esquema novo)", bool(ABSENCE_RE.match(compact_norm("Bif"))))
+    check("Madeira continua M, nao E", MOTIVE_LABELS["M"] == "Madeira" and "E" not in MOTIVE_LABELS)
     check("folga *if", bool(DAY_OFF_RE.match(compact_norm("*if"))))
     check("ausencia invalida", not ABSENCE_RE.match(compact_norm("Xyz")))
+    check("E sozinho nao e motivo valido", not ABSENCE_RE.match(compact_norm("Eif")))
 
     check("classify_calendar rafael", classify_calendar("Rafael correia") == "evento")
     check("classify_calendar feriados", classify_calendar("Feriados em Portugal") == "feriado")
