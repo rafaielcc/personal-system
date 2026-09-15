@@ -181,14 +181,23 @@ NAME_TO_INITIALS = {
     "rodrigo": "RR", "rodrigo roquette": "RR",
     "afonso": "A",
 }
-ABSENCE_RE = re.compile(r"^(?P<motive>[FCM])(?P<who>if|rc|rr|a)$", re.IGNORECASE)
+# A partir do 2o semestre de 2026 (confirmado pelo Rafa) o codigo passou a levar sempre as
+# iniciais — deixou de depender da cor da celula para identificar quem. Letra do motivo:
+# F=Ferias, E=Madeira, C=Curso. "M" mantem-se aceite (motivo antigo, mesmo significado) por
+# seguranca, mas so E e' o que a folha escreve daqui em diante.
+ABSENCE_RE = re.compile(r"^(?P<motive>[FCME])(?P<who>if|rc|rr|a)$", re.IGNORECASE)
 DAY_OFF_RE = re.compile(r"^\*(?P<who>if|rc|rr|a)$", re.IGNORECASE)
-MOTIVE_LABELS = {"F": "Ferias", "C": "Curso", "M": "Madeira"}
+MOTIVE_LABELS = {"F": "Ferias", "C": "Curso", "M": "Madeira", "E": "Madeira"}
 BO_WEEKDAYS = {0, 2}  # BO = segunda e quarta APENAS
 
 # Data em qualquer ponto de uma celula, nao so no inicio (o Espelho prefixa o dia da semana)
 DATE_IN_TEXT_RE = re.compile(r"(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})")
 DATE_ISO_IN_TEXT_RE = re.compile(r"(\d{4})-(\d{1,2})-(\d{1,2})")
+# Formato "seg., 5/jan." — o valor FORMATADO que a API do Sheets devolve para as colunas
+# de data das abas Sigic e Prevencao. E' diferente do serial numerico que se ve exportando
+# a folha para .xlsx (esse ignora o formato da celula); a API devolve sempre o texto tal
+# como aparece na folha, e este formato de coluna especifico nunca mostra o ano.
+DATE_DIA_MES_ABREV_RE = re.compile(r"(\d{1,2})\s*/\s*([A-Za-z\u00c0-\u017f]{3,})\.?")
 
 # Um doente de cirurgia pediatrica nao tem 126 anos: quando a folha calcula a idade a
 # partir de uma data de nascimento em falta, sai a idade da data-zero da folha de calculo.
@@ -276,6 +285,17 @@ def parse_date(value: Any, default_year: int | None = None) -> date | None:
             return date(year, month, day)
         except ValueError:
             pass
+
+    # "5/jan." — dia + mes por extenso abreviado, sem ano. So se resolve com default_year;
+    # sem ele, mais vale devolver None do que adivinhar um ano.
+    m = DATE_DIA_MES_ABREV_RE.search(text)
+    if m and default_year:
+        month = MONTHS_PT.get(norm(m.group(2)))
+        if month:
+            try:
+                return date(default_year, month, int(m.group(1)))
+            except ValueError:
+                pass
 
     m = re.match(r"^(\d{1,2})[/-](\d{1,2})$", text)
     if m and default_year:
@@ -1217,7 +1237,11 @@ def parse_ausencias(rows: list[list[Any]], today: date) -> dict[str, Any]:
             compact = compact_norm(text)
             absence_match = ABSENCE_RE.match(compact)
             day_off_match = DAY_OFF_RE.match(compact)
-            ambiguous_single = compact.upper() in {"F", "C", "M"}
+            # Codigo de 1 letra sem iniciais: so existia no esquema antigo (a cor da
+            # celula e' que identificava a pessoa) — dados anteriores ao 2o semestre de
+            # 2026, fora da janela dos 28 dias. Mantido por seguranca, nunca deve ocorrer
+            # em dados novos.
+            ambiguous_single = compact.upper() in {"F", "C", "M", "E"}
             if not (absence_match or day_off_match or ambiguous_single):
                 continue
             parsed_date = infer_grid_date(rows, r_idx, c_idx, year, blocos)
@@ -1855,6 +1879,15 @@ def self_test() -> int:
     check("parse_date serial numerico", parse_date(46027) == date(2026, 1, 5))
     check("parse_date nao confunde n.o processo", parse_date("1119760") is None)
     check("parse_date nao confunde dia solto", parse_date("14") is None)
+    # Formato REAL devolvido pela API do Sheets (valueRenderOption=FORMATTED_VALUE) para
+    # as colunas de data das abas Sigic/Prevencao: dia + mes abreviado, SEM ano. Descoberto
+    # so na 3a corrida real — o teste anterior validava contra o serial que se ve exportando
+    # a folha para .xlsx, que e' outra coisa (o export ignora o formato da celula).
+    check("parse_date dia/mes abreviado", parse_date("seg., 5/jan. ", default_year=2026) == date(2026, 1, 5))
+    check("parse_date dia/mes abreviado 2", parse_date("qua., 16/set.", default_year=2026) == date(2026, 9, 16))
+    check("parse_date dia/mes abreviado 3", parse_date("seg., 7/out. ", default_year=2026) == date(2026, 10, 7))
+    check("parse_date dia/mes abreviado sem default_year", parse_date("seg., 5/jan. ") is None)
+    check("parse_date dia/mes abreviado mes invalido", parse_date("5/xis.", default_year=2026) is None)
     check("parse_date dia impossivel", parse_date("qua., 32/13/26") is None)
 
     check("next_business_day sexta->segunda", next_business_day(date(2026, 9, 11)) == date(2026, 9, 14))
@@ -1880,6 +1913,9 @@ def self_test() -> int:
 
     check("ausencia Mif", bool(ABSENCE_RE.match(compact_norm("Mif"))))
     check("ausencia Frc", bool(ABSENCE_RE.match(compact_norm("Frc"))))
+    # Esquema novo (2o semestre de 2026): E = Madeira, sempre com iniciais
+    check("ausencia Erc (Madeira, esquema novo)", bool(ABSENCE_RE.match(compact_norm("Erc"))))
+    check("Erc e Mrc tem o mesmo motivo", MOTIVE_LABELS["E"] == MOTIVE_LABELS["M"] == "Madeira")
     check("folga *if", bool(DAY_OFF_RE.match(compact_norm("*if"))))
     check("ausencia invalida", not ABSENCE_RE.match(compact_norm("Xyz")))
 
