@@ -38,7 +38,15 @@ from googleapiclient.discovery import build
 
 SPREADSHEET_ID = "1g7JBnpEkaYZQl2SBGYmooZhOBYqOa0ER2o3F1yPkSnA"
 RANGE_NAME = "Main"
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
+# Qualquer um destes scopes chega para LER a folha. O token.json e partilhado
+# com gmail_articles_export.py, que exige o scope de escrita ("spreadsheets") e
+# reescreve o token com esse scope; se este script impusesse "readonly", o
+# refresh falhava com invalid_scope (scope pedido != scope concedido).
+# Por isso NAO se impoe scope ao carregar: usa-se o que esta gravado no token.
+ACCEPTED_SCOPES = [
+    "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/spreadsheets",
+]
 
 # Pasta SSOT do Rafa = a raiz do projecto (confirmado 18/ago/2026), nao uma
 # subpasta "SSOT". Ajustar aqui se um dia mudar.
@@ -71,7 +79,13 @@ def load_credentials(credentials_path: Path, token_path: Path) -> Credentials:
             f"token.json nao encontrado: {token_path}. Corre o fluxo de consentimento "
             f"interativo primeiro (fora deste script) para o gerar."
         )
-    creds = Credentials.from_authorized_user_file(str(token_path), SCOPES)
+    # Sem argumento de scopes: herda os scopes gravados no proprio token.json.
+    creds = Credentials.from_authorized_user_file(str(token_path))
+    if not any(creds.has_scopes([scope]) for scope in ACCEPTED_SCOPES):
+        raise EspelhoRadarError(
+            f"token.json sem scope de Sheets (tem: {creds.scopes}). Refaz o consentimento "
+            f"com um destes scopes: {ACCEPTED_SCOPES}"
+        )
     if creds.expired and creds.refresh_token:
         creds.refresh(Request())
         # Persistir o access_token renovado para a proxima execucao nao ter
