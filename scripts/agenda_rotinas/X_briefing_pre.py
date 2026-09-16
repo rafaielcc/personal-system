@@ -1595,7 +1595,8 @@ def build_canonical_draft(target: date, mode: str, generated_at: str, calendario
             "date": key,
             "weekday": weekday_pt(day),
             "audio_script": "",          # <- LLM
-            "alertas": [],               # <- LLM
+            "alertas": [],                # <- LLM: lista de {"nivel": "urgente"|"importante"|"info", "texto": "..."},
+                                           # NUNCA strings simples -- o render usa "nivel" para escolher cor/icone do banner.
             "feriado": (feriados_por_dia.get(key) or [None])[0],
             "proximo_evento": (
                 {"titulo": eventos[0]["titulo"], "date_label": label, "time": (eventos[0].get("inicio") or "")[11:16]}
@@ -1860,7 +1861,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "o_que_falta_ao_llm": [
                 "Classificar cada email em urgente/importante/informativo/ruido (dados crus em 'email')",
                 "Escrever os 3 audio_script (um por dia da janela)",
-                "Escrever alertas, sugestoes e as listas 'conferir' das 3 janelas de rotina",
+                "Escrever hoje.dias[].alertas -- cada item e um objecto "
+                "{\"nivel\": \"urgente\"|\"importante\"|\"info\", \"texto\": \"...\"}, nunca uma string simples",
+                "Escrever sugestoes e as listas 'conferir' das 3 janelas de rotina",
                 "Cruzar duplicados evento vs tarefa e resolver ambiguidades assinaladas em 'avisos'",
                 "Preencher canonical_draft.diagnostico.notas_llm SO se tiver algo a assinalar que "
                 "'fontes'/'avisos'/'erros' nao dizem (ex: uma inconsistencia que reparou nos dados) "
