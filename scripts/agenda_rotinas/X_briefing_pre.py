@@ -1466,12 +1466,16 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
             "tipo_dia": tipo_dia,
             "janela_dias": HFF_WINDOW_DAYS,
         },
-        "resumo": {
+        # Dados mecanicos crus, para o LLM ler -- NAO e' o que aparece na aba do
+        # Briefing (isso e' "resumo"/"cirurgias_resumo" abaixo, texto simples).
+        "resumo_dados": {
             "tipo_dia": tipo_dia,
             "proximo_bo": proximo_bo,
             "fdr_total": cirurgias.get("fdr_total", 0),
             "anomalias": cirurgias.get("anomalias", []) + sigic.get("anomalias", []),
         },
+        "resumo": "",              # <- LLM: frase curta a partir de resumo_dados (nunca copiar o dict)
+        "cirurgias_resumo": "",    # <- LLM: frase curta sobre as cirurgias de hoje/se BO
         "tarefas_hff": {"janela": "hoje + 2 dias", "itens": tarefas_hff},
         "cirurgias": {"janela_dias": HFF_WINDOW_DAYS, "sessoes": cirurgias.get("sessoes", [])},
         "sigic": {"listas": sigic.get("listas", [])},
@@ -1864,6 +1868,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "Escrever hoje.dias[].alertas -- cada item e um objecto "
                 "{\"nivel\": \"urgente\"|\"importante\"|\"info\", \"texto\": \"...\"}, nunca uma string simples",
                 "Escrever sugestoes e as listas 'conferir' das 3 janelas de rotina",
+                "Modo A: escrever hff.resumo e hff.cirurgias_resumo como frases curtas "
+                "(strings), a partir dos dados crus em hff.resumo_dados -- NUNCA copiar "
+                "esse dict tal e qual para 'resumo' (a aba do Briefing mostra-o em texto)",
                 "Cruzar duplicados evento vs tarefa e resolver ambiguidades assinaladas em 'avisos'",
                 "Preencher canonical_draft.diagnostico.notas_llm SO se tiver algo a assinalar que "
                 "'fontes'/'avisos'/'erros' nao dizem (ex: uma inconsistencia que reparou nos dados) "
