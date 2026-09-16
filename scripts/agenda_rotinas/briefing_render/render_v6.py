@@ -482,16 +482,24 @@ def diag_fonte_label(key):
     return FONTE_LABELS.get(key, key.replace("_", " ").capitalize())
 
 
+# Campos que aparecem em quase todas as fontes mas nunca ajudam a ler o
+# diagnostico de relance (identificadores fixos, nao informacao da corrida).
+# Descoberto testando contra uma corrida real: sem isto, "Espelho HFF" mostrava
+# o spreadsheet_id (uma string enorme e sempre igual) em vez de "sessoes: 7".
+DIAG_DETALHE_SKIP_KEYS = {"spreadsheet_id", "abas"}
+
+
 def diag_fonte_detalhe(fonte):
     """Uma linha curta e generica: se falhou, mostra o erro; senao, ate 3
-    campos escalares (ignora sub-objectos/listas, que ja tem secção própria)."""
+    campos escalares (ignora sub-objectos/listas e identificadores fixos)."""
     if not isinstance(fonte, dict):
         return esc(str(fonte))
     if fonte.get("erro"):
         return esc(str(fonte["erro"]))
     pares = [
         f"{k}: {v}" for k, v in fonte.items()
-        if k not in ("ok", "erro") and not isinstance(v, (dict, list))
+        if k not in ("ok", "erro") and k not in DIAG_DETALHE_SKIP_KEYS
+        and not isinstance(v, (dict, list))
     ]
     return esc(" · ".join(pares[:3])) if pares else ""
 
