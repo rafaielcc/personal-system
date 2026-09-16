@@ -1537,7 +1537,8 @@ def build_bo_block(hff: dict[str, Any]) -> dict[str, Any]:
 # ======================================================================================
 def build_canonical_draft(target: date, mode: str, generated_at: str, calendario: dict[str, Any],
                           todoist: dict[str, Any], weather: dict[str, Any] | None,
-                          hff: dict[str, Any] | None) -> dict[str, Any]:
+                          hff: dict[str, Any] | None, fontes: dict[str, Any],
+                          avisos: list[str], erros: list[str]) -> dict[str, Any]:
     itens = calendario.get("itens", [])
     eventos_por_dia: dict[str, list[dict[str, Any]]] = defaultdict(list)
     feriados_por_dia: dict[str, list[str]] = defaultdict(list)
@@ -1643,6 +1644,18 @@ def build_canonical_draft(target: date, mode: str, generated_at: str, calendario
         "hff": hff if mode == "A" else None,
         "tempo": tempo,
         "rotina": {"dias": rotina_dias},
+        # A aba Diagnostico do template le directamente daqui. As tres primeiras
+        # chaves sao mecanicas (o pre ja as tem prontas); notas_llm fica vazio —
+        # o LLM so lhe mexe quando tem mesmo algo a assinalar, nunca por rotina.
+        "diagnostico": {
+            "fontes": fontes,
+            "avisos": list(avisos),
+            "erros": list(erros),
+            "notas_llm": [],
+            "tem_alertas": bool(erros) or bool(avisos) or any(
+                isinstance(f, dict) and f.get("ok") is False for f in fontes.values()
+            ),
+        },
     }
 
 
@@ -1785,7 +1798,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         fontes["espelho_hff"] = {"ok": True, "ignorado": "Modo B nao tem tab HFF"}
 
     generated_at = agora.isoformat(timespec="seconds")
-    draft = build_canonical_draft(target, mode, generated_at, calendario, todoist, weather, hff)
+    draft = build_canonical_draft(target, mode, generated_at, calendario, todoist, weather, hff,
+                                  fontes, warnings, errors)
 
     return {
         "schema_version": SCHEMA_VERSION,
@@ -1840,12 +1854,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "Previsao Open-Meteo (7 dias + horas-chave)",
                 "Leitura e parsing do Espelho HFF (Cirurgias/SIGIC/Prevencao/Ausencias) e derivacao da lista BO",
                 "Esqueleto do JSON canonico ja preenchido com tudo o que e mecanico",
+                "canonical_draft.diagnostico ja tem fontes/avisos/erros/tem_alertas prontos "
+                "para a aba Diagnostico — nao e preciso copiar nada disto a mao",
             ],
             "o_que_falta_ao_llm": [
                 "Classificar cada email em urgente/importante/informativo/ruido (dados crus em 'email')",
                 "Escrever os 3 audio_script (um por dia da janela)",
                 "Escrever alertas, sugestoes e as listas 'conferir' das 3 janelas de rotina",
                 "Cruzar duplicados evento vs tarefa e resolver ambiguidades assinaladas em 'avisos'",
+                "Preencher canonical_draft.diagnostico.notas_llm SO se tiver algo a assinalar que "
+                "'fontes'/'avisos'/'erros' nao dizem (ex: uma inconsistencia que reparou nos dados) "
+                "— texto curto, um item por nota; ficar vazio e o normal, nao inventar conteudo",
                 "Emitir o JSON canonico final (sem este bloco) para o render/publicacao",
             ],
             "o_llm_nunca_deve": [
@@ -2058,6 +2077,7 @@ def self_test() -> int:
                     "flags": ["sigic"], "event_id": "x"}]},
         {"itens": [{"date": "2026-09-14", "texto": "Forxiga", "prioridade": "baixa", "classificacao": "pessoal"}]},
         None, None,
+        {"calendario": {"ok": True}, "todoist": {"ok": True}}, [], [],
     )
     check("draft 3 dias hoje", len(draft["hoje"]["dias"]) == 3)
     check("draft 3 dias rotina", len(draft["rotina"]["dias"]) == 3)
@@ -2066,6 +2086,17 @@ def self_test() -> int:
     check("draft sigic_shift", draft["rotina"]["dias"][0]["sigic_shift"] is True)
     check("draft badge sigic", "sigic" in draft["calendario"]["dias"][0]["badges"])
     check("draft habito segunda", draft["tarefas"]["cards"][0]["extras"][0]["texto"].startswith("Leitura"))
+
+    # diagnostico: sem erros/avisos e todas as fontes ok -> sem alerta
+    check("diagnostico sem alertas quando tudo ok", draft["diagnostico"]["tem_alertas"] is False)
+    check("diagnostico notas_llm comeca vazio", draft["diagnostico"]["notas_llm"] == [])
+    draft_com_erro = build_canonical_draft(
+        date(2026, 9, 14), "B", "2026-09-14T08:00:00+01:00",
+        {"itens": []}, {"itens": []}, None, None,
+        {"gmail": {"ok": False, "erro": "403"}}, ["aviso de teste"], [],
+    )
+    check("diagnostico com alerta quando uma fonte falha", draft_com_erro["diagnostico"]["tem_alertas"] is True)
+    check("diagnostico guarda os avisos", draft_com_erro["diagnostico"]["avisos"] == ["aviso de teste"])
 
     if failures:
         print("SELF-TEST FALHOU:")
