@@ -31,7 +31,7 @@
   v5 — 21 Jul 2026: cabeçalho passa a uma única linha (chips +
   "↩ Início" à direita, na mesma linha topbar-row1 — antes eram duas
   linhas); Calendário — .cal-today (marcador dourado persistente) e
-  .cal-selected (contorno terracota, movido por JS a cada clique) são
+  .cal-selected (contorno terracotta, movido por JS a cada clique) são
   agora classes separadas, com token novo {{CAL_SELECTED_CLASS}}
   (antes só existia .cal-today fixo na DATA_ALVO, sem se mover ao
   navegar); .cal-pill aumentado (8.5px→11px, ilegível antes); painel de
@@ -190,6 +190,16 @@
   .email-row.e-noise{ padding:6px 11px; font-size:12px; color:var(--muted); }
   .email-badge{ font-size:9.5px; font-weight:700; padding:2px 7px; border-radius:999px; background:var(--teal); color:#fff; margin-left:5px; }
 
+  /* ===== DIAGNOSTICO (v8) ===== */
+  .diag-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:9px 11px; margin-bottom:6px; }
+  .diag-fonte-nome{ font-weight:700; font-size:13px; }
+  .diag-fonte-status{ font-size:12px; font-weight:700; white-space:nowrap; }
+  .diag-row.diag-ok .diag-fonte-status{ color:var(--sage); }
+  .diag-row.diag-erro{ border-color:#EBC9C2; background:var(--red-bg); }
+  .diag-row.diag-erro .diag-fonte-status{ color:var(--red); }
+  .diag-fonte-detalhe{ font-size:12px; color:var(--muted); margin-top:2px; }
+  .diag-tab-badge{ margin-left:2px; }
+
   /* ===== TEMPO ===== */
   table.weather7{ width:100%; border-collapse:collapse; font-size:12.5px; }
   table.weather7 th{ text-align:center; font-size:10px; color:var(--muted); text-transform:uppercase; padding:4px; border-bottom:1px solid var(--border); }
@@ -227,9 +237,9 @@
     <div class="topbar-inner">
       <div class="topbar-row1">
         <div class="topbar-chips">
-          <span class="chip daytype">📅 <b>Sábado, 12 Set</b></span>
-          <span class="chip">🌡️ <b>20°</b></span>
-          <span class="chip">🏥 <b>Sem HFF hoje</b></span>
+          <span class="chip daytype">📅 <b>Quarta, 16 Set</b></span>
+          <span class="chip">🌡️ <b>19°</b></span>
+          <span class="chip">🏥 <b>—</b></span>
         </div>
         <a class="back-link" href="../index.html">↩ Início</a>
       </div>
@@ -242,9 +252,10 @@
     <button class="tabbtn" onclick="showTab('tarefas')">✅ Tarefas</button>
     <button class="tabbtn" onclick="showTab('calendario')">📅 Calendário</button>
     <button class="tabbtn" onclick="showTab('email')">📬 Email</button>
-    
+    <button class="tabbtn" onclick="showTab('hff')">🏥 Trabalho HFF</button>
     <button class="tabbtn" onclick="showTab('tempo')">🌤️ Tempo</button>
     <button class="tabbtn" onclick="showTab('rotina')">⚡ Rotina</button>
+    <button class="tabbtn" onclick="showTab('diagnostico')">🔍 Diagnóstico<span class="diag-tab-badge">⚠️</span></button>
   </div>
 
   <div class="wrap">
@@ -254,58 +265,58 @@
       <div id="tab-hoje" class="tabpanel active">
 
         <details class="collapse day-panel" open>
-          <summary><span><span class="dp-name">Hoje</span> <span class="dp-date">Sábado, 12 Set</span></span></summary>
+          <summary><span><span class="dp-name">Hoje</span> <span class="dp-date">Quarta, 16 Set</span></span></summary>
           <div class="collapse-body">
             <div class="section-label" style="margin-top:6px;">🎧 Áudio do dia</div>
             <div class="card stripe-teal">
-              <p id="audio-script-text-0" class="audio-script-hidden">Bom dia, Rafa. Hoje é sábado, dia sem Painel HFF. É sobretudo um dia de viagem: encontrei no teu calendário dois itinerários diferentes de regresso a Lisboa vindo de Tirana - um via Roma, com voo Wizz até Fiumicino e depois Ryanair até Lisboa, chegada prevista às vinte horas e dez; outro via Belgrado, com dois voos da Air Serbia, chegada prevista às vinte e duas horas e dez. Vale a pena confirmares qual dos dois é mesmo o teu voo antes de fazeres planos para a noite. Não tens tarefas do Todoist pendentes para hoje, todas parecem já tratadas. O hábito do fim de semana seria o Leg and Core Reinforcement, mas com viagem pelo meio talvez faça mais sentido deixares para amanhã, se o cansaço não ajudar. Boa viagem de volta.</p>
+              <p id="audio-script-text-0" class="audio-script-hidden">Bom dia! Hoje e quarta-feira, 16 de setembro. Em Lisboa fica nublado, maxima de 25 graus, sem chuva. No HFF tens BO de manha com um doente agendado, o Sanjaya Sapkota, para hernia inguinal bilateral. Atencao ao fim de tarde: o webinar sobre infecoes urinarias em bexiga neurogenica as 17h, o Volleyball as 17h30 e o jantar no Pasta Non Basta as 18h sobrepoem-se — vale a pena decidir ja qual fica de fora. Tens tambem tres tarefas pessoais por fazer: prenda de anos da Clara, decidir life, e o Forxiga. A encomenda da Decathlon chega hoje.</p>
               <button type="button" class="audio-btn" id="audio-btn-0" onclick="playAudio(0)">▶ Ouvir</button>
             </div>
-            <div class="banner banner-alert">
-              🚨 Regresso a Lisboa hoje: dois itinerários diferentes no calendário — via Roma (Wizz W4 5015 Tirana-Roma às 13h40, Ryanair FR9903 Roma-Lisboa, chegada 20h10) e via Belgrado (Air Serbia JU163 Tirana-Belgrado às 14h15, JU564 Belgrado-Lisboa, chegada 22h10). Confirma qual é o voo real antes de planeares a noite.
+            <div class="banner banner-warn">
+              ⚠️ Conflito de horario ao fim da tarde: webinar &#x27;UTIs&#x27; (17h-18h), Volleyball (17h30-20h30) e reserva no Pasta Non Basta (18h-19h) sobrepoem-se — decide agora a prioridade.
             </div>
             <div class="navy-box" style="display:block; margin-bottom:0;">
               <div class="label">Próximo destaque</div>
-              <div class="title">Chegada a Lisboa (voo a confirmar)</div>
-              <div class="meta">Hoje · ~20h10 ou ~22h10</div>
+              <div class="title">Management of UTIs in patients with neurogenic bladder</div>
+              <div class="meta">Hoje · 17:00</div>
             </div>
           </div>
         </details>
 
         <details class="collapse day-panel" >
-          <summary><span><span class="dp-name">Amanhã</span> <span class="dp-date">Domingo, 13 Set</span></span></summary>
+          <summary><span><span class="dp-name">Amanha</span> <span class="dp-date">Quinta, 17 Set</span></span></summary>
           <div class="collapse-body">
             <div class="section-label" style="margin-top:6px;">🎧 Áudio do dia</div>
             <div class="card stripe-teal">
-              <p id="audio-script-text-1" class="audio-script-hidden">Amanhã é domingo. Não há eventos no calendário, é um dia livre, bom para recuperar da viagem. Tens três tarefas no Todoist: a Forxiga, a medicação diária; a prenda de aniversário da Clara, atenção à data certa; e uma tarefa chamada &#x27;Festa pca comercio&#x27;, que talvez valha a pena esclarecer o que é exatamente. O hábito de fim de semana continua a ser o Leg and Core Reinforcement. Sem compromissos à vista, é um bom dia para arrumar estas pendências com calma.</p>
+              <p id="audio-script-text-1" class="audio-script-hidden">Amanha e quinta-feira, 17 de setembro, com maxima a chegar aos 28 graus. E o dia do niver da Clarinha. A prioridade e a tarefa &#x27;Contrato social&#x27;, marcada como alta prioridade para o trabalho no HFF — vale a pena resolve-la logo de manha, a seguir ao gym das 7h30. Tens tambem aula de tenis e happy hour com a Vanessa a tarde, e nao esquecer de tratar da consulta de RM.</p>
               <button type="button" class="audio-btn" id="audio-btn-1" onclick="playAudio(1)">▶ Ouvir</button>
             </div>
-            <div class="banner banner-info">
-              ℹ️ Sem eventos no calendário para domingo — dia livre.
+            <div class="banner banner-warn">
+              ⚠️ Tarefa de prioridade alta &#x27;Contrato social&#x27; (trabalho HFF) tem prazo amanha — e a unica tarefa de alta prioridade do dia.
             </div>
             <div class="navy-box" style="display:block; margin-bottom:0;">
               <div class="label">Próximo destaque</div>
-              <div class="title">Game Night at Amelia Cafe</div>
-              <div class="meta">Terça, 15 Set · 19h00</div>
+              <div class="title">Niver Clarinha</div>
+              <div class="meta">Amanha</div>
             </div>
           </div>
         </details>
 
         <details class="collapse day-panel" >
-          <summary><span><span class="dp-name">Depois de amanhã</span> <span class="dp-date">Segunda, 14 Set</span></span></summary>
+          <summary><span><span class="dp-name">Depois de amanha</span> <span class="dp-date">Sexta, 18 Set</span></span></summary>
           <div class="collapse-body">
             <div class="section-label" style="margin-top:6px;">🎧 Áudio do dia</div>
             <div class="card stripe-teal">
-              <p id="audio-script-text-2" class="audio-script-hidden">Depois de amanhã é segunda-feira, e é dia de Sigic: a tarde e a noite ficam bloqueadas, aproximadamente entre as três e meia e as oito e meia da noite. Como é Modo B, não estou a mostrar o painel do Hospital Fernando Fonseca, mas o Sigic conta na mesma para a tua disponibilidade pessoal. Tens duas tarefas no Todoist para esse dia, &#x27;Pendencias&#x27; e &#x27;Ir br&#x27;. O hábito de segunda é a leitura de artigos ou vídeos de Cirurgia Pediátrica, de manhã, antes de o Sigic começar. Aproveita a manhã livre para tratar do que puderes, porque a partir do meio da tarde o dia fecha.</p>
+              <p id="audio-script-text-2" class="audio-script-hidden">Sexta-feira, 18 de setembro, com sol e nuvens e maxima de 28 graus. Comeca com o gym as 7h30 e a revisao semanal de tarefas, emails e pendentes. Tens uma nota clinica para preparar, o caso da atresia do esofago. A noite ha um evento social, o Meet Local and International Friends, boa forma de fechar a semana.</p>
               <button type="button" class="audio-btn" id="audio-btn-2" onclick="playAudio(2)">▶ Ouvir</button>
             </div>
-            <div class="banner banner-warn">
-              ⚠️ Sigic hoje — tarde e noite bloqueadas (~15h30–20h30). Sem espaço para compromissos depois do trabalho.
+            <div class="banner ">
+              ✅ Sem alertas hoje
             </div>
             <div class="navy-box" style="display:block; margin-bottom:0;">
               <div class="label">Próximo destaque</div>
-              <div class="title">Sigic</div>
-              <div class="meta">Hoje · 15h30–20h30</div>
+              <div class="title">Meet Local &amp; International Friends - Casual Socialising Evening- Music &amp; DJ</div>
+              <div class="meta">Depois de amanha · 19:00</div>
             </div>
           </div>
         </details>
@@ -320,64 +331,76 @@
 
         <div class="task-card tc-tarefas">
           <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Clara&#x27;s birthday gift on the 12th of September</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Decidir life</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Forxiga</span></label>
         </div>
 
         <div class="task-card tc-eventos">
           <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Chegada a Lisboa esta noite (voo a confirmar — Roma ou Belgrado)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Management of UTIs in patients with neurogenic bladder</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Grass Volleyball at Jardim Vasco da Gama in Belém</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Grass Volleyball at Jardim Vasco da Gama in Belém</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Reservation at Pasta Non Basta - Avenidas Novas</span></label>
         </div>
 
         <div class="task-card tc-extras">
           <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
 
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leg &amp; Core Reinforcement (fim de semana) — se o cansaço da viagem permitir</span></label>
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leitura de artigos de Cirurgia Pediatrica (manha), ciclo lazer/reabilitacao a tarde</span></label>
         </div>
 
-        <div class="task-section-label">Amanhã</div>
+        <div class="task-section-label">Amanha</div>
 
         <div class="task-card tc-tarefas">
           <div class="task-card-title">✅ Tarefas</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Forxiga (medicação diária)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Aula tennis</span></label>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Prenda de aniversário da Clara (confirmar data — 12 ou 17 Set?)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Clarinha bthday</span></label>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Festa pca comercio</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Contrato social</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Ver minha Rm</span></label>
         </div>
 
         <div class="task-card tc-eventos">
           <div class="task-card-title">📅 Eventos</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Niver Clarinha</span></label>
         </div>
 
         <div class="task-card tc-extras">
           <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
 
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leg &amp; Core Reinforcement (fim de semana)</span></label>
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Gym 7h30, ver projectos, happy hour com a Vanessa</span></label>
         </div>
 
-        <div class="task-section-label">Depois de amanhã</div>
+        <div class="task-section-label">Depois de amanha</div>
 
         <div class="task-card tc-tarefas">
           <div class="task-card-title">✅ Tarefas</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Pendencias</span></label>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Ir br</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Eco 1352213, waziha, atresia esof</span></label>
         </div>
 
         <div class="task-card tc-eventos">
           <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Sigic — tarde/noite bloqueadas (~15h30–20h30)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Meet Local &amp; International Friends - Casual Socialising Evening- Music &amp; DJ</span></label>
         </div>
 
         <div class="task-card tc-extras">
           <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
 
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leitura de artigos/vídeos de Cirurgia Pediátrica (manhã, entre cirurgias)</span></label>
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Gym 7h30, revisao semanal (tarefas/emails/pendentes)</span></label>
         </div>
 
 
@@ -393,70 +416,31 @@
           <div class="cal-dow">S</div><div class="cal-dow">T</div><div class="cal-dow">Q</div><div class="cal-dow">Q</div><div class="cal-dow">S</div><div class="cal-dow">S</div><div class="cal-dow">D</div>
 <div class="cal-cell cal-empty"></div>
 <div class="cal-cell cal-empty"></div>
-<div class="cal-cell cal-empty"></div>
-<div class="cal-cell cal-empty"></div>
-<div class="cal-cell cal-empty"></div>
 
-          <div class="cal-cell cal-today cal-selected" onclick="showDay('2026-09-12', this)">
-            <span class="cal-daynum">12</span>
-            <span class="cal-badge-dot cb-special" style="display:block"></span>
+          <div class="cal-cell cal-today cal-selected" onclick="showDay('2026-09-16', this)">
+            <span class="cal-daynum">16</span>
+            <span class="cal-badge-dot " style="display:none"></span>
             <div class="cal-pills">
               <span class="cal-pill cp-event" style="display:flex">📅4</span>
-              <span class="cal-pill cp-task" style="display:none">✅0</span>
-            </div>
-          </div>
-
-          <div class="cal-cell  " onclick="showDay('2026-09-13', this)">
-            <span class="cal-daynum">13</span>
-            <span class="cal-badge-dot " style="display:none"></span>
-            <div class="cal-pills">
-              <span class="cal-pill cp-event" style="display:none">📅0</span>
               <span class="cal-pill cp-task" style="display:flex">✅3</span>
-            </div>
-          </div>
-
-          <div class="cal-cell  " onclick="showDay('2026-09-14', this)">
-            <span class="cal-daynum">14</span>
-            <span class="cal-badge-dot cb-sigic" style="display:block"></span>
-            <div class="cal-pills">
-              <span class="cal-pill cp-event" style="display:flex">📅1</span>
-              <span class="cal-pill cp-task" style="display:flex">✅2</span>
-            </div>
-          </div>
-
-          <div class="cal-cell  " onclick="showDay('2026-09-15', this)">
-            <span class="cal-daynum">15</span>
-            <span class="cal-badge-dot " style="display:none"></span>
-            <div class="cal-pills">
-              <span class="cal-pill cp-event" style="display:flex">📅1</span>
-              <span class="cal-pill cp-task" style="display:none">✅0</span>
-            </div>
-          </div>
-
-          <div class="cal-cell  " onclick="showDay('2026-09-16', this)">
-            <span class="cal-daynum">16</span>
-            <span class="cal-badge-dot cb-special" style="display:block"></span>
-            <div class="cal-pills">
-              <span class="cal-pill cp-event" style="display:flex">📅2</span>
-              <span class="cal-pill cp-task" style="display:none">✅0</span>
             </div>
           </div>
 
           <div class="cal-cell  " onclick="showDay('2026-09-17', this)">
             <span class="cal-daynum">17</span>
-            <span class="cal-badge-dot cb-special" style="display:block"></span>
+            <span class="cal-badge-dot " style="display:none"></span>
             <div class="cal-pills">
               <span class="cal-pill cp-event" style="display:flex">📅1</span>
-              <span class="cal-pill cp-task" style="display:none">✅0</span>
+              <span class="cal-pill cp-task" style="display:flex">✅4</span>
             </div>
           </div>
 
           <div class="cal-cell  " onclick="showDay('2026-09-18', this)">
             <span class="cal-daynum">18</span>
-            <span class="cal-badge-dot cb-show" style="display:block"></span>
+            <span class="cal-badge-dot " style="display:none"></span>
             <div class="cal-pills">
               <span class="cal-pill cp-event" style="display:flex">📅1</span>
-              <span class="cal-pill cp-task" style="display:none">✅0</span>
+              <span class="cal-pill cp-task" style="display:flex">✅1</span>
             </div>
           </div>
 
@@ -516,7 +500,7 @@
 
           <div class="cal-cell  " onclick="showDay('2026-09-25', this)">
             <span class="cal-daynum">25</span>
-            <span class="cal-badge-dot cb-special" style="display:block"></span>
+            <span class="cal-badge-dot " style="display:none"></span>
             <div class="cal-pills">
               <span class="cal-pill cp-event" style="display:flex">📅1</span>
               <span class="cal-pill cp-task" style="display:none">✅0</span>
@@ -527,7 +511,43 @@
             <span class="cal-daynum">26</span>
             <span class="cal-badge-dot " style="display:none"></span>
             <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅2</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell  " onclick="showDay('2026-09-27', this)">
+            <span class="cal-daynum">27</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
               <span class="cal-pill cp-event" style="display:none">📅0</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell  " onclick="showDay('2026-09-28', this)">
+            <span class="cal-daynum">28</span>
+            <span class="cal-badge-dot cb-sigic" style="display:block"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell  " onclick="showDay('2026-09-29', this)">
+            <span class="cal-daynum">29</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅1</span>
+              <span class="cal-pill cp-task" style="display:none">✅0</span>
+            </div>
+          </div>
+
+          <div class="cal-cell  " onclick="showDay('2026-09-30', this)">
+            <span class="cal-daynum">30</span>
+            <span class="cal-badge-dot " style="display:none"></span>
+            <div class="cal-pills">
+              <span class="cal-pill cp-event" style="display:flex">📅2</span>
               <span class="cal-pill cp-task" style="display:none">✅0</span>
             </div>
           </div>
@@ -536,131 +556,37 @@
 
         <div id="cal-detail-box">
 
-          <div class="cal-day-panel" id="calday-2026-09-12" style="display:block">
-            <p class="card-title">Sábado, 12 Set</p>
-
-            <div class="task-card tc-tarefas">
-              <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
-
-            </div>
-
-            <div class="task-card tc-eventos">
-              <div class="task-card-title">📅 Eventos</div>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>✈️ Regresso a Lisboa via Roma (Wizz+Ryanair, chegada ~20h10)</span></label>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>✈️ Regresso a Lisboa via Belgrado (Air Serbia, chegada ~22h10) — confirmar qual</span></label>
-
-            </div>
-
-            <div class="task-card tc-extras">
-              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leg &amp; Core Reinforcement (fim de semana) — se o cansaço da viagem permitir</span></label>
-
-            </div>
-          </div>
-
-          <div class="cal-day-panel" id="calday-2026-09-13" style="display:none">
-            <p class="card-title">Domingo, 13 Set</p>
-
-            <div class="task-card tc-tarefas">
-              <div class="task-card-title">✅ Tarefas</div>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Forxiga (medicação diária)</span></label>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Prenda de aniversário da Clara</span></label>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Festa pca comercio</span></label>
-
-            </div>
-
-            <div class="task-card tc-eventos">
-              <div class="task-card-title">📅 Eventos</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
-
-            </div>
-
-            <div class="task-card tc-extras">
-              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leg &amp; Core Reinforcement (fim de semana)</span></label>
-
-            </div>
-          </div>
-
-          <div class="cal-day-panel" id="calday-2026-09-14" style="display:none">
-            <p class="card-title">Segunda, 14 Set</p>
-
-            <div class="task-card tc-tarefas">
-              <div class="task-card-title">✅ Tarefas</div>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Pendencias</span></label>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Ir br</span></label>
-
-            </div>
-
-            <div class="task-card tc-eventos">
-              <div class="task-card-title">📅 Eventos</div>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Sigic — tarde/noite bloqueadas (~15h30–20h30)</span></label>
-
-            </div>
-
-            <div class="task-card tc-extras">
-              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-
-          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leitura de artigos/vídeos de Cirurgia Pediátrica (manhã, entre cirurgias)</span></label>
-
-            </div>
-          </div>
-
-          <div class="cal-day-panel" id="calday-2026-09-15" style="display:none">
-            <p class="card-title">Terça, 15 Set</p>
-
-            <div class="task-card tc-tarefas">
-              <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
-
-            </div>
-
-            <div class="task-card tc-eventos">
-              <div class="task-card-title">📅 Eventos</div>
-
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Game Night at Amelia Cafe (19h00)</span></label>
-
-            </div>
-
-            <div class="task-card tc-extras">
-              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
-
-            </div>
-          </div>
-
-          <div class="cal-day-panel" id="calday-2026-09-16" style="display:none">
+          <div class="cal-day-panel" id="calday-2026-09-16" style="display:block">
             <p class="card-title">Quarta, 16 Set</p>
 
             <div class="task-card tc-tarefas">
               <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Clara&#x27;s birthday gift on the 12th of September</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Decidir life</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Forxiga</span></label>
 
             </div>
 
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Webinar ERN eUROGEN — UTIs em bexiga neurogénica (17h00)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Management of UTIs in patients with neurogenic bladder</span></label>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Jantar — Pasta Non Basta, Avenidas Novas (19h45)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Grass Volleyball at Jardim Vasco da Gama in Belém</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Grass Volleyball at Jardim Vasco da Gama in Belém</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Reservation at Pasta Non Basta - Avenidas Novas</span></label>
 
             </div>
 
             <div class="task-card tc-extras">
               <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Leitura de artigos de Cirurgia Pediatrica (manha), ciclo lazer/reabilitacao a tarde</span></label>
 
             </div>
           </div>
@@ -670,20 +596,28 @@
 
             <div class="task-card tc-tarefas">
               <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Aula tennis</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Clarinha bthday</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Contrato social</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Ver minha Rm</span></label>
 
             </div>
 
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>🎂 Aniversário da Clara (18 anos) — &#x27;Niver Clarinha&#x27;</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Niver Clarinha</span></label>
 
             </div>
 
             <div class="task-card tc-extras">
               <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Gym 7h30, ver projectos, happy hour com a Vanessa</span></label>
 
             </div>
           </div>
@@ -693,20 +627,22 @@
 
             <div class="task-card tc-tarefas">
               <div class="task-card-title">✅ Tarefas</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Eco 1352213, waziha, atresia esof</span></label>
 
             </div>
 
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Meet Local &amp; International Friends — Music &amp; DJ (19h00)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Meet Local &amp; International Friends - Casual Socialising Evening- Music &amp; DJ</span></label>
 
             </div>
 
             <div class="task-card tc-extras">
               <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
-          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+          <label class="task-item ti-habito " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Gym 7h30, revisao semanal (tarefas/emails/pendentes)</span></label>
 
             </div>
           </div>
@@ -767,7 +703,7 @@
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Sigic — tarde/noite bloqueadas (~15h30–20h30)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Sigic</span></label>
 
             </div>
 
@@ -856,7 +792,7 @@
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
 
-          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Niver Gi Gisele Prima (~20h00)</span></label>
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Niver Gi Gisele Prima</span></label>
 
             </div>
 
@@ -878,7 +814,103 @@
 
             <div class="task-card tc-eventos">
               <div class="task-card-title">📅 Eventos</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Moonlight at the Edge of the World: Cabo Espichel</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Moonlight at the Edge of the World: Cabo Espichel</span></label>
+
+            </div>
+
+            <div class="task-card tc-extras">
+              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
           <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+          </div>
+
+          <div class="cal-day-panel" id="calday-2026-09-27" style="display:none">
+            <p class="card-title">Domingo, 27 Set</p>
+
+            <div class="task-card tc-tarefas">
+              <div class="task-card-title">✅ Tarefas</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+
+            <div class="task-card tc-eventos">
+              <div class="task-card-title">📅 Eventos</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+
+            <div class="task-card tc-extras">
+              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+          </div>
+
+          <div class="cal-day-panel" id="calday-2026-09-28" style="display:none">
+            <p class="card-title">Segunda, 28 Set</p>
+
+            <div class="task-card tc-tarefas">
+              <div class="task-card-title">✅ Tarefas</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+
+            <div class="task-card tc-eventos">
+              <div class="task-card-title">📅 Eventos</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Sigic</span></label>
+
+            </div>
+
+            <div class="task-card tc-extras">
+              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+          </div>
+
+          <div class="cal-day-panel" id="calday-2026-09-29" style="display:none">
+            <p class="card-title">Terça, 29 Set</p>
+
+            <div class="task-card tc-tarefas">
+              <div class="task-card-title">✅ Tarefas</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+
+            <div class="task-card tc-eventos">
+              <div class="task-card-title">📅 Eventos</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Game Night at Amelia Cafe 🌿</span></label>
+
+            </div>
+
+            <div class="task-card tc-extras">
+              <div class="task-card-title">🌿 Hábitos · 💡 Sugestão · 🏃 Desporto</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+          </div>
+
+          <div class="cal-day-panel" id="calday-2026-09-30" style="display:none">
+            <p class="card-title">Quarta, 30 Set</p>
+
+            <div class="task-card tc-tarefas">
+              <div class="task-card-title">✅ Tarefas</div>
+          <p class="muted" style="font-size:12px;">Nada por agora.</p>
+
+            </div>
+
+            <div class="task-card tc-eventos">
+              <div class="task-card-title">📅 Eventos</div>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Ferias Hff</span></label>
+
+          <label class="task-item " data-task><input type="checkbox"  onchange="toggleTaskItem(this)"><span>Stay at Malu</span></label>
 
             </div>
 
@@ -897,29 +929,20 @@
       <div id="tab-email" class="tabpanel">
 
 
-        <div class="email-section-label" style="color:var(--red)">🚨 Urgente</div>
-
-        <div class="email-row">
-          <div class="e-from">Ryanair</div>
-          <div class="e-subj">Check-in online — voo Roma → Lisboa (hoje, 17h55)</div>
-          <div class="e-summary">Evita a taxa de check-in de 55€ no aeroporto; é o voo de hoje, com chegada prevista às 20h10 em Lisboa.</div>
-        </div>
-
-
 
 
         <div class="email-section-label" style="color:var(--terracotta)">⚡ Importante</div>
 
         <div class="email-row">
-          <div class="e-from">GlobalcastMD</div>
-          <div class="e-subj">Robotic Practice in Pediatrics — inscrições abertas</div>
-          <div class="e-summary">Webinar com Dr. Juan Gurria (Cincinnati Children&#x27;s) — formação médica de interesse (GlobalcastMD).</div>
+          <div class="e-from">Electoral Services - Cardiff Council</div>
+          <div class="e-subj">Act now so Cardiff Council can check who is eligible to be registered to vote at your address</div>
+          <div class="e-summary"></div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Academia SPCMIN / Diventos</div>
-          <div class="e-subj">Confirmação de inscrição — XIX SPCMIN Congress (perfil Faculty)</div>
-          <div class="e-summary">Inscrição confirmada como Faculty no congresso.</div>
+          <div class="e-from">Gotogate &lt;airhelp-compensation@gotogate.com&gt;</div>
+          <div class="e-subj">Compensação pelo seu voo cancelado para Roma</div>
+          <div class="e-summary"></div>
         </div>
 
 
@@ -928,56 +951,61 @@
         <div class="email-section-label" style="color:var(--blue)">📢 Informativo</div>
 
         <div class="email-row">
-          <div class="e-from">XP Investimentos</div>
-          <div class="e-subj">Transferência recebida — R$ 18.950,00</div>
+          <div class="e-from">Decathlon &lt;noreply-pt@service.decathlon.com&gt;</div>
+          <div class="e-subj">Fatura disponível</div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Tesouro Direto</div>
-          <div class="e-subj">Resgate liquidado com sucesso</div>
+          <div class="e-from">Gotogate in partnership with Booking.com</div>
+          <div class="e-subj">Chat Response for Order 40-1044352583</div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Air Serbia (web check-in)</div>
-          <div class="e-subj">Boarding pass JU564 — Belgrado → Lisboa, 12 Set</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Air Serbia (web check-in)</div>
-          <div class="e-subj">Boarding pass JU163 — Tirana → Belgrado, 12 Set</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Wimbledon</div>
-          <div class="e-subj">Confirmação de candidatura à Public Ballot 2027</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">INCM</div>
-          <div class="e-subj">Reclamação submetida — nº ROR00000000045723777</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Gjirafa Travel</div>
-          <div class="e-subj">Reserva confirmada (viagem já realizada, 11 Set)</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Decathlon</div>
-          <div class="e-subj">Confirmação de encomenda PT5V1WN6CG6R</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Amazon</div>
-          <div class="e-subj">Encomenda a caminho para entrega</div>
+          <div class="e-from">&lt;lro.noreply@incm.pt&gt;</div>
+          <div class="e-subj">Reclamação submetida</div>
         </div>
 
 
 
 
         <div class="email-section-label" style="color:var(--muted)">⚫ Ruído</div>
-        <div class="email-row e-noise">5 emails de marketing/newsletters/Todoist digest</div>
+        <div class="email-row e-noise">7 emails de marketing/newsletters/Todoist digest</div>
 
+
+
+        <div class="email-section-label">📁 Tarefas sem data</div>
+
+        <div class="email-row">
+          <div class="e-subj">Fwd: Informação sobre Procedimento para Emissão de Certidão de Tempo de Contribuição</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">RE: Aulas de vela</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Aulas de vela</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Diverticulite apendice</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Fwd: Protocolo NAC Neonatologia</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Re: Protocolo NAC Neonatologia</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Re: Protocolo NAC Neonatologia</div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj">Protocolo NAC Neonatologia</div>
+        </div>
 
 
 
@@ -985,57 +1013,57 @@
         <div class="email-section-label">💤 Snoozed</div>
 
         <div class="email-row">
-          <div class="e-from">ERN eUROGEN / Zoom</div>
-          <div class="e-subj">Confirmado — Management of UTIs in neurogenic bladder</div>
-          <div class="e-summary">Reagendado para 16 Set, 17h00 (Lisboa) — já também no Calendário</div>
+          <div class="e-from">Volleyball Lisboa &lt;noreply@volleyball-lisboa.org&gt;</div>
+          <div class="e-subj">Thank you for your payment</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">TheFork</div>
-          <div class="e-subj">Reserva atualizada — Pasta Non Basta, 16 Set 19h45</div>
-          <div class="e-summary">Reagendado para 16 Set — já também no Calendário</div>
+          <div class="e-from">Andar a cavalo &lt;info@patiodotejo.com&gt;</div>
+          <div class="e-subj">Bem vindo(a) ao Andar a Cavalo!</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Andar a Cavalo</div>
-          <div class="e-subj">Boas-vindas / desconto 10%</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">Malu through Booking.com</div>
+          <div class="e-subj">You have a message from Malu</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Booking.com (Malu)</div>
-          <div class="e-subj">Mensagem da anfitriã sobre check-in às 12h</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">noreply@booking.com</div>
+          <div class="e-subj">🛄 Obrigado! A sua reserva em Malu está confirmada</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Booking.com</div>
-          <div class="e-subj">Reserva confirmada — Pinhal do Douro</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">Hospital da Luz &lt;noreply@hospitaldaluz.pt&gt;</div>
+          <div class="e-subj">Confirmação de Marcação | RAFAEL CORREIA</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Hospital da Luz</div>
-          <div class="e-subj">Consulta de Endocrinologia confirmada</div>
-          <div class="e-summary">Reagendado para 26 Jan 2027</div>
+          <div class="e-from">&lt;noreply@luzsaude.pt&gt;</div>
+          <div class="e-subj">Ministério da Saúde | Prescrição Eletrónica Médica</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Ministério da Saúde</div>
-          <div class="e-subj">Prescrição eletrónica registada</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">&lt;noreply@luzsaude.pt&gt;</div>
+          <div class="e-subj">Ministério da Saúde | Prescrição Eletrónica Médica</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Amazon Music</div>
-          <div class="e-subj">Alteração de preço da subscrição</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">Amazon Music &lt;music.amazon@amazon.com&gt;</div>
+          <div class="e-subj">Alteração do preço da assinatura</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Lusíadas Saúde</div>
-          <div class="e-subj">Confirmação de marcação — Oftalmologia</div>
-          <div class="e-summary">Reagendado para —</div>
+          <div class="e-from">Portal +Lusíadas &lt;portal@lusiadas.pt&gt;</div>
+          <div class="e-subj">Lusíadas Saúde - Confirmação de marcações</div>
+          <div class="e-summary">Reagendado para </div>
         </div>
 
 
@@ -1044,15 +1072,63 @@
         <div class="email-section-label">🔪 Cirurgia Pediátrica</div>
 
         <div class="email-row">
-          <div class="e-from">Afonso Mendes<span class="email-badge">Caso Clínico</span></div>
-          <div class="e-subj">Diverticulite do apêndice — revisões</div>
-          <div class="e-summary">Thread sobre submissão/revisões de caso clínico.</div>
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">Event Registration Confirmation</div>
+          <div class="e-summary"></div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Sofia Grilo / Rodrigo Roquette<span class="email-badge">Guideline</span></div>
-          <div class="e-subj">Protocolo NAC Neonatologia</div>
-          <div class="e-summary">Versão revista do protocolo em circulação.</div>
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">Event Registration Confirmation</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">A Full Day of Pediatric Surgery Updates from Top US Experts, Register! ONE MONTH!</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">rafael correia &lt;rcc4730@gmail.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">paediatric surgery</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">A Full Day of Pediatric Surgery Updates from Top US Experts, Register! NEXT MONTH!</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">A Full Day of Pediatric Surgery Updates from Top US Experts, Register! August 10!</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">GlobalCastMD &lt;info@globalcastmd.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">Ask Dr. Ponsky Live: Pediatric Hernia Repair Webinar, THIS WEEK!</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Rafael Correia &lt;rafaielcc@gmail.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">Fwd: da série... Sperandio tinha razão.</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Shilhan, Darren &lt;Darren.Shilhan@radboudumc.nl&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">ERN eUROGEN Paediatric Urology Webinar Series for Ukraine: Session 21 Recording &#x27;Hypospadias&#x27;</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Lisieux Eyer de Jesus &lt;lisieuxeyerdejesus@gmail.com&gt;<span class="email-badge"></span></div>
+          <div class="e-subj">da série... Sperandio tinha razão.</div>
+          <div class="e-summary"></div>
         </div>
 
 
@@ -1061,32 +1137,32 @@
         <div class="email-section-label">🏥 ULSASI</div>
 
         <div class="email-row">
-          <div class="e-from">Isabel França / Rodrigo Roquette</div>
-          <div class="e-subj">FW: Journal Club SPCP</div>
-          <div class="e-summary">Reencaminhado, sem data expressa no assunto.</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Academia Eventos ULSASI</div>
-          <div class="e-subj">Save the Date — Reunião Pediatria HFF: 30 Anos a Crescer</div>
-          <div class="e-summary">Sem data específica no snippet — verificar mais tarde.</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Rafael Correia (auto-forward)</div>
-          <div class="e-subj">&quot;rm&quot;</div>
-          <div class="e-summary">Processo/registo interno.</div>
-        </div>
-
-        <div class="email-row">
-          <div class="e-from">Rafael Correia (auto-forward)</div>
-          <div class="e-subj">&quot;processo clinico&quot;</div>
+          <div class="e-from">Rafael Correia &lt;rafael.correia@ulsasi.min-saude.pt&gt;</div>
+          <div class="e-subj">rm</div>
           <div class="e-summary"></div>
         </div>
 
         <div class="email-row">
-          <div class="e-from">Marta Moniz</div>
-          <div class="e-subj">FW: Protocolo Nutrição entérica Pós-GOT</div>
+          <div class="e-from">Rafael Correia &lt;rafael.correia@ulsasi.min-saude.pt&gt;</div>
+          <div class="e-subj">FW: protocolo Nutrição enterica Pos GOT</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Rafael Correia &lt;rafael.correia@ulsasi.min-saude.pt&gt;</div>
+          <div class="e-subj">prcesso clinico</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Rafael Correia &lt;rafael.correia@ulsasi.min-saude.pt&gt;</div>
+          <div class="e-subj">FW: Journal Club SPCP</div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-from">Rafael Correia &lt;rafael.correia@ulsasi.min-saude.pt&gt;</div>
+          <div class="e-subj">FW: Save the Date | Reunião da Pediatria do HFF: 30 Anos a Crescer com Ciência e Humanidade</div>
           <div class="e-summary"></div>
         </div>
 
@@ -1096,13 +1172,33 @@
         <div class="email-section-label">🗓️ Events</div>
 
         <div class="email-row">
-          <div class="e-subj">Management of UTIs in neurogenic bladder (ERN eUROGEN)</div>
-          <div class="e-summary">confirmado · 16 Set · 17h00 (Lisboa)</div>
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
         </div>
 
         <div class="email-row">
-          <div class="e-subj">Jantar — Pasta Non Basta, Avenidas Novas</div>
-          <div class="e-summary">confirmado · 16 Set · 19h45</div>
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
+        </div>
+
+        <div class="email-row">
+          <div class="e-subj"></div>
+          <div class="e-summary"></div>
         </div>
 
 
@@ -1112,6 +1208,25 @@
       <!-- ===================== TAB 5 — TRABALHO HFF (Modo A) ===================== -->
       <!-- Versão condensada — painel completo vive em ../Hff/index.html -->
 
+      <div id="tab-hff" class="tabpanel">
+
+        <div class="banner banner-info">
+          ℹ️ Painel completo em <a href="../Hff/index.html" style="text-decoration:underline">../Hff/index.html</a>
+        </div>
+
+        <div class="section-label">Resumo do dia</div>
+        <div class="card stripe-terracotta">
+          <p><b></b></p>
+          <p class="muted">{&#x27;tipo_dia&#x27;: &#x27;BO manha&#x27;, &#x27;proximo_bo&#x27;: {&#x27;date&#x27;: &#x27;2026-09-16&#x27;, &#x27;weekday&#x27;: &#x27;quarta&#x27;, &#x27;n_cirurgias&#x27;: 1}, &#x27;fdr_total&#x27;: 2, &#x27;anomalias&#x27;: [{&#x27;tipo&#x27;: &#x27;idade_implausivel&#x27;, &#x27;linha&#x27;: 26, &#x27;date&#x27;: &#x27;2026-09-21&#x27;, &#x27;valor&#x27;: 126.8, &#x27;nota&#x27;: &#x27;Provavel data de nascimento em falta na folha; tratada como sem dados.&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 55, &#x27;date&#x27;: &#x27;2026-09-22&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 56, &#x27;date&#x27;: &#x27;2026-09-24&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 57, &#x27;date&#x27;: &#x27;2026-09-29&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 58, &#x27;date&#x27;: &#x27;2026-10-01&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 59, &#x27;date&#x27;: &#x27;2026-10-06&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 60, &#x27;date&#x27;: &#x27;2026-10-08&#x27;}, {&#x27;tipo&#x27;: &#x27;sigic_sem_cirurgiao&#x27;, &#x27;linha&#x27;: 61, &#x27;date&#x27;: &#x27;2026-10-13&#x27;}]}</p>
+        </div>
+
+        <div class="section-label">Cirurgias de hoje (se BO)</div>
+        <div class="card">
+          <p class="muted"></p>
+        </div>
+
+      </div>
+
 
       <!-- ===================== TAB 6 — TEMPO ===================== -->
       <div id="tab-tempo" class="tabpanel">
@@ -1119,9 +1234,13 @@
         <div class="section-label">Janelas do dia</div>
         <div class="card">
 
-          <div class="window-row"><span class="window-time">Manhã</span><span>Sem saída para o HFF hoje (fim de semana) — Chegada do voo só à noite — sem planos para a manhã</span></div>
+          <div class="window-row"><span class="window-time">08:00</span><span></span></div>
 
-          <div class="window-row"><span class="window-time">~20h/22h</span><span>Chegada a Lisboa (voo a confirmar) — Noite mais fresca — leva um casaco leve</span></div>
+          <div class="window-row"><span class="window-time">13:00</span><span></span></div>
+
+          <div class="window-row"><span class="window-time">16:30</span><span></span></div>
+
+          <div class="window-row"><span class="window-time">21:00</span><span></span></div>
 
         </div>
 
@@ -1130,19 +1249,19 @@
           <thead><tr><th>Dia</th><th>☁️</th><th>Máx/Mín</th><th>🌧️</th></tr></thead>
           <tbody>
 
-            <tr><td>Sáb 12</td><td>☀️</td><td>27°/18°</td><td>5%</td></tr>
+            <tr><td>Qua 16</td><td>nublado</td><td>25°/19°</td><td>0%</td></tr>
 
-            <tr><td>Dom 13</td><td>☀️</td><td>26°/18°</td><td>5%</td></tr>
+            <tr><td>Qui 17</td><td>nublado</td><td>28°/19°</td><td>0%</td></tr>
 
-            <tr><td>Seg 14</td><td>🌤️</td><td>25°/17°</td><td>10%</td></tr>
+            <tr><td>Sex 18</td><td>sol-nuvens</td><td>28°/19°</td><td>0%</td></tr>
 
-            <tr><td>Ter 15</td><td>☀️</td><td>26°/17°</td><td>5%</td></tr>
+            <tr><td>Sab 19</td><td>sol-nuvens</td><td>30°/18°</td><td>0%</td></tr>
 
-            <tr><td>Qua 16</td><td>🌤️</td><td>25°/17°</td><td>10%</td></tr>
+            <tr><td>Dom 20</td><td>nuvens-sol</td><td>32°/22°</td><td>0%</td></tr>
 
-            <tr><td>Qui 17</td><td>☀️</td><td>26°/18°</td><td>5%</td></tr>
+            <tr><td>Seg 21</td><td>sol</td><td>31°/19°</td><td>0%</td></tr>
 
-            <tr><td>Sex 18</td><td>☀️</td><td>27°/18°</td><td>5%</td></tr>
+            <tr><td>Ter 22</td><td>sol-nuvens</td><td>30°/20°</td><td>0%</td></tr>
 
           </tbody>
         </table>
@@ -1155,17 +1274,16 @@
         <div class="section-label">As 3 Janelas — à medida do dia</div>
 
         <details class="collapse day-panel" open>
-          <summary><span><span class="dp-name">Hoje</span> <span class="dp-date">Sábado, 12 Set</span></span></summary>
+          <summary><span><span class="dp-name">Hoje</span> <span class="dp-date">Quarta, 16 Set</span></span></summary>
           <div class="collapse-body">
             <div class="card stripe-terracotta" style="margin-top:6px;">
               <div class="routine-card">
-                <span class="routine-time">—</span>
+                <span class="routine-time">08h00</span>
                 <div>
                   <p class="card-title">🌅 Matinal</p>
                   <ul class="routine-list">
-                <li>Sem HFF hoje (fim de semana) — nenhuma verificação matinal necessária.</li>
-                <li>Confirmar qual dos dois voos de regresso é o real (Roma vs. Belgrado).</li>
-                <li>💡 Aproveita o dia de viagem para descansar; deixa o Leg &amp; Core para amanhã se estiveres cansado.</li>
+                <li>🌿 Leitura de artigos de Cirurgia Pediatrica (manha), ciclo lazer/reabilitacao a tarde</li>
+                <li>💡 Aproveita a manha para a leitura de artigos e para o BO (so 1 doente hoje) antes da tarde compactada.</li>
 
                   </ul>
                 </div>
@@ -1173,61 +1291,13 @@
             </div>
             <div class="card">
               <div class="routine-card">
-                <span class="routine-time">~15h30–16h</span>
+                <span class="routine-time">~15h30</span>
                 <div>
                   <p class="card-title">⚡ Processamento</p>
                   <ul class="routine-list">
-                <li>Nenhuma tarefa pendente hoje — já tratadas.</li>
-                <li>Confirmar o horário/gate real do voo antes de saíres para o aeroporto.</li>
-                <li>💡 Confere o embarque com antecedência dado o histórico de dois itinerários no calendário.</li>
-
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="card stripe-sage" style="margin-bottom:0;">
-              <div class="routine-card">
-                <span class="routine-time">21h30/23h</span>
-                <div>
-                  <p class="card-title">🌙 Descompressão</p>
-                  <ul class="routine-list">
-                <li>3 prioridades de amanhã: Forxiga, prenda da Clara, Festa pca comercio.</li>
-                <li>💡 Já em casa — aproveita para descomprimir da viagem.</li>
-
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </details>
-
-        <details class="collapse day-panel" >
-          <summary><span><span class="dp-name">Amanhã</span> <span class="dp-date">Domingo, 13 Set</span></span></summary>
-          <div class="collapse-body">
-            <div class="card stripe-terracotta" style="margin-top:6px;">
-              <div class="routine-card">
-                <span class="routine-time">09h00</span>
-                <div>
-                  <p class="card-title">🌅 Matinal</p>
-                  <ul class="routine-list">
-                <li>Dia livre — sem eventos no calendário.</li>
-                <li>Forxiga (medicação diária).</li>
-                <li>🌿 Leg &amp; Core Reinforcement</li>
-                <li>💡 Bom dia para recuperar da viagem e tratar da prenda de aniversário da Clara.</li>
-
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="card">
-              <div class="routine-card">
-                <span class="routine-time">~15h30–16h</span>
-                <div>
-                  <p class="card-title">⚡ Processamento</p>
-                  <ul class="routine-list">
-                <li>Confirmar a data certa do aniversário da Clara (12 vs. 17 Set) antes de comprar/entregar a prenda.</li>
-                <li>Esclarecer a tarefa &#x27;Festa pca comercio&#x27;.</li>
-                <li>💡 Aproveita a tarde de domingo para resolver estas pendências leves.</li>
+                <li>Confirmar entrega da encomenda Decathlon</li>
+                <li>Decidir a prioridade entre webinar UTIs (17h), Volleyball (17h30) e jantar no Pasta Non Basta (18h)</li>
+                <li>💡 A tarde tem tres compromissos sobrepostos — decide agora para nao chegares atrasado a nenhum.</li>
 
                   </ul>
                 </div>
@@ -1239,8 +1309,7 @@
                 <div>
                   <p class="card-title">🌙 Descompressão</p>
                   <ul class="routine-list">
-                <li>3 prioridades de segunda: Pendencias, Ir br, leitura de Cirurgia Pediátrica antes do Sigic.</li>
-                <li>💡 Amanhã é dia de Sigic — a noite vai ficar mais cheia.</li>
+                <li>💡 Dia cheio; usa a noite para descansar, sem tarefas administrativas.</li>
 
                   </ul>
                 </div>
@@ -1250,7 +1319,7 @@
         </details>
 
         <details class="collapse day-panel" >
-          <summary><span><span class="dp-name">Depois de amanhã</span> <span class="dp-date">Segunda, 14 Set</span></span></summary>
+          <summary><span><span class="dp-name">Amanha</span> <span class="dp-date">Quinta, 17 Set</span></span></summary>
           <div class="collapse-body">
             <div class="card stripe-terracotta" style="margin-top:6px;">
               <div class="routine-card">
@@ -1258,10 +1327,9 @@
                 <div>
                   <p class="card-title">🌅 Matinal</p>
                   <ul class="routine-list">
-                <li>Dia de Sigic — tarde/noite bloqueadas (~15h30–20h30).</li>
-                <li>Tarefas &#x27;Pendencias&#x27; e &#x27;Ir br&#x27; para hoje.</li>
-                <li>🌿 Leitura de artigos/vídeos de Cirurgia Pediátrica (entre cirurgias)</li>
-                <li>💡 Aproveita a manhã livre antes do Sigic para tratar de pendências.</li>
+                <li>Tarefa &#x27;Contrato social&#x27; (prioridade alta, HFF) tem prazo hoje</li>
+                <li>🌿 Gym 7h30, ver projectos, happy hour com a Vanessa</li>
+                <li>💡 Prioriza &#x27;Contrato social&#x27; logo de manha — e a unica tarefa de prioridade alta do dia.</li>
 
                   </ul>
                 </div>
@@ -1269,13 +1337,11 @@
             </div>
             <div class="card">
               <div class="routine-card">
-                <span class="routine-time">~21h</span>
+                <span class="routine-time">~15h30</span>
                 <div>
                   <p class="card-title">⚡ Processamento</p>
                   <ul class="routine-list">
-                <li>Email e Todoist do dia.</li>
-                <li>Sem desporto hoje — Sigic ocupa a tarde/noite.</li>
-                <li>💡 Processamento adiado para depois do Sigic, como habitual nestes dias.</li>
+                <li>💡 Aula de tenis e niver da Clarinha a tarde — confirma horarios antes da happy hour com a Vanessa.</li>
 
                   </ul>
                 </div>
@@ -1283,12 +1349,55 @@
             </div>
             <div class="card stripe-sage" style="margin-bottom:0;">
               <div class="routine-card">
-                <span class="routine-time">~21h30–22h</span>
+                <span class="routine-time">21h30</span>
                 <div>
                   <p class="card-title">🌙 Descompressão</p>
                   <ul class="routine-list">
-                <li>3 prioridades de terça, 15 Set.</li>
-                <li>💡 Dia intenso — descomprime com calma ao chegar a casa.</li>
+                <li class="muted">Nada por agora.</li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="collapse day-panel" >
+          <summary><span><span class="dp-name">Depois de amanha</span> <span class="dp-date">Sexta, 18 Set</span></span></summary>
+          <div class="collapse-body">
+            <div class="card stripe-terracotta" style="margin-top:6px;">
+              <div class="routine-card">
+                <span class="routine-time">08h00</span>
+                <div>
+                  <p class="card-title">🌅 Matinal</p>
+                  <ul class="routine-list">
+                <li>Preparar nota clinica: Eco 1352213, waziha, atresia esof</li>
+                <li>🌿 Gym 7h30, revisao semanal (tarefas/emails/pendentes)</li>
+                <li>💡 Usa a revisao semanal para tratar os emails represados (registo eleitoral Cardiff, compensacao Gotogate).</li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="routine-card">
+                <span class="routine-time">~15h30</span>
+                <div>
+                  <p class="card-title">⚡ Processamento</p>
+                  <ul class="routine-list">
+                <li class="muted">Nada por agora.</li>
+
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="card stripe-sage" style="margin-bottom:0;">
+              <div class="routine-card">
+                <span class="routine-time">21h30</span>
+                <div>
+                  <p class="card-title">🌙 Descompressão</p>
+                  <ul class="routine-list">
+                <li>💡 Evento social a noite (Meet Local &amp; International Friends) — bom fecho de semana.</li>
 
                   </ul>
                 </div>
@@ -1301,10 +1410,79 @@
 
       </div>
 
+      <!-- ============== TAB 8 — DIAGNÓSTICO (v8) ============== -->
+      <!-- Le directamente de canonical_draft.diagnostico. Sempre presente, Modo A e B —
+           ao contrario da aba Trabalho HFF, diagnostico nao e especifico de modo. -->
+      <div id="tab-diagnostico" class="tabpanel">
+
+        <div class="banner banner-warn">
+          ⚠️ Há avisos ou uma fonte falhou nesta corrida — ver abaixo.
+        </div>
+
+        <div class="section-label">Fontes</div>
+
+        <div class="diag-row diag-ok">
+          <div>
+            <div class="diag-fonte-nome">Calendário</div>
+            <div class="diag-fonte-detalhe">calendarios: 9 · itens: 14 · duplicados: 2</div>
+          </div>
+          <span class="diag-fonte-status">✅ ok</span>
+        </div>
+
+        <div class="diag-row diag-ok">
+          <div>
+            <div class="diag-fonte-nome">Gmail</div>
+            <div class="diag-fonte-detalhe">conta: rafaielcc@gmail.com · conta_esperada: rafaielcc@gmail.com</div>
+          </div>
+          <span class="diag-fonte-status">✅ ok</span>
+        </div>
+
+        <div class="diag-row diag-ok">
+          <div>
+            <div class="diag-fonte-nome">Todoist</div>
+            <div class="diag-fonte-detalhe">itens: 9</div>
+          </div>
+          <span class="diag-fonte-status">✅ ok</span>
+        </div>
+
+        <div class="diag-row diag-ok">
+          <div>
+            <div class="diag-fonte-nome">Tempo</div>
+            <div class="diag-fonte-detalhe">dias: 7</div>
+          </div>
+          <span class="diag-fonte-status">✅ ok</span>
+        </div>
+
+        <div class="diag-row diag-ok">
+          <div>
+            <div class="diag-fonte-nome">Espelho HFF</div>
+            <div class="diag-fonte-detalhe">sessoes: 7 · cirurgias_cabecalho_ok: True · cirurgias_linhas_na_folha: 27</div>
+          </div>
+          <span class="diag-fonte-status">✅ ok</span>
+        </div>
+
+
+
+        <div class="section-label">Avisos</div>
+        <div class="card">
+
+          <p>⚠️ Calendario: 2 evento(s) repetido(s) (mesma data, hora e titulo); marcados com &#x27;duplicado_de&#x27;.</p>
+
+          <p>⚠️ Todoist: 21 tarefa(s) sem data ignoradas (nao entram no briefing).</p>
+
+        </div>
+
+
+
+
+
+
+      </div>
+
     </div>
 
     <div class="footer">
-      <p>Briefing Diário · Sábado, 12 Set · gerado às 14:30</p>
+      <p>Briefing Diário · Quarta, 16 Set · gerado às 15:19</p>
     </div>
   </div>
 
