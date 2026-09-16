@@ -59,7 +59,10 @@ TEMPLATES_DIR = AGENDA_ROOT / "Templates"
 BRIEFING_TEMPLATE_PATH = TEMPLATES_DIR / "Briefing" / "BRIEFING_TEMPLATE_v8_render.html"
 BRIEFING_TEMPLATE_FALLBACK_PATH = TEMPLATES_DIR / "Briefing" / "BRIEFING_TEMPLATE_v7_render.html"
 BRIEFING_RENDER_PATH = TEMPLATES_DIR / "Briefing" / "render_v6.py"
-REPO_DIR = PROJECT_ROOT / "personal-system"
+# Fora do Drive de proposito: um checkout git dentro de uma pasta sincronizada
+# pelo Google Drive corrompe-se (o Drive intromete-se na escrita da .git,
+# confirmado na pratica com erros "bad ref" durante um clone real).
+REPO_DIR = Path(r"C:\Users\rafai\Documents\github\personal-system")
 REPO_BRIEFING_PATH = Path("agendas") / "briefing" / "index.html"
 DAY_WINDOW_DAYS = 3
 CALENDAR_WINDOW_DAYS = 15

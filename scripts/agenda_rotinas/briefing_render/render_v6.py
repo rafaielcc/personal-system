@@ -230,7 +230,9 @@ def put_block(template, marker, content):
 # Secoes
 # --------------------------------------------------------------------------
 def build_banner(hoje):
-    alertas = hoje.get("alertas") or []
+    # O esquema pede {"nivel", "texto"} por alerta, mas uma string simples ja
+    # escapou ao LLM numa corrida real -- normaliza em vez de rebentar o render.
+    alertas = [a if isinstance(a, dict) else {"nivel": "info", "texto": str(a)} for a in (hoje.get("alertas") or [])]
     feriado = hoje.get("feriado")
     ordem = {"urgente": 0, "importante": 1, "info": 2}
     if alertas:
