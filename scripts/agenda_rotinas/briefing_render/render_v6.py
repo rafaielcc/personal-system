@@ -586,7 +586,9 @@ def main():
     if tempo.get("janelas"):
         temp_actual = str(tempo["janelas"][0].get("temp", ""))
     template = template.replace("{{TEMP_ACTUAL}}", esc(temp_actual))
-    tipo_dia = (hff or {}).get("tipo_dia") if meta["mode"] == "A" else "Sem HFF hoje"
+    # hff.meta.day_type -- chave aninhada desde sempre (Seccao 11); um "hff.tipo_dia"
+    # directo nunca existiu, por isso {{TIPO_DIA}}/{{HFF_TIPO_DIA}} rendiam sempre vazio.
+    tipo_dia = (hff or {}).get("meta", {}).get("day_type") if meta["mode"] == "A" else "Sem HFF hoje"
     template = template.replace("{{TIPO_DIA}}", esc(tipo_dia or "—"))
 
     # 2) HFF tab/button (Modo A vs B)
@@ -597,12 +599,12 @@ def main():
             sys.exit(3)
         if meta["mode"] == "A":
             filled = inner
-            # hff.resumo/cirurgias_resumo tem de ser texto (o LLM escreve-os a
-            # partir de hff.resumo_dados) -- se por engano vier outra coisa
-            # (ex. o dict cru), mostra vazio em vez do repr do Python.
-            hff_resumo = hff.get("resumo", "")
-            hff_cirurgias_resumo = hff.get("cirurgias_resumo", "")
-            filled = filled.replace("{{HFF_TIPO_DIA}}", esc(hff.get("tipo_dia", "")))
+            # hff.briefing_resumo/briefing_cirurgias_resumo tem de ser texto (o LLM
+            # escreve-os a partir de hff.resumo) -- se por engano vier outra coisa
+            # (ex. um dict), mostra vazio em vez do repr do Python.
+            hff_resumo = hff.get("briefing_resumo", "")
+            hff_cirurgias_resumo = hff.get("briefing_cirurgias_resumo", "")
+            filled = filled.replace("{{HFF_TIPO_DIA}}", esc((hff.get("meta", {}) or {}).get("day_type", "")))
             filled = filled.replace("{{HFF_RESUMO}}", esc(hff_resumo if isinstance(hff_resumo, str) else ""))
             filled = filled.replace("{{HFF_CIRURGIAS_RESUMO}}", esc(hff_cirurgias_resumo if isinstance(hff_cirurgias_resumo, str) else ""))
             template = put_block(template, marker, filled)
