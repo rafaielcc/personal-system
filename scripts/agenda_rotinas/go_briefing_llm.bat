@@ -35,6 +35,11 @@ REM  Publica sempre: nao ha flag --dry-run aqui de proposito -- se um
 REM  dia precisares de ensaiar sem publicar, corre X_briefing_pos.py a
 REM  mao com --dry-run (ver o docstring desse ficheiro).
 REM
+REM  Modelo fixo (--model claude-sonnet-5): sem isto, a corrida usaria o
+REM  que estiver definido por omissao nesta instalacao do Claude Code --
+REM  podia mudar sem aviso se o modelo por omissao for trocado noutro
+REM  contexto. Sonnet 5 por escolha do Rafa (tarefa do dia-a-dia).
+REM
 REM  Primeira corrida: testa isto a mao de dia, a ver o log, antes de
 REM  confiares nele sem vigilancia as 06:30 -- ao contrario do
 REM  go_X_briefing_pre.bat (que ja correu varias vezes contra dados
@@ -64,7 +69,7 @@ if errorlevel 1 (
 
 cd /d "%REPO%"
 
-claude -p "%PROMPT%" --permission-mode dontAsk --output-format json > "%OUT%" 2>&1
+claude -p "%PROMPT%" --model claude-sonnet-5 --permission-mode dontAsk --output-format json > "%OUT%" 2>&1
 set "RC=%ERRORLEVEL%"
 
 type "%OUT%"

@@ -41,6 +41,12 @@ REM  A resposta completa do Claude (--output-format json) fica sempre
 REM  gravada em _noticias_llm_log.json, por isso ha sempre rasto mesmo
 REM  quando corre sem ninguem a ver.
 REM
+REM  Modelo fixo (--model claude-opus-5): sem isto, a corrida usaria o
+REM  que estiver definido por omissao nesta instalacao do Claude Code --
+REM  podia mudar sem aviso se o modelo por omissao for trocado noutro
+REM  contexto. Opus 5 por escolha do Rafa (mais julgamento exigido:
+REM  relevancia para a carteira, sintese de varias fontes).
+REM
 REM  Primeira corrida: testa isto a mao, a ver o log, antes de confiares
 REM  nele sem vigilancia as 15:00 -- nunca foi corrido num Windows real
 REM  a partir do Agendador de Tarefas.
@@ -67,7 +73,7 @@ if errorlevel 1 (
 
 cd /d "%REPO%"
 
-claude -p "%PROMPT%" --permission-mode bypassPermissions --output-format json > "%OUT%" 2>&1
+claude -p "%PROMPT%" --model claude-opus-5 --permission-mode bypassPermissions --output-format json > "%OUT%" 2>&1
 set "RC=%ERRORLEVEL%"
 
 type "%OUT%"
