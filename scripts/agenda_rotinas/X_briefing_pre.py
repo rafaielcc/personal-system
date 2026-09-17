@@ -977,8 +977,16 @@ def parse_cirurgias(rows: list[list[Any]], today: date, warnings: list[str], err
     rows_in_window = 0
 
     for row_idx, row in enumerate(rows[header_idx + 1:], start=header_idx + 2):
-        surgery_date = parse_date(cell(row, mapping, "data"), default_year=today.year)
+        raw_date_cell = cell(row, mapping, "data")
+        surgery_date = parse_date(raw_date_cell, default_year=today.year)
         if surgery_date is None:
+            if str(raw_date_cell or "").strip():
+                # Nunca cair fora da lista em silencio: uma data ilegivel e um
+                # doente a menos que ninguem repara ter desaparecido.
+                anomalies.append({
+                    "tipo": "data_ilegivel", "linha": row_idx, "raw": str(raw_date_cell),
+                    "processo": str(cell(row, mapping, "processo") or "").strip(),
+                })
             continue
         periodo = str(cell(row, mapping, "periodo") or "").strip().upper()
         processo = str(cell(row, mapping, "processo") or "").strip()
@@ -1345,6 +1353,30 @@ def parse_prevencao(rows: list[list[Any]], today: date, ausencias: dict[str, Any
     }
 
 
+def compact_date_ranges(records: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Agrupa registos diarios {"cir", "motivo", "data"} em blocos consecutivos por
+    (cir, motivo), para nao listar um bullet por dia (Seccao 11: resumo.ausencias_relevantes
+    e' 'ausencias_confirmadas + folgas reformatadas como bullets com datas')."""
+    by_group: dict[tuple[str, str], list[str]] = defaultdict(list)
+    for item in records:
+        by_group[(item["cir"], item["motivo"])].append(item["data"])
+    out = []
+    for (cir, motivo), dates in by_group.items():
+        dates = sorted(set(dates))
+        start = prev = date.fromisoformat(dates[0])
+        for d_str in dates[1:] + [None]:
+            d = date.fromisoformat(d_str) if d_str else None
+            if d is None or (d - prev).days > 1:
+                datas = start.isoformat() if start == prev else f"{start.isoformat()} a {prev.isoformat()}"
+                out.append({"cir": cir, "motivo": motivo, "datas": datas})
+                if d:
+                    start = d
+            if d:
+                prev = d
+    out.sort(key=lambda i: (i["datas"], i["cir"]))
+    return out
+
+
 def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: dict[str, Any],
                     warnings: list[str], errors: list[str]) -> dict[str, Any]:
     sheets = {
@@ -1438,6 +1470,19 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
         and target.isoformat() <= item["date"] <= (target + timedelta(days=2)).isoformat()
     ]
 
+    # equipa.ausencias_provaveis (Seccao 11): sinal fraco (flag da aba Cirurgias),
+    # nunca confundir com equipa.ausencias_confirmadas (aba Ausencias, fonte autoritativa).
+    ausencias_provaveis = sorted(
+        {
+            (session["date"], initials)
+            for session in cirurgias.get("sessoes", [])
+            for initials in session.get("ausentes_previstos", [])
+        }
+    )
+    ausencias_provaveis = [{"cir": cir, "dia": dia, "fonte": "flag_cirurgias"} for dia, cir in ausencias_provaveis]
+
+    generated_at_iso = datetime.now(TZ).isoformat(timespec="seconds")
+
     return {
         "_diagnostico": {
             # Sem isto, "sessoes: 0" e ambiguo: cabecalho nao reconhecido? folha vazia?
@@ -1459,19 +1504,33 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
             "prevencao_semanas": len(prevencao.get("semanas", [])),
             "prevencao_cabecalho_ok": bool(prevencao.get("ok")),
             "janela": {"inicio": key, "fim": (target + timedelta(days=HFF_WINDOW_DAYS - 1)).isoformat()},
+            # Factos crus para o LLM rever ao escrever resumo.alertas (Seccao 8 item 1:
+            # FDR, codigos ambiguos, duplicados -- nunca ausencias, essas vao em ausencias_relevantes).
+            "cirurgias_fdr_total": cirurgias.get("fdr_total", 0),
+            "cirurgias_anomalias": cirurgias.get("anomalias", []),
+            "sigic_anomalias": sigic.get("anomalias", []),
         },
+        # Esquema desta chave 'meta' para baixo segue a Seccao 11 de
+        # INSTRUCOES_PAINEL_HFF.md ao pe da letra -- e' o mesmo objecto que
+        # alimenta a tab do Briefing (fatia de hoje) e o X_hff_pos.py
+        # (Hff/index.html + BO/index.html, 4 semanas). "briefing_resumo"/
+        # "briefing_cirurgias_resumo" abaixo sao a UNICA parte especifica do
+        # Briefing -- nomes deliberadamente diferentes de "resumo" para nao
+        # repetir o erro de uma chave a servir dois propositos incompativeis.
         "meta": {
             "date": key,
             "weekday": weekday_pt(target),
-            "tipo_dia": tipo_dia,
-            "janela_dias": HFF_WINDOW_DAYS,
+            "day_type": tipo_dia,
+            "generated_at": generated_at_iso,
         },
         "resumo": {
             "tipo_dia": tipo_dia,
+            "alertas": [],  # <- LLM: frases curtas (FDR, codigos ambiguos, duplicados -- NAO ausencias)
+            "ausencias_relevantes": compact_date_ranges(ausencias.get("ausencias", []) + ausencias.get("folgas", [])),
             "proximo_bo": proximo_bo,
-            "fdr_total": cirurgias.get("fdr_total", 0),
-            "anomalias": cirurgias.get("anomalias", []) + sigic.get("anomalias", []),
         },
+        "briefing_resumo": "",              # <- LLM: frase curta para a tab do Briefing, a partir de 'resumo'
+        "briefing_cirurgias_resumo": "",    # <- LLM: frase curta sobre as cirurgias de hoje/se BO
         "tarefas_hff": {"janela": "hoje + 2 dias", "itens": tarefas_hff},
         "cirurgias": {"janela_dias": HFF_WINDOW_DAYS, "sessoes": cirurgias.get("sessoes", [])},
         "sigic": {"listas": sigic.get("listas", [])},
@@ -1481,6 +1540,7 @@ def build_hff_block(target: date, espelho: dict[str, list[list[Any]]], todoist: 
         },
         "equipa": {
             "ausencias_confirmadas": ausencias.get("ausencias", []),
+            "ausencias_provaveis": ausencias_provaveis,
             "folgas": ausencias.get("folgas", []),
             "codigos_ambiguos": ausencias.get("codigos_ambiguos", []),
             "codigos_sem_data": ausencias.get("codigos_sem_data", []),
@@ -1864,6 +1924,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 "Escrever hoje.dias[].alertas -- cada item e um objecto "
                 "{\"nivel\": \"urgente\"|\"importante\"|\"info\", \"texto\": \"...\"}, nunca uma string simples",
                 "Escrever sugestoes e as listas 'conferir' das 3 janelas de rotina",
+                "Modo A: escrever hff.resumo.alertas (lista de frases curtas -- FDR, codigos "
+                "ambiguos, duplicados; NUNCA ausencias, essas ja vem prontas em "
+                "resumo.ausencias_relevantes) a partir dos factos em _diagnostico."
+                "cirurgias_fdr_total/cirurgias_anomalias/sigic_anomalias",
+                "Modo A: escrever hff.briefing_resumo e hff.briefing_cirurgias_resumo como frases "
+                "curtas (strings) para a tab do Briefing, a partir do que ja esta em hff.resumo "
+                "-- nunca copiar o dict tal e qual para estes dois campos",
                 "Cruzar duplicados evento vs tarefa e resolver ambiguidades assinaladas em 'avisos'",
                 "Preencher canonical_draft.diagnostico.notas_llm SO se tiver algo a assinalar que "
                 "'fontes'/'avisos'/'erros' nao dizem (ex: uma inconsistencia que reparou nos dados) "
