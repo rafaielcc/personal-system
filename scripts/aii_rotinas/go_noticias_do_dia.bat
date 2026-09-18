@@ -50,6 +50,14 @@ REM
 REM  Primeira corrida: testa isto a mao, a ver o log, antes de confiares
 REM  nele sem vigilancia as 15:00 -- nunca foi corrido num Windows real
 REM  a partir do Agendador de Tarefas.
+REM
+REM  Sincronizacao automatica com origin/main: sessoes de Claude Code na
+REM  cloud podem publicar directamente em main a qualquer momento -- se
+REM  este checkout local ficar para tras, o proprio postflight desta
+REM  rotina pode falhar no git push por divergencia (mesmo problema
+REM  confirmado no Briefing em 2026-09-18). Por isso sincronizamos
+REM  sempre primeiro, com --ff-only (nunca cria merge commit sozinho; se
+REM  nao conseguir avancar de forma linear, para e reporta).
 REM ======================================================================
 
 chcp 65001 >nul
@@ -72,6 +80,15 @@ if errorlevel 1 (
 )
 
 cd /d "%REPO%"
+
+git fetch origin main >nul 2>&1
+git merge --ff-only origin/main >nul 2>&1
+if errorlevel 1 (
+    echo ERRO: nao consegui sincronizar "%REPO%" com origin/main antes de arrancar.
+    echo Ha provavelmente commits locais nao publicados -- resolve no GitHub Desktop
+    echo ^(Fetch/Pull origin, depois Push origin^) e volta a correr.
+    exit /b 9
+)
 
 claude -p "%PROMPT%" --model claude-opus-5 --permission-mode bypassPermissions --output-format json > "%OUT%" 2>&1
 set "RC=%ERRORLEVEL%"
