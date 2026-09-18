@@ -46,6 +46,19 @@ REM  go_X_briefing_pre.bat (que ja correu varias vezes contra dados
 REM  reais), este ficheiro ainda nao foi testado num Windows a serio;
 REM  o ponto mais provavel de precisar de ajuste e a sintaxe exacta das
 REM  regras de permissao no settings.json, nao a logica em si.
+REM
+REM  Sincronizacao automatica com origin/main (adicionado depois da
+REM  corrida real de 2026-09-18): sessoes de Claude Code na cloud podem
+REM  publicar directamente em main a qualquer momento (ex. para corrigir
+REM  este proprio ficheiro ou o settings.json) -- se este checkout local
+REM  ficar para tras, DOIS problemas em cadeia acontecem: o
+REM  .claude/settings.json lido aqui fica desactualizado (o dontAsk nega
+REM  ferramentas recem-autorizadas remotamente, como aconteceu com o
+REM  X_hff_pos.py nessa corrida), e o commit local do X_briefing_pos.py
+REM  diverge do origin/main, falhando o git push. Por isso sincronizamos
+REM  sempre primeiro, com --ff-only (nunca cria merge commit sozinho; se
+REM  nao conseguir avancar de forma linear, para e reporta em vez de
+REM  arriscar).
 REM ======================================================================
 
 chcp 65001 >nul
@@ -68,6 +81,15 @@ if errorlevel 1 (
 )
 
 cd /d "%REPO%"
+
+git fetch origin main >nul 2>&1
+git merge --ff-only origin/main >nul 2>&1
+if errorlevel 1 (
+    echo ERRO: nao consegui sincronizar "%REPO%" com origin/main antes de arrancar.
+    echo Ha provavelmente commits locais nao publicados -- resolve no GitHub Desktop
+    echo ^(Fetch/Pull origin, depois Push origin^) e volta a correr.
+    exit /b 9
+)
 
 claude -p "%PROMPT%" --model claude-sonnet-5 --permission-mode dontAsk --output-format json > "%OUT%" 2>&1
 set "RC=%ERRORLEVEL%"
