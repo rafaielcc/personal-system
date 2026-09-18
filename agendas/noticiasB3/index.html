@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Notícias do Dia | 16/09/2026</title>
+<title>Noticias do Dia | 17/09/2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -47,7 +47,7 @@ main.content{max-width:1000px;margin:0 auto;padding:24px 22px 64px}
 .collabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);padding:0 2px 10px}
 
 /* BOX (cada seccao e uma caixa propria; so a activa fica visivel) */
-.box{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 26px 26px;box-shadow:0 1px 3px rgba(20,30,50,.04)}
+.box{min-width:0;background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:24px 26px 26px;box-shadow:0 1px 3px rgba(20,30,50,.04)}
 .box[hidden]{display:none}
 .sec-num{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--accent);letter-spacing:.16em;margin-bottom:8px;font-weight:600}
 .sec-num:empty{display:none}
@@ -108,7 +108,7 @@ ul.clean li b{color:var(--txt)}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 20px}
 .two:empty{display:none}
 @media(max-width:560px){.two{grid-template-columns:1fr}}
-.panel{background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.panel{min-width:0;background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
 .panel h4{font-size:14.5px;margin-bottom:8px;color:var(--txt)}
 .panel.good{border-top:2px solid var(--grn)}
 .panel.bad{border-top:2px solid var(--red)}
@@ -308,25 +308,29 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
 
 <script type="application/json" id="report-data">{
   "meta": {
-    "eyebrow": "AII | 16 SET 2026 | 21:09 LISBOA",
-    "titleMain": "Notícias do Dia",
-    "titleSub": "16 de setembro de 2026",
-    "pageTitle": "Notícias do Dia | 16/09/2026",
-    "footerLine": "AII | 16/09/2026 | Contexto de 60 ativos; arquivo 09-16/09; Fed confirmado, Copom sem nova decisão incorporada.",
-    "footerDisclaimer": "Análise informativa. Preços são snapshots; hipóteses e opiniões não são garantias. Nenhuma ordem foi enviada."
+    "eyebrow": "AII | 17 SET 2026 | 22:08 LISBOA",
+    "titleMain": "Noticias do Dia",
+    "titleSub": "17 de setembro de 2026",
+    "pageTitle": "Noticias do Dia | 17/09/2026",
+    "footerLine": "AII | 17/09/2026 | 60 ativos; arquivo 10-17/09; Copom, Fed, BoE e sobras do Bradesco conferidos.",
+    "footerDisclaimer": "Analise informativa. Precos sao snapshots; hipoteses e opinioes nao sao garantias. Nenhuma ordem foi enviada."
   },
   "sections": {
     "inicio": {
       "num": "01",
-      "heading": "Notícias do Dia",
+      "heading": "Noticias do Dia",
       "groups": [
         {
-          "title": "Enquadramento",
-          "html": "\u003Cp\u003E\u003Cstrong\u003ESentimento: cautela seletiva.\u003C/strong\u003E O alívio pontual da inflação brasileira convive com petróleo caro e crédito fragilizado.\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EFed confirmado; Copom ainda sem decisão incorporada:\u003C/strong\u003E o banco central americano elevou os juros em 0,25 p.p., para 3,75%-4,00%. O corte brasileiro continua como expectativa nesta edição.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EConsumo:\u003C/strong\u003E varejo fraco e inadimplência elevada pesam mais sobre a leitura do negócio do que uma alta isolada da Bolsa. Atenção a LREN3, VULC3 e bancos.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EMineração:\u003C/strong\u003E frete elevado reduz o valor que sobra ao produtor; a cotação internacional do minério sozinha não resolve a equação de VALE3 e CMIN3.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ERadar:\u003C/strong\u003E XP baixou Sanepar para neutra por catalisadores incertos. O alvo publicado é para SAPR11, não para SAPR4.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EEventos:\u003C/strong\u003E ALOS3, VIVT3 e WEGE3 aparecem no calendário de proventos; rating de JALL3 foi mantido. Valores e datas ficam no arquivo de eventos, não são convite a comprar antes da data-com.\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "title": "O que decide o dia",
+          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EJuros em direcoes opostas:\u003C/strong\u003E Copom cortou a Selic para 13,75%; Fed subiu para 3,75%-4,00%. O alivio domestico existe, mas o custo de capital continua alto e o diferencial externo encolheu.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBAS3:\u003C/strong\u003E JPMorgan reduziu lucros projetados e levou o alvo de dezembro/2027 a R$22, mantendo neutral; credito rural, cartoes e provisoes continuam no centro do risco.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBDC3:\u003C/strong\u003E ha 202,38 milhoes de acoes em sobras. So participa quem exerceu a preferencia e reservou sobras; os percentuais incidem sobre acoes subscritas, nao sobre toda a carteira.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EPetroleo:\u003C/strong\u003E Brent e WTI recuam com perspectiva de reparacao parcial do oleoduto saudita e alta de estoques, mas continuam acima de US$100.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBoE:\u003C/strong\u003E manteve 3,75% por 6 votos a 3; a minoria queria alta. Europa e Reino Unido continuam a tratar energia como risco inflacionario.\u003C/li\u003E\n\u003C/ul\u003E\n"
         },
         {
-          "title": "Ações sugeridas / principais gatilhos",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E preco dentro das duas reguas e do limite de reforco da analise anterior; candidato a avaliacao, sujeito a tese, concentracao e disponibilidade. Nao e ordem automatica.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ERANI3:\u003C/strong\u003E Sistema atingido, mas ainda acima do limite de reforco mais recente de R$ 7,80; nao usar a referencia de tese de R$ 8,20 para contornar essa disciplina.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EOrientacoes historicas de saida/reducao:\u003C/strong\u003E BBAS3 reduzir, ROMI3 vender e BBSE3 aparar por concentracao. Condicoes de preco continuam cumpridas no snapshot; nao se verificou se essas orientacoes ja foram executadas. LREN3 e VULC3 nao ganham autorizacao automatica de compra por atingirem o teto pessoal.\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "title": "Acoes sugeridas",
+          "html": "\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EPrioridade\u003C/th\u003E\n\u003Cth\u003EAcao\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EAlta\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E unica compra em que o preco cumpre as duas reguas e o limite historico de R$6,50; avaliar tese, concentracao e caixa antes de qualquer ordem.\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EAlta\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EBBAS3 / ROMI3:\u003C/strong\u003E reduzir / vender conforme a analise de 28/08; a noticia de BBAS3 reforca, e nao alivia, a preocupacao.\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMedia\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EBBSE3:\u003C/strong\u003E aparar por concentracao, sem urgencia. \u003Cstrong\u003EBBDC3:\u003C/strong\u003E conferir no custodiante se houve subscricao e reserva de sobras; prazo divulgado 21-25/09.\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
+        },
+        {
+          "title": "Sentimento",
+          "html": "\u003Cp\u003E\u003Cstrong\u003ECauteloso, com alivio seletivo.\u003C/strong\u003E Juros domesticos um pouco menores ajudam ativos locais, mas o Fed mais duro, o petroleo ainda caro e a deterioracao de credito do BB impedem tratar o dia como virada ampla de ciclo.\u003C/p\u003E\n"
         }
       ]
     },
@@ -335,20 +339,36 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       "heading": "Contexto",
       "groups": [
         {
-          "title": "O corte brasileiro não elimina o aperto financeiro",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E O noticiário de 15 e 16/09 reúne sinais de desaceleração do consumo brasileiro: o varejo restrito caiu 0,8% em julho e a Serasa reportou 83,9 milhões de pessoas inadimplentes. Os boletins da manhã antecipavam decisões opostas de juros. Na revisão noturna, confirmou-se a alta americana de 0,25 p.p., para 3,75%-4,00%; não foi incorporada nova decisão do Copom.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELeitura própria.\u003C/strong\u003E A eventual redução da taxa básica brasileira não deve ser confundida com normalização imediata do crédito. O consumidor endividado precisa recuperar capacidade de pagamento, e uma empresa que vende a prazo continua a depender da seleção de clientes, do custo de financiamento e da conversão de vendas em caixa. Há um intervalo entre o início de uma mudança monetária e o aparecimento do benefício no resultado das empresas. Para LREN3 e VULC3, isso recomenda observar volumes, margens e estoques; para BBAS3 e BBDC3, a composição da carteira e o custo do crédito continuam centrais. Não é uma previsão de deterioração igual para todos: exposição, execução e balanço importam.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário.\u003C/strong\u003E Petróleo persistentemente caro pode dificultar a desinflação, pressionar custos logísticos e reduzir a renda disponível para outras compras. Um movimento diário de baixa do barril não invalida essa transmissão se o nível continuar elevado. De forma semelhante, um dia de Bolsa positiva pode refletir petroleiras fortes sem traduzir melhora do consumo doméstico. O teste útil para as próximas divulgações será encontrar melhora simultânea em atividade, qualidade do crédito e geração de caixa, em vez de procurar confirmação numa única cotação.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EOpinião.\u003C/strong\u003E O dado de inadimplência é um alerta de qualidade, não um relógio capaz de marcar sozinho o fundo do ciclo. A própria economista ouvida pela Bloomberg considerou prematuro concluir que o pior passou. Por isso, esta edição não transforma expectativa de corte de juros em recomendação generalizada de reforço.\u003C/p\u003E\n"
+          "title": "Alertas criticos",
+          "html": "\u003Col\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBDC3: sobras de subscricao nao sao um direito calculado sobre a posicao atual.\u003C/strong\u003E O Bradesco informou que 402,47 milhoes de acoes foram subscritas e 202,38 milhoes restaram. A etapa de 21 a 25/09 e exclusiva de quem exerceu a preferencia e marcou interesse em sobras. Cada BBDC3 subscrita da direito a 19,902247370% de BBDC3 e 31,271512790% de BBDC4; cada BBDC4 subscrita da direito a 51,173760160% de BBDC4. Precos: R$15,43 e R$17,64. Conferir elegibilidade e prazo interno no custodiante; nao se presume que a carteira tenha aderido. Money Times Finance News\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBAS3: a revisao externa reforca a fragilidade ja identificada.\u003C/strong\u003E JPMorgan reduziu lucro de 2026 em 8%, para R$16,879 bilhoes, e de 2027 em 12%, para R$23,524 bilhoes; manteve neutral e alvo de R$22 para dezembro/2027. A fonte diverge sobre o alvo anterior, por isso apenas o novo alvo e usado. Bloomberg Linea Reuters/UOL\u003C/li\u003E\n\u003C/ol\u003E\n"
         },
         {
-          "title": "Mineração: o frete fica com uma parte da receita",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E A reportagem recebida ontem relata fretes Brasil-China no maior nível desde 2021 e ajustes de produção em operadores brasileiros de maior custo. A questão para o produtor é o preço realizado após os custos de colocar o produto no destino.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELeitura própria.\u003C/strong\u003E Para VALE3 e CMIN3, o foco deve deslocar-se da pergunta isolada sobre o preço do minério para a combinação de realização, qualidade, desconto, frete e custo operacional. Empresas com escala e flexibilidade logística podem ficar relativamente melhor posicionadas do que concorrentes mais caros, mas essa vantagem relativa não garante aumento de lucro num mercado mais fraco. Fechar capacidade de alto custo pode reduzir oferta futura; até que isso apareça nos preços e volumes, a pressão imediata sobre a margem continua relevante.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELimite dos dados.\u003C/strong\u003E A alta do minério sugerida pelo painel automático de newsletters não é usada para contradizer essa leitura: o exportado mistura referências insuficientemente identificadas. Não seria correto comparar um futuro em Dalian, convertido de renminbi, com uma realização FOB brasileira ou com um índice CFR de outro teor. O relatório preserva o dado bruto para auditoria, mas retira-lhe o papel de evidência de uma recuperação generalizada. Esse cuidado é especialmente importante quando a conclusão pretendida seria alterar uma posição de carteira.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário.\u003C/strong\u003E O sinal de melhora precisaria combinar estabilização de preços comparáveis, alívio logístico e manutenção dos volumes rentáveis. Até lá, o tema é de margem e risco operacional, não apenas de cotação da ação. O preço capturado no contexto de hoje continua sendo suficiente para comparar os tetos históricos, mas não atualiza por si só a tese econômica.\u003C/p\u003E\n"
+          "title": "Aprofundamento do dia",
+          "html": "\u003Ch4\u003EO detalhe operacional que muda a leitura das sobras do Bradesco\u003C/h4\u003E\n\u003Cp\u003EO dado de maior utilidade pratica hoje nao e a quantidade total de sobras, mas a regra de elegibilidade. A primeira comunicacao recebida no Telegram simplificava os percentuais como se incidissem sobre as acoes que o investidor ja detinha. A propria fonte corrigiu depois: a base e o numero de acoes efetivamente subscritas na primeira etapa, e a pessoa precisa ter manifestado interesse nas sobras. A conferencia web acrescentou um detalhe que a versao resumida tambem escondia: a especie recebida pode ser diferente da especie que serviu de base. Uma ON subscrita gera direito potencial tanto a ON quanto a PN; uma PN subscrita gera sobras PN. Isso torna incorreto aplicar 19,90% ou 31,27% ao saldo total de BBDC3 da carteira.\u003C/p\u003E\n\u003Cp\u003EO efeito economico tambem precisa ser separado do efeito operacional. O preco de R$15,43 por BBDC3 esta abaixo da cotacao de R$16,00 do contexto, mas um desconto pequeno nao torna a subscricao obrigatoria: ha diluicao, necessidade de capital adicional, aumento da exposicao ao banco e a possibilidade de o mercado ajustar o preco. Para esta rotina, a conclusao util e apenas verificar no custodiante se houve exercicio anterior e reserva, e qual e o prazo interno. A decisao de alocar mais capital continua dependente da tese e da concentracao. O comunicado permite cessao de direitos em certas condicoes e informa negociacao de recibos posteriormente, mas cada corretora pode trabalhar com horario anterior ao limite formal. Money Times\u003C/p\u003E\n\u003Ch4\u003EO corte brasileiro nao neutraliza o aperto externo nem o risco de credito\u003C/h4\u003E\n\u003Cp\u003EO Copom reduziu a Selic em 0,25 ponto, para 13,75%, e deixou a magnitude total do ciclo dependente dos dados. Horas antes, o Fed elevou a faixa para 3,75%-4,00% por unanimidade e afirmou que a inflacao permanece elevada. O contraste reduz parte do diferencial de juros e cria duas forcas simultaneas: empresas domesticas sensiveis a juros ganham algum alivio de taxa, enquanto o real e os juros longos continuam expostos ao Fed, ao petroleo e ao risco fiscal. O movimento de uma reuniao, portanto, nao e suficiente para assumir recuperacao linear do consumo ou do credito.\u003C/p\u003E\n\u003Cp\u003EO Banco do Brasil mostra por que essa distincao importa. A revisao do JPMorgan nao decorre apenas do nivel da Selic: incorpora provisoes maiores, inadimplencia do agronegocio, piora de cartoes, menor margem financeira de mercado e contribuicao mais fraca da BB Seguridade. O lucro do segundo trimestre melhorou em sequencia, mas o ROE ficou em 8,3%; a inadimplencia rural acima de 90 dias estava em 6,27%, com a faixa acima de 30 dias ainda a crescer. Juros um pouco menores podem ajudar o custo do dinheiro no futuro, mas nao apagam perdas ja formadas nem garantem uma reversao rapida da qualidade da carteira. A leitura do dia, por isso, e de alivio seletivo: empresas com caixa e baixa dependencia de refinanciamento beneficiam primeiro; empresas cuja tese depende de credito normalizado continuam a exigir confirmacao nos resultados. Fed InfoMoney Bloomberg Linea\u003C/p\u003E\n"
         },
         {
-          "title": "Mudanças no Radar e calendário",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto / opinião de terceiro.\u003C/strong\u003E A XP reduziu a recomendação de Sanepar para neutra, destacando incerteza em torno de privatização e retenção de créditos tributários. Isso é revisão de análise, não decisão governamental. SAPR4 está no Radar; o preço-alvo divulgado para SAPR11 não foi convertido nem introduzido como novo gatilho.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E O calendário recebido inclui dividendos de ALOS3 e JCP de VIVT3 e WEGE3. JALL3 teve rating reafirmado. Datas-com, pagamentos e valores estão discriminados em Insiders \u0026amp; B3. Rating de crédito não é recomendação acionária, e um provento não é retorno gratuito separado do preço da ação.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário, não obrigação já implementada.\u003C/strong\u003E A análise do Safra sobre split payment aponta pressão moderada sobre caixa de alguns varejistas. O cenário integral de 2027 usado no exercício não é o calendário efetivo assegurado. Não se transfere o limite de impacto da amostra para cada empresa individualmente.\u003C/p\u003E\n"
+          "title": "Insiders e recompras",
+          "html": "\u003Cp\u003EA busca foi individual para os 15 ativos da carteira. O ZIP oficial da CVM consultado em 17/09 tem \u003Ccode\u003Emax_delivery\u003C/code\u003E em 14/09; logo, nao permite afirmar ausencia de documentos em 15-17/09. Formularios mensais de BBDC3, BBSE3, CPFE3, VALE3 e VULC3 aparecem no indice com referencia agosto, mas os anexos nao foram validados integralmente: nao se infere compra ou venda de administradores. O aviso de sobras do Bradesco foi localizado por pesquisa separada. A Vale mantem programa de recompra aprovado em julho, de ate 100 milhoes de acoes, mas esta edicao nao encontrou relatorio novo de execucao. CVM Vale\u003C/p\u003E\n"
+        },
+        {
+          "title": "Empresas da carteira",
+          "html": "\u003Cp\u003E\u003Cstrong\u003EBBAS3.\u003C/strong\u003E A revisao do JPMorgan reforca a fragilidade de credito e provisoes apontada na Analise de Carteira de 28/08. O alvo de R$22 e para dezembro/2027 e nao deve ser confundido com teto de compra. A noticia confirma o risco, sem criar nova venda mecanica fora do bloco PORTFOLIO.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EBBDC3.\u003C/strong\u003E A cotacao do contexto, R$16,00, coincide com a referencia Sistema. O evento material e operacional: conferir se houve subscricao anterior e reserva. Sem isso, nao ha direito a sobras. Mesmo com elegibilidade, o desconto nao substitui uma decisao de concentracao.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EBBSE3.\u003C/strong\u003E Nenhum fato corporativo novo da empresa foi confirmado. A menor contribuicao esperada na conta do JPMorgan para BBAS3 e uma projecao externa, nao guidance novo da BB Seguridade. Mantem-se a leitura de qualidade com risco de concentracao.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EKEPL3.\u003C/strong\u003E R$6,44 cumpre os dois gatilhos e o limite historico de R$6,50. O comunicado Kepler Day apareceu com titulo que refere 2025; sem teor validado, ele nao foi usado para alterar tese. A crise de credito rural continua a recomendar avaliacao em tranche, nao automatismo.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ERANI3 / KLBN4.\u003C/strong\u003E A BHKP na China esta em torno de US$560/t, com melhora esperada no curto prazo e limites no medio. RANI3, a R$8,02, cumpre apenas o teto Sistema; continua acima da disciplina de R$7,80. KLBN4 permanece sem fato novo individual.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EVULC3.\u003C/strong\u003E A renovacao do acordo Nike/Grupo SBF ate 2034 fortalece uma concorrente de distribuicao, mas nao demonstra perda de vendas ou quota da Vulcabras. O dado serve como vigilancia competitiva, nao mudanca de tese.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003ETicker\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003ECotacao do contexto\u003C/th\u003E\n\u003Cth\u003EVerificacao de hoje\u003C/th\u003E\n\u003Cth\u003ELeitura compacta\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECPFE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$45,44\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EContinua defensiva; 3,27% acima dos tetos, portanto fora de Proximo\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECXSE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$20,66\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EQualidade preservada; sem novo gatilho\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEGIE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$30,85\u003C/td\u003E\n\u003Ctd\u003ESem anuncio novo\u003C/td\u003E\n\u003Ctd\u003EHistorico de dividendos nao e provento declarado hoje\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELEVE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$32,97\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EA condicao relevante segue sendo payout, nao apenas preco\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELREN3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$11,50\u003C/td\u003E\n\u003Ctd\u003EVarejistas reagiram a juros longos\u003C/td\u003E\n\u003Ctd\u003EUm pregao positivo nao resolve a decisao estrategica pendente\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EROMI3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$6,02\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EOrientacao estrutural fica no PORTFOLIO; nao converter gatilho pessoal em compra\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVALE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$73,38\u003C/td\u003E\n\u003Ctd\u003EMinerio a US$105,94 em Dalian\u003C/td\u003E\n\u003Ctd\u003EContrato/base limitam comparacao; frete e realizacao continuam sob vigilancia\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVLID3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$18,00\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003ENenhuma confusao com empresa argentina de nome semelhante\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
+        },
+        {
+          "title": "Macro",
+          "html": "\u003Cp\u003EO Copom levou a Selic a 13,75% e manteve os proximos passos dependentes dos dados. O IPCA de agosto foi -0,32% e 4,22% em 12 meses, mas parte do alivio veio do bonus de Itaipu. O Fed subiu 25 pontos-base; o BCE ja havia elevado a taxa de deposito a 2,50%, e o BoE manteve 3,75% por 6 a 3. O denominador comum e energia: o petroleo recua no dia, mas Brent e WTI seguem acima de US$100. Copom/Reuters Fed BCE BoE\u003C/p\u003E\n"
+        },
+        {
+          "title": "Oportunidades do dia",
+          "html": "\u003Cp\u003E\u003Cstrong\u003EKEPL3 e a unica oportunidade nova gerada pelo cruzamento de preco de hoje com as duas reguas e com o limite historico de reforco.\u003C/strong\u003E Isso autoriza avaliacao, nao ordem: o ciclo de credito rural ainda e o principal contrapeso. BBDC3 exige antes uma verificacao operacional de direitos. Os demais gatilhos atingidos nao passaram simultaneamente pelo filtro de tese ou de decisao pendente.\u003C/p\u003E\n"
+        },
+        {
+          "title": "Resumo do dia",
+          "html": "\u003Cp\u003EO mercado recebeu algum alivio domestico, mas nao uma autorizacao para baixar a guarda. O Fed mais duro e o petroleo ainda caro mantem pressao externa; a revisao de BBAS3 lembra que risco de credito tem defasagem e nao desaparece com um corte de 0,25 ponto. No plano pratico, o evento de maior urgencia e confirmar a elegibilidade das sobras de BBDC3; no plano de alocacao, KEPL3 merece avaliacao disciplinada e o restante das decisoes estruturais continua concentrado no quadro de carteira.\u003C/p\u003E\n"
         },
         {
           "title": "Politica",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003ERisco institucional e prêmio de prazo, 15-16/09:\u003C/strong\u003E os emails do Estadão e o fechamento do InfoMoney descrevem tensão no STF e cautela nos juros futuros. O canal econômico é a incerteza institucional e fiscal, não a atribuição de valor de investimento a uma preferência eleitoral.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EAjuste pós-eleição é hipótese, 15/09:\u003C/strong\u003E o debate entre economistas descrito pelo Brazil Journal trata da expectativa de correção fiscal após as eleições. Expectativa de mercado não equivale a medida aprovada ou melhoria já entregue.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ECombustíveis, 09-11/09:\u003C/strong\u003E a XP analisou o pacote tributário e de subsídio; o Estadão informou posteriormente a desistência do reajuste de gasolina da Petrobras. A sequência temporal importa: não usar o comentário anterior como se o aumento tivesse permanecido válido. Impacto potencial em PETR4 e UGPA3, condicionado à política efetivamente aplicada.\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "html": "\u003Ch3\u003ERisco institucional e fiscal\u003C/h3\u003E\n\u003Cp\u003EO dia eleitoral trouxe novas pesquisas e declaracoes, mas nenhuma delas foi usada para alterar tese de empresa. O ponto relevante para ativos e a transmissao por juros longos e cambio: estimulo fiscal de curto prazo pode reduzir a confianca e limitar o beneficio do corte da Selic. A crise no STF continua como risco institucional em acompanhamento; pedidos, votos-vista e comentarios nao foram tratados como sentencas definitivas. Exame\u003C/p\u003E\n"
         }
       ]
     },
@@ -357,20 +377,36 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       "heading": "Contexto com fontes",
       "groups": [
         {
-          "title": "O corte brasileiro não elimina o aperto financeiro",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E O noticiário de 15 e 16/09 reúne sinais de desaceleração do consumo brasileiro: o varejo restrito caiu 0,8% em julho e a Serasa reportou 83,9 milhões de pessoas inadimplentes. Os boletins da manhã antecipavam decisões opostas de juros. Na revisão noturna, confirmou-se a alta americana de 0,25 p.p., para 3,75%-4,00%; não foi incorporada nova decisão do Copom. \u003Ca href=\"https://www.boursorama.com/actualite-economique/actualites/usa-la-fed-releve-ses-taux-pour-la-premiere-fois-depuis-2023-027720884f3d14b43e880cba84123469\"\u003EEstadão, email, 16/09; Bloomberg Línea, email, 15/09; Reuters\u003C/a\u003E\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELeitura própria.\u003C/strong\u003E A eventual redução da taxa básica brasileira não deve ser confundida com normalização imediata do crédito. O consumidor endividado precisa recuperar capacidade de pagamento, e uma empresa que vende a prazo continua a depender da seleção de clientes, do custo de financiamento e da conversão de vendas em caixa. Há um intervalo entre o início de uma mudança monetária e o aparecimento do benefício no resultado das empresas. Para LREN3 e VULC3, isso recomenda observar volumes, margens e estoques; para BBAS3 e BBDC3, a composição da carteira e o custo do crédito continuam centrais. Não é uma previsão de deterioração igual para todos: exposição, execução e balanço importam.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário.\u003C/strong\u003E Petróleo persistentemente caro pode dificultar a desinflação, pressionar custos logísticos e reduzir a renda disponível para outras compras. Um movimento diário de baixa do barril não invalida essa transmissão se o nível continuar elevado. De forma semelhante, um dia de Bolsa positiva pode refletir petroleiras fortes sem traduzir melhora do consumo doméstico. O teste útil para as próximas divulgações será encontrar melhora simultânea em atividade, qualidade do crédito e geração de caixa, em vez de procurar confirmação numa única cotação.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EOpinião.\u003C/strong\u003E O dado de inadimplência é um alerta de qualidade, não um relógio capaz de marcar sozinho o fundo do ciclo. A própria economista ouvida pela Bloomberg considerou prematuro concluir que o pior passou. Por isso, esta edição não transforma expectativa de corte de juros em recomendação generalizada de reforço. [Bloomberg Línea, email, 15/09]\u003C/p\u003E\n"
+          "title": "Alertas criticos",
+          "html": "\u003Col\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBDC3: sobras de subscricao nao sao um direito calculado sobre a posicao atual.\u003C/strong\u003E O Bradesco informou que 402,47 milhoes de acoes foram subscritas e 202,38 milhoes restaram. A etapa de 21 a 25/09 e exclusiva de quem exerceu a preferencia e marcou interesse em sobras. Cada BBDC3 subscrita da direito a 19,902247370% de BBDC3 e 31,271512790% de BBDC4; cada BBDC4 subscrita da direito a 51,173760160% de BBDC4. Precos: R$15,43 e R$17,64. Conferir elegibilidade e prazo interno no custodiante; nao se presume que a carteira tenha aderido. \u003Ca href=\"https://www.moneytimes.com.br/bradesco-bbdc4-abre-etapa-de-sobras-em-aumento-de-capital-veja-quanto-acionistas-poderao-subscrever/\"\u003EMoney Times\u003C/a\u003E \u003Ca href=\"https://financenews.com.br/2026/09/aumento-de-capital-do-bradesco-banco-anuncia-rateio-de-sobras/\"\u003EFinance News\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBAS3: a revisao externa reforca a fragilidade ja identificada.\u003C/strong\u003E JPMorgan reduziu lucro de 2026 em 8%, para R$16,879 bilhoes, e de 2027 em 12%, para R$23,524 bilhoes; manteve neutral e alvo de R$22 para dezembro/2027. A fonte diverge sobre o alvo anterior, por isso apenas o novo alvo e usado. \u003Ca href=\"https://www.bloomberglinea.com.br/mercados/jp-morgan-corta-projecao-de-lucro-do-banco-do-brasil-e-cita-aumento-da-inadimplencia/\"\u003EBloomberg Linea\u003C/a\u003E \u003Ca href=\"https://economia.uol.com.br/noticias/reuters/2026/09/16/jpmorgan-reduz-previsao-de-lucro-para-banco-do-brasil-e-corta-preco-alvo-da-acao-para-r22.amp.htm\"\u003EReuters/UOL\u003C/a\u003E\u003C/li\u003E\n\u003C/ol\u003E\n"
         },
         {
-          "title": "Mineração: o frete fica com uma parte da receita",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E A reportagem recebida ontem relata fretes Brasil-China no maior nível desde 2021 e ajustes de produção em operadores brasileiros de maior custo. A questão para o produtor é o preço realizado após os custos de colocar o produto no destino. [Bloomberg Línea, email, 15/09]\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELeitura própria.\u003C/strong\u003E Para VALE3 e CMIN3, o foco deve deslocar-se da pergunta isolada sobre o preço do minério para a combinação de realização, qualidade, desconto, frete e custo operacional. Empresas com escala e flexibilidade logística podem ficar relativamente melhor posicionadas do que concorrentes mais caros, mas essa vantagem relativa não garante aumento de lucro num mercado mais fraco. Fechar capacidade de alto custo pode reduzir oferta futura; até que isso apareça nos preços e volumes, a pressão imediata sobre a margem continua relevante.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ELimite dos dados.\u003C/strong\u003E A alta do minério sugerida pelo painel automático de newsletters não é usada para contradizer essa leitura: o exportado mistura referências insuficientemente identificadas. Não seria correto comparar um futuro em Dalian, convertido de renminbi, com uma realização FOB brasileira ou com um índice CFR de outro teor. O relatório preserva o dado bruto para auditoria, mas retira-lhe o papel de evidência de uma recuperação generalizada. Esse cuidado é especialmente importante quando a conclusão pretendida seria alterar uma posição de carteira.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário.\u003C/strong\u003E O sinal de melhora precisaria combinar estabilização de preços comparáveis, alívio logístico e manutenção dos volumes rentáveis. Até lá, o tema é de margem e risco operacional, não apenas de cotação da ação. O preço capturado no contexto de hoje continua sendo suficiente para comparar os tetos históricos, mas não atualiza por si só a tese econômica.\u003C/p\u003E\n"
+          "title": "Aprofundamento do dia",
+          "html": "\u003Ch4\u003EO detalhe operacional que muda a leitura das sobras do Bradesco\u003C/h4\u003E\n\u003Cp\u003EO dado de maior utilidade pratica hoje nao e a quantidade total de sobras, mas a regra de elegibilidade. A primeira comunicacao recebida no Telegram simplificava os percentuais como se incidissem sobre as acoes que o investidor ja detinha. A propria fonte corrigiu depois: a base e o numero de acoes efetivamente subscritas na primeira etapa, e a pessoa precisa ter manifestado interesse nas sobras. A conferencia web acrescentou um detalhe que a versao resumida tambem escondia: a especie recebida pode ser diferente da especie que serviu de base. Uma ON subscrita gera direito potencial tanto a ON quanto a PN; uma PN subscrita gera sobras PN. Isso torna incorreto aplicar 19,90% ou 31,27% ao saldo total de BBDC3 da carteira.\u003C/p\u003E\n\u003Cp\u003EO efeito economico tambem precisa ser separado do efeito operacional. O preco de R$15,43 por BBDC3 esta abaixo da cotacao de R$16,00 do contexto, mas um desconto pequeno nao torna a subscricao obrigatoria: ha diluicao, necessidade de capital adicional, aumento da exposicao ao banco e a possibilidade de o mercado ajustar o preco. Para esta rotina, a conclusao util e apenas verificar no custodiante se houve exercicio anterior e reserva, e qual e o prazo interno. A decisao de alocar mais capital continua dependente da tese e da concentracao. O comunicado permite cessao de direitos em certas condicoes e informa negociacao de recibos posteriormente, mas cada corretora pode trabalhar com horario anterior ao limite formal. \u003Ca href=\"https://www.moneytimes.com.br/bradesco-bbdc4-abre-etapa-de-sobras-em-aumento-de-capital-veja-quanto-acionistas-poderao-subscrever/\"\u003EMoney Times\u003C/a\u003E\u003C/p\u003E\n\u003Ch4\u003EO corte brasileiro nao neutraliza o aperto externo nem o risco de credito\u003C/h4\u003E\n\u003Cp\u003EO Copom reduziu a Selic em 0,25 ponto, para 13,75%, e deixou a magnitude total do ciclo dependente dos dados. Horas antes, o Fed elevou a faixa para 3,75%-4,00% por unanimidade e afirmou que a inflacao permanece elevada. O contraste reduz parte do diferencial de juros e cria duas forcas simultaneas: empresas domesticas sensiveis a juros ganham algum alivio de taxa, enquanto o real e os juros longos continuam expostos ao Fed, ao petroleo e ao risco fiscal. O movimento de uma reuniao, portanto, nao e suficiente para assumir recuperacao linear do consumo ou do credito.\u003C/p\u003E\n\u003Cp\u003EO Banco do Brasil mostra por que essa distincao importa. A revisao do JPMorgan nao decorre apenas do nivel da Selic: incorpora provisoes maiores, inadimplencia do agronegocio, piora de cartoes, menor margem financeira de mercado e contribuicao mais fraca da BB Seguridade. O lucro do segundo trimestre melhorou em sequencia, mas o ROE ficou em 8,3%; a inadimplencia rural acima de 90 dias estava em 6,27%, com a faixa acima de 30 dias ainda a crescer. Juros um pouco menores podem ajudar o custo do dinheiro no futuro, mas nao apagam perdas ja formadas nem garantem uma reversao rapida da qualidade da carteira. A leitura do dia, por isso, e de alivio seletivo: empresas com caixa e baixa dependencia de refinanciamento beneficiam primeiro; empresas cuja tese depende de credito normalizado continuam a exigir confirmacao nos resultados. \u003Ca href=\"https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm\"\u003EFed\u003C/a\u003E \u003Ca href=\"https://www.infomoney.com.br/mercados/dolar-bolsa-e-juros-como-mercado-brasileiro-deve-reagir-nesta-5a-apos-copom-e-fed/\"\u003EInfoMoney\u003C/a\u003E \u003Ca href=\"https://www.bloomberglinea.com.br/mercados/jp-morgan-corta-projecao-de-lucro-do-banco-do-brasil-e-cita-aumento-da-inadimplencia/\"\u003EBloomberg Linea\u003C/a\u003E\u003C/p\u003E\n"
         },
         {
-          "title": "Mudanças no Radar e calendário",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EFacto / opinião de terceiro.\u003C/strong\u003E A XP reduziu a recomendação de Sanepar para neutra, destacando incerteza em torno de privatização e retenção de créditos tributários. Isso é revisão de análise, não decisão governamental. SAPR4 está no Radar; o preço-alvo divulgado para SAPR11 não foi convertido nem introduzido como novo gatilho. \u003Ca href=\"https://conteudos.xpi.com.br/acoes/relatorios/sanepar-sapr11-a-lacuna-de-incentivos-por-que-o-status-quo-ainda-prevalece/\"\u003EXP/Sanepar\u003C/a\u003E\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EFacto.\u003C/strong\u003E O calendário recebido inclui dividendos de ALOS3 e JCP de VIVT3 e WEGE3. JALL3 teve rating reafirmado. Datas-com, pagamentos e valores estão discriminados em Insiders \u0026amp; B3. Rating de crédito não é recomendação acionária, e um provento não é retorno gratuito separado do preço da ação. [ADVFN, emails, 15 e 16/09; Dica de Hoje, Telegram, 16/09]\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ECenário, não obrigação já implementada.\u003C/strong\u003E A análise do Safra sobre split payment aponta pressão moderada sobre caixa de alguns varejistas. O cenário integral de 2027 usado no exercício não é o calendário efetivo assegurado. Não se transfere o limite de impacto da amostra para cada empresa individualmente. \u003Ca href=\"https://exame.com/invest/mercados/split-payment-pode-reduzir-lucro-de-magalu-pague-menos-e-centauro-diz-safra/\"\u003EExame/Safra\u003C/a\u003E\u003C/p\u003E\n"
+          "title": "Insiders e recompras",
+          "html": "\u003Cp\u003EA busca foi individual para os 15 ativos da carteira. O ZIP oficial da CVM consultado em 17/09 tem \u003Ccode\u003Emax_delivery\u003C/code\u003E em 14/09; logo, nao permite afirmar ausencia de documentos em 15-17/09. Formularios mensais de BBDC3, BBSE3, CPFE3, VALE3 e VULC3 aparecem no indice com referencia agosto, mas os anexos nao foram validados integralmente: nao se infere compra ou venda de administradores. O aviso de sobras do Bradesco foi localizado por pesquisa separada. A Vale mantem programa de recompra aprovado em julho, de ate 100 milhoes de acoes, mas esta edicao nao encontrou relatorio novo de execucao. \u003Ca href=\"https://dados.cvm.gov.br/dataset/cia_aberta-doc-ipe\"\u003ECVM\u003C/a\u003E \u003Ca href=\"https://www.vale.com/pt/w/vale-anuncia-remuneracao-aos-acionistas-4\"\u003EVale\u003C/a\u003E\u003C/p\u003E\n"
+        },
+        {
+          "title": "Empresas da carteira",
+          "html": "\u003Cp\u003E\u003Cstrong\u003EBBAS3.\u003C/strong\u003E A revisao do JPMorgan reforca a fragilidade de credito e provisoes apontada na Analise de Carteira de 28/08. O alvo de R$22 e para dezembro/2027 e nao deve ser confundido com teto de compra. A noticia confirma o risco, sem criar nova venda mecanica fora do bloco PORTFOLIO.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EBBDC3.\u003C/strong\u003E A cotacao do contexto, R$16,00, coincide com a referencia Sistema. O evento material e operacional: conferir se houve subscricao anterior e reserva. Sem isso, nao ha direito a sobras. Mesmo com elegibilidade, o desconto nao substitui uma decisao de concentracao.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EBBSE3.\u003C/strong\u003E Nenhum fato corporativo novo da empresa foi confirmado. A menor contribuicao esperada na conta do JPMorgan para BBAS3 e uma projecao externa, nao guidance novo da BB Seguridade. Mantem-se a leitura de qualidade com risco de concentracao.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EKEPL3.\u003C/strong\u003E R$6,44 cumpre os dois gatilhos e o limite historico de R$6,50. O comunicado Kepler Day apareceu com titulo que refere 2025; sem teor validado, ele nao foi usado para alterar tese. A crise de credito rural continua a recomendar avaliacao em tranche, nao automatismo.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003ERANI3 / KLBN4.\u003C/strong\u003E A BHKP na China esta em torno de US$560/t, com melhora esperada no curto prazo e limites no medio. RANI3, a R$8,02, cumpre apenas o teto Sistema; continua acima da disciplina de R$7,80. KLBN4 permanece sem fato novo individual.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EVULC3.\u003C/strong\u003E A renovacao do acordo Nike/Grupo SBF ate 2034 fortalece uma concorrente de distribuicao, mas nao demonstra perda de vendas ou quota da Vulcabras. O dado serve como vigilancia competitiva, nao mudanca de tese.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003ETicker\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003ECotacao do contexto\u003C/th\u003E\n\u003Cth\u003EVerificacao de hoje\u003C/th\u003E\n\u003Cth\u003ELeitura compacta\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECPFE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$45,44\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EContinua defensiva; 3,27% acima dos tetos, portanto fora de Proximo\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECXSE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$20,66\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EQualidade preservada; sem novo gatilho\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEGIE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$30,85\u003C/td\u003E\n\u003Ctd\u003ESem anuncio novo\u003C/td\u003E\n\u003Ctd\u003EHistorico de dividendos nao e provento declarado hoje\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELEVE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$32,97\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EA condicao relevante segue sendo payout, nao apenas preco\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELREN3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$11,50\u003C/td\u003E\n\u003Ctd\u003EVarejistas reagiram a juros longos\u003C/td\u003E\n\u003Ctd\u003EUm pregao positivo nao resolve a decisao estrategica pendente\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EROMI3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$6,02\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003EOrientacao estrutural fica no PORTFOLIO; nao converter gatilho pessoal em compra\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVALE3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$73,38\u003C/td\u003E\n\u003Ctd\u003EMinerio a US$105,94 em Dalian\u003C/td\u003E\n\u003Ctd\u003EContrato/base limitam comparacao; frete e realizacao continuam sob vigilancia\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVLID3\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$18,00\u003C/td\u003E\n\u003Ctd\u003ESem fato material novo\u003C/td\u003E\n\u003Ctd\u003ENenhuma confusao com empresa argentina de nome semelhante\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
+        },
+        {
+          "title": "Macro",
+          "html": "\u003Cp\u003EO Copom levou a Selic a 13,75% e manteve os proximos passos dependentes dos dados. O IPCA de agosto foi -0,32% e 4,22% em 12 meses, mas parte do alivio veio do bonus de Itaipu. O Fed subiu 25 pontos-base; o BCE ja havia elevado a taxa de deposito a 2,50%, e o BoE manteve 3,75% por 6 a 3. O denominador comum e energia: o petroleo recua no dia, mas Brent e WTI seguem acima de US$100. \u003Ca href=\"https://noticias.uol.com.br/ultimas-noticias/reuters/2026/09/16/bc-corta-selic-em-025-ponto-para-1375-e-deixa-proximos-passos-em-aberto.htm\"\u003ECopom/Reuters\u003C/a\u003E \u003Ca href=\"https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm\"\u003EFed\u003C/a\u003E \u003Ca href=\"https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html\"\u003EBCE\u003C/a\u003E \u003Ca href=\"https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/september-2026\"\u003EBoE\u003C/a\u003E\u003C/p\u003E\n"
+        },
+        {
+          "title": "Oportunidades do dia",
+          "html": "\u003Cp\u003E\u003Cstrong\u003EKEPL3 e a unica oportunidade nova gerada pelo cruzamento de preco de hoje com as duas reguas e com o limite historico de reforco.\u003C/strong\u003E Isso autoriza avaliacao, nao ordem: o ciclo de credito rural ainda e o principal contrapeso. BBDC3 exige antes uma verificacao operacional de direitos. Os demais gatilhos atingidos nao passaram simultaneamente pelo filtro de tese ou de decisao pendente.\u003C/p\u003E\n"
+        },
+        {
+          "title": "Resumo do dia",
+          "html": "\u003Cp\u003EO mercado recebeu algum alivio domestico, mas nao uma autorizacao para baixar a guarda. O Fed mais duro e o petroleo ainda caro mantem pressao externa; a revisao de BBAS3 lembra que risco de credito tem defasagem e nao desaparece com um corte de 0,25 ponto. No plano pratico, o evento de maior urgencia e confirmar a elegibilidade das sobras de BBDC3; no plano de alocacao, KEPL3 merece avaliacao disciplinada e o restante das decisoes estruturais continua concentrado no quadro de carteira.\u003C/p\u003E\n"
         },
         {
           "title": "Politica",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003ERisco institucional e prêmio de prazo, 15-16/09:\u003C/strong\u003E os emails do Estadão e o fechamento do InfoMoney descrevem tensão no STF e cautela nos juros futuros. O canal econômico é a incerteza institucional e fiscal, não a atribuição de valor de investimento a uma preferência eleitoral. [Estadão, emails, 15 e 16/09; InfoMoney, fecho de 15/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EAjuste pós-eleição é hipótese, 15/09:\u003C/strong\u003E o debate entre economistas descrito pelo Brazil Journal trata da expectativa de correção fiscal após as eleições. Expectativa de mercado não equivale a medida aprovada ou melhoria já entregue. \u003Ca href=\"https://braziljournal.com/cenario-base-do-mercado-e-de-ajuste-fiscal-pos-eleicao-de-novo/\"\u003EBrazil Journal\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ECombustíveis, 09-11/09:\u003C/strong\u003E a XP analisou o pacote tributário e de subsídio; o Estadão informou posteriormente a desistência do reajuste de gasolina da Petrobras. A sequência temporal importa: não usar o comentário anterior como se o aumento tivesse permanecido válido. Impacto potencial em PETR4 e UGPA3, condicionado à política efetivamente aplicada. [XP, Telegram, 10/09; Estadão, email, 11/09]\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "html": "\u003Ch3\u003ERisco institucional e fiscal\u003C/h3\u003E\n\u003Cp\u003EO dia eleitoral trouxe novas pesquisas e declaracoes, mas nenhuma delas foi usada para alterar tese de empresa. O ponto relevante para ativos e a transmissao por juros longos e cambio: estimulo fiscal de curto prazo pode reduzir a confianca e limitar o beneficio do corte da Selic. A crise no STF continua como risco institucional em acompanhamento; pedidos, votos-vista e comentarios nao foram tratados como sentencas definitivas. \u003Ca href=\"https://exame.com/invest/mercados/emprego-nos-eua-juros-na-inglaterra-e-pesquisas-eleitorais-o-que-move-os-mercados/\"\u003EExame\u003C/a\u003E\u003C/p\u003E\n"
         }
       ]
     },
@@ -379,35 +415,27 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       "heading": "Arquivo por fonte",
       "groups": [
         {
-          "title": "Email | 09-16/09",
-          "html": "\u003Cp\u003EArquivo compacto de 09-16/09. Fontes referidas com data do email; quando o evento ocorreu antes, a data do evento também aparece. Conteúdo antigo, publicidade, tabelas de cotações redundantes e assuntos sem corpo correspondente foram excluídos da evidência.\u003C/p\u003E\n\u003Ch3\u003ELigado a carteira/radar\u003C/h3\u003E\n\u003Ch4\u003EADVFN\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EALOS3: distribuição total anunciada de R$ 438 milhões em três parcelas, com datas detalhadas em Insiders \u0026amp; B3. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003EAXIA3: conversão de 69.886.551 ações PNC em ON e resgate de PNC; evento de estrutura de capital, não dividendo ordinário. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003EJALL3: S\u0026amp;P reafirmou BB, perspectiva estável, em 15/09. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003EAgro: estimativa Conab/BB de 366,6 milhões de toneladas para 2026/27 e área de 85,3 milhões de hectares; projeção, não safra realizada. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003EBBDC3/BBDC4: pagamento em 15/09 de JCP já declarado em março/junho; não nova data de aquisição de direito. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003EVALE3: ação do MPF referente à mina Viga, com pedido de auditoria independente; posteriormente conferida na fonte oficial. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003EMOTV3/BBDC3/ITSA4: aprovação concorrencial da transferência de participação de 15% da Mover em Motiva ao Bradesco BBI, associada à liquidação de dívida. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003EVIVT3: JCP aprovado em 14/09, R$ 500 milhões brutos; ver calendário. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003ESLCE3: emissão de CPR-F de R$ 515,48 milhões, prazo de sete anos, com hedge informado para dólar mais 6,15%; não tratar como dívida sem risco cambial por omissão do hedge. [ADVFN, 14/09]\u003C/li\u003E\n\u003Cli\u003ECMIG4: eleição de Marco Aurélio Vasconcelos para presidência executiva e Alexandre Peixoto para presidência do conselho. [ADVFN, 14/09]\u003C/li\u003E\n\u003Cli\u003ECSMG3: JCP de R$ 96,9 milhões aprovado em 10/09, com pagamento em novembro. [ADVFN, 11/09]\u003C/li\u003E\n\u003Cli\u003EPETR4: contratação com PPSA para comercialização de gás por três anos; cupom de debêntures de 15/09 não é dividendo ao acionista. [ADVFN, 11 e 15/09]\u003C/li\u003E\n\u003Cli\u003EVALE3: esclarecimento de 09/09 afirma que a avaliação de financiamento não representa decisão de emissão de títulos na China. [ADVFN, 10/09]\u003C/li\u003E\n\u003Cli\u003ESLCE3: JPMorgan passou a overweight, com alvo de R$ 23 para fim de 2027; opinião de terceiro, não substitui gatilho do contexto. [ADVFN, 10/09]\u003C/li\u003E\n\u003Cli\u003ESAPR4: mudança de diretores administrativos/comerciais, sem equivaler a privatização. [ADVFN, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EBloomberg Línea\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003ECrédito e bancos/varejo: 83,9 milhões de inadimplentes, mais de metade da população adulta; não há confirmação de pico do problema. [Bloomberg Línea, 15-16/09]\u003C/li\u003E\n\u003Cli\u003EVALE3/CMIN3: frete Brasil-China elevado e redução de produção em minas de maior custo comprimem a realização; separar custo logístico do preço da commodity. [Bloomberg Línea, 15/09]\u003C/li\u003E\n\u003Cli\u003EBBDC3: Inovabra prepara mudança do modelo de crédito e investimento para 2027; plano anunciado, sem impacto imediato quantificado. [Bloomberg Línea, 15/09]\u003C/li\u003E\n\u003Cli\u003EBolsa: alta liderada por petróleo em 15/09, depois de queda com Vale em 14/09; composição setorial explica por que índice e consumo podem divergir. [Bloomberg Línea, 14-15/09]\u003C/li\u003E\n\u003Cli\u003EJuros e Brasil: BofA reforça leitura favorável para alocação no país, com Selic de 11,25% no fim de 2027 como projeção da casa. [Bloomberg Línea, 12/09]\u003C/li\u003E\n\u003Cli\u003EInflação externa: CPI americano e energia mantêm pressão sobre o debate monetário; os dados históricos de 11/09 não são decisão do Fed de hoje. [Bloomberg Línea, 11/09]\u003C/li\u003E\n\u003Cli\u003EAçúcar/agro: dificuldades de oferta na África do Sul e atrasos de moagem no Brasil; possíveis efeitos para SMTO3/JALL3, sem extrapolar lucro. [Bloomberg Línea, 10/09]\u003C/li\u003E\n\u003Cli\u003ESaneamento: Iguá privilegia disciplina de retorno na concessão do Rio; comparação setorial, não notícia operacional de SAPR4/CSMG3. [Bloomberg Línea, 10/09]\u003C/li\u003E\n\u003Cli\u003EVALE3: avaliação de títulos na China reportada em 09/09 foi contraposta ao esclarecimento posterior da companhia. [Bloomberg Línea, 09/09]\u003C/li\u003E\n\u003Cli\u003EMercado: fechos de 09, 10 e 11/09 foram lidos como contexto semanal, não como cotação atual. [Bloomberg Línea, 09-11/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EEstadão\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003ELREN3/VULC3/MGLU3 e bancos: varejo restrito de julho recuou 0,8%; móveis e eletrodomésticos, 4,9%. [Estadão Economia \u0026amp; Negócios, 16/09]\u003C/li\u003E\n\u003Cli\u003EInstituições e fiscal: tensão entre Poderes e repercussão eleitoral, filtradas pelo possível efeito no prêmio de risco. [Estadão, 15-16/09]\u003C/li\u003E\n\u003Cli\u003EVarejo: Appy afirmou não haver data definida para split payment no varejo; não equiparar a calendário de cenário de banco. [Estadão Economia \u0026amp; Negócios, 15/09]\u003C/li\u003E\n\u003Cli\u003EInflação: deflação de agosto puxada por energia, com efeito temporário do bônus de Itaipu; índice confirmado depois nas séries oficiais. [Estadão Economia \u0026amp; Negócios, 14/09]\u003C/li\u003E\n\u003Cli\u003EPETR4: desistência do reajuste de gasolina anteriormente anunciado. [Estadão Economia \u0026amp; Negócios, 11/09]\u003C/li\u003E\n\u003Cli\u003EPETR4/energia: proposta de reajuste e redução tributária; bateria/leilão surge como oportunidade setorial, ainda condicionada à execução. [Estadão Economia \u0026amp; Negócios, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EManhã Seu Dinheiro\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EJuros/energia: decisões monetárias sob choque do petróleo, clima e ruído institucional; separar cenário e fato. [Manhã Seu Dinheiro, 16/09]\u003C/li\u003E\n\u003Cli\u003EVarejo: competição de PMEs com grandes redes e disciplina de margens; revisão de Vale citada sem números suficientes para alterar valuation. [Manhã Seu Dinheiro, 15/09]\u003C/li\u003E\n\u003Cli\u003EFiscal: debate sobre benefícios de LCI/LCA e risco institucional, sem pressupor mudança tributária aprovada. [Manhã Seu Dinheiro, 14/09]\u003C/li\u003E\n\u003Cli\u003EBBSE3: Citi indicou venda e alvo de R$ 35, visão externa mais cautelosa; não altera mecanicamente tese ou teto do Sistema. [Manhã Seu Dinheiro, 11/09]\u003C/li\u003E\n\u003Cli\u003EBBAS3: aquisição do Banco Patagonia na Argentina e cautela com crédito; notícia de expansão não resolve sozinha a qualidade da carteira brasileira. [Manhã Seu Dinheiro, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EE-Investidor/Estadão\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EMercado: otimismo de gestores e survey do BofA em 15/09 representam posicionamento, não garantia de retorno. [E-Investidor/Estadão, 15/09]\u003C/li\u003E\n\u003Cli\u003EBBDC3/BBDC4 e MOTV3: pagamentos de proventos na semana, com necessidade de respeitar datas-com anteriores. [E-Investidor/Estadão, 14/09]\u003C/li\u003E\n\u003Cli\u003EPETR4: avaliação favorável do BTG é projeção de analista; renda futura não foi incorporada como dividendo aprovado. [E-Investidor/Estadão, 11/09]\u003C/li\u003E\n\u003Cli\u003EFluxo: entrada estrangeira em setembro contrasta com retirada anterior; melhora de fluxo pode ocorrer antes da melhora dos resultados. [E-Investidor/Estadão, 10/09]\u003C/li\u003E\n\u003Cli\u003EBBAS3/agro: aquisição na Argentina e dependência de fertilizantes importados sob petróleo mais caro. [E-Investidor/Estadão, 09/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EExame Invest e Seu Dinheiro\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EMGLU3: cenário do Safra para split payment afeta o financiamento do capital de giro; não estabelece prejuízo individual nem data obrigatória de implementação. [Exame Invest, 16/09; artigo de 15/09]\u003C/li\u003E\n\u003Cli\u003EShoppings: expansão e consumo de alta renda ilustram segmentação da demanda; não transferir automaticamente dados de JHSF para ALOS3. [Seu Dinheiro, 12/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch3\u003EOutros itens\u003C/h3\u003E\n\u003Ch4\u003EADVFN\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EWEGE3: JCP com data-com em 18/09 e pagamento em março de 2027; detalhes abaixo. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003EMULT3: pagamento em setembro de JCP cujo direito foi definido em setembro de 2025. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003EBRST3: crescimento de bases de fibra/móvel em agosto, útil como contexto competitivo de telecomunicações. [ADVFN, 14/09]\u003C/li\u003E\n\u003Cli\u003EB3: lançamento da versão em dólar do Ibovespa. [ADVFN, 14/09]\u003C/li\u003E\n\u003Cli\u003EALPA4: debêntures de R$ 300 milhões para refinanciamento; GPA: mudança de conselho; Comgás: oferta de biometano a empresas menores. [ADVFN, 11/09]\u003C/li\u003E\n\u003Cli\u003EEMBJ3: Fitch elevou rating a BBB; Light saiu da recuperação judicial, mantendo desafios operacionais e de perdas. [ADVFN, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EBloomberg Línea\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EiFood: plano de investimento de R$ 24 bilhões no exercício abril/2026-março/2027, aumento de 41% sobre o anterior; acompanhar competição e retorno. [Bloomberg Línea, 16/09]\u003C/li\u003E\n\u003Cli\u003ERenault/Geely: investimento industrial no Brasil; Databricks: expansão de receita; ambos fora do universo acionário acompanhado. [Bloomberg Línea, 16/09]\u003C/li\u003E\n\u003Cli\u003EMercado de capitais: saída de 33 empresas da Bolsa desde 2024, sem confundir anúncios de OPA com conclusão de todas as operações. [Bloomberg Línea, 15/09]\u003C/li\u003E\n\u003Cli\u003EDHL: ampliação de logística farmacêutica no Brasil; demanda específica distinta da média industrial. [Bloomberg Línea, 14/09]\u003C/li\u003E\n\u003Cli\u003EComércio: hipótese de abertura temporária americana à carne moída, com potencial para exportadores, sujeita aos termos da medida. [Bloomberg Línea, 14/09]\u003C/li\u003E\n\u003Cli\u003EProteínas: Seara aposta em produtos proteicos; Unico comprou a argentina Valida, que não é a Valid/VLID3. [Bloomberg Línea, 11/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EExame Invest e Manhã Seu Dinheiro\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EJBSS32: acordo JBS/Viva para negócio de couros em parceria 50/50; não confundir Viva Holding com Vivara. [Exame Invest, 16/09]\u003C/li\u003E\n\u003Cli\u003ELogística: baixa vacância em São Paulo e expansão de absorção de galpões, indicador setorial não associado automaticamente a um FII. [Exame Invest, 16/09]\u003C/li\u003E\n\u003Cli\u003ESMFT3: concorrência de redes e diferenças de localização; Nubank: expansão internacional; BDRs brasileiros: possível entrada no Ibovespa em 2027. [Manhã Seu Dinheiro, 11 e 16/09]\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "title": "Email | 10-17/09",
+          "html": "\u003Ch3\u003ELigado à Carteira/Radar\u003C/h3\u003E\n\u003Cp\u003E\u003Cstrong\u003EADVFN\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Copom reduz Selic a 13,75%; Fed sobe para 3,75%-4%; BoE mantém 3,75%. Bradesco abre etapa de sobras, com regras de elegibilidade confirmadas em outras fontes. Intelbras anuncia JCP de R$20 milhões: R$0,06112261897 bruto por ação, data-com 21/09, ex 22/09 e pagamento em 15/03/2027. Fora do Radar: operação Sabesp/Emae aprovada em assembleia; relação indicada de 1,3195 ação SBSP por ação EMAE, sem presumir consumação. [Gmail, item 64]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E ALLOS anuncia R$438 milhões em três parcelas, cada uma de R$0,291918638 por ação: data-com 22/09, 22/10 e 19/11; pagamentos 02/10, 04/11 e 02/12. AXIA: conversão de PNC em ON e resgate de outra parcela. Jalles: rating BB estável/brAAA, melhora agrícola ainda sujeita ao ciclo. Fora do Radar: WEG declara JCP; Conab/BB apresentam projeção de safra, não colheita realizada. [Gmail, item 53]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Bradesco paga JCP declarado anteriormente. Telefônica anuncia JCP de R$500 milhões, data-com 25/09 e pagamento até 30/04/2027. Pedido do MPF relativo à Vale é medida processual, não condenação. Cade aprova operação envolvendo participação em Motiva. Multiplan: parcela tem data-com de 2025; calendário de pagamento será confirmado antes de qualquer ação. [Gmail, item 40]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E SLC Agrícola: CPR de R$515,4 milhões, prazo até 2033; a estrutura inclui exposição contratada em dólar. Brisanet: evolução de clientes móveis e fibra em agosto. Cemig: mudança de administração exige acompanhar continuidade operacional. Crescem pedidos de recuperação de pequenas empresas, sinal de pressão de crédito. [Gmail, item 28]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Copasa: JCP de R$96,9 milhões, R$0,2556463313 por ação, posição em 21/09, ex em 22/09, pagamento em 09/11. Petrobras/PPSA: acordo de comercialização de gás anunciado em 10/09. Comgás: biomethano para pequenas empresas. Fora do Radar: Alpargatas refinancia debêntures; GPA altera conselho. CNI aponta recuo mensal da receita industrial de julho. [Gmail, item 12]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EBloomberg Línea\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E JPMorgan reduz previsões de lucro de BBAS3 para 2026/2027 e mantém neutral com alvo de R$22 para dezembro/2027. O alvo anterior diverge entre veículos, pelo que a variação do alvo foi omitida. Grupo SBF/Nike renovam contrato: concorrência no setor de VULC3, sem evidência de perda de quota desta. Fecho de 16/09 do Ibovespa em 185.548 pontos. [Gmail, item 56]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Fecho de 15/09: recuperação do Ibovespa e alta do petróleo favorecem Petrobras. Alteração de gestão da Oncoclínicas é notícia fora do Radar e não foi confundida com mudança em empresas detidas. [Gmail, item 43]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Frete marítimo mais caro entre Brasil e China pressiona a realização líquida do minério, tema para VALE3/CMIN3. Fechamentos de capital e OPAs, incluindo Santander, ilustram mudanças no mercado; o status de cada operação não foi presumido concluído. [Gmail, item 42]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Serasa aponta recorde de inadimplência: 83,9 milhões de pessoas e cerca de R$500 bilhões de dívidas. Dado de pessoas negativadas não é a mesma métrica que NPL bancário. Itaú reorganiza presença europeia; não confundir com a notícia posterior de licença condicional nos EUA. [Gmail, item 39]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Fecho de 14/09: Ibovespa 185.501 pontos e Vale em queda. A pressão de preços precisa ser distinguida de revisão formal dos fundamentos; o preço utilizado nos gatilhos é o JSON de 17/09. [Gmail, item 32]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Fecho de 11/09: Ibovespa 187.207 pontos e dólar R$5,1228 segundo a newsletter. Reclamações em planos de saúde sinalizam pressão setorial, sem demonstrar impacto financeiro específico sobre FLRY3. [Gmail, item 15]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E10/09:\u003C/strong\u003E Fecho de 10/09: Ibovespa 188.269 pontos e dólar R$5,1061 na newsletter; Petrobras em alta. São referências históricas, não preços de hoje. [Gmail, item 3]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E10/09:\u003C/strong\u003E Açúcar: concorrência brasileira na África do Sul e procura indiana dão contexto ao setor de JALL3/SMTO3. A notícia sobre Tyson é de empresa externa ao Radar; projeção revista não é resultado realizado. [Gmail, item 2]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EE-Investidor/Estadão\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Juros de Brasil e EUA em sentidos opostos; estudo de dividendos globais mostra crescimento no Brasil, sem provar sustentabilidade de cada empresa. Juros superiores ao lucro operacional em companhias endividadas reforçam análise de cobertura, não uma conclusão automática para o Radar inteiro. [Gmail, item 54]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Agenda de proventos inclui Motiva e Bradesco; a data de pagamento não confere direito a quem compra depois da data-com. Santander compara frigoríficos, mantendo separação entre preferências de analistas e fatos operacionais. [Gmail, item 30]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E BTG comenta potencial de dividendos da Petrobras; alvo para ADR não foi convertido em teto de PETR4. Nubank aparece como tese de crescimento de terceiro, fora do universo acompanhado. Dividendos reinvestidos e retorno real são medidas distintas. [Gmail, item 13]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EEstadão\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Análise sobre credibilidade do BC e limites do estímulo fiscal. São interpretações de autores/economistas: estímulo no curto prazo pode pressionar juros longos, hipótese que exige acompanhar dados e execução orçamental. [Gmail, item 58]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Varejo de julho em queda reforça cautela com consumo financiado. Declarações políticas sobre o Banco Central são pressão discursiva; não equivalem a alteração legal da sua independência. [Gmail, item 45]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Declaração de Bernard Appy afasta o desenho então discutido de split payment no varejo. Contrapõe a hipótese tributária usada em análises de sensibilidade, sem permitir tratar o custo hipotético como aprovado. [Gmail, item 34]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E IPCA de agosto recua 0,32%, com energia elétrica beneficiada pelo bônus de Itaipu. É um efeito importante, mas não permanente. Pedido de avaliação ao TCU sobre despesas de saúde é questionamento, não decisão judicial ou contábil definitiva. [Gmail, item 22]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Petrobras: recuo do reajuste de gasolina anteriormente divulgado. A discussão sobre combustíveis exige separar preço internacional, decisão comercial e intervenção tributária; não extrapolar automaticamente lucro da PETR4. [Gmail, item 5]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EExame/Desperta\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Safra discute sensibilidade do varejo a um desenho de split payment: cenário condicional, contraposto à declaração de Appy. JBS e Viva anunciam associação de 50%/50% em couro; Viva não é Vivara. [Gmail, item 48]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EManhã Seu Dinheiro\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Repercussão das decisões Copom/Fed. Braskem sofre revisão negativa do UBS após proposta de dívida; não pertence ao Radar. Mudanças de carteiras recomendadas de bancos não alteram as posições do utilizador. [Gmail, item 61]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E XP altera avaliação de Vale para neutra e discute comparabilidade de indicadores. Digitalização das pequenas empresas e uso de marketplaces são contexto competitivo para o varejo, não evidência isolada de lucro adicional em LREN3. [Gmail, item 37]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Citi apresenta visão negativa para BB Seguridade e alvo de R$35. É opinião de analista, não alteração de guidance ou da remuneração declarada. BDRs: mudanças metodológicas discutidas para 2027, não regra em vigor nesta sessão. [Gmail, item 9]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch3\u003EOutros\u003C/h3\u003E\n\u003Cp\u003E\u003Cstrong\u003EBloomberg Línea\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Ânima: CFO vê possibilidade de ganho de margem com FMU; sinergia é objetivo, não lucro já entregue. Eleições e dólar no foco do dia. Nike/SBF reforçam distribuição. Artigo de gás em 2030 continua tratado como hipótese de cenário. [Gmail, item 63]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Fed eleva juros em 25 pontos-base; projeções de lucros nos EUA não se confundem com resultados realizados. Revolut e Morgan Stanley anunciam iniciativas internacionais fora do universo B3 acompanhado. [Gmail, item 55]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E iFood anuncia R$24 bilhões de investimento no exercício abril/2026-março/2027, incluindo despesas operacionais e incentivos, não apenas capex. Renault/Geely ampliam esforço em híbridos flex. Texto sobre gás em 2030 é cenário prospectivo, não notícia ocorrida no futuro. [Gmail, item 52]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Proposta americana de ampliação temporária da importação de carne e alteração de liderança na Cofco. Investimento do Golfo no Brasil aparece como leitura de oportunidade, não fluxo contratado para empresas da carteira. [Gmail, item 31]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E DHL amplia a operação farmacêutica no Brasil; objetivos de capacidade futura dependem de execução. Expansão de empresas privadas não foi transposta para projeções de companhias cotadas. [Gmail, item 27]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E12/09:\u003C/strong\u003E BofA apresenta cenário favorável ao Brasil condicionado à trajetória futura da Selic. Captação da Cognition e planos de expansão tecnológica são movimentos empresariais, não recomendação para um ativo do Radar. [Gmail, item 18]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Inflação americana de agosto, pressão nos bens e eletrificação na China. Dados de inflação ajudam a explicar a reunião seguinte do Fed; não devem ser lidos como divulgação nova de 17/09. [Gmail, item 14]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Seara amplia oferta de refeições com proteína; Oracle e eletrificação automóvel chinesa ilustram investimento e concorrência. A argentina Valida referida no ecossistema Unico não foi confundida com VLID3. [Gmail, item 11]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EE-Investidor/Estadão\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Opções ligadas ao Brasil e cenários de bolsa discutidos por gestores. Comparações CDI/S\u0026amp;P dependem de moeda, reinvestimento e período; metas de índice para dezembro não são resultado assegurado. [Gmail, item 41]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E10/09:\u003C/strong\u003E Fluxo estrangeiro e reestruturação da Braskem: separar entrada de capital em bolsa de risco de diluição numa companhia endividada; não são sinais equivalentes de qualidade. [Gmail, item 1]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EManhã Seu Dinheiro\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Expansão das redes de ginásios e concorrência Smart Fit/Panobianco. Contagem de inaugurações não é comparação direta de rentabilidade; notícias institucionais exigem separar comentário e ato formal. [Gmail, item 49]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003ESeu Dinheiro\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003E12/09:\u003C/strong\u003E Consumo e centros comerciais: leitura de Eduardo Moreira sobre atividade e empreendimentos; distinguir exemplos de vendas e faturação setorial de lucro distribuível das empresas de shoppings. [Gmail, item 17]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EResenha do Dinheiro (CNN)\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Petróleo, conflitos e El Niño como riscos de inflação. O calendário embutido está desatualizado e foi descartado; não reproduzir as datas antigas como agenda corrente. [Gmail, item 10]\u003C/li\u003E\n\u003C/ul\u003E\n"
         },
         {
-          "title": "Telegram | 09-16/09",
-          "html": "\u003Cp\u003EArquivo de 09-16/09; mensagens do autor identificado como Daniel nos canais DH são assinaladas como Daniel Nigri. Posts sem conteúdo substantivo, vídeos sem transcrição e a planilha-modelo de terceiros não são tratados como carteira de Rafa.\u003C/p\u003E\n\u003Ch3\u003ELigado a carteira/radar\u003C/h3\u003E\n\u003Ch4\u003EXP Investimentos\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EJuros: expectativa de corte de 0,25 p.p. da Selic; expectativa, não decisão. [XP Investimentos, 16/09, 14:01]\u003C/li\u003E\n\u003Cli\u003EMorning Call: espera por decisões monetárias e petróleo elevado; os índices do cabeçalho são referências de momentos diferentes. [XP Investimentos, 16/09]\u003C/li\u003E\n\u003Cli\u003EVALE3: estimativas atualizadas com recomendação neutra; XP alerta para ajustes necessários ao comparar mineradoras diversificadas. [XP Investimentos, 14/09]\u003C/li\u003E\n\u003Cli\u003EFocus: medianas de IPCA 2026 e PIB revisadas para baixo; inflação de 2027 revista para cima; consenso não é projeção própria do Banco Central. [XP Investimentos, 14/09]\u003C/li\u003E\n\u003Cli\u003EMorning Calls: decisões de juros em foco em 14/09; varejo no Brasil em 15/09; inflação externa em 10/09. [XP Investimentos, 10, 14 e 15/09]\u003C/li\u003E\n\u003Cli\u003EPETR4/UGPA3: leitura do pacote de combustíveis como neutro para Petrobras e favorável à dinâmica competitiva de grandes distribuidoras; comentário anterior à notícia de desistência do reajuste. [XP Investimentos, 10/09]\u003C/li\u003E\n\u003Cli\u003ECMIN3/CSNA3: revisão da equação de financiamento do grupo CSN, diante de juros altos e fundamentos menos favoráveis. [XP Investimentos, 09/09]\u003C/li\u003E\n\u003Cli\u003EFluxo: agosto com saída estrangeira de R$ 22,2 bilhões e setembro com entradas de R$ 10,8 bilhões até a publicação; períodos distintos. [XP Investimentos, 09/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EDica de Hoje\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EJALL3: rating BB estável/brAAA; canal relata recuperação operacional da safra e alavancagem em torno de 2,4x. São fundamentos de crédito, não prova de ação barata. [Dica de Hoje, 16/09]\u003C/li\u003E\n\u003Cli\u003EMacro: petróleo, juros longos e atividade desigual na China pedem leitura além do índice agregado. [Dica de Hoje, 14-15/09]\u003C/li\u003E\n\u003Cli\u003EBradesco Saúde: cancelamento de autorização de operadora ligado à combinação societária, segundo a empresa; não significa encerramento do negócio do grupo. [Dica de Hoje, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EDH Dica Ações\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EJuros: Daniel Nigri destaca risco no diferencial Brasil/EUA e a necessidade de melhorias estruturais; opinião do autor. [DH Dica Ações, Daniel Nigri, 16/09]\u003C/li\u003E\n\u003Cli\u003ELREN3: canal relata ações em tesouraria de 5,8% e cerca de 58 milhões recompradas após cancelamentos anteriores; mês e estoque não se confundem. A avaliação de preço barato é opinião, não conclusão automática desta rotina. [DH Dica Ações, Daniel Nigri, 10/09]\u003C/li\u003E\n\u003Cli\u003EKLBN4: menção a recompras em ritmo menor, sem quantidade no texto; não estimada. [DH Dica Ações, Daniel Nigri, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003ECanal Neto Invest\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EAURE3: comentário sobre geração operacional de R$ 1,976 bilhão frente a R$ 1,158 bilhão de juros pagos no 1S26; alerta para conversão de caixa em renda. [Canal Neto Invest, 12/09]\u003C/li\u003E\n\u003Cli\u003EEGIE3: histórico de dividendos citado desde 2002 não garante pagamento futuro; preservado como observação histórica. [Canal Neto Invest, 11/09]\u003C/li\u003E\n\u003Cli\u003EÍndice: concentração em Petrobras, Vale e grupo Itaú ajuda a explicar o descolamento entre Ibovespa e outros setores. [Canal Neto Invest, 11/09]\u003C/li\u003E\n\u003Cli\u003EFluxo: retomada de entrada estrangeira e realização de pessoas físicas, sem atribuir causalidade exclusiva à alta da Bolsa. [Canal Neto Invest, 10 e 14/09]\u003C/li\u003E\n\u003Cli\u003ELREN3: recompra informada de 13 milhões de ações em agosto, entre R$ 10,50 e R$ 12,24; informação do canal, anexo oficial não recuperado nesta sessão. [Canal Neto Invest, 09/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch3\u003EOutros itens\u003C/h3\u003E\n\u003Ch4\u003EXP Investimentos\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003ENATU3: preparação de consultoras para mudança tributária; notícia de adaptação comercial, sem reproduzir como orientação fiscal individual. [XP Investimentos, 15/09]\u003C/li\u003E\n\u003Cli\u003EETFs: novos produtos de energia limpa e inteligência artificial e crescimento de renda fixa; não são recomendação de aplicação. [XP Investimentos, 15/09]\u003C/li\u003E\n\u003Cli\u003EBDRs brasileiros: alterações previstas para o Ibovespa em 2027, com regras de implementação ainda a detalhar. [XP Investimentos, 11/09]\u003C/li\u003E\n\u003Cli\u003ETecnologia americana: setor elevado a favorito no ranking da XP após resultados; preferência de analista, não orientação de alocação de Rafa. [XP Investimentos, 09/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EDica de Hoje\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EB3SA3: volume financeiro médio diário de ações em agosto de R$ 30,284 bilhões, +26,1% anual e +33,8% mensal, segundo o canal. [Dica de Hoje, 16/09]\u003C/li\u003E\n\u003Cli\u003ECVCB3: Fitch manteve BBB(bra), mudando perspectiva de positiva para estável; preocupação com caixa. [Dica de Hoje, 16/09]\u003C/li\u003E\n\u003Cli\u003EEMBJ3: BermudAir será operadora do E190F em leasing; expansão do uso de aeronaves cargueiras. [Dica de Hoje, 16/09]\u003C/li\u003E\n\u003Cli\u003EJBSS32: joint venture de couros 50/50; BEEF3: aumento de capital de R$ 2.705,97 por exercício de bônus, 544 novas ações, financeiramente pequeno. [Dica de Hoje, 16/09]\u003C/li\u003E\n\u003Cli\u003ELight: fim de recuperação judicial não elimina perdas operacionais; CVM: auditoria orçamentária citada pelo canal. [Dica de Hoje, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003EDH Dica Ações\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EPRIO3: Daniel Nigri prepara revisão de cenário; eventual retirada de imposto de exportação é hipótese, não valor garantido. [DH Dica Ações, Daniel Nigri, 15/09]\u003C/li\u003E\n\u003Cli\u003ECosan: áudio transcrito aponta baixa cobertura de juros por dividendos das investidas e necessidade de eficiência/desinvestimentos. Transcrição tem erros de nomes; não usar como balanço oficial nem certeza de inflexão. [DH Dica Ações, Daniel Nigri, áudio de 14/09]\u003C/li\u003E\n\u003Cli\u003EPRIO3: recompras com mais de 8% das ações em tesouraria, sem quantidade absoluta no texto; JHSF: ampliação de shopping analisada como potencial de receita, não receita já realizada. [DH Dica Ações, Daniel Nigri, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003ECanal Neto Invest\u003C/h4\u003E\n\u003Cul\u003E\n\u003Cli\u003EWEGE3: JCP e calendário recebidos em 16/09; BRSR3/BRSR5/BRSR6: JCP de R$ 0,22006263 por ação, data-base de 11/09, pagamento em 28/09. [Canal Neto Invest, 10 e 16/09]\u003C/li\u003E\n\u003Cli\u003EPASS3: menção a recompras sem quantidade, percentagem ou documento no texto; sem interpretação quantitativa. [Canal Neto Invest, 10/09]\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "title": "Telegram | 10-17/09",
+          "html": "\u003Ch3\u003ELigado à Carteira/Radar\u003C/h3\u003E\n\u003Cp\u003E\u003Cstrong\u003EXP Investimentos\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Morning Call de 17/09: decisões já tomadas de Fed/Copom; a comparação com a edição anterior evita apresentar expectativas vencidas como fatos correntes. [Telegram, item 36]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Morning Call de 16/09: petróleo, curva de juros e cautela antes das decisões. As taxas futuras projetadas não são a Selic vigente. [Telegram, item 39]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Expectativas para a reunião de 16/09, preservadas apenas no arquivo histórico. O resultado efetivo foi incorporado à edição de 17/09. [Telegram, item 38]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Morning Call de 15/09: vendas no varejo e petróleo como vetores setoriais. Dados de julho não são vendas de setembro. [Telegram, item 43]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Bradesco participa em iniciativas de ETF com IA; setor de energia recebe nova estrutura de investimento. Produtos financeiros não são alteração material de lucro bancário demonstrada nesta rotina. [Telegram, item 41]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Morning Call de 14/09 organiza a semana das decisões de juros. A evolução posterior está no corpo principal da edição. [Telegram, item 47]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Focus de 14/09: IPCA 2026 de 4,90%, PIB de 1,89% e Selic final de 13,75%. São medianas de expectativas naquela data; não taxas já realizadas para o ano inteiro. [Telegram, item 46]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E XP revê Vale para neutra e explica ajustes de comparabilidade de EBITDA e alavancagem. Opinião de casa de análise, sem alteração automática do teto do Sistema. [Telegram, item 45]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E10/09:\u003C/strong\u003E XP comenta pacote de combustíveis anunciado em 09/09 e impactos distintos em Petrobras e distribuidoras. Visão de analistas sobre anúncio anterior, não validação jurídica das condições de subsídio. [Telegram, item 53]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EDica de Hoje\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Comentário de abertura: desaceleração da atividade, Copom/Fed e petróleo. Diagnóstico macro do canal, não recomendação individual nem prova de mudança de lucro. [Telegram, item 2]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Jalles comenta produtividade e melhora agrícola; B3 divulga crescimento do volume médio diário em agosto. CVC, Embraer e JBS/Viva são notícias externas ao Radar. Distinguir projeções da safra e evolução já observada. [Telegram, item 4]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Reação ao Copom: mensagem termina incompleta no export. Só a parte disponível foi considerada; decisão e taxa foram conferidas externamente. [Telegram, item 3]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Panorama macro de 15/09: crédito, inflação e expectativa de juros. Preservado como leitura daquele dia, anterior às decisões efetivas. [Telegram, item 7]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Complemento sobre crédito e incerteza macro na abertura da semana. Não tratado como duplicação de um fato corporativo novo. [Telegram, item 11]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Discussão sobre risco fiscal e petróleo, com possíveis efeitos no custo de capital. Interpretação do canal, não novo indicador oficial. [Telegram, item 10]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EDH Dica Ações\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Canal reconhece erro na explicação anterior sobre Bradesco. A correção mais recente prevalece; o aviso não confirma que o utilizador seja elegível. [Telegram, item 29]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Daniel Nigri corrige a explicação das sobras do Bradesco: exige participação anterior e reserva. A base é o lote subscrito, não toda a posição detida. Percentuais cruzados ON/PN foram detalhados na conferência web. [Telegram, item 28]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Daniel Nigri comenta distribuição da ALLOS. O anúncio foi classificado como dividendos; não transformar automaticamente toda remuneração em JCP ou retorno recorrente. [Telegram, item 27]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E Daniel Nigri destaca novo JCP da Intelbras. Valor e calendário concordam com ADVFN; atenção ao intervalo até março de 2027. [Telegram, item 26]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E Daniel Nigri comenta a divergência Fed/Copom e o diferencial de juros. Análise de cenário, sem substituir os comunicados oficiais. [Telegram, item 30]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EDH DicaPrev\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003E17/09:\u003C/strong\u003E DH DicaPrev replica a correção operacional de Bradesco. Não foi contada como segundo anúncio independente do banco. [Telegram, item 34]\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003ECanal Neto Invest\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E12/09:\u003C/strong\u003E AURE3: Neto destaca peso de juros em relação ao caixa operacional do semestre. Cálculo apresentado pelo analista, sem atualização do balanço pela rotina. [Telegram, item 21]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E EGIE3: histórico longo de remuneração ao acionista. Não constitui declaração nova de dividendo nem permite atribuir uma data-com nesta semana. [Telegram, item 24]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Concentração do Ibovespa: poucos grupos podem dominar o movimento do índice; a leitura setorial não deve substituir a análise das empresas. [Telegram, item 23]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch3\u003EOutros\u003C/h3\u003E\n\u003Cp\u003E\u003Cstrong\u003EXP Investimentos\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Natura: analistas discutem possível impacto tributário em consultoras em 2027. Sensibilidade regulatória, não imposto pessoal calculado ou mudança consumada. [Telegram, item 42]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E11/09:\u003C/strong\u003E Mudanças previstas para BDRs em 2027: implementação e detalhes ainda sujeitos à divulgação; não tratadas como alteração já em vigor. [Telegram, item 50]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003EDH Dica Ações\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E15/09:\u003C/strong\u003E Daniel Nigri analisa PRIO: hipótese de fim de tributação de exportação poderia alterar valuation. Condição ainda não confirmada; não transformada em aumento efetivo do preço-alvo. [Telegram, item 31]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Áudio transcrito: Cosan, com discussão sobre dividendos recebidos, despesa de juros, eficiência de holding e possíveis desinvestimentos. A transcrição escreve o nome de forma imperfeita; contexto aponta para Cosan, não outro ativo. A avaliação não equivale a declaração de que a recuperação já está concluída. [Telegram, item 33]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n\u003Cp\u003E\u003Cstrong\u003ECanal Neto Invest\u003C/strong\u003E\u003C/p\u003E\n\u003Cul\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E16/09:\u003C/strong\u003E WEG: JCP de R$449,8 milhões, R$0,107212121 bruto por ação; data-com 18/09, ex 21/09, pagamento 10/03/2027. WEG está fora do Radar; sem cálculo de yield pessoal. [Telegram, item 16]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Complemento sobre composição dos investidores em bolsa; não extrapolar para direção garantida do Ibovespa. [Telegram, item 20]\u003C/p\u003E\n\u003C/li\u003E\n\u003Cli\u003E\n\u003Cp\u003E\u003Cstrong\u003E14/09:\u003C/strong\u003E Neto discute a diferença entre fluxos de investidores locais e estrangeiros. É leitura de comportamento agregado, não fluxo demonstrado de um ativo individual. [Telegram, item 19]\u003C/p\u003E\n\u003C/li\u003E\n\u003C/ul\u003E\n"
         },
         {
-          "title": "Pesquisa web | 16/09",
-          "html": "\u003Cp\u003EPesquisa realizada em 16/09/2026. A coluna de resultado se refere à recolha web desta execução, não ao material dos emails. Falha de recuperação não prova inexistência de notícia.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EFonte obrigatória\u003C/th\u003E\n\u003Cth\u003EConsultada\u003C/th\u003E\n\u003Cth\u003EItem relevante encontrado\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EInfoMoney\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim: fecho de 15/09 e referência de celulose publicada em 09/09\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EExame\u003C/td\u003E\n\u003Ctd\u003ESim, duas formulações\u003C/td\u003E\n\u003Ctd\u003ESim: análise Safra sobre split payment, publicada em 15/09\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EValor Econômico\u003C/td\u003E\n\u003Ctd\u003ESim, duas formulações\u003C/td\u003E\n\u003Ctd\u003ENão recuperado; bloqueio de acesso\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBrazil Journal\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim: debate sobre expectativa de ajuste fiscal pós-eleição, 15/09\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EE-Investidor/Estadão\u003C/td\u003E\n\u003Ctd\u003ESim, duas formulações\u003C/td\u003E\n\u003Ctd\u003ENão recuperado na web; emails lidos separadamente\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EG1\u003C/td\u003E\n\u003Ctd\u003ESim, duas formulações\u003C/td\u003E\n\u003Ctd\u003ENão recuperado diretamente; indicadores confirmados por outra fonte\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim: moedas, commodities e índices com referência temporal\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EXP Morning Call\u003C/td\u003E\n\u003Ctd\u003ESim, página inicial e edição clicada\u003C/td\u003E\n\u003Ctd\u003ESim: edição de 16/09 e relatórios setoriais ligados\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EXP/Sanepar:\u003C/strong\u003E revisão para neutro e menor confiança em catalisadores; publicação em 15/09, atualização em 16/09. \u003Ca href=\"https://conteudos.xpi.com.br/acoes/relatorios/sanepar-sapr11-a-lacuna-de-incentivos-por-que-o-status-quo-ainda-prevalece/\"\u003ERelatório\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EXP/Mineração:\u003C/strong\u003E avaliação do efeito do frete elevado em produtores de maior custo, com vantagem logística relativa da Vale; não equivale a imunidade à pressão de margem. \u003Ca href=\"https://conteudos.xpi.com.br/acoes/relatorios/mineracao-e-siderurgia-alta-dos-fretes-pressiona-a-oferta-de-minerio-de-ferro-de-alto-custo/\"\u003ERelatório de 15/09\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EExame/Safra:\u003C/strong\u003E hipótese de antecipação do recolhimento de impostos afeta o caixa antes de afetar o lucro; calendário do cenário não confundido com implementação assegurada. \u003Ca href=\"https://exame.com/invest/mercados/split-payment-pode-reduzir-lucro-de-magalu-pague-menos-e-centauro-diz-safra/\"\u003EArtigo de 15/09\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EComplementares úteis:\u003C/strong\u003E BCB/SGS para Selic/IPCA; BCE para juros vigentes; CVM/IPE para índice de documentos; MPF para a ação referente à mina Viga. São fontes primárias usadas para confirmação, não novos canais de opinião.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ERevisão noturna:\u003C/strong\u003E Reuters confirmou a alta do Fed; a página primária do comunicado não foi recuperada pelo acesso disponível. O portal de comunicados do Copom exigiu JavaScript; nenhum resultado novo brasileiro foi presumido. \u003Ca href=\"https://www.boursorama.com/actualite-economique/actualites/usa-la-fed-releve-ses-taux-pour-la-premiere-fois-depuis-2023-027720884f3d14b43e880cba84123469\"\u003EReuters, 16/09\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EMinério/celulose:\u003C/strong\u003E busca dedicada não confirmou preço comparável de minério para hoje. Celulose foi mantida como referência datada de setembro, sem fingir atualização intradiária.\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "title": "Pesquisa web | 17/09",
+          "html": "\u003Ch3\u003ECobertura obrigatoria\u003C/h3\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EFonte\u003C/th\u003E\n\u003Cth\u003EPesquisa dedicada\u003C/th\u003E\n\u003Cth\u003EItem relevante\u003C/th\u003E\n\u003Cth\u003EResultado\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EInfoMoney\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003EReacao de mercado a Copom/Fed e fecho de 16/09\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EExame\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003EEmprego nos EUA, BoE e pesquisas eleitorais\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EValor Economico\u003C/td\u003E\n\u003Ctd\u003ESim, duas tentativas\u003C/td\u003E\n\u003Ctd\u003ENao\u003C/td\u003E\n\u003Ctd\u003EPagina/resultado util nao acessivel; nao se inferiu conteudo pelo assunto do email\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBrazil Journal\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003EKinea discute custo de capital; Itau obtem aprovacao condicional nos EUA\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EE-Investidor/Estadao\u003C/td\u003E\n\u003Ctd\u003ESim, duas tentativas\u003C/td\u003E\n\u003Ctd\u003ENao\u003C/td\u003E\n\u003Ctd\u003ESem artigo novo acessivel que alterasse a leitura do dia\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EG1\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESelic a 13,75% e propostas eleitorais; acesso direto limitado, feed corroborado\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003EPainel de moedas, indices, Brent e WTI\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EXP Morning Call\u003C/td\u003E\n\u003Ctd\u003EAcesso direto ao indice e edicoes 17/09 e 16/09\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003EDecisoes de juros, fechos e mercados globais\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n\u003Ch3\u003EItens incorporados\u003C/h3\u003E\n\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003ECopom/Fed:\u003C/strong\u003E direcoes opostas, com comunicados oficiais usados para taxa e decisao. \u003Ca href=\"https://www.federalreserve.gov/newsevents/pressreleases/monetary20260916a.htm\"\u003EFed\u003C/a\u003E \u003Ca href=\"https://noticias.uol.com.br/ultimas-noticias/reuters/2026/09/16/bc-corta-selic-em-025-ponto-para-1375-e-deixa-proximos-passos-em-aberto.htm\"\u003EReuters/UOL\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBoE/BCE:\u003C/strong\u003E BoE mantem 3,75% por 6 a 3; BCE elevou deposito a 2,50% com efeito em 16/09. \u003Ca href=\"https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2026/september-2026\"\u003EBoE\u003C/a\u003E \u003Ca href=\"https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html\"\u003EBCE\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EMercado:\u003C/strong\u003E Ibovespa fechou 16/09 a 185.548, queda de 0,51%; hoje os valores do painel sao snapshots intradia e nao fecho. \u003Ca href=\"https://conteudos.xpi.com.br/morning-call/mercados-repercutem-decisoes-de-juros-confira-os-destaques-desta-quinta-feira/\"\u003EXP\u003C/a\u003E \u003Ca href=\"https://br.investing.com/indices/bovespa-historical-data\"\u003EInvesting.com\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ELeitura de valuation:\u003C/strong\u003E a Kinea argumenta que o desconto aparente da bolsa vem do custo de capital alto; a rotina usa a ideia como alerta contra comprar apenas por multiplo baixo. \u003Ca href=\"https://braziljournal.com/o-desconto-nao-esta-nas-acoes-esta-nos-juros-diz-a-kinea/\"\u003EBrazil Journal\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ECelulose:\u003C/strong\u003E XP aponta BHKP a US$560/t, com suporte de curto prazo e recuperacao limitada no medio prazo. \u003Ca href=\"https://www.infomoney.com.br/mercados/xp-precos-da-celulose-melhoram-mas-ventos-positivos-nao-devem-durar/\"\u003EInfoMoney\u003C/a\u003E\u003C/li\u003E\n\u003C/ul\u003E\n"
         }
       ]
     },
     "insiders_b3": {
       "num": "04",
       "heading": "Insiders, Recompras \u0026 Proventos",
-      "intro": "Janela: 09-16/09. Busca específica realizada para cada um dos 15 tickers em carteira, abrangendo comunicados, proventos, recompras e operações de administradores. Complemento: índice anual oficial CVM/IPE, cuja listagem pública indicava atualização em 14/09. A extração cobre os registros disponíveis nesse arquivo, não certifica completude de 14-16/09. Anexos consultados não abriram; não há conclusão de inexistência de operações.",
+      "intro": "Busca individual dos 15 ativos; indice CVM semanal limitado a entregas ate 14/09.",
       "groups": [
         {
-          "title": "Recompras de Accoes",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003ELREN3, agosto, noticiado em 09-10/09:\u003C/strong\u003E Canal Neto Invest informa \u003Cstrong\u003E13 milhões de ações\u003C/strong\u003E, faixa \u003Cstrong\u003ER$ 10,50-12,24\u003C/strong\u003E; DH Dica Ações menciona estoque de \u003Cstrong\u003Ecerca de 58 milhões\u003C/strong\u003E, \u003Cstrong\u003E5,8% do total\u003C/strong\u003E. Fluxo mensal e estoque em tesouraria são bases diferentes. O índice CVM confirma publicação de formulário referente a agosto em 09/09, mas o anexo não foi recuperado: volumes continuam atribuídos aos canais, não validados documentalmente nesta sessão.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EKLBN4, 10/09:\u003C/strong\u003E Daniel Nigri menciona recompras em menor ritmo; \u003Cstrong\u003Equantidade e percentagem não informadas\u003C/strong\u003E. Não há confirmação quantitativa nova.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EPRIO3, 10/09, fora do Radar:\u003C/strong\u003E DH Dica Ações informa \u003Cstrong\u003Emais de 8% das ações em tesouraria\u003C/strong\u003E, sem quantidade absoluta. Cancelamento futuro e novo programa são expectativa do autor.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EPASS3, 10/09, fora do Radar:\u003C/strong\u003E Canal Neto Invest menciona recompras, sem valor, quantidade ou percentagem utilizáveis.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EVALE3, contexto fora da janela:\u003C/strong\u003E o documento de 30/07 prevê \u003Cstrong\u003Eaté 100 milhões de ações\u003C/strong\u003E, \u003Cstrong\u003Ecerca de 2,3% das ações em circulação\u003C/strong\u003E, por \u003Cstrong\u003E18 meses\u003C/strong\u003E, com início em 19/08. Não é anúncio desta semana nem comprovação de execução diária. \u003Ca href=\"https://www.rad.cvm.gov.br/ENETCONSULTA/frmDownloadDocumento.aspx?CodigoInstituicao=1\u0026amp;Tela=99\u0026amp;descTipo=IPE\u0026amp;numProtocolo=1549982\u0026amp;numSequencia=1074688\u0026amp;numVersao=1\"\u003EDocumento CVM\u003C/a\u003E\u003C/li\u003E\n\u003C/ul\u003E\n"
-        },
-        {
-          "title": "Dividendos \u0026 JCP",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBDC3/BBDC4, pagamento de 15/09:\u003C/strong\u003E ADVFN informa \u003Cstrong\u003ER$ 6,5 bilhões\u003C/strong\u003E, valores brutos de \u003Cstrong\u003ER$ 0,58 por ON\u003C/strong\u003E e \u003Cstrong\u003ER$ 0,64 por PN\u003C/strong\u003E, relativos a declarações de 25/03 e 23/06. Datas-base históricas de 06/04 e 03/07. Para \u003Cstrong\u003EBBDC3\u003C/strong\u003E, a relação entre a tranche bruta informada e a cotação do contexto é \u003Cstrong\u003E3,60%\u003C/strong\u003E; é medida bruta comparativa, não retorno adicional disponível a quem compra hoje. [ADVFN, 15/09; contexto de 16/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EALOS3, noticiado em 16/09:\u003C/strong\u003E \u003Cstrong\u003ER$ 438 milhões\u003C/strong\u003E, em três parcelas de \u003Cstrong\u003ER$ 146 milhões\u003C/strong\u003E, \u003Cstrong\u003ER$ 0,291918638 por ação em cada parcela\u003C/strong\u003E. Datas-com: \u003Cstrong\u003E22/09, 22/10 e 19/11\u003C/strong\u003E. Pagamentos: \u003Cstrong\u003E02/10, 04/11 e 02/12\u003C/strong\u003E. Fora da carteira; nenhum yield calculado. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EVIVT3, aprovação em 14/09:\u003C/strong\u003E \u003Cstrong\u003ER$ 500 milhões brutos\u003C/strong\u003E, \u003Cstrong\u003ER$ 412,5 milhões líquidos\u003C/strong\u003E e \u003Cstrong\u003ER$ 0,12908348356 líquidos por ação\u003C/strong\u003E, conforme a newsletter. Data-com: \u003Cstrong\u003E25/09\u003C/strong\u003E; pagamento até \u003Cstrong\u003E30/04/2027\u003C/strong\u003E. Valor bruto por ação não extraído, não estimado. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EWEGE3, noticiado em 16/09, fora do Radar:\u003C/strong\u003E \u003Cstrong\u003ER$ 449.843.800,53 brutos\u003C/strong\u003E, \u003Cstrong\u003ER$ 0,107212121 brutos / R$ 0,08845 líquidos por ação\u003C/strong\u003E. Data-com \u003Cstrong\u003E18/09\u003C/strong\u003E, ex \u003Cstrong\u003E21/09\u003C/strong\u003E, pagamento \u003Cstrong\u003E10/03/2027\u003C/strong\u003E. [ADVFN e Canal Neto Invest, 16/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ECSMG3, aprovação em 10/09:\u003C/strong\u003E \u003Cstrong\u003ER$ 96,9 milhões brutos\u003C/strong\u003E, \u003Cstrong\u003ER$ 0,2556463313 por ação\u003C/strong\u003E; data-com \u003Cstrong\u003E21/09\u003C/strong\u003E, ex \u003Cstrong\u003E22/09\u003C/strong\u003E, pagamento \u003Cstrong\u003E09/11\u003C/strong\u003E. [ADVFN, 11/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EMULT3, fora do Radar:\u003C/strong\u003E \u003Cstrong\u003ER$ 120 milhões\u003C/strong\u003E, \u003Cstrong\u003ER$ 0,24559842645 por ação\u003C/strong\u003E, pagamento \u003Cstrong\u003E21/09/2026\u003C/strong\u003E. Direito definido pela posição de \u003Cstrong\u003E26/09/2025\u003C/strong\u003E, ex em \u003Cstrong\u003E29/09/2025\u003C/strong\u003E, não 2026. [ADVFN, 15/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBRSR3/BRSR5/BRSR6, fora do Radar:\u003C/strong\u003E \u003Cstrong\u003ER$ 0,22006263 por ação\u003C/strong\u003E, data-base \u003Cstrong\u003E11/09\u003C/strong\u003E, pagamento \u003Cstrong\u003E28/09\u003C/strong\u003E; total não informado no texto. [Canal Neto Invest, 10/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EMOTV3:\u003C/strong\u003E E-Investidor menciona pagamento na semana e \u003Cstrong\u003ER$ 0,72 por ação\u003C/strong\u003E; detalhes de declaração e data-com não recuperados nesta sessão. Não pressupor novo direito. [E-Investidor/Estadão, 14/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBAS3/CPFE3:\u003C/strong\u003E surgiram referências a pagamentos de direitos antigos nos resultados de busca, mas sem anexo primário utilizável para validar o conjunto de valores/datas. Não acrescentados como anúncio novo. Para os demais ativos em carteira, não foi confirmado novo anúncio de provento na janela; isso não significa ausência de pagamentos contratados anteriormente.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EPETR4:\u003C/strong\u003E pagamento de cupom de debêntures não é remuneração de acionista e fica excluído deste calendário de dividendos. [ADVFN, 15/09]\u003C/li\u003E\n\u003C/ul\u003E\n"
-        },
-        {
-          "title": "Outros Movimentos Societarios / Insiders",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EVALE3:\u003C/strong\u003E MPF anunciou em 10/09 ação que pede auditoria técnica independente e reparação ambiental na mina Viga. Pedido judicial, não condenação nem perda monetária definida. \u003Ca href=\"https://www.mpf.mp.br/o-mpf/unidades/pr-mg/noticias/mpf-vai-a-justica-contra-a-vale-para-garantir-seguranca-e-reparacao-na-mina-de-viga\"\u003EMPF\u003C/a\u003E\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EVALE3:\u003C/strong\u003E comunicado de 09/09 esclarece notícia de financiamento. A manchete sobre títulos na China não foi tratada como operação aprovada. Formulários mensais e reapresentações aparecem no índice; julho e agosto não foram rotulados como operações de setembro.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EROMI3:\u003C/strong\u003E comunicado de alteração da diretoria estatutária de 09/09 identificado no índice oficial. Sem o anexo, não se atribui identidade, efeito econômico ou motivação não verificados.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E busca encontrou comunicado de 14/09 sobre Kepler Day, com divergência entre o ano no título indexado e a descrição secundária. Sem conteúdo primário validado, não se afirma novo guidance.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EAXIA3:\u003C/strong\u003E conversão de \u003Cstrong\u003E69.886.551 PNC em ON, 1:1\u003C/strong\u003E, e resgate de \u003Cstrong\u003E41,6 milhões de PNC por R$ 2,31 bilhões\u003C/strong\u003E, pagamento previsto em \u003Cstrong\u003E22/09\u003C/strong\u003E; cronograma de ADRs distinto. [ADVFN, 16/09]\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EJALL3:\u003C/strong\u003E rating reafirmado; \u003Cstrong\u003ESLCE3:\u003C/strong\u003E financiamento via CPR-F; \u003Cstrong\u003ECMIG4/SAPR4:\u003C/strong\u003E mudanças de administração. Esses eventos do Radar foram preservados no arquivo de emails, sem extrapolar para negociação de insiders.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBEEF3, fora do Radar:\u003C/strong\u003E homologação de \u003Cstrong\u003ER$ 2.705,97\u003C/strong\u003E, com \u003Cstrong\u003E544 ações novas\u003C/strong\u003E, capital de \u003Cstrong\u003ER$ 3,134 bilhões\u003C/strong\u003E e total de ações de \u003Cstrong\u003E1.000.541.644 para 1.000.542.188\u003C/strong\u003E, conforme Dica de Hoje em 16/09. Evento muito pequeno, não tese de diluição material.\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch4\u003ECobertura individual da carteira\u003C/h4\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003ETicker\u003C/th\u003E\n\u003Cth\u003EBusca individual\u003C/th\u003E\n\u003Cth\u003EDocumentos / eventos localizados\u003C/th\u003E\n\u003Cth\u003EOperacoes de administradores\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBAS3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E09/09: Relatório Proventos\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBDC3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E11/09: Eleição de Diretor(es)\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBSE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECPFE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E09/09: Apresentação de Proposta Comercial pelas Subsidiárias para a cliente\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECXSE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEGIE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EKEPL3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel; busca web adicional localizou Kepler Day de 14/09, sem teor validado\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EKLBN4\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELEVE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELREN3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ERANI3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EROMI3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E09/09: Alteração na Diretoria Estatutária\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVALE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E09/09: Vale esclarece sobre matéria veiculada na imprensa\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-07, 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVLID3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003ESem novo formulario no indice disponivel; nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVULC3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem outro registro novo no recorte disponivel\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) publicado(s); referencia 2026-08; anexos nao validados\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n\u003Cp\u003EFonte de registros: \u003Ca href=\"https://dados.cvm.gov.br/dados/CIA_ABERTA/DOC/IPE/DADOS/\"\u003ECVM, índice IPE 2026\u003C/a\u003E. O campo \u0026quot;sem registro novo no recorte disponível\u0026quot; refere-se apenas ao índice efetivamente lido. \u003Cstrong\u003ECompras de ações pela própria companhia, subscrições, remuneração em ações e compras pessoais de administradores são categorias diferentes.\u003C/strong\u003E Não foi validado sinal líquido novo de insider para recomendar operação.\u003C/p\u003E\n"
+          "title": "Cobertura B3/CVM",
+          "html": "\u003Cp\u003EO recorte foi 10-17/09 e a busca cobriu individualmente os 15 ativos. O indice oficial semanal da CVM tinha ultima entrega em 14/09; por isso a coluna de insiders nao prova ausencia de operacoes depois dessa data.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003ETicker\u003C/th\u003E\n\u003Cth\u003EBusca individual\u003C/th\u003E\n\u003Cth\u003EDocumentos/eventos localizados\u003C/th\u003E\n\u003Cth\u003EAdministradores\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBSE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem evento corporativo adicional no indice semanal\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) mensal(is) publicado(s), referencia 08/2026; anexos nao validados, sem inferencia de compra/venda\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECPFE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem evento material novo no recorte; formulario mensal publicado\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) mensal(is) publicado(s), referencia 08/2026; anexos nao validados, sem inferencia de compra/venda\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBAS3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo documento no indice semanal; revisao JPMorgan e externa, nao documento da companhia\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBBDC3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E16/09: aviso de rateio de sobras localizado fora do ZIP semanal; 11/09: ata com eleicao de diretor\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) mensal(is) publicado(s), referencia 08/2026; anexos nao validados, sem inferencia de compra/venda\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVALE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E09/09: esclarecimento sobre materia e deliberacao de convocacao de AGE, ja no inicio da janela\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) mensal(is) publicado(s), referencia 08/2026; anexos nao validados, sem inferencia de compra/venda\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEGIE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ERANI3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EKEPL3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003E14/09: comunicado 'Informacoes Kepler Day 2025'; titulo inconsistente com data, teor nao usado\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EKLBN4\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELEVE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECXSE3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVULC3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem evento corporativo adicional no indice semanal; formulario mensal publicado\u003C/td\u003E\n\u003Ctd\u003EFormulario(s) mensal(is) publicado(s), referencia 08/2026; anexos nao validados, sem inferencia de compra/venda\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EROMI3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ELREN3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EVLID3\u003C/td\u003E\n\u003Ctd\u003ESim\u003C/td\u003E\n\u003Ctd\u003ESem novo registro no indice semanal; ultimo formulario mensal referido por fonte secundaria em 08/09\u003C/td\u003E\n\u003Ctd\u003ESem formulario novo no indice semanal; isto nao comprova ausencia de operacoes\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
         }
       ]
     },
@@ -416,27 +444,15 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       "heading": "Fora do Radar",
       "groups": [
         {
-          "title": "B3: volume pode importar mais do que direção",
-          "html": "\u003Cp\u003EO resumo Dica de Hoje de 16/09 relata forte avanço do volume médio de ações em agosto. Para uma infraestrutura de mercado, atividade pode sustentar receitas mesmo quando há volatilidade e divergência entre setores. É um candidato a acompanhamento operacional, não indicação de preço ou margem já confirmados. [Dica de Hoje, Telegram, 16/09]\u003C/p\u003E\n"
-        },
-        {
-          "title": "Embraer: novo uso comercial para o cargueiro",
-          "html": "\u003Cp\u003EA entrada da BermudAir como operadora do E190F em leasing sinaliza aplicação comercial da conversão para carga. A oportunidade está em acompanhar adoção, entregas e rentabilidade dessa plataforma, sem confundir um novo operador com encomenda de dimensão já quantificada. [Dica de Hoje, Telegram, 16/09]\u003C/p\u003E\n"
-        },
-        {
-          "title": "JBS e Viva: parceria precisa virar retorno",
-          "html": "\u003Cp\u003EO acordo para combinar operações de couro numa sociedade 50/50 cria uma estrutura distinta para esse negócio. A questão de acompanhamento é se escala e eficiência se traduzirão em caixa e retorno sobre capital. Viva Holding não é Vivara, e a associação não foi aplicada a ticker por semelhança de nome. [Exame Invest, email, e Dica de Hoje, Telegram, 16/09]\u003C/p\u003E\n"
-        },
-        {
-          "title": "iFood: investimento é compromisso, não lucro",
-          "html": "\u003Cp\u003EO plano de R$ 24 bilhões para o exercício em curso mostra intensidade competitiva no delivery. O interesse é acompanhar quanto desse investimento reforça eficiência e retenção de clientes, em vez de apenas subsidiar transações. Não se trata de ação brasileira disponível no Radar e não foi procurado um veículo indireto para transformar a notícia em recomendação. [Bloomberg Línea, email, 16/09]\u003C/p\u003E\n"
+          "title": "Empresas e temas fora do Radar",
+          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EIntelbras:\u003C/strong\u003E JCP de R$20 milhoes, R$0,06112261897 bruto por acao; data-com 21/09, ex 22/09, pagamento em 15/03/2027. Fora da carteira, sem yield calculado.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EALLOS:\u003C/strong\u003E R$438 milhoes em tres parcelas de R$0,291918638; datas-com 22/09, 22/10 e 19/11; pagamentos 02/10, 04/11 e 02/12.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EJBS/Viva:\u003C/strong\u003E associacao 50%/50% em couro, sujeita a condicoes. Viva nao e Vivara.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EiFood:\u003C/strong\u003E R$24 bilhoes anunciados para abr/2026-mar/2027 incluem operacao, incentivos e expansao; nao sao capex puro.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBraskem:\u003C/strong\u003E proposta de reestruturacao levou UBS a cortar drasticamente o alvo e manter venda; risco principal e divida/diluicao. Fora do Radar.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EAnima/FMU:\u003C/strong\u003E CFO projeta ganhos de escala; sinergia ainda nao e margem realizada.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ESabesp/Emae:\u003C/strong\u003E assembleia da Emae aprovou incorporacao de acoes na proporcao divulgada de 1,3195 SBSP por EMAE ON/PN; consumacao nao foi presumida.\u003C/li\u003E\n\u003C/ul\u003E\n"
         }
       ]
     },
     "portfolio": {
       "num": "07",
       "heading": "Carteira",
-      "intro": "Espelho de orientação da Análise de Carteira de **28/08/2026**, confrontado com a leitura independente de hoje. Os **pesos são históricos de 28/08**, não recalculados; os 15 ativos presentes e o PM vêm do contexto de 16/09. Status normalizados: aparar = reduzir; sair = vender; aguardar ou ausência de nova movimentação = manter. Manter não representa uma nova recomendação positiva. Prioridade baixa nos nomes sem ação específica significa ausência de nova ação no quadro histórico.",
+      "intro": "Analise de origem: 28/08/2026. Pesos historicos; PM e cotacoes do contexto de 17/09.",
       "table": {
         "columns": [
           {
@@ -471,15 +487,15 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "reduzir",
             "prioridade": "Media",
             "pm": "30,59",
-            "nota": "Aparar por concentracao; sem urgencia; fonte 28/08"
+            "nota": "Aparar por concentracao, sem tese quebrada; origem 28/08"
           },
           {
             "ticker": "CPFE3",
             "peso": "14,34%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "36,56",
-            "nota": "Sem nova movimentacao no quadro historico; proximidade do teto nao basta"
+            "nota": "Nucleo defensivo; nenhum facto novo material"
           },
           {
             "ticker": "BBAS3",
@@ -487,31 +503,31 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "reduzir",
             "prioridade": "Alta",
             "pm": "17,74",
-            "nota": "Preocupacao estrutural com credito; orientacao historica preservada"
+            "nota": "Revisao do JPMorgan reforca risco de credito e provisoes"
           },
           {
             "ticker": "BBDC3",
             "peso": "10,44%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "13,42",
-            "nota": "JCP pago nao cria novo direito para compra hoje; acompanhar custo de credito"
+            "nota": "Conferir elegibilidade e prazo das sobras; nao presumir participacao"
           },
           {
             "ticker": "VALE3",
             "peso": "7,36%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "61,02",
-            "nota": "Atualizacao do dia: frete/realizacao e pedido do MPF sob acompanhamento"
+            "nota": "Minerio e frete monitorados; sem mudanca de orientacao"
           },
           {
             "ticker": "EGIE3",
             "peso": "5,82%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "28,23",
-            "nota": "Historico de dividendos nao equivale a novo anuncio"
+            "nota": "Historico de dividendos nao e anuncio novo"
           },
           {
             "ticker": "RANI3",
@@ -519,23 +535,23 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "acumular",
             "prioridade": "Media",
             "pm": "8,02",
-            "nota": "Condicional: tranches ate 7,80, segundo 28/08; limite nao cumprido hoje"
+            "nota": "Condicional a tranches ate R$7,80; hoje R$8,02"
           },
           {
             "ticker": "KEPL3",
             "peso": "4,89%",
             "status": "manter",
             "prioridade": "Baixa",
-            "pm": "7,53",
-            "nota": "Fonte: aguardar/preco abaixo de 6,50; condicao numerica agora satisfeita"
+            "pm": "7,46",
+            "nota": "Abaixo de R$6,50; tese valida, mas ciclo rural pede disciplina"
           },
           {
             "ticker": "KLBN4",
             "peso": "4,74%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "3,60",
-            "nota": "Celulose e caixa monitorados; recompra no canal sem quantidade validada"
+            "nota": "Celulose melhora na China; duracao da alta ainda incerta"
           },
           {
             "ticker": "LEVE3",
@@ -543,15 +559,15 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "acumular",
             "prioridade": "Media",
             "pm": "28,92",
-            "nota": "Condicional a normalizacao do payout; nao satisfeita por simples preco"
+            "nota": "Condicional a normalizacao do payout, nao apenas ao preco"
           },
           {
             "ticker": "CXSE3",
             "peso": "3,95%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "14,14",
-            "nota": "Sem novo fato material confirmado nesta varredura"
+            "nota": "Sem facto novo material confirmado"
           },
           {
             "ticker": "VULC3",
@@ -559,7 +575,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "manter",
             "prioridade": "Baixa",
             "pm": "14,09",
-            "nota": "Rever sem urgencia; aumento exige decisao deliberada"
+            "nota": "Contrato Nike/SBF e concorrencia; nao aumentar automaticamente"
           },
           {
             "ticker": "ROMI3",
@@ -567,7 +583,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "vender",
             "prioridade": "Alta",
             "pm": "9,96",
-            "nota": "Saida historica acima de 5,40; condicao de preco mantida"
+            "nota": "Tese de saida acima de R$5,40 permanece executavel"
           },
           {
             "ticker": "LREN3",
@@ -575,23 +591,23 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "status": "manter",
             "prioridade": "Media",
             "pm": "15,47",
-            "nota": "Pendente de decisao explicita; nao reativar antigo gatilho de saida"
+            "nota": "Decisao explicita pendente; nao reativar saida antiga por inercia"
           },
           {
             "ticker": "VLID3",
             "peso": "0,44%",
             "status": "manter",
-            "prioridade": "Baixa",
+            "prioridade": "—",
             "pm": "16,76",
-            "nota": "Sem fato novo confirmado; nao confundir com a argentina Valida"
+            "nota": "Sem facto novo; nao confundir com a argentina Valida"
           }
         ],
         "rowClassKey": "prioridade"
       },
       "groups": [
         {
-          "title": "Confronto com as notícias",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EConfronto, sem reescrever a análise estrutural:\u003C/strong\u003E a preocupação independente com crédito e consumo não invalida a prudência histórica para BBAS3, ROMI3 e LREN3. As notícias lidas não demonstram recuperação operacional suficiente para alterar essas orientações. A comparação entre gatilho de compra e cotação não pode reverter automaticamente um status de saída.\u003C/p\u003E\n\u003Cp\u003ERANI3 mantém referência de tese de R$ 8,20 na consolidação, mas a Análise de Carteira mais recente delimitou reforços a R$ 7,80. As duas informações têm funções diferentes e são preservadas. KEPL3 cumpre o limite de preço do reforço histórico, sujeito à tese e ao orçamento. LREN3 continua exigindo decisão explícita de Rafa; o antigo gatilho de saída não foi reativado por simples mudança de preço. VULC3 permanece sem autorização automática de aumento. As divergências antigas de PM/quantidades existentes na descrição livre das projeções não foram importadas: prevalecem os campos estruturados atuais do contexto.\u003C/p\u003E\n"
+          "title": "Confronto com as noticias",
+          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBAS3:\u003C/strong\u003E a revisao do JPMorgan reforca a justificacao historica de reduzir; nao prova sozinha que a operacao deva ser executada a mercado.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EBBDC3:\u003C/strong\u003E a subscricao e um evento operacional novo, mas nao altera automaticamente o status manter. Primeiro confirmar elegibilidade; depois decidir capital e concentracao.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E o preco passou a cumprir a disciplina historica. E uma condicao necessaria, nao suficiente.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EROMI3 e BBSE3:\u003C/strong\u003E sem fato novo que invalide os status vender/reduzir; mantem-se a origem 28/08.\u003C/li\u003E\n\u003C/ul\u003E\n"
         }
       ]
     },
@@ -600,23 +616,23 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       "heading": "Painel de Mercado",
       "groups": [
         {
-          "title": "Referências do dia",
-          "html": "\u003Cp\u003EReferências consultadas em 16/09, aproximadamente entre 15:33 e 15:38 de Lisboa. Horas intradiárias abaixo são as exibidas pelo provedor, cujo fuso não foi confirmado. Dados derivados não substituem o índice oficial à vista. As cotações das ações da carteira ficam apenas na tabela de gatilhos.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EGrupo\u003C/th\u003E\n\u003Cth\u003EIndicador\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EValor\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EVariação\u003C/th\u003E\n\u003Cth\u003EData / natureza / fonte\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMoedas\u003C/td\u003E\n\u003Ctd\u003EUSD/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$ 5,1501\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,03%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:16:46 no provedor; \u003Ca href=\"https://br.investing.com/currencies/usd-brl\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMoedas\u003C/td\u003E\n\u003Ctd\u003EEUR/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$ 5,9377\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,02%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:17:54; \u003Ca href=\"https://br.investing.com/currencies/eur-brl\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMoedas\u003C/td\u003E\n\u003Ctd\u003EGBP/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ER$ 6,9387\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,04%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:00; \u003Ca href=\"https://br.investing.com/currencies/gbp-brl\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMoedas\u003C/td\u003E\n\u003Ctd\u003EEUR/USD\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EUS$ 1,1536\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,04%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:16:53; \u003Ca href=\"https://br.investing.com/currencies/eur-usd\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECommodities\u003C/td\u003E\n\u003Ctd\u003EMinério de ferro\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EADVFN informou Dalian, mas o contrato e a comparabilidade não foram confirmados; não confundir futuro doméstico chinês com preço FOB/CFR em dólares\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECommodities\u003C/td\u003E\n\u003Ctd\u003EBrent, futuro\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EUS$ 107,31/barril\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-1,32%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:13:43; \u003Ca href=\"https://br.investing.com/commodities/brent-oil\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECommodities\u003C/td\u003E\n\u003Ctd\u003EWTI, futuro\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EUS$ 103,35/barril\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-2,34%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:33:34; \u003Ca href=\"https://br.investing.com/commodities/crude-oil\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECommodities\u003C/td\u003E\n\u003Ctd\u003ECelulose BHKP, China\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EUS$ 560/t\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EReferência de setembro publicada em 09/09, não cotação intradiária; \u003Ca href=\"https://www.infomoney.com.br/mercados/xp-precos-da-celulose-melhoram-mas-ventos-positivos-nao-devem-durar/\"\u003EInfoMoney/XP\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EÍndices\u003C/td\u003E\n\u003Ctd\u003EIbovespa\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E186.502,64\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,54%\u003C/td\u003E\n\u003Ctd\u003EFecho de 15/09, última referência de fecho confirmada; \u003Ca href=\"https://www.infomoney.com.br/mercados/ibovespa-hoje-bolsa-de-valores-ao-vivo-15092026/\"\u003EInfoMoney\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EÍndices\u003C/td\u003E\n\u003Ctd\u003ES\u0026amp;P 500, indicação derivada\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E7.608,56\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,30%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:15:53; não tratado como fecho oficial; \u003Ca href=\"https://br.investing.com/indices/us-spx-500\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EÍndices\u003C/td\u003E\n\u003Ctd\u003EDow Jones\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E51.883,26\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,40%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:24:02; \u003Ca href=\"https://br.investing.com/indices/us-30\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EÍndices\u003C/td\u003E\n\u003Ctd\u003EDAX\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E25.496,25\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,29%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:33:13; \u003Ca href=\"https://br.investing.com/indices/germany-30\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EÍndices\u003C/td\u003E\n\u003Ctd\u003EFTSE 100, indicação derivada\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E10.686,19\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,26%\u003C/td\u003E\n\u003Ctd\u003E16/09, 11:33:13; \u003Ca href=\"https://br.investing.com/indices/uk-100\"\u003EInvesting\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EJuros e inflação\u003C/td\u003E\n\u003Ctd\u003ESelic, meta vigente\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E14,00% a.a.\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ESem decisão nova incorporada\u003C/td\u003E\n\u003Ctd\u003ESGS 432 de 16/09; \u003Ca href=\"https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json\"\u003EBanco Central\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EJuros e inflação\u003C/td\u003E\n\u003Ctd\u003EIPCA, agosto\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E-0,32% mensal / +4,22% em 12 meses\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EReferência mensal\u003C/td\u003E\n\u003Ctd\u003E\u003Ca href=\"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/1?formato=json\"\u003EBCB/SGS 433\u003C/a\u003E e \u003Ca href=\"https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json\"\u003ESGS 13522\u003C/a\u003E, dados do IBGE\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EJuros e inflação\u003C/td\u003E\n\u003Ctd\u003EBCE, facilidade de depósito\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E2,50% a.a.\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,25 p.p.\u003C/td\u003E\n\u003Ctd\u003EDecisão de 10/09, vigente desde 16/09; refinanciamento 2,65% e marginal 2,90%; \u003Ca href=\"https://www.ecb.europa.eu/press/pr/date/2026/html/ecb.mp260910~314e508016.en.html\"\u003EBCE\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EJuros e inflação\u003C/td\u003E\n\u003Ctd\u003EFed, faixa-alvo\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E3,75%-4,00% a.a.\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,25 p.p.\u003C/td\u003E\n\u003Ctd\u003EDecisão de 16/09 confirmada na revisão noturna; \u003Ca href=\"https://www.boursorama.com/actualite-economique/actualites/usa-la-fed-releve-ses-taux-pour-la-premiere-fois-depuis-2023-027720884f3d14b43e880cba84123469\"\u003EReuters/Boursorama\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EOpcionais\u003C/td\u003E\n\u003Ctd\u003ETreasury 10 anos\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003ECerca de 4,98%\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EIntradiária aproximada\u003C/td\u003E\n\u003Ctd\u003EMorning Call de 16/09; \u003Ca href=\"https://conteudos.xpi.com.br/morning-call/brasil-e-eua-decidem-juros-em-meio-a-pressoes-globais/\"\u003EXP\u003C/a\u003E\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
+          "title": "Referencias do dia",
+          "html": "\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EIndicador\u003C/th\u003E\n\u003Cth\u003EValor\u003C/th\u003E\n\u003Cth\u003EData/base\u003C/th\u003E\n\u003Cth\u003EFonte\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EUSD/BRL\u003C/td\u003E\n\u003Ctd\u003E5,1567\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEUR/BRL\u003C/td\u003E\n\u003Ctd\u003E5,9330\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EGBP/BRL\u003C/td\u003E\n\u003Ctd\u003E6,9033\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEUR/USD\u003C/td\u003E\n\u003Ctd\u003E1,1488\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMinerio de ferro Dalian\u003C/td\u003E\n\u003Ctd\u003EUS$105,94/t\u003C/td\u003E\n\u003Ctd\u003E17/09, fecho diurno\u003C/td\u003E\n\u003Ctd\u003EFinance News / contrato nao especificado\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBrent Nov/26\u003C/td\u003E\n\u003Ctd\u003EUS$103,59\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EWTI\u003C/td\u003E\n\u003Ctd\u003EUS$100,60\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ECelulose BHKP China\u003C/td\u003E\n\u003Ctd\u003EUS$560/t\u003C/td\u003E\n\u003Ctd\u003Eset/2026\u003C/td\u003E\n\u003Ctd\u003EXP, referencia setorial\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EIbovespa\u003C/td\u003E\n\u003Ctd\u003E183.242\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ES\u0026amp;P 500\u003C/td\u003E\n\u003Ctd\u003E7.622,97\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EDow Jones\u003C/td\u003E\n\u003Ctd\u003E51.628,99\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EDAX\u003C/td\u003E\n\u003Ctd\u003E25.760,96\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EFTSE 100\u003C/td\u003E\n\u003Ctd\u003E10.793,64\u003C/td\u003E\n\u003Ctd\u003E17/09, intradia\u003C/td\u003E\n\u003Ctd\u003EInvesting.com\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ESelic meta\u003C/td\u003E\n\u003Ctd\u003E13,75% a.a.\u003C/td\u003E\n\u003Ctd\u003Edecisao 16/09\u003C/td\u003E\n\u003Ctd\u003ECopom\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EIPCA\u003C/td\u003E\n\u003Ctd\u003E-0,32% mes / 4,22% 12m\u003C/td\u003E\n\u003Ctd\u003Eago/2026\u003C/td\u003E\n\u003Ctd\u003EIBGE\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBCE deposito\u003C/td\u003E\n\u003Ctd\u003E2,50%\u003C/td\u003E\n\u003Ctd\u003Evigente desde 16/09\u003C/td\u003E\n\u003Ctd\u003EBCE\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBoE Bank Rate\u003C/td\u003E\n\u003Ctd\u003E3,75%\u003C/td\u003E\n\u003Ctd\u003Edecisao 17/09\u003C/td\u003E\n\u003Ctd\u003EBoE, 6x3\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ETreasury 10 anos\u003C/td\u003E\n\u003Ctd\u003E4,98%\u003C/td\u003E\n\u003Ctd\u003E17/09, manha\u003C/td\u003E\n\u003Ctd\u003EXP\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EDXY\u003C/td\u003E\n\u003Ctd\u003E100,249\u003C/td\u003E\n\u003Ctd\u003E17/09, manha\u003C/td\u003E\n\u003Ctd\u003EMoney Times\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
         }
       ],
       "callout": {
-        "title": "Evolução semanal dos índices-chave",
-        "html": "\u003Cp\u003EReutilização literal das estatísticas pré-calculadas pelo Python. É uma amostra de newsletters com cinco observações por série, não uma série oficial de fechos homogéneos. A coluna final não significa necessariamente hoje. Não foram recalculadas medianas pelo LLM.\u003C/p\u003E\n\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EÍndice\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EPrimeira referência\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EÚltima referência da amostra\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EVariação da amostra\u003C/th\u003E\n\u003Cth style=\"text-align:right\"\u003EMediana\u003C/th\u003E\n\u003Cth\u003EValidação\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBrent\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E100,00 em 09/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E107,00 em 15/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+7,00%\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E102,00\u003C/td\u003E\n\u003Ctd\u003EUsável como amostra aproximada; seis dias entre extremos\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMinério\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E108,86 em 10/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E118,14 em 16/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+8,52%\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E107,06\u003C/td\u003E\n\u003Ctd\u003EQuarentena: valores brutos do JSON; benchmark/contrato não confirmado, não usar como tendência\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EIbovespa\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ERejeitado: o JSON repete 167.100 em todas as observações, vindo de corpo antigo\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EUSD/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E5,1091 em 09/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E5,1528 em 15/09\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E+0,86%\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003E5,1200\u003C/td\u003E\n\u003Ctd\u003EAmostra de seis dias entre extremos; não substitui a cotação de hoje\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEUR/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESérie não fornecida pelo exportador\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EGBP/BRL\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESérie não fornecida pelo exportador\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ES\u0026amp;P 500\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd style=\"text-align:right\"\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESérie não fornecida pelo exportador\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
+        "title": "Evolucao semanal dos indices-chave",
+        "html": "\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EIndice\u003C/th\u003E\n\u003Cth\u003EHa 7 dias\u003C/th\u003E\n\u003Cth\u003EHoje/amostra\u003C/th\u003E\n\u003Cth\u003EVariacao 7d\u003C/th\u003E\n\u003Cth\u003EMediana\u003C/th\u003E\n\u003Cth\u003ENota\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EBrent\u003C/td\u003E\n\u003Ctd\u003E108,00 (10/09)\u003C/td\u003E\n\u003Ctd\u003E104,50 (amostra 17/09)\u003C/td\u003E\n\u003Ctd\u003E-3,24%\u003C/td\u003E\n\u003Ctd\u003E107,00\u003C/td\u003E\n\u003Ctd\u003ESerie automatica da newsletter; hoje intradia separado: 103,59\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMinerio de ferro\u003C/td\u003E\n\u003Ctd\u003E107,06 (11/09)\u003C/td\u003E\n\u003Ctd\u003E105,94 (17/09)\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003E105,94\u003C/td\u003E\n\u003Ctd\u003EContrato/base nao confirmados; comparacao percentual suspensa\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EIbovespa\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESerie automatica contaminada por corpo antigo do Exame; usar fechos verificados no texto\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EUSD/BRL\u003C/td\u003E\n\u003Ctd\u003E5,1061 (10/09)\u003C/td\u003E\n\u003Ctd\u003E5,1556 (16/09)\u003C/td\u003E\n\u003Ctd\u003E+0,97%\u003C/td\u003E\n\u003Ctd\u003E5,1500\u003C/td\u003E\n\u003Ctd\u003EAmostra exportada; hoje intradia 5,1567\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EEUR/BRL\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003E5,9330 (17/09)\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESem serie semanal comparavel\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EGBP/BRL\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003E6,9033 (17/09)\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESem serie semanal comparavel\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003ES\u0026amp;P 500\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003E7.622,97 (17/09)\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003EN/D\u003C/td\u003E\n\u003Ctd\u003ESem serie semanal comparavel\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
       }
     },
     "gatilhos": {
       "num": "09",
       "heading": "Gatilhos",
-      "intro": "Gatilho Rafa: pessoal,extraído de Espelho Carteira / Vigiar. Teto Sistema: `preco_ref_tese` das Projeções Consolidadas de 18/08, não preço-alvo novo do LLM. Cotação: snapshot do Espelho Radar recolhido hoje pelo Python. **Atingido** significa preço menor ou igual ao teto; **Próximo**, até 3% acima do teto; **Longe**, mais de 3%; **N/D**, ausência ou base não comparável. São estados numéricos, não ordens nem validação automática de compra.",
+      "intro": "Gatilho Rafa e pessoal; Teto Sistema e calculado. Cotacoes do contexto de 17/09.",
       "panels": [
         {
           "title": "Principais Gatilhos",
-          "html": "\u003Cul\u003E\n\u003Cli\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E preco dentro das duas reguas e do limite de reforco da analise anterior; candidato a avaliacao, sujeito a tese, concentracao e disponibilidade. Nao e ordem automatica.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003ERANI3:\u003C/strong\u003E Sistema atingido, mas ainda acima do limite de reforco mais recente de R$ 7,80; nao usar a referencia de tese de R$ 8,20 para contornar essa disciplina.\u003C/li\u003E\n\u003Cli\u003E\u003Cstrong\u003EOrientacoes historicas de saida/reducao:\u003C/strong\u003E BBAS3 reduzir, ROMI3 vender e BBSE3 aparar por concentracao. Condicoes de preco continuam cumpridas no snapshot; nao se verificou se essas orientacoes ja foram executadas. LREN3 e VULC3 nao ganham autorizacao automatica de compra por atingirem o teto pessoal.\u003C/li\u003E\n\u003C/ul\u003E\n"
+          "html": "\u003Cdiv class=\"tablewrap\"\u003E\u003Ctable\u003E\n\u003Cthead\u003E\n\u003Ctr\u003E\n\u003Cth\u003EPrioridade\u003C/th\u003E\n\u003Cth\u003EAcao\u003C/th\u003E\n\u003C/tr\u003E\n\u003C/thead\u003E\n\u003Ctbody\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EAlta\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EKEPL3:\u003C/strong\u003E unica compra em que o preco cumpre as duas reguas e o limite historico de R$6,50; avaliar tese, concentracao e caixa antes de qualquer ordem.\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EAlta\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EBBAS3 / ROMI3:\u003C/strong\u003E reduzir / vender conforme a analise de 28/08; a noticia de BBAS3 reforca, e nao alivia, a preocupacao.\u003C/td\u003E\n\u003C/tr\u003E\n\u003Ctr\u003E\n\u003Ctd\u003EMedia\u003C/td\u003E\n\u003Ctd\u003E\u003Cstrong\u003EBBSE3:\u003C/strong\u003E aparar por concentracao, sem urgencia. \u003Cstrong\u003EBBDC3:\u003C/strong\u003E conferir no custodiante se houve subscricao e reserva de sobras; prazo divulgado 21-25/09.\u003C/td\u003E\n\u003C/tr\u003E\n\u003C/tbody\u003E\n\u003C/table\u003E\u003C/div\u003E\n"
         }
       ],
       "table": {
@@ -658,7 +674,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "22,00",
             "estado_sistema": "Longe",
             "cotacao": "28,50",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -667,8 +683,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "25,00",
             "estado_sistema": "Longe",
-            "cotacao": "33,40",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "33,10",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -677,8 +693,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "2,80",
             "estado_sistema": "Longe",
-            "cotacao": "3,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "4,00",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -687,8 +703,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "8,00",
             "estado_sistema": "Longe",
-            "cotacao": "11,60",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "11,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -697,8 +713,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "46,00",
             "estado_sistema": "Longe",
-            "cotacao": "54,90",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "55,50",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -707,8 +723,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "16,00",
             "estado_sistema": "Longe",
-            "cotacao": "22,04",
-            "nota": "Carteira: reduzir; preco de compra nao anula orientacao estrutural",
+            "cotacao": "22,75",
+            "nota": "Preco nao anula a revisao negativa de lucros nem a orientacao de reduzir",
             "satisfeito": "nao"
           },
           {
@@ -716,10 +732,10 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "rafa": "15,00",
             "estado_rafa": "Longe",
             "sistema": "16,00",
-            "estado_sistema": "Proximo",
-            "cotacao": "16,09",
-            "nota": "Sistema proximo; Rafa longe; monitorar credito",
-            "satisfeito": "nao"
+            "estado_sistema": "Atingido",
+            "cotacao": "16,00",
+            "nota": "Sistema atingido; sobras exigem subscricao previa e reserva, nao compra automatica",
+            "satisfeito": "sim"
           },
           {
             "ticker": "BBSE3",
@@ -727,8 +743,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "36,00",
             "estado_sistema": "Longe",
-            "cotacao": "40,16",
-            "nota": "Carteira: aparar por concentracao, nao tese quebrada",
+            "cotacao": "40,57",
+            "nota": "Acima das duas reguas; orientacao antiga de aparar decorre da concentracao",
             "satisfeito": "nao"
           },
           {
@@ -737,8 +753,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "N/D",
             "sistema": "20,00",
             "estado_sistema": "Longe",
-            "cotacao": "27,70",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "27,80",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -747,8 +763,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "24,00",
             "estado_sistema": "Longe",
-            "cotacao": "27,10",
-            "nota": "Rafa atingido; Sistema longe; tese setorial antiga",
+            "cotacao": "27,50",
+            "nota": "Rafa atingido; tese continua sem catalisador confirmado",
             "satisfeito": "sim"
           },
           {
@@ -757,8 +773,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "10,50",
             "estado_sistema": "Longe",
-            "cotacao": "11,10",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "11,30",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -767,18 +783,18 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "4,80",
             "estado_sistema": "Longe",
-            "cotacao": "6,20",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "5,90",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
             "ticker": "CPFE3",
             "rafa": "44,00",
-            "estado_rafa": "Proximo",
+            "estado_rafa": "Longe",
             "sistema": "44,00",
-            "estado_sistema": "Proximo",
-            "cotacao": "44,72",
-            "nota": "Proxima das duas reguas; sem novo gatilho qualitativo",
+            "estado_sistema": "Longe",
+            "cotacao": "45,44",
+            "nota": "3,27% acima de ambos os tetos: Longe, por margem decimal",
             "satisfeito": "nao"
           },
           {
@@ -787,8 +803,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "12,00",
             "estado_sistema": "Longe",
-            "cotacao": "15,90",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "16,20",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -797,8 +813,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "57,30",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "56,70",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -808,7 +824,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "12,00",
             "estado_sistema": "Longe",
             "cotacao": "14,20",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -817,8 +833,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "16,50",
             "estado_sistema": "Longe",
-            "cotacao": "20,17",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "20,66",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -827,8 +843,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "27,00",
             "estado_sistema": "Longe",
-            "cotacao": "30,52",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "30,85",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -837,8 +853,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "7,50",
             "estado_sistema": "Longe",
-            "cotacao": "9,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "10,00",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -847,8 +863,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "5,50",
             "estado_sistema": "Longe",
-            "cotacao": "5,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "5,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -858,7 +874,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "4,40",
             "estado_sistema": "Longe",
             "cotacao": "5,20",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -867,8 +883,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "16,00",
             "estado_sistema": "Longe",
-            "cotacao": "21,30",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "21,40",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -877,8 +893,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "23,30",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "23,50",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -888,7 +904,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "2,90",
             "estado_sistema": "Longe",
             "cotacao": "3,30",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -897,8 +913,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "13,00",
             "estado_sistema": "Longe",
-            "cotacao": "14,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "14,90",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -907,8 +923,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "48,00",
             "estado_sistema": "Longe",
-            "cotacao": "61,00",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "60,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -918,7 +934,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "22,00",
             "estado_sistema": "Longe",
             "cotacao": "27,40",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -928,7 +944,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "12,50",
             "estado_sistema": "Longe",
             "cotacao": "14,20",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -937,8 +953,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "46,70",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "46,80",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -947,8 +963,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "2,40",
-            "nota": "Rafa atingido; sem teto Sistema; rating nao valida compra",
+            "cotacao": "2,30",
+            "nota": "Rafa atingido; rating melhor nao equivale a autorizacao de compra",
             "satisfeito": "sim"
           },
           {
@@ -957,8 +973,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "7,00",
             "estado_sistema": "Atingido",
-            "cotacao": "6,48",
-            "nota": "Ambos atingidos; limite de reforco historico tambem cumprido",
+            "cotacao": "6,44",
+            "nota": "Ambos atingidos e abaixo do limite historico de R$6,50; avaliar, sem ordem automatica",
             "satisfeito": "sim"
           },
           {
@@ -967,18 +983,18 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "3,30",
             "estado_sistema": "Longe",
-            "cotacao": "3,84",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "3,82",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
             "ticker": "LEVE3",
             "rafa": "32,00",
-            "estado_rafa": "Proximo",
+            "estado_rafa": "Longe",
             "sistema": "31,50",
-            "estado_sistema": "Proximo",
-            "cotacao": "32,43",
-            "nota": "Ambos proximos; aumento condicionado a normalizacao do payout",
+            "estado_sistema": "Longe",
+            "cotacao": "32,97",
+            "nota": "3,03% acima de Rafa: Longe; reforco depende de normalizacao do payout",
             "satisfeito": "nao"
           },
           {
@@ -987,8 +1003,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "10,50",
             "estado_sistema": "Longe",
-            "cotacao": "11,15",
-            "nota": "Rafa atingido; Sistema longe; decisao explicita pendente",
+            "cotacao": "11,50",
+            "nota": "Rafa atingido; decisao explicita segue pendente",
             "satisfeito": "sim"
           },
           {
@@ -997,8 +1013,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "3,00",
             "estado_sistema": "Longe",
-            "cotacao": "5,60",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "6,00",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1007,8 +1023,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "13,50",
             "estado_sistema": "Longe",
-            "cotacao": "16,40",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "16,30",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1018,7 +1034,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "9,00",
             "estado_sistema": "Longe",
             "cotacao": "9,60",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1027,8 +1043,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "50,40",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "48,20",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -1037,8 +1053,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "4,00",
             "estado_sistema": "Longe",
-            "cotacao": "4,40",
-            "nota": "Rafa atingido; Sistema longe",
+            "cotacao": "4,50",
+            "nota": "Rafa atingido; caixa operacional e catalisadores continuam a pedir confirmacao",
             "satisfeito": "sim"
           },
           {
@@ -1047,8 +1063,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "42,00",
             "estado_sistema": "Longe",
-            "cotacao": "50,50",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "50,00",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1057,8 +1073,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Proximo",
             "sistema": "8,20",
             "estado_sistema": "Atingido",
-            "cotacao": "7,96",
-            "nota": "Sistema atingido; reforco da Analise de Carteira limitado a 7,80",
+            "cotacao": "8,02",
+            "nota": "Sistema atingido, mas acima do limite historico de reforco de R$7,80",
             "satisfeito": "sim"
           },
           {
@@ -1068,7 +1084,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "4,00",
             "estado_sistema": "Longe",
             "cotacao": "5,10",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1077,8 +1093,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "5,00",
             "estado_sistema": "Longe",
-            "cotacao": "5,95",
-            "nota": "Rafa atingido, mas carteira sinaliza vender; nao validar compra",
+            "cotacao": "6,02",
+            "nota": "Rafa atingido, mas carteira manda vender; nao interpretar como compra",
             "satisfeito": "sim"
           },
           {
@@ -1087,8 +1103,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "11,50",
             "estado_sistema": "Longe",
-            "cotacao": "15,10",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "15,20",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1097,8 +1113,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "5,50",
             "estado_sistema": "Longe",
-            "cotacao": "6,80",
-            "nota": "Revisao XP trata de SAPR11; nenhum alvo convertido",
+            "cotacao": "6,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1108,7 +1124,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "N/D",
             "estado_sistema": "N/D",
             "cotacao": "4,40",
-            "nota": "Sem teto Sistema no JSON",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -1117,8 +1133,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "12,00",
             "estado_sistema": "Longe",
-            "cotacao": "18,00",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "17,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1127,8 +1143,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "20,00",
-            "nota": "Rafa atingido; sem teto Sistema",
+            "cotacao": "19,30",
+            "nota": "Rafa atingido; sem teto Sistema disponivel",
             "satisfeito": "sim"
           },
           {
@@ -1138,17 +1154,17 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "4,80",
             "estado_sistema": "Longe",
             "cotacao": "7,70",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
             "ticker": "SYNE3",
             "rafa": "3,50",
-            "estado_rafa": "Proximo",
+            "estado_rafa": "Longe",
             "sistema": "3,30",
             "estado_sistema": "Longe",
-            "cotacao": "3,60",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "3,70",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1157,8 +1173,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "N/D",
             "sistema": "36,00",
             "estado_sistema": "Longe",
-            "cotacao": "40,80",
-            "nota": "Rafa 11,00 preservado; suspeita de base acao/Unit; comparacao suspensa",
+            "cotacao": "41,40",
+            "nota": "Gatilho Rafa de R$11 preservado, mas base acao/Unit e inconsistente; comparacao suspensa",
             "satisfeito": "nao"
           },
           {
@@ -1167,8 +1183,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "N/D",
             "sistema": "12,00",
             "estado_sistema": "Longe",
-            "cotacao": "13,10",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "13,20",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1177,8 +1193,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "18,00",
             "estado_sistema": "Longe",
-            "cotacao": "19,60",
-            "nota": "Rafa atingido; Sistema longe",
+            "cotacao": "19,70",
+            "nota": "Rafa atingido; Sistema longe e distribuicao acima da capacidade recorrente segue em observacao",
             "satisfeito": "sim"
           },
           {
@@ -1187,8 +1203,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "13,00",
             "estado_sistema": "Longe",
-            "cotacao": "15,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "15,90",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1197,8 +1213,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "38,40",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "38,50",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -1207,8 +1223,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "N/D",
             "estado_sistema": "N/D",
-            "cotacao": "57,50",
-            "nota": "Sem teto Sistema no JSON",
+            "cotacao": "57,90",
+            "nota": "Sem teto Sistema",
             "satisfeito": "nao"
           },
           {
@@ -1217,8 +1233,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "68,00",
             "estado_sistema": "Longe",
-            "cotacao": "74,60",
-            "nota": "Frete e realizacao sob pressao; nenhum teto atingido",
+            "cotacao": "73,38",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1228,7 +1244,7 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "sistema": "27,00",
             "estado_sistema": "Longe",
             "cotacao": "30,80",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1237,8 +1253,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Longe",
             "sistema": "17,00",
             "estado_sistema": "Longe",
-            "cotacao": "17,70",
-            "nota": "Sem alteracao de tese confirmada nesta edicao",
+            "cotacao": "18,00",
+            "nota": "Sem mudanca material de tese confirmada hoje",
             "satisfeito": "nao"
           },
           {
@@ -1247,8 +1263,8 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
             "estado_rafa": "Atingido",
             "sistema": "13,00",
             "estado_sistema": "Longe",
-            "cotacao": "13,43",
-            "nota": "Rafa atingido; Sistema longe; nao aumentar automaticamente",
+            "cotacao": "13,91",
+            "nota": "Rafa atingido; nao aumentar automaticamente",
             "satisfeito": "sim"
           }
         ],
@@ -1256,22 +1272,22 @@ footer .wrap{border-top:1px solid var(--line);padding-top:20px}
       },
       "groups": [
         {
-          "title": "Ressalvas e contagem",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EContagem mecanica:\u003C/strong\u003E 9 tetos Rafa atingidos (CEBR6, JALL3, KEPL3, LREN3, POMO4, ROMI3, SMTO3, TIMS3, VULC3); 2 referencias Sistema atingidas (KEPL3, RANI3). A uniao tem 10 ativos. Isto nao equivale a 10 oportunidades de compra validadas.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EControles de interpretação:\u003C/strong\u003E ROMI3 e LREN3 podem atingir o teto pessoal sem validar compra; JALL3 e SMTO3 não têm teto Sistema; CEBR6, POMO4 e TIMS3 atingem a régua pessoal mas não a do Sistema. RANI3 atinge o Sistema mas está acima do limite de reforço mais recente. TAEE11 tem R$ 11 registados para uma Unit, com possível confusão entre ação e Unit já sinalizada em agosto: valor preservado e comparação pessoal suspensa, sem multiplicação automática. Os nove tetos ausentes continuam N/D.\u003C/p\u003E\n"
+          "title": "Contagem e ressalvas",
+          "html": "\u003Cp\u003E\u003Cstrong\u003EContagem mecanica:\u003C/strong\u003E 9 tetos Rafa atingidos (CEBR6, JALL3, KEPL3, LREN3, POMO4, ROMI3, SMTO3, TIMS3, VULC3); 3 referencias Sistema atingidas (BBDC3, KEPL3, RANI3). A uniao tem 11 ativos. A contagem nao equivale a oportunidades aprovadas.\u003C/p\u003E\n"
         }
       ]
     },
     "leitura_do_dia": {
       "num": "10",
-      "heading": "Sugestão de Leitura",
+      "heading": "Sugestao de Leitura",
       "groups": [
         {
           "title": "Leitura profunda da rotina",
-          "html": "\u003Cp\u003E\u003Cstrong\u003EO que sobra depois da manchete\u003C/strong\u003E\u003C/p\u003E\n\u003Cp\u003EHá uma ligação pouco evidente entre a família que atrasa uma prestação, a mineradora que paga mais pelo transporte e o varejista que talvez deixe de contar com alguns dias de dinheiro de impostos no caixa. Nos três casos, a manchete costuma mostrar um número que não é exatamente o número que decide a saúde econômica do negócio. A família tem renda, mas precisa pagar compromissos anteriores. A mineradora vende, mas parte da receita remunera a logística. O varejista registra a venda, mas não controla por igual todo o dinheiro que passa pela operação. O denominador comum é a distância entre atividade visível e recursos efetivamente disponíveis.\u003C/p\u003E\n\u003Cp\u003EEssa distância ajuda a organizar a leitura de um dia dominado por decisões de juros. Uma redução da taxa básica é relevante, mas não substitui o trabalho de perguntar onde está o aperto. Quando o problema é uma dívida cara que ainda será renegociada, o benefício pode demorar. Quando é falta de demanda, a melhora no financiamento pode chegar antes de a empresa conseguir vender mais. Quando há deterioração de crédito, vender mais pode até aumentar a necessidade de provisões. O sentido de uma variável macroeconômica, portanto, não determina sozinho o sentido do lucro de cada companhia.\u003C/p\u003E\n\u003Cp\u003ETambém importa distinguir nível e variação. Um custo que caiu hoje ainda pode estar elevado o suficiente para consumir a margem. Um juro que começou a baixar ainda pode restringir o investimento. Um volume que cresceu sobre uma base fraca ainda pode ser insuficiente para ocupar a capacidade instalada. A linguagem de mercado gosta de verbos rápidos: disparou, caiu, recuperou, virou. O investidor precisa fazer uma pergunta mais lenta: recuperou até onde, em relação a quê e com qual consequência para o caixa? Essa disciplina protege tanto contra o excesso de entusiasmo quanto contra a reação automática a uma notícia negativa.\u003C/p\u003E\n\u003Cp\u003ENa mineração, a diferença entre preço de referência e realização do produtor é um exemplo concreto. Não basta escolher uma cotação internacional conveniente e desenhar o lucro a partir dela. Teor, prêmio, desconto, qualidade, rota e contrato alteram o resultado. Uma empresa pode ser mais eficiente que a concorrente e ainda assim ganhar menos num cenário adverso. A vantagem relativa merece reconhecimento, mas não autoriza ignorar o problema absoluto. Do mesmo modo, o fechamento de uma mina cara pode ajudar o equilíbrio de oferta no futuro, sem eliminar a pressão presente sobre quem continua a produzir.\u003C/p\u003E\n\u003Cp\u003ENo consumo, o erro simétrico seria tratar recompra como prova suficiente de que a operação está saudável. Uma recompra pode ser uma boa decisão de alocação, sobretudo quando o preço está abaixo do valor econômico e o balanço suporta a saída de caixa. Mas o juízo depende justamente dessas condições. A decisão do conselho não substitui a avaliação do investidor. É útil acompanhar o ritmo, o preço pago, o estoque em tesouraria e o que deixou de receber recursos para financiar a aquisição das próprias ações. A existência do programa diz menos do que a sua execução e o contexto em que acontece.\u003C/p\u003E\n\u003Cp\u003EPara uma carteira pessoal, o preço médio introduz outra confusão possível. Ele conta a história da posição, ajuda a avaliar o resultado e pode ser relevante para obrigações fiscais. Não determina, porém, o valor futuro do negócio. Comprar mais apenas porque a cotação ficou abaixo do custo antigo transforma um registro do passado numa previsão sem fundamento. A pergunta adequada é se o próximo recurso alocado naquela empresa tem uma relação entre retorno e risco melhor do que as alternativas. Essa pergunta continua válida mesmo quando a posição anterior está com ganho.\u003C/p\u003E\n\u003Cp\u003EDaí a utilidade de preservar duas réguas de preço, em vez de escolher a mais confortável. O teto pessoal incorpora preferências e decisões do investidor. A referência do Sistema expressa uma análise com premissas e data próprias. Uma divergência entre elas é informação, não inconveniente a esconder. Quando a cotação entra na faixa de uma e fica fora da outra, o resultado correto é tornar a diferença visível. A decisão pode depender de informação adicional, de revisão da tese ou de uma preferência explícita. Nenhum cálculo de distância resolve sozinho essa escolha.\u003C/p\u003E\n\u003Cp\u003EO mesmo princípio vale para a infraestrutura desta rotina. Um ficheiro gerado hoje pode transportar uma cotação ainda sem atualização, uma tese de agosto ou o corpo repetido de uma newsletter antiga. Automatizar a recolha é valioso porque reduz trabalho mecânico e torna a origem rastreável. Mas frescura do ficheiro, frescura do conteúdo e qualidade da interpretação são três coisas distintas. A melhor divisão de trabalho deixa ao Python o que ele faz de modo repetível e reserva à análise a tarefa de perceber quando os números não estão a falar da mesma coisa.\u003C/p\u003E\n\u003Cp\u003EO objetivo, ao final, não é ter uma opinião nova sobre cada ativo todos os dias. É perceber o que realmente mudou, o que permanece hipótese e o que continua a exigir paciência. Quando não há evidência suficiente para converter uma notícia em alteração de tese, a conclusão mais útil pode ser manter a pergunta aberta. Isso não torna a leitura menos prática. Evita apenas que a necessidade de produzir uma resposta transforme um dado incompleto numa convicção maior do que ele suporta.\u003C/p\u003E\n\u003Cp\u003E\u003Cem\u003EAutoria: Codex/AII, 16/09/2026. Análise própria baseada nos temas dos feeds; não reproduz texto de terceiro.\u003C/em\u003E\u003C/p\u003E\n"
+          "html": "\u003Cp\u003EO corte de juros e um verbo, nao um resultado. Ele descreve uma decisao de politica monetaria; nao descreve ainda o que aconteceu com a carteira de credito de um banco, com a procura de uma varejista ou com o caixa de uma empresa industrial. Entre a decisao e o efeito economico existe uma cadeia: curva futura, custo de captacao, spreads, apetite dos bancos, renda disponivel, refinanciamento, inadimplencia e, por fim, lucro. Cada elo tem prazo e pode ser interrompido por petroleo, cambio, fiscal ou deterioracao de credito ja contratada.\u003C/p\u003E\n\u003Cp\u003EO dia oferece um bom teste dessa separacao. A Selic caiu, mas o Fed subiu. A curva brasileira pode aliviar em alguns vencimentos, enquanto o real perde parte da protecao do diferencial de juros. O petroleo caiu mais de 2%, mas continua acima de US$100, nivel que preserva risco inflacionario e pressiona custos. O IPCA teve deflacao em agosto, mas com contribuicao extraordinaria da energia eletrica. Ao mesmo tempo, o JPMorgan reviu o Banco do Brasil por fatores que nao desaparecem com a taxa de ontem: provisoes, cartoes, credito rural e margem financeira.\u003C/p\u003E\n\u003Cp\u003EPor isso, a melhor traducao para a carteira nao e 'juros cairam, comprar varejo' nem 'Fed subiu, vender Brasil'. E decompor a sensibilidade. Utilities reguladas podem beneficiar da curva longa, mas ja negociam com premios distintos. Varejo com caixa e retorno sobre capital robusto responde de modo diferente de varejo que precisa de refinanciamento. Bancos com credito deteriorado podem ate receber alivio futuro no custo de dinheiro, mas primeiro precisam reconhecer perdas e reconstruir cobertura. Exportadoras ganham protecao cambial, mas convivem com frete, commodities e ciclos globais.\u003C/p\u003E\n\u003Cp\u003EEssa disciplina tambem ajuda nos gatilhos. KEPL3 abaixo de R$6,50 e um sinal numerico coerente com as duas reguas; ainda assim, o credito rural e parte da tese. RANI3 abaixo do teto Sistema, mas acima da disciplina de R$7,80, nao merece uma excecao criada pelo entusiasmo do dia. BBDC3 a R$16,00 e com direito potencial a sobras tem um problema anterior ao valuation: saber se o direito existe para esta carteira. Um bom painel reduz o espaco da improvisacao; ele nao elimina o julgamento.\u003C/p\u003E\n"
         },
         {
           "title": "Leitura externa selecionada",
-          "html": "\u003Cp\u003E\u003Cstrong\u003ECenário-base do mercado é de ajuste fiscal pós-eleição. De novo?\u003C/strong\u003E\u003C/p\u003E\n\u003Cp\u003EFonte: Brazil Journal, 15/09/2026. \u003Ca href=\"https://braziljournal.com/cenario-base-do-mercado-e-de-ajuste-fiscal-pos-eleicao-de-novo/\"\u003EArtigo original\u003C/a\u003E.\u003C/p\u003E\n\u003Cblockquote\u003E\n\u003Cp\u003E\u0026quot;O custo político de não fazer nada é grande\u0026quot;.\u003C/p\u003E\n\u003C/blockquote\u003E\n\u003Cp\u003EO texto coloca em discussão uma aposta recorrente dos agentes de mercado: um governo eleito encontraria incentivos para corrigir as contas públicas. O debate reuniu representantes da B3 e economistas do Bradesco e do Itaú. A reportagem contrasta a expectativa atual com a frustração de uma aposta semelhante no início do governo vigente.\u003C/p\u003E\n\u003Cp\u003EO interesse editorial está na distinção entre incentivo e execução. Uma dívida mais difícil de estabilizar pode aumentar a urgência do ajuste, mas não demonstra a existência de uma coalizão capaz de aprovar medidas. Tampouco prova que a correção ocorrerá no ritmo necessário. Essa diferença ajuda a ler valorização de ativos antes de mudanças concretas, sem tratar o movimento dos preços como validação do cenário.\u003C/p\u003E\n\u003Cp\u003E\u003Cstrong\u003EPergunta para levar da leitura:\u003C/strong\u003E que evidências permitiriam distinguir uma melhora fiscal efetiva de uma expectativa que apenas voltou a ser popular?\u003C/p\u003E\n"
+          "html": "\u003Cp\u003E\u003Cstrong\u003E“O desconto nao esta nas acoes, esta nos juros”, Brazil Journal/Kinea, 16/09.\u003C/strong\u003E A Kinea argumenta que o multiplo baixo da bolsa brasileira nao significa, por si so, premio extraordinario: com a taxa livre de risco muito alta, o premio adicional das acoes estaria perto de 4%, abaixo da media historica citada de 5%. A gestora tambem separa empresas defensivas das teses muito sensiveis a uma mudanca fiscal e de juros. Para esta rotina, o valor do texto esta na pergunta que obriga a fazer: o ativo esta barato em termos absolutos ou apenas parece barato diante de um custo de capital excepcionalmente alto? A resposta evita transformar um P/L baixo num gatilho automatico. \u003Ca href=\"https://braziljournal.com/o-desconto-nao-esta-nas-acoes-esta-nos-juros-diz-a-kinea/\"\u003ELer no Brazil Journal\u003C/a\u003E\u003C/p\u003E\n"
         }
       ]
     }
