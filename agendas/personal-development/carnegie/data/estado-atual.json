@@ -1,50 +1,50 @@
 {
-  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-11.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
+  "_comentario": "Camada 3 — ficheiro-máquina, consumido pelo Dashboard (e por qualquer outro módulo da Agenda que precise do estado do curso). Nome de ficheiro ESTÁVEL — não é 'semana-12.json': este ficheiro é sobrescrito a cada fecho de semana para continuar a apontar para a semana atual, para que quem o consome não precise de adivinhar o número da semana antes de o pedir. Fonte de verdade primária é o ficheiro mais recente em Licoes_semanais/ no Drive; este JSON é a mesma informação, sintetizada para consumo por máquina.",
   "curso": "carnegie",
   "titulo_curso": "Carnegie · Desenvolvimento de Pessoas",
-  "semana_atual": 11,
+  "semana_atual": 12,
   "total_semanas": 17,
   "fase": "Fase 4 — Conversas Difíceis",
-  "tema": "A Arte do Pedido de Desculpa e da Reparação",
-  "progresso": { "semanas_concluidas": 11, "total_semanas": 17 },
+  "tema": "Estabelecer Limites Com Cuidado",
+  "progresso": { "semanas_concluidas": 12, "total_semanas": 17 },
   "fio_condutor": "Antes de falar, pergunto — estou aqui para perceber ou para corrigir?",
-  "ultima_atualizacao": "2026-09-14",
-  "resumo_curto": "Semana 11 de 17 · Fase 4 — Conversas Difíceis: A Arte do Pedido de Desculpa e da Reparação. A maioria dos pedidos de desculpa falha por ser defesa disfarçada; os cinco passos que reparam de verdade.",
+  "ultima_atualizacao": "2026-09-19",
+  "resumo_curto": "Semana 12 de 17 · Fase 4 — Conversas Difíceis (última semana da fase): Estabelecer Limites Com Cuidado. Um limite não é um muro — é a descrição do que precisas para te manteres bem, e dizê-lo é um ato de respeito.",
   "topicos": [
-    "A anatomia de um pedido de desculpa real: nomear, reconhecer o impacto, assumir sem \"mas\", dizer o que gostarias de ter feito, perguntar o que precisam",
-    "Os falsos pedidos de desculpa: \"Desculpa se te sentiste assim\" e \"Desculpa, mas tu também—\" são defesas disfarçadas",
-    "Receber um pedido de desculpa: deixa-o assentar antes de responder",
-    "Nunca usar a vulnerabilidade de quem pede desculpa como arma na discussão"
+    "A fórmula: \"Importo-me com [ti]. Para [me manter presente], preciso de [pedido específico].\"",
+    "O que os limites NÃO são: ultimatos dados em raiva, castigo por comportamento passado, regras permanentes e inflexíveis",
+    "O que SÃO: declarações calmas de necessidade, convites para encontrar uma nova forma de se relacionar",
+    "Um limite bem enunciado protege a relação em vez de a ameaçar"
   ],
   "exemplos_chave": [
-    "\"Quando disse [coisa específica], vejo que te fez sentir [magoado]. Isso não foi correto, e a culpa foi minha. Gostaria de ter [feito uma pausa]. O que te ajudaria agora?\" — sem \"mas\", sem justificação, e uma pergunta no fim.",
-    "A justificação, mesmo quando é verdadeira, dilui a responsabilidade aos olhos de quem ouve.",
-    "Tarefa 11-A: pensar numa pessoa a quem se deve um pedido de desculpa — mesmo pequeno, mesmo antigo — escrevê-lo com os cinco passos, e decidir se se envia."
+    "\"Amo-te e quero estar presente nestas chamadas. Preciso que não passem das 21h para conseguir dormir o suficiente.\" — cuidado, razão, pedido concreto, por esta ordem.",
+    "\"Quero ajudar. Não consigo fazer [X], mas posso fazer [Y] — resultava?\" O limite troca um não seco por uma alternativa concreta.",
+    "Reflexão da noite, que funciona como diagnóstico: \"Onde estou ressentido? O ressentimento é normalmente um limite por dizer.\""
   ],
-  "sintese_falada": "Estás na Semana 11 do curso Carnegie, a segunda da Fase 4 — Conversas Difíceis. A semana passada foi sobre discordar sem destruir a ligação. Esta é sobre o que se faz depois, quando o dano já aconteceu.\n\nA ideia central é incómoda: a maioria dos pedidos de desculpa falha, e falha por uma razão estrutural — são defesas disfarçadas. \"Desculpa se te sentiste assim\" devolve a responsabilidade a quem foi magoado. \"Desculpa, mas tu também\" esconde uma contra-acusação atrás da palavra desculpa.\n\nOs cinco passos de um pedido de desculpa que cura: nomear especificamente o que fizeste; reconhecer o impacto sem minimizar; assumir a responsabilidade sem \"mas\"; dizer o que gostarias de ter feito de diferente; e perguntar o que a pessoa precisa agora — o passo que quase toda a gente esquece.\n\nO teu fio condutor continua o mesmo. Esta noite, pergunta-te: a quem é que eu devo um pedido de desculpa que ainda não fiz?",
-  "leitura_detalhada": "A maioria dos pedidos de desculpa falha, e falha por um motivo estrutural: são, na verdade, defesas disfarçadas de pedido de desculpa. \"Desculpa se te sentiste assim\" transfere a responsabilidade da interpretação para quem foi magoado. \"Desculpa, mas tu também—\" introduz uma contra-acusação escondida atrás da palavra \"desculpa\". Nenhuma das duas repara nada, porque nenhuma assume verdadeiramente responsabilidade.\n\nA anatomia de um pedido de desculpa que de facto cura tem cinco elementos, e a ordem importa: primeiro, nomear especificamente o que se fez. Segundo, reconhecer o impacto real na outra pessoa, sem minimizar. Terceiro, assumir a responsabilidade sem \"mas\" e sem justificação — a justificação, mesmo verdadeira, dilui a responsabilidade aos olhos de quem ouve. Quarto, expressar o que se gostaria de ter feito de diferente, o que demonstra reflexão real. E quinto — o passo mais frequentemente esquecido — perguntar o que a pessoa precisa agora, em vez de assumir que se sabe.\n\nReceber um pedido de desculpa exige a sua própria disciplina: dar espaço para que ele assente antes de responder, e resistir à tentação de usar a vulnerabilidade de quem pede desculpa como arma adicional na discussão.\n\nA tarefa 11-A pede algo concreto e muitas vezes adiado durante anos: pensar numa pessoa a quem se deve um pedido de desculpa, mesmo pequeno, mesmo antigo, e escrevê-lo usando os cinco passos. Nem sempre é preciso enviá-lo — mas, mais frequentemente do que se espera, enviá-lo acaba por curar as duas pessoas envolvidas.",
+  "sintese_falada": "Estás na Semana 12 do curso Carnegie, a última da Fase 4 — Conversas Difíceis. Depois de discordar sem destruir e de reparar o que se partiu, a fase fecha com o tema que mais facilmente se confunde com o contrário de tudo o que o curso defende: limites.\n\nA ideia central desfaz essa confusão. Um limite bem enunciado não é um muro — é uma descrição clara do que precisas para te manteres bem. E dizê-lo com clareza é, ele próprio, um ato de respeito, não de rejeição.\n\nA fórmula tem três partes, por esta ordem: nomear o cuidado pela relação, nomear a razão, e só depois o pedido concreto. E vale a pena nomear o que um limite não é: não é um ultimato dado em raiva, não é castigo pelo passado, não é uma regra permanente. É uma declaração calma de necessidade — que protege a relação, porque uma relação onde alguém se esgota em silêncio não é sustentável.\n\nO teu fio condutor continua o mesmo. Esta noite, a pergunta é quase um diagnóstico: onde estou ressentido? O ressentimento é quase sempre um limite por dizer.",
+  "leitura_detalhada": "Fecha-se a Fase 4 com o tema que mais facilmente se confunde com o oposto do que o curso defende até aqui: limites. A ideia central desta semana é desfazer essa confusão: um limite bem enunciado não é um muro, é uma descrição clara do que se precisa para se manter bem — e dizê-lo com clareza é, ele próprio, um ato de respeito, não de rejeição.\n\nA fórmula proposta segue uma estrutura de três partes: nomear o cuidado pela relação, nomear a razão, e só depois nomear o pedido concreto. É igualmente importante nomear o que um limite não é: não é um ultimato dado em raiva, não é castigo por comportamento passado, não é uma regra permanente e inflexível. É, pelo contrário, uma declaração calma de necessidade, e um ato de respeito-próprio que, paradoxalmente, protege a relação em vez de a ameaçar — porque uma relação onde uma das partes se está lentamente a esgotar em silêncio não é, de facto, sustentável a prazo.\n\nA reflexão da noite desta semana funciona quase como diagnóstico: \"Onde estou ressentido? O ressentimento é normalmente um limite por dizer.\" O ressentimento raramente aparece do nada; é, quase sempre, o resíduo acumulado de necessidades nunca ditas em voz alta.",
   "audio_segmentos": [
     {
       "titulo": "Resumo da semana",
-      "texto": "Semana 11, a segunda da Fase 4. A semana passada foi sobre discordar sem destruir a ligação. Esta é sobre o que se faz quando o dano já aconteceu. A ideia central é incómoda: a maioria dos pedidos de desculpa falha, e falha por uma razão estrutural — são defesas disfarçadas. Desculpa se te sentiste assim. Desculpa, mas tu também. Nenhuma das duas repara nada. Nos próximos áudios explico os cinco passos de um pedido de desculpa que cura de verdade, a disciplina de receber um, e a tarefa da semana."
+      "texto": "Semana 12, a última da Fase 4. Depois de discordar sem destruir e de reparar o que se partiu, fecha-se a fase com o tema que mais facilmente se confunde com o contrário de tudo o que o curso defende: limites. A ideia central é desfazer essa confusão. Um limite não é um muro — é uma descrição do que precisas para te manteres bem. E dizê-lo com clareza é um ato de respeito, não de rejeição. Nos próximos áudios: a fórmula para enunciar um limite com calor, o que os limites não são, e a pergunta da semana, que funciona como diagnóstico."
     },
     {
-      "titulo": "Porque é que quase todos falham",
-      "texto": "A maioria dos pedidos de desculpa falha, e falha por um motivo estrutural: são, na verdade, defesas disfarçadas de pedido de desculpa. Desculpa se te sentiste assim transfere a responsabilidade da interpretação para quem foi magoado. Desculpa, mas tu também introduz uma contra-acusação escondida atrás da palavra desculpa. Nenhuma das duas repara nada, porque nenhuma assume verdadeiramente responsabilidade."
+      "titulo": "Um limite não é um muro",
+      "texto": "Fecha-se a Fase 4 com o tema que mais facilmente se confunde com o oposto do que o curso defende até aqui: limites. A ideia central desta semana é desfazer essa confusão: um limite bem enunciado não é um muro, é uma descrição clara do que se precisa para se manter bem — e dizê-lo com clareza é, ele próprio, um ato de respeito, não de rejeição."
     },
     {
-      "titulo": "Os cinco passos",
-      "texto": "A anatomia de um pedido de desculpa que de facto cura tem cinco elementos, e a ordem importa: primeiro, nomear especificamente o que se fez. Segundo, reconhecer o impacto real na outra pessoa, sem minimizar. Terceiro, assumir a responsabilidade sem mas e sem justificação — a justificação, mesmo verdadeira, dilui a responsabilidade aos olhos de quem ouve. Quarto, expressar o que se gostaria de ter feito de diferente, o que demonstra reflexão real. E quinto, o passo mais frequentemente esquecido: perguntar o que a pessoa precisa agora, em vez de assumir que se sabe."
+      "titulo": "A fórmula, e o que os limites não são",
+      "texto": "A fórmula proposta segue uma estrutura de três partes: nomear o cuidado pela relação, nomear a razão, e só depois nomear o pedido concreto. É igualmente importante nomear o que um limite não é: não é um ultimato dado em raiva, não é castigo por comportamento passado, não é uma regra permanente e inflexível. É, pelo contrário, uma declaração calma de necessidade, e um ato de respeito-próprio que, paradoxalmente, protege a relação em vez de a ameaçar — porque uma relação onde uma das partes se está lentamente a esgotar em silêncio não é, de facto, sustentável a prazo."
     },
     {
-      "titulo": "Receber um pedido de desculpa",
-      "texto": "Receber um pedido de desculpa exige a sua própria disciplina: dar espaço para que ele assente antes de responder, e resistir à tentação de usar a vulnerabilidade de quem pede desculpa como arma adicional na discussão."
+      "titulo": "O ressentimento como diagnóstico",
+      "texto": "A reflexão da noite desta semana funciona quase como diagnóstico: onde estou ressentido? O ressentimento é normalmente um limite por dizer. O ressentimento raramente aparece do nada; é, quase sempre, o resíduo acumulado de necessidades nunca ditas em voz alta."
     },
     {
-      "titulo": "A tarefa da semana",
-      "texto": "A tarefa onze A pede algo concreto e muitas vezes adiado durante anos: pensar numa pessoa a quem se deve um pedido de desculpa, mesmo pequeno, mesmo antigo, e escrevê-lo usando os cinco passos. Nem sempre é preciso enviá-lo — mas, mais frequentemente do que se espera, enviá-lo acaba por curar as duas pessoas envolvidas."
+      "titulo": "A prática da semana",
+      "texto": "A prática é a fórmula, aplicada onde doer. Importo-me contigo, e para me manter presente preciso de uma coisa concreta. Em casa: amo-te e quero estar presente nestas chamadas, preciso que não passem das nove da noite. No trabalho ou com amigos: quero ajudar, não consigo fazer aquilo, mas posso fazer isto — resultava? O limite não fecha a porta. Troca um não seco por uma alternativa concreta, que é mais fácil de ouvir e mais difícil de recusar."
     }
   ],
-  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-11.html",
+  "link_semana_html": "https://personal-system-hs5.pages.dev/personal-development/carnegie/semanas/semana-12.html",
   "link_curso_completo": "https://personal-system-hs5.pages.dev/personal-development/carnegie/curso-completo.html"
 }
