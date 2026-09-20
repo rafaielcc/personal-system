@@ -218,8 +218,32 @@
     border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35);
   }
   .mapa-pin-label { transform: rotate(45deg); color: #fff; font-weight: bold; font-size: 12px; font-family: Georgia, serif; }
+  .mapa-pin-vanessa-icon {
+    width: 26px; height: 26px; border-radius: 50%; background: #d6336c;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
+    border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.35);
+  }
+  .mapa-legenda-dot.mapa-legenda-vanessa { background: none; border: none; font-size: 12px; width: auto; height: auto; }
   .leaflet-popup-content { font-family: Georgia, "Times New Roman", serif; }
   .leaflet-popup-content .btn { margin-top: 6px; }
+  .vanessa { margin-top: 10px; border: 1px solid #dcc6f2; border-radius: 8px; background: #faf6ff; }
+  .vanessa > summary {
+    cursor: pointer; padding: 11px 12px; font-size: 13px; color: #7c3aed; list-style: none;
+    min-height: 44px; display: flex; align-items: center; gap: 8px; font-weight: bold;
+  }
+  .vanessa > summary::-webkit-details-marker { display: none; }
+  .vanessa[open] > summary { border-bottom: 1px solid #dcc6f2; }
+  .vanessa-corpo { padding: 10px 12px 12px; }
+  .vanessa-nota { font-size: 12.5px; color: var(--text-secondary); font-style: italic; margin: 0 0 10px; }
+  .vanessa-linha { font-size: 14px; line-height: 1.5; margin: 0 0 8px; }
+  .vanessa-diffs-titulo { font-size: 13px; font-weight: bold; color: #7c3aed; margin: 12px 0 4px; }
+  .vanessa-diffs { margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; }
+  .vanessa-diffs li { margin-bottom: 6px; }
+  .vanessa-igual { font-size: 13.5px; color: var(--text-secondary); font-style: italic; margin: 0; }
+  .vanessa-chip {
+    display: inline-block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.04em;
+    background: #f2e6fb; color: #7c3aed; border-radius: 999px; padding: 2px 8px;
+  }
 </style>
 </head>
 <body>
@@ -235,719 +259,7 @@
 <footer class="app">Guia gerado para uso offline — todas as informações foram pesquisadas e confirmadas na criação deste ficheiro.</footer>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-const DATA = {
- "meta": {
-  "titulo": "Pinhal do Douro",
-  "subtitulo": "30 Set – 5 Out 2026 · Rafa & Vanessa (+ Pub e Dexter) · De carro",
-  "numeroPessoas": 2,
-  "highlights": [
-   "Base junto ao rio Douro, a dois passos do Vale do Côa e da arte rupestre paleolítica",
-   "Aldeias históricas com séculos de arqueologia: Freixo de Numão e Castelo de Numão",
-   "Miradouros ao virar da esquina do alojamento — Fraga do Ôla, Santa Bárbara, São Martinho",
-   "Um dia de escapadela ao Douro Vinhateiro clássico (Régua/Pinhão) para os socalcos e uma quinta pet-friendly",
-   "Viagem de carro com os cães — cada bloco do itinerário já vem com alternativas prontas a trocar"
-  ],
-  "slug": "pinhal-do-douro-2026-09"
- },
- "combustivel": {
-  "localPartida": "Rua Maria Veleda, Carnide, Lisboa",
-  "consumoMedio": 6.5,
-  "distanciaKm": 780,
-  "precoLitro": 1.9
- },
- "logistica": {
-  "voos": [],
-  "saidaCasa": "09:00 (30 Set, de Carnide)",
-  "chegadaCasa": "~18:00 (5 Out)",
-  "transportesEntreDestinos": [],
-  "numerosUteis": [
-   {
-    "local": "Portugal",
-    "emergencia": "112"
-   }
-  ],
-  "appsEssenciais": [
-   "Google Maps",
-   "Via Verde / portagens",
-   "The Fork (restaurantes)"
-  ]
- },
- "destinos": [
-  {
-   "id": "douro",
-   "nome": "Pinhal do Douro",
-   "pais": "Portugal",
-   "alojamento": [
-    {
-     "nome": "Malu",
-     "morada": "Rua das Adegas 148, 5140-270 Pinhal do Douro, Portugal",
-     "mapsQuery": "Rua das Adegas 148, Pinhal do Douro",
-     "coord": {
-      "lat": 41.078,
-      "lng": -7.145
-     },
-     "coordAproximada": true,
-     "plataforma": "Booking.com",
-     "contacto": "Malu",
-     "observacoes": "Reserva #6003232580, confirmada e paga (€477,60). Check-in 30 Set, check-out 5 Out (5 noites). Viagem de carro com dois cães (Pub e Dexter) — confirmar regras de animais com a anfitriã antes de chegar.",
-     "checkin": "30 Set 2026",
-     "checkout": "5 Out 2026"
-    }
-   ],
-   "dias": [
-    {
-     "data": "30 Set (Qua)",
-     "titulo": "Chegada ao Pinhal do Douro",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Saída de Carnide (Lisboa)",
-         "horario": "09:00",
-         "nota": "Viagem estimada de ~4h até ao Douro Superior (~390 km) — prever uma paragem a meio (Coimbra ou Viseu) para esticar as pernas e passear os cães."
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Check-in em Malu",
-         "horario": "a confirmar com a anfitriã"
-        },
-        {
-         "titulo": "Miradouro e Cascata da Fraga do Ôla",
-         "horario": "final da tarde",
-         "duracao": "~1h",
-         "nota": "Mesmo ao pé de casa — está na estrada municipal que liga o Pinhal do Douro a Coleja. Bom primeiro passeio para os cães espicharem as pernas depois da viagem.",
-         "itemId": "dr-fraga-ola",
-         "alternativas": [
-          {
-           "itemId": "dr-santa-barbara",
-           "nota": "Miradouro mais perto ainda, vista sobre o Douro Superior — se preferires algo mais curto no primeiro dia."
-          },
-          {
-           "itemId": "dr-sao-martinho",
-           "nota": "Vista sobre a Barragem da Valeira, um pouco mais afastado mas ainda muito perto do alojamento."
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "periodo": "Noite",
-       "atividades": [
-        {
-         "titulo": "Jantar tranquilo, sem grandes planos",
-         "horario": "20:00",
-         "nota": "Primeiro dia é só para chegar e assentar — nada de agenda apertada."
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "data": "1 Out (Qui)",
-     "titulo": "Freixo de Numão",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Freixo de Numão — Castelo Velho e centro histórico",
-         "horario": "10:00",
-         "duracao": "~2h30",
-         "nota": "Sítio arqueológico pré-histórico com miradouro, Ruínas do Prazo (ocupação romana e medieval, um dos complexos mais bem preservados do país), Museu da Casa Grande e o pelourinho. Boa mistura de história a céu aberto — fácil de fazer com os cães pela vila.",
-         "itemId": "dr-castelo-velho"
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Almoço na Petiscaria Preguiça",
-         "horario": "13:00",
-         "itemId": "dr-preguica"
-        },
-        {
-         "titulo": "Miradouro de São Martinho e Barragem da Valeira",
-         "horario": "15:30",
-         "duracao": "~1h",
-         "nota": "Vista sobre a barragem no Douro — combina bem com o resto do dia, fica no caminho de regresso ao alojamento.",
-         "itemId": "dr-sao-martinho"
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "data": "2 Out (Sex)",
-     "titulo": "Vale do Côa e Vila Nova de Foz Côa",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Museu do Côa",
-         "horario": "10:00",
-         "duracao": "~1h30",
-         "nota": "Porta de entrada para a arte rupestre paleolítica do Vale do Côa (Património Mundial UNESCO) — contextualiza tudo antes de ires às gravuras. Miradouro do Museu com vista sobre o encontro dos rios Douro e Côa.",
-         "itemId": "dr-museu-coa"
-        },
-        {
-         "titulo": "Parque Arqueológico do Vale do Côa — visita às gravuras",
-         "horario": "conforme reserva",
-         "duracao": "meio-dia",
-         "nota": "⚠️ Reserva obrigatória com antecedência (Muxagata ou Castelo Melhor). Visitas em grupos de 8, transporte todo-o-terreno próprio do parque — €10/pessoa/sítio. Ligar antes para confirmar se os cães podem ir (+351 279 768 260) ou combinar para ficarem com um de vocês no carro/alojamento.",
-         "itemId": "dr-parque-coa"
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Almoço no Restaurante Côa Museu",
-         "horario": "13:30",
-         "itemId": "dr-restaurante-coa-museu"
-        },
-        {
-         "titulo": "Centro histórico de Vila Nova de Foz Côa",
-         "horario": "15:30",
-         "duracao": "~1h30",
-         "nota": "Igreja Matriz manuelina e o pelourinho — passeio a pé fácil com os cães.",
-         "itemId": "dr-foz-coa-centro",
-         "alternativas": [
-          {
-           "itemId": "dr-faia-brava",
-           "nota": "Se preferirem trocar o centro histórico por natureza: maior reserva privada de conservação de Portugal, trilhos e observação de aves."
-          }
-         ]
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "data": "3 Out (Sáb)",
-     "titulo": "Escapadela ao Douro Vinhateiro",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Miradouro de São Leonardo da Galafura",
-         "horario": "11:00",
-         "duracao": "~1h",
-         "nota": "O melhor miradouro do Douro Vinhateiro clássico, a 640 m de altitude. Confirmado: 1h12 / 85 km desde o Pinhal do Douro — perfeitamente viável num só dia, mesmo com os cães.",
-         "itemId": "dr-sao-leonardo",
-         "alternativas": [
-          {
-           "titulo": "Ficar na zona do Vale do Côa em vez desta escapadela",
-           "nota": "Se preferirem mesmo assim poupar a condução extra, trocar este dia por mais tempo tranquilo perto do alojamento.",
-           "recomendacao": 6.5
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Almoço no Restaurante São Leonardo",
-         "horario": "13:00",
-         "itemId": "dr-restaurante-sao-leonardo"
-        },
-        {
-         "titulo": "Quinta do Vallado — passeio pelas vinhas",
-         "horario": "15:00",
-         "duracao": "~1h30",
-         "nota": "Quinta em Peso da Régua que aceita cães — passeio pelas vinhas incluído. Prova de vinhos é melhor fazer-se por turnos, um de cada vez, com o outro a ficar com os cães no exterior.",
-         "itemId": "dr-quinta-vallado",
-         "alternativas": [
-          {
-           "itemId": "dr-quinta-sol",
-           "nota": "Alojamento rural pet-friendly com animais da quinta — mais casual, menos focado em vinho."
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "periodo": "Noite",
-       "atividades": [
-        {
-         "titulo": "Regresso ao Pinhal do Douro",
-         "horario": "19:00",
-         "nota": "Dia mais longo da viagem — sem mais planos à noite."
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "data": "4 Out (Dom)",
-     "titulo": "Torre de Moncorvo — dia tranquilo",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Torre de Moncorvo — centro histórico e Igreja Matriz",
-         "horario": "10:30",
-         "duracao": "~2h",
-         "nota": "Monumento Nacional, portal renascentista, ruas medievais cheias de casas senhoriais. Ritmo mais lento — combina com o \"equilibrado\" que pediram para esta viagem.",
-         "itemId": "dr-torre-moncorvo",
-         "alternativas": [
-          {
-           "itemId": "dr-castelo-melhor",
-           "nota": "Aldeia histórica medieval com vistas e centro de interpretação sobre as gravuras rupestres — alternativa se preferirem outra vila em vez de Torre de Moncorvo."
-          }
-         ]
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Almoço no O Rebentão",
-         "horario": "13:30",
-         "itemId": "dr-rebentao"
-        },
-        {
-         "titulo": "Tarde livre perto do alojamento",
-         "horario": "16:00",
-         "nota": "Dia para recuperar do passeio mais longo de ontem — caminhada com os cães sem grande plano fixo, ou aproveitar para repetir o miradouro preferido da semana."
-        }
-       ]
-      }
-     ]
-    },
-    {
-     "data": "5 Out (Seg)",
-     "titulo": "Regresso",
-     "periodos": [
-      {
-       "periodo": "Manhã",
-       "atividades": [
-        {
-         "titulo": "Última caminhada com os cães",
-         "horario": "09:00"
-        },
-        {
-         "titulo": "Check-out",
-         "horario": "11:00 (a confirmar)"
-        }
-       ]
-      },
-      {
-       "periodo": "Tarde",
-       "atividades": [
-        {
-         "titulo": "Viagem de regresso a Carnide",
-         "horario": "12:00",
-         "nota": "Chegada a casa prevista para as 18:00 — considerar uma paragem a meio do caminho."
-        }
-       ]
-      }
-     ]
-    }
-   ],
-   "restaurantes": [
-    {
-     "id": "dr-restaurante-coa-museu",
-     "nome": "Restaurante Côa Museu",
-     "categoria": "Gastronomia Transmontana",
-     "descricaoCurta": "Vista sobre o encontro dos rios Douro e Côa, cozinha de tradição beirã.",
-     "descricaoCompleta": "Dentro do próprio Museu do Côa, este restaurante combina uma vista privilegiada sobre o vale com uma cozinha bem enraizada na tradição da Beira: cabrito e bacalhau muito bem confecionados, com destaque para as migas que acompanham o cabrito. Bom sítio para o almoço do dia da visita ao museu e ao parque arqueológico.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Restaurante Museu do Côa",
-     "coord": {
-      "lat": 41.089,
-      "lng": -7.141
-     },
-     "coordAproximada": true,
-     "recomendacao": 8.4,
-     "recomendacaoNota": "Vista + comida regional bem feita, mesmo ao lado do museu — combina perfeitamente com a manhã de arte rupestre."
-    },
-    {
-     "id": "dr-preguica",
-     "nome": "Petiscaria Preguiça",
-     "categoria": "Petiscos / Peixe do Rio",
-     "descricaoCurta": "Peixe do rio frito e sopa, vista sobre o rio Douro, em Freixo de Numão.",
-     "descricaoCompleta": "Petisqueira simples em Freixo de Numão com vista sobre o Douro — peixe do rio frito é a especialidade, ambiente informal e sem cerimónia. Boa opção de almoço depois da manhã a explorar o Castelo Velho e as ruínas.",
-     "precoSimbolo": "€",
-     "distanciaAlojamento": "~10 min de carro",
-     "mapsQuery": "Petisqueira Preguiça Freixo de Numão",
-     "coord": {
-      "lat": 41.075,
-      "lng": -7.153
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.8,
-     "recomendacaoNota": "Simples, barato e com vista — sem grandes cerimónias, boa pausa a meio do dia."
-    },
-    {
-     "id": "dr-restaurante-sao-leonardo",
-     "nome": "Restaurante São Leonardo",
-     "categoria": "Gastronomia do Douro",
-     "descricaoCurta": "Junto ao melhor miradouro do Douro Vinhateiro, em São Leonardo da Galafura.",
-     "descricaoCompleta": "Mesmo junto ao Miradouro de São Leonardo da Galafura, o restaurante aproveita a mesma vista de 640 m sobre o Douro. Bom ponto de paragem depois do miradouro, antes de continuar para a quinta à tarde.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "Douro Vinhateiro (dia de escapadela)",
-     "mapsQuery": "Restaurante Sao Leonardo Galafura",
-     "coord": {
-      "lat": 41.186,
-      "lng": -7.706
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.9,
-     "recomendacaoNota": "Aproveita a vista do miradouro sem teres de te deslocar outra vez — prático para o dia mais longo da viagem."
-    },
-    {
-     "id": "dr-rebentao",
-     "nome": "O Rebentão",
-     "categoria": "Gastronomia Transmontana",
-     "descricaoCurta": "Bife à lareira e posta em Torre de Moncorvo.",
-     "descricaoCompleta": "Em Torre de Moncorvo, especialista em carnes grelhadas à lareira — bife, posta à lareira, costeleta de vitela — além de polvo à lagareiro e bacalhau assado na brasa. Cozinha transmontana sem grandes voltas, feita bem.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~25 min de carro",
-     "mapsQuery": "O Rebentao Torre de Moncorvo",
-     "coord": {
-      "lat": 41.1758,
-      "lng": -7.0463
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.9,
-     "recomendacaoNota": "Carnes à lareira bem feitas, ambiente sem pretensões — bom fecho para o dia mais tranquilo da viagem.",
-     "dicas": "Não consegui confirmar este nome numa pesquisa recente — encontrei apenas \"O Artur de Carviçais\", no Largo do Rebentão, em Carviçais (concelho de Torre de Moncorvo). Pode ser o mesmo local com outro nome, ou outro estabelecimento — vale a pena confirmar antes de reservar."
-    },
-    {
-     "id": "dr-adega-caneco",
-     "nome": "Adega O Caneco",
-     "categoria": "Gastronomia Transmontana",
-     "descricaoCurta": "Casa de comidas em Torre de Moncorvo desde 1981.",
-     "descricaoCompleta": "Adega tradicional em Torre de Moncorvo a servir comida caseira desde 1981 — cozinha simples e genuína, sem artifícios. Boa alternativa ao Rebentão se preferirem algo ainda mais informal.",
-     "precoSimbolo": "€",
-     "distanciaAlojamento": "~25 min de carro",
-     "mapsQuery": "Adega O Caneco Torre de Moncorvo",
-     "coord": {
-      "lat": 41.1758,
-      "lng": -7.0463
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.3,
-     "recomendacaoNota": "Décadas de história na cozinha — casa antiga, sem pressa nenhuma."
-    },
-    {
-     "id": "dr-calca-curta",
-     "nome": "Restaurante Calça Curta",
-     "categoria": "Peixe do Rio",
-     "descricaoCurta": "Escabeche, ensopado de enguias e arroz de lampreia, vista sobre o Douro.",
-     "descricaoCompleta": "Em Carrazeda de Ansiães, especialista em peixe do rio: escabeche, ensopado e caldeirada de enguias, arroz de lampreia e sável — pratos que raramente se encontram fora desta zona do Douro. Vista sobre o rio incluída.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Restaurante Calca Curta Carrazeda de Ansiaes",
-     "coord": {
-      "lat": 41.2306,
-      "lng": -7.3016
-     },
-     "coordAproximada": true,
-     "recomendacao": 8.0,
-     "recomendacaoNota": "Pratos de peixe de rio que não se encontram em qualquer lado — vale o desvio para quem gosta de sair da carne."
-    },
-    {
-     "id": "dr-taberna-helena",
-     "nome": "Taberna da Helena",
-     "categoria": "Casual",
-     "descricaoCurta": "Cozinha mediterrânica e europeia em Carrazeda de Ansiães.",
-     "descricaoCompleta": "Ambiente descontraído em Carrazeda de Ansiães, cozinha mais europeia/mediterrânica do que transmontana clássica — boa opção para variar se já tiverem comido carnes grelhadas e peixe de rio nos dias anteriores.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Taberna da Helena Carrazeda de Ansiaes",
-     "coord": {
-      "lat": 41.2306,
-      "lng": -7.3016
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.5,
-     "recomendacaoNota": "Boa opção para variar o registo a meio da semana."
-    },
-    {
-     "id": "dr-a-lareira",
-     "nome": "A Lareira",
-     "categoria": "Gastronomia Transmontana",
-     "descricaoCurta": "Restaurante em Vila Nova de Foz Côa.",
-     "descricaoCompleta": "Um dos restaurantes bem cotados de Vila Nova de Foz Côa, cozinha regional. Boa opção de reserva no centro da vila, perto do museu e do parque arqueológico.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "A Lareira Vila Nova de Foz Coa",
-     "coord": {
-      "lat": 41.087,
-      "lng": -7.1367
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.6,
-     "recomendacaoNota": "Alternativa central em Foz Côa, ainda não testada — vale reservar com antecedência."
-    },
-    {
-     "id": "dr-paleolitico",
-     "nome": "Restaurante Paleolítico",
-     "categoria": "Gastronomia Transmontana",
-     "descricaoCurta": "Restaurante em Vila Nova de Foz Côa, nome a condizer com a arte rupestre da região.",
-     "descricaoCompleta": "Outro nome bem cotado em Vila Nova de Foz Côa, batizado em homenagem à arte rupestre paleolítica do Vale do Côa. Cozinha regional no centro da vila.",
-     "precoSimbolo": "€€",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Restaurante Paleolitico Vila Nova de Foz Coa",
-     "coord": {
-      "lat": 41.087,
-      "lng": -7.1367
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.5,
-     "recomendacaoNota": "Nome divertido, localização central — boa opção de reserva em Foz Côa."
-    }
-   ],
-   "atracoes": [
-    {
-     "id": "dr-fraga-ola",
-     "nome": "Miradouro e Cascata da Fraga do Ôla",
-     "categoria": "Miradouro",
-     "gratis": true,
-     "descricaoCurta": "Estrutura metálica com vista sobre a cascata e o vale do Douro, mesmo ao pé do alojamento.",
-     "descricaoCompleta": "Estrutura metálica construída de raiz sobre a cascata da Fraga do Ôla, com vista panorâmica extraordinária sobre um grande troço do vale do Douro e do ribeiro da aldeia. Fica na estrada municipal que liga o Pinhal do Douro a Coleja — literalmente ao virar da esquina do alojamento.",
-     "distanciaAlojamento": "A poucos minutos a pé/carro",
-     "mapsQuery": "Miradouro Fraga do Ola Pinhal do Douro",
-     "coord": {
-      "lat": 41.085,
-      "lng": -7.15
-     },
-     "coordAproximada": true,
-     "recomendacao": 8.6,
-     "recomendacaoNota": "O miradouro mais conveniente de toda a viagem — literalmente ao pé de casa, ótimo para o fim do primeiro dia com os cães."
-    },
-    {
-     "id": "dr-santa-barbara",
-     "nome": "Miradouro de Santa Bárbara",
-     "categoria": "Miradouro",
-     "gratis": true,
-     "descricaoCurta": "Vista sobre o Douro Superior, perto do alojamento.",
-     "descricaoCompleta": "Miradouro na mesma zona do Pinhal do Douro, com vista aberta sobre o Douro Superior. Boa opção rápida para uma pausa ao ar livre com os cães sem grande deslocação.",
-     "distanciaAlojamento": "Muito perto do alojamento",
-     "mapsQuery": "Miradouro Santa Barbara Pinhal do Douro",
-     "coord": {
-      "lat": 41.07,
-      "lng": -7.14
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.8,
-     "recomendacaoNota": "Alternativa rápida à Fraga do Ôla, sem quase nenhuma condução."
-    },
-    {
-     "id": "dr-sao-martinho",
-     "nome": "Miradouro de São Martinho e Barragem da Valeira",
-     "categoria": "Miradouro",
-     "gratis": true,
-     "descricaoCurta": "Vista sobre a barragem da Valeira, no rio Douro.",
-     "descricaoCompleta": "Vista sobre a Barragem da Valeira, uma das barragens do rio Douro, com a paisagem típica de socalcos e encosta a pique sobre a água. Fica no caminho entre o alojamento e Freixo de Numão, fácil de encaixar noutro dia.",
-     "distanciaAlojamento": "~10 min de carro",
-     "mapsQuery": "Miradouro Sao Martinho Barragem da Valeira",
-     "coord": {
-      "lat": 41.133,
-      "lng": -7.478
-     },
-     "coordAproximada": true,
-     "foto": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Barragem_da_Valeira_-_Portugal_(17020997765).jpg",
-     "recomendacao": 8.0,
-     "recomendacaoNota": "Vista de barragem/socalcos sem sair da vizinhança imediata do alojamento."
-    },
-    {
-     "id": "dr-castelo-velho",
-     "nome": "Freixo de Numão — Castelo Velho e Ruínas do Prazo",
-     "categoria": "História",
-     "descricaoCurta": "Aldeia com camadas de ocupação pré-histórica, romana e medieval, e um miradouro.",
-     "descricaoCompleta": "Freixo de Numão é uma pequena vila que concentra uma densidade rara de património: o Castelo Velho (sítio pré-histórico com miradouro), as Ruínas do Prazo (ocupação desde a pré-história até época romana e medieval, um dos complexos arqueológicos mais bem preservados do país), o Museu da Casa Grande (etnografia local — pastorícia, vinho, azeite e amêndoa) e o pelourinho da vila. Dá para passear tudo a pé, boa parte ao ar livre.",
-     "distanciaAlojamento": "~10 min de carro",
-     "mapsQuery": "Freixo de Numao Castelo Velho",
-     "coord": {
-      "lat": 41.075,
-      "lng": -7.153
-     },
-     "coordAproximada": true,
-     "foto": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Castelo_Velho_de_Freixo_de_Num%C3%A3o.jpg",
-     "recomendacao": 8.7,
-     "recomendacaoNota": "Talvez a manhã mais rica em história de toda a viagem, e tudo a uma curta distância do alojamento."
-    },
-    {
-     "id": "dr-museu-coa",
-     "nome": "Museu do Côa",
-     "categoria": "Museu",
-     "precoSimbolo": "€",
-     "descricaoCurta": "Museu de contexto para a arte rupestre paleolítica do Vale do Côa, Património Mundial UNESCO.",
-     "descricaoCompleta": "Construído numa das encostas onde se encontram os rios Douro e Côa, o Museu do Côa serve de porta de entrada para a maior coleção a céu aberto de arte rupestre paleolítica do mundo (gravuras datadas de há 22.000 a 10.000 anos). Tem também um miradouro próprio sobre o rio e os socalcos do Douro. Bilhete combinado com o Museu da Casa Grande: €6,50 (€4 reduzido).",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Museu do Coa Vila Nova de Foz Coa",
-     "coord": {
-      "lat": 41.089,
-      "lng": -7.141
-     },
-     "coordAproximada": true,
-     "recomendacao": 9.0,
-     "recomendacaoNota": "Essencial para dar contexto antes de ver as gravuras a sério no parque arqueológico — não saltar este passo.",
-     "dicas": "Fechado às segundas-feiras e nos feriados de 1 Jan, Páscoa, 1 Mai e 25 Dez."
-    },
-    {
-     "id": "dr-parque-coa",
-     "nome": "Parque Arqueológico do Vale do Côa",
-     "categoria": "Arqueologia",
-     "precoSimbolo": "€€",
-     "descricaoCurta": "Visitas guiadas às gravuras rupestres paleolíticas, em veículos todo-o-terreno.",
-     "descricaoCompleta": "As visitas às gravuras propriamente ditas fazem-se a partir dos centros de receção de Muxagata e Castelo Melhor, em grupos de 8 pessoas, com transporte todo-o-terreno do próprio parque, até três sítios: Canada do Inferno, Penascosa e Ribeira de Piscos. Bilhete normal: €10 por pessoa e por sítio visitado. Reserva prévia obrigatória.",
-     "distanciaAlojamento": "~25-30 min de carro (Muxagata/Castelo Melhor)",
-     "mapsQuery": "Centro de Receção Muxagata Parque Arqueologico Coa",
-     "coord": {
-      "lat": 41.045,
-      "lng": -7.115
-     },
-     "coordAproximada": true,
-     "foto": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Prehistoric_Rock-Art_Site_of_the_C%C3%B4a_Valley_-_Penascosa_-_Bull_%40_2011-08-06.jpg",
-     "recomendacao": 9.2,
-     "recomendacaoNota": "O grande motivo de vir a esta zona do Douro — reservar com bastante antecedência, os grupos são pequenos.",
-     "dicas": "Confirmar antes se os cães podem ir no veículo todo-o-terreno (+351 279 768 260 / visitas@arte-coa.pt) — se não puderem, combinar revezamento entre os dois."
-    },
-    {
-     "id": "dr-foz-coa-centro",
-     "nome": "Centro histórico de Vila Nova de Foz Côa",
-     "categoria": "História",
-     "gratis": true,
-     "descricaoCurta": "Igreja Matriz manuelina e pelourinho, no centro da vila.",
-     "descricaoCompleta": "A Igreja Matriz de estilo manuelino e o pelourinho são os pontos altos de um passeio a pé pelo centro de Vila Nova de Foz Côa — vila pequena, fácil de percorrer com os cães depois do almoço.",
-     "distanciaAlojamento": "~20 min de carro",
-     "mapsQuery": "Igreja Matriz Vila Nova de Foz Coa",
-     "coord": {
-      "lat": 41.087,
-      "lng": -7.1367
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.4,
-     "recomendacaoNota": "Passeio leve para fechar a tarde, sem grande investimento de tempo."
-    },
-    {
-     "id": "dr-faia-brava",
-     "nome": "Reserva da Faia Brava",
-     "categoria": "Natureza",
-     "gratis": true,
-     "descricaoCurta": "Maior reserva privada de conservação de Portugal — trilhos e observação de aves.",
-     "descricaoCompleta": "A maior área de conservação privada do país, com trilhos e boas condições para observação de aves de rapina sobre as escarpas do Côa. Alternativa mais tranquila e ao ar livre ao centro histórico de Foz Côa, se preferirem mais natureza e menos pedra.",
-     "distanciaAlojamento": "~25 min de carro",
-     "mapsQuery": "Reserva Faia Brava",
-     "coord": {
-      "lat": 41.03,
-      "lng": -7.1
-     },
-     "coordAproximada": true,
-     "recomendacao": 8.1,
-     "recomendacaoNota": "Boa opção se estiverem saturados de igrejas e museus — natureza pura, e os cães vão adorar."
-    },
-    {
-     "id": "dr-sao-leonardo",
-     "nome": "Miradouro de São Leonardo da Galafura",
-     "categoria": "Miradouro",
-     "gratis": true,
-     "descricaoCurta": "O melhor miradouro do Douro Vinhateiro clássico, a 640 m de altitude.",
-     "descricaoCompleta": "Considerado o melhor miradouro de todo o Alto Douro, a 640 m de altitude, com vista desimpedida sobre o rio e os socalcos. Tem capela, zona de piquenique com bancos de pedra e sombra, e um marco geodésico. A 1h12/85 km do alojamento — mais longe do que os miradouros do dia a dia, mas perfeitamente viável num só dia.",
-     "distanciaAlojamento": "1h12 (85 km) do alojamento",
-     "mapsQuery": "Miradouro Sao Leonardo da Galafura",
-     "coord": {
-      "lat": 41.186,
-      "lng": -7.706
-     },
-     "coordAproximada": true,
-     "foto": "https://upload.wikimedia.org/wikipedia/commons/9/91/Miradouro_de_S%C3%A3o_Leonardo_da_Galafura_-_Portugal_(7339251762).jpg",
-     "recomendacao": 8.8,
-     "recomendacaoNota": "A vista mais icónica de todo o Douro — vale bem a condução extra deste dia."
-    },
-    {
-     "id": "dr-quinta-vallado",
-     "nome": "Quinta do Vallado",
-     "categoria": "Vinho",
-     "precoSimbolo": "€€",
-     "descricaoCurta": "Quinta em Peso da Régua que aceita cães, com passeio pelas vinhas.",
-     "descricaoCompleta": "Uma das poucas quintas do Douro claramente preparadas para receber cães — passeio pelas vinhas incluído. A prova de vinhos em si é melhor fazer-se por turnos, com um dos dois a ficar de fora com o Pub e o Dexter, já que o espaço de prova costuma ser interior.",
-     "distanciaAlojamento": "Douro Vinhateiro (dia de escapadela)",
-     "mapsQuery": "Quinta do Vallado Peso da Regua",
-     "coord": {
-      "lat": 41.163,
-      "lng": -7.789
-     },
-     "coordAproximada": true,
-     "recomendacao": 8.3,
-     "recomendacaoNota": "Rara quinta genuinamente pet-friendly no Douro — vale a pena por isso mesmo.",
-     "dicas": "Reservar a visita com antecedência e perguntar diretamente sobre a política de animais no momento da reserva."
-    },
-    {
-     "id": "dr-quinta-sol",
-     "nome": "Quinta do Sol (Tendais)",
-     "categoria": "Turismo Rural",
-     "precoSimbolo": "€€",
-     "descricaoCurta": "Turismo rural pet-friendly no Douro, com animais da quinta.",
-     "descricaoCompleta": "Propriedade de turismo rural onde os animais de estimação são bem-vindos — tem égua, cabras-anãs, faisões e cães da Serra da Estrela residentes. Mais casual e menos focada em vinho do que a Quinta do Vallado, boa alternativa se preferirem um ambiente de quinta tradicional.",
-     "distanciaAlojamento": "Douro Vinhateiro (dia de escapadela)",
-     "mapsQuery": "Quinta do Sol Tendais",
-     "coord": {
-      "lat": 41.05,
-      "lng": -8.05
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.7,
-     "recomendacaoNota": "Mais quinta tradicional do que enoturismo — boa se quiserem variar o registo do dia."
-    },
-    {
-     "id": "dr-torre-moncorvo",
-     "nome": "Torre de Moncorvo — centro histórico e Igreja Matriz",
-     "categoria": "História",
-     "gratis": true,
-     "descricaoCurta": "Monumento Nacional com portal renascentista e ruas medievais cheias de casas senhoriais.",
-     "descricaoCompleta": "A Igreja Matriz é Monumento Nacional, construída entre o séc. XVI e início do XVII, com um portal renascentista e um órgão de tubos do séc. XVIII. À volta, o núcleo medieval e renascentista da vila está cheio de casas senhoriais, capelas, fontes e pequenos museus (arte sacra, ferro e região de Moncorvo, fotografia do Alto Douro). Passeio fácil a pé, ritmo lento.",
-     "distanciaAlojamento": "~25 min de carro",
-     "mapsQuery": "Igreja Matriz Torre de Moncorvo",
-     "coord": {
-      "lat": 41.1758,
-      "lng": -7.0463
-     },
-     "coordAproximada": true,
-     "recomendacao": 7.9,
-     "recomendacaoNota": "Bom dia mais lento — muita história concentrada num passeio a pé sem pressa."
-    },
-    {
-     "id": "dr-castelo-melhor",
-     "nome": "Aldeia Histórica de Castelo Melhor",
-     "categoria": "Aldeia Histórica",
-     "gratis": true,
-     "descricaoCurta": "Aldeia medieval com vistas e centro de interpretação da arte rupestre.",
-     "descricaoCompleta": "Uma das Aldeias Históricas de Portugal, com características medievais e vistas soberbas sobre o vale. Tem também um dos centros de receção do Parque Arqueológico do Côa e um centro de interpretação dedicado às gravuras e à ocupação ancestral da região.",
-     "distanciaAlojamento": "~30 min de carro",
-     "mapsQuery": "Castelo Melhor aldeia historica",
-     "coord": {
-      "lat": 41.0075,
-      "lng": -7.1264
-     },
-     "coordAproximada": true,
-     "foto": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Capela_de_S%C3%A3o_Gabriel_-_Castelo_Melhor_-_Portugal_(50766239596).jpg",
-     "recomendacao": 8.0,
-     "recomendacaoNota": "Boa alternativa a Torre de Moncorvo se preferirem outra aldeia histórica, com o bónus de ligar de volta ao tema das gravuras."
-    }
-   ],
-   "praias": [],
-   "nightlife": []
-  }
- ]
-};
+const DATA = {"meta":{"titulo":"Pinhal do Douro","subtitulo":"30 Set – 5 Out 2026 · Rafa & Vanessa (+ Pub e Dexter) · De carro","numeroPessoas":2,"highlights":["Base junto ao rio Douro, a dois passos do Vale do Côa e da arte rupestre paleolítica","Aldeias históricas com séculos de arqueologia: Freixo de Numão e Castelo de Numão","Miradouros ao virar da esquina do alojamento — Fraga do Ôla, Santa Bárbara, São Martinho","Um dia de escapadela ao Douro Vinhateiro clássico (Régua/Pinhão) para os socalcos e uma quinta pet-friendly","Viagem de carro com os cães — cada bloco do itinerário já vem com alternativas prontas a trocar"],"slug":"pinhal-do-douro-2026-09"},"combustivel":{"localPartida":"Rua Maria Veleda, Carnide, Lisboa","consumoMedio":6.5,"distanciaKm":780,"precoLitro":1.9},"logistica":{"voos":[],"saidaCasa":"09:00 (30 Set, de Carnide)","chegadaCasa":"~18:00 (5 Out)","transportesEntreDestinos":[],"numerosUteis":[{"local":"Portugal","emergencia":"112"}],"appsEssenciais":["Google Maps","Via Verde / portagens","The Fork (restaurantes)"]},"destinos":[{"id":"douro","nome":"Pinhal do Douro","pais":"Portugal","alojamento":[{"nome":"Malu","morada":"Rua das Adegas 148, 5140-270 Pinhal do Douro, Portugal","mapsQuery":"Rua das Adegas 148, Pinhal do Douro","coord":{"lat":41.078,"lng":-7.145},"coordAproximada":true,"plataforma":"Booking.com","contacto":"Malu","observacoes":"Reserva #6003232580, confirmada e paga (€477,60). Check-in 30 Set, check-out 5 Out (5 noites). Viagem de carro com dois cães (Pub e Dexter) — confirmar regras de animais com a anfitriã antes de chegar.","checkin":"30 Set 2026","checkout":"5 Out 2026"}],"dias":[{"data":"30 Set (Qua)","titulo":"Chegada ao Pinhal do Douro","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Saída de Carnide (Lisboa)","horario":"09:00","nota":"Viagem estimada de ~4h até ao Douro Superior (~390 km) — prever uma paragem a meio (Coimbra ou Viseu) para esticar as pernas e passear os cães."}]},{"periodo":"Tarde","atividades":[{"titulo":"Check-in em Malu","horario":"a confirmar com a anfitriã"},{"titulo":"Miradouro e Cascata da Fraga do Ôla","horario":"final da tarde","duracao":"~1h","nota":"Mesmo ao pé de casa — está na estrada municipal que liga o Pinhal do Douro a Coleja. Bom primeiro passeio para os cães espicharem as pernas depois da viagem.","itemId":"dr-fraga-ola","alternativas":[{"itemId":"dr-santa-barbara","nota":"Miradouro mais perto ainda, vista sobre o Douro Superior — se preferires algo mais curto no primeiro dia."},{"itemId":"dr-sao-martinho","nota":"Vista sobre a Barragem da Valeira, um pouco mais afastado mas ainda muito perto do alojamento."}]}]},{"periodo":"Noite","atividades":[{"titulo":"Jantar tranquilo, sem grandes planos","horario":"20:00","nota":"Primeiro dia é só para chegar e assentar — nada de agenda apertada."}]}],"vanessa":{"resumo":["Mesma estrutura: saída 09:00 de Carnide, ~4h de viagem com paragem a meio, check-in na Malu ao início da tarde, Fraga do Ôla ao final da tarde e jantar tranquilo à noite.","Nota dela: propositalmente um dia leve, sem nenhuma atração que exija deslocamento depois de ~4h de carro."],"diferencas":[]}},{"data":"1 Out (Qui)","titulo":"Freixo de Numão","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Freixo de Numão — Castelo Velho e centro histórico","horario":"10:00","duracao":"~2h30","nota":"Sítio arqueológico pré-histórico com miradouro, Ruínas do Prazo (ocupação romana e medieval, um dos complexos mais bem preservados do país), Museu da Casa Grande e o pelourinho. Boa mistura de história a céu aberto — fácil de fazer com os cães pela vila.","itemId":"dr-castelo-velho"}]},{"periodo":"Tarde","atividades":[{"titulo":"Almoço na Petiscaria Preguiça","horario":"13:00","itemId":"dr-preguica"},{"titulo":"Miradouro de São Martinho e Barragem da Valeira","horario":"15:30","duracao":"~1h","nota":"Vista sobre a barragem no Douro — combina bem com o resto do dia, fica no caminho de regresso ao alojamento.","itemId":"dr-sao-martinho"}]}],"vanessa":{"resumo":["Mesma estrutura: Freixo de Numão de manhã (Castelo Velho, Ruínas do Prazo, Museu da Casa Grande, pelourinho), almoço na Petiscaria Preguiça, e Miradouro de São Martinho / Barragem da Valeira a fechar a tarde.","Nota dela: manteria praticamente como está — dia variado mas sem grandes deslocamentos ou caminhadas cansativas, e a Valeira dá aos cães mais um momento de natureza."],"diferencas":[]}},{"data":"2 Out (Sex)","titulo":"Vale do Côa e Vila Nova de Foz Côa","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Museu do Côa","horario":"10:00","duracao":"~1h30","nota":"Porta de entrada para a arte rupestre paleolítica do Vale do Côa (Património Mundial UNESCO) — contextualiza tudo antes de ires às gravuras. Miradouro do Museu com vista sobre o encontro dos rios Douro e Côa.","itemId":"dr-museu-coa"},{"titulo":"Parque Arqueológico do Vale do Côa — visita às gravuras","horario":"conforme reserva","duracao":"meio-dia","nota":"⚠️ Reserva obrigatória com antecedência (Muxagata ou Castelo Melhor). Visitas em grupos de 8, transporte todo-o-terreno próprio do parque — €10/pessoa/sítio. Ligar antes para confirmar se os cães podem ir (+351 279 768 260) ou combinar para ficarem com um de vocês no carro/alojamento.","itemId":"dr-parque-coa"}]},{"periodo":"Tarde","atividades":[{"titulo":"Almoço no Restaurante Côa Museu","horario":"13:30","itemId":"dr-restaurante-coa-museu"},{"titulo":"Centro histórico de Vila Nova de Foz Côa","horario":"15:30","duracao":"~1h30","nota":"Igreja Matriz manuelina e o pelourinho — passeio a pé fácil com os cães.","itemId":"dr-foz-coa-centro","alternativas":[{"itemId":"dr-faia-brava","nota":"Se preferirem trocar o centro histórico por natureza: maior reserva privada de conservação de Portugal, trilhos e observação de aves."}]}]}],"vanessa":{"resumo":["Museu do Côa às 10:00 (~1h30), Parque Arqueológico do Vale do Côa (visita às gravuras conforme reserva), almoço no Restaurante Côa Museu por volta das 13:30/14:00.","À tarde: Passadiços do Côa / passeio exterior com os cães (~15:30, 1h–1h30), seguido do centro histórico de Vila Nova de Foz Côa às 17:00."],"diferencas":["Acrescenta um passeio exterior dedicado aos cães a meio da tarde — Passadiços do Côa (~15:30, 1h–1h30) — antes do centro histórico de Foz Côa, que passa das 15:30 para as 17:00.","Reforça explicitamente que os cães não podem acompanhar dentro do Museu do Côa nem nas visitas guiadas às gravuras rupestres — o itinerário atual já avisa disto no Parque Arqueológico, mas de forma menos destacada."]}},{"data":"3 Out (Sáb)","titulo":"Escapadela ao Douro Vinhateiro","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Miradouro de São Leonardo da Galafura","horario":"11:00","duracao":"~1h","nota":"O melhor miradouro do Douro Vinhateiro clássico, a 640 m de altitude. Confirmado: 1h12 / 85 km desde o Pinhal do Douro — perfeitamente viável num só dia, mesmo com os cães.","itemId":"dr-sao-leonardo","alternativas":[{"titulo":"Ficar na zona do Vale do Côa em vez desta escapadela","nota":"Se preferirem mesmo assim poupar a condução extra, trocar este dia por mais tempo tranquilo perto do alojamento.","recomendacao":6.5}]}]},{"periodo":"Tarde","atividades":[{"titulo":"Almoço no Restaurante São Leonardo","horario":"13:00","itemId":"dr-restaurante-sao-leonardo"},{"titulo":"Quinta do Vallado — passeio pelas vinhas","horario":"15:00","duracao":"~1h30","nota":"Quinta em Peso da Régua que aceita cães — passeio pelas vinhas incluído. Prova de vinhos é melhor fazer-se por turnos, um de cada vez, com o outro a ficar com os cães no exterior.","itemId":"dr-quinta-vallado","alternativas":[{"itemId":"dr-quinta-sol","nota":"Alojamento rural pet-friendly com animais da quinta — mais casual, menos focado em vinho."}]}]},{"periodo":"Noite","atividades":[{"titulo":"Regresso ao Pinhal do Douro","horario":"19:00","nota":"Dia mais longo da viagem — sem mais planos à noite."}]}],"vanessa":{"resumo":["Sai do Pinhal do Douro às 10:00, Miradouro de São Leonardo da Galafura às 11:15 (~1h), almoço no Restaurante São Leonardo às 13:00.","À tarde, passeio pelo Douro Vinhateiro / vinhas (~1h30–2h) em vez de uma quinta fixa, com regresso mais cedo, por volta das 17:00/17:30."],"diferencas":["Regressa mais cedo ao Pinhal do Douro — 17:00/17:30 em vez de 19:00 — para não esticar tanto o dia mais longo da viagem.","Retira a Quinta do Vallado como compromisso fixo à tarde; propõe um passeio genérico pelas vinhas, reservando uma quinta específica só se confirmarem antecipadamente que aceita os dois cães."]}},{"data":"4 Out (Dom)","titulo":"Torre de Moncorvo — dia tranquilo","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Torre de Moncorvo — centro histórico e Igreja Matriz","horario":"10:30","duracao":"~2h","nota":"Monumento Nacional, portal renascentista, ruas medievais cheias de casas senhoriais. Ritmo mais lento — combina com o \"equilibrado\" que pediram para esta viagem.","itemId":"dr-torre-moncorvo","alternativas":[{"itemId":"dr-castelo-melhor","nota":"Aldeia histórica medieval com vistas e centro de interpretação sobre as gravuras rupestres — alternativa se preferirem outra vila em vez de Torre de Moncorvo."}]}]},{"periodo":"Tarde","atividades":[{"titulo":"Almoço no O Rebentão","horario":"13:30","itemId":"dr-rebentao"},{"titulo":"Tarde livre perto do alojamento","horario":"16:00","nota":"Dia para recuperar do passeio mais longo de ontem — caminhada com os cães sem grande plano fixo, ou aproveitar para repetir o miradouro preferido da semana."}]}],"vanessa":{"resumo":["Torre de Moncorvo às 10:30 (~2h) e almoço no O Rebentão às 13:30, tal como no itinerário atual.","À tarde, passeio de natureza/trilho com os cães (~15:00, 1h30–2h) em vez de tarde livre, com regresso ao alojamento às 17:00."],"diferencas":["Substitui a 'tarde livre perto do alojamento' por um passeio de natureza/trilho específico para os cães (~15:00, 1h30–2h) antes do regresso."]}},{"data":"5 Out (Seg)","titulo":"Regresso","periodos":[{"periodo":"Manhã","atividades":[{"titulo":"Última caminhada com os cães","horario":"09:00"},{"titulo":"Check-out","horario":"11:00 (a confirmar)"}]},{"periodo":"Tarde","atividades":[{"titulo":"Viagem de regresso a Carnide","horario":"12:00","nota":"Chegada a casa prevista para as 18:00 — considerar uma paragem a meio do caminho."}]}],"vanessa":{"resumo":["Última caminhada às 09:00, pequeno-almoço e arrumar entre 10:00 e 11:00, check-out às 11:00, saída às 12:00 e chegada a casa prevista para as 18:00.","Nota dela: sem colocar nenhuma atração no caminho — o objetivo é chegar a casa sem transformar o último dia numa corrida."],"diferencas":["Torna explícita uma paragem a meio do caminho para almoço, descanso e passeio dos cães — o itinerário atual apenas dizia para 'considerar' uma paragem."]}}],"restaurantes":[{"id":"dr-restaurante-coa-museu","nome":"Restaurante Côa Museu","categoria":"Gastronomia Transmontana","descricaoCurta":"Vista sobre o encontro dos rios Douro e Côa, cozinha de tradição beirã.","descricaoCompleta":"Dentro do próprio Museu do Côa, este restaurante combina uma vista privilegiada sobre o vale com uma cozinha bem enraizada na tradição da Beira: cabrito e bacalhau muito bem confecionados, com destaque para as migas que acompanham o cabrito. Bom sítio para o almoço do dia da visita ao museu e ao parque arqueológico.","precoSimbolo":"€€","distanciaAlojamento":"~20 min de carro","mapsQuery":"Restaurante Museu do Côa","coord":{"lat":41.089,"lng":-7.141},"coordAproximada":true,"recomendacao":8.4,"recomendacaoNota":"Vista + comida regional bem feita, mesmo ao lado do museu — combina perfeitamente com a manhã de arte rupestre."},{"id":"dr-preguica","nome":"Petiscaria Preguiça","categoria":"Petiscos / Peixe do Rio","descricaoCurta":"Peixe do rio frito e sopa, vista sobre o rio Douro, em Freixo de Numão.","descricaoCompleta":"Petisqueira simples em Freixo de Numão com vista sobre o Douro — peixe do rio frito é a especialidade, ambiente informal e sem cerimónia. Boa opção de almoço depois da manhã a explorar o Castelo Velho e as ruínas.","precoSimbolo":"€","distanciaAlojamento":"~10 min de carro","mapsQuery":"Petisqueira Preguiça Freixo de Numão","coord":{"lat":41.075,"lng":-7.153},"coordAproximada":true,"recomendacao":7.8,"recomendacaoNota":"Simples, barato e com vista — sem grandes cerimónias, boa pausa a meio do dia."},{"id":"dr-restaurante-sao-leonardo","nome":"Restaurante São Leonardo","categoria":"Gastronomia do Douro","descricaoCurta":"Junto ao melhor miradouro do Douro Vinhateiro, em São Leonardo da Galafura.","descricaoCompleta":"Mesmo junto ao Miradouro de São Leonardo da Galafura, o restaurante aproveita a mesma vista de 640 m sobre o Douro. Bom ponto de paragem depois do miradouro, antes de continuar para a quinta à tarde.","precoSimbolo":"€€","distanciaAlojamento":"Douro Vinhateiro (dia de escapadela)","mapsQuery":"Restaurante Sao Leonardo Galafura","coord":{"lat":41.186,"lng":-7.706},"coordAproximada":true,"recomendacao":7.9,"recomendacaoNota":"Aproveita a vista do miradouro sem teres de te deslocar outra vez — prático para o dia mais longo da viagem."},{"id":"dr-rebentao","nome":"O Rebentão","categoria":"Gastronomia Transmontana","descricaoCurta":"Bife à lareira e posta em Torre de Moncorvo.","descricaoCompleta":"Em Torre de Moncorvo, especialista em carnes grelhadas à lareira — bife, posta à lareira, costeleta de vitela — além de polvo à lagareiro e bacalhau assado na brasa. Cozinha transmontana sem grandes voltas, feita bem.","precoSimbolo":"€€","distanciaAlojamento":"~25 min de carro","mapsQuery":"O Rebentao Torre de Moncorvo","coord":{"lat":41.1758,"lng":-7.0463},"coordAproximada":true,"recomendacao":7.9,"recomendacaoNota":"Carnes à lareira bem feitas, ambiente sem pretensões — bom fecho para o dia mais tranquilo da viagem.","dicas":"Não consegui confirmar este nome numa pesquisa recente — encontrei apenas \"O Artur de Carviçais\", no Largo do Rebentão, em Carviçais (concelho de Torre de Moncorvo). Pode ser o mesmo local com outro nome, ou outro estabelecimento — vale a pena confirmar antes de reservar."},{"id":"dr-adega-caneco","nome":"Adega O Caneco","categoria":"Gastronomia Transmontana","descricaoCurta":"Casa de comidas em Torre de Moncorvo desde 1981.","descricaoCompleta":"Adega tradicional em Torre de Moncorvo a servir comida caseira desde 1981 — cozinha simples e genuína, sem artifícios. Boa alternativa ao Rebentão se preferirem algo ainda mais informal.","precoSimbolo":"€","distanciaAlojamento":"~25 min de carro","mapsQuery":"Adega O Caneco Torre de Moncorvo","coord":{"lat":41.1758,"lng":-7.0463},"coordAproximada":true,"recomendacao":7.3,"recomendacaoNota":"Décadas de história na cozinha — casa antiga, sem pressa nenhuma."},{"id":"dr-calca-curta","nome":"Restaurante Calça Curta","categoria":"Peixe do Rio","descricaoCurta":"Escabeche, ensopado de enguias e arroz de lampreia, vista sobre o Douro.","descricaoCompleta":"Em Carrazeda de Ansiães, especialista em peixe do rio: escabeche, ensopado e caldeirada de enguias, arroz de lampreia e sável — pratos que raramente se encontram fora desta zona do Douro. Vista sobre o rio incluída.","precoSimbolo":"€€","distanciaAlojamento":"~20 min de carro","mapsQuery":"Restaurante Calca Curta Carrazeda de Ansiaes","coord":{"lat":41.2306,"lng":-7.3016},"coordAproximada":true,"recomendacao":8.0,"recomendacaoNota":"Pratos de peixe de rio que não se encontram em qualquer lado — vale o desvio para quem gosta de sair da carne."},{"id":"dr-taberna-helena","nome":"Taberna da Helena","categoria":"Casual","descricaoCurta":"Cozinha mediterrânica e europeia em Carrazeda de Ansiães.","descricaoCompleta":"Ambiente descontraído em Carrazeda de Ansiães, cozinha mais europeia/mediterrânica do que transmontana clássica — boa opção para variar se já tiverem comido carnes grelhadas e peixe de rio nos dias anteriores.","precoSimbolo":"€€","distanciaAlojamento":"~20 min de carro","mapsQuery":"Taberna da Helena Carrazeda de Ansiaes","coord":{"lat":41.2306,"lng":-7.3016},"coordAproximada":true,"recomendacao":7.5,"recomendacaoNota":"Boa opção para variar o registo a meio da semana."},{"id":"dr-a-lareira","nome":"A Lareira","categoria":"Gastronomia Transmontana","descricaoCurta":"Restaurante em Vila Nova de Foz Côa.","descricaoCompleta":"Um dos restaurantes bem cotados de Vila Nova de Foz Côa, cozinha regional. Boa opção de reserva no centro da vila, perto do museu e do parque arqueológico.","precoSimbolo":"€€","distanciaAlojamento":"~20 min de carro","mapsQuery":"A Lareira Vila Nova de Foz Coa","coord":{"lat":41.087,"lng":-7.1367},"coordAproximada":true,"recomendacao":7.6,"recomendacaoNota":"Alternativa central em Foz Côa, ainda não testada — vale reservar com antecedência."},{"id":"dr-paleolitico","nome":"Restaurante Paleolítico","categoria":"Gastronomia Transmontana","descricaoCurta":"Restaurante em Vila Nova de Foz Côa, nome a condizer com a arte rupestre da região.","descricaoCompleta":"Outro nome bem cotado em Vila Nova de Foz Côa, batizado em homenagem à arte rupestre paleolítica do Vale do Côa. Cozinha regional no centro da vila.","precoSimbolo":"€€","distanciaAlojamento":"~20 min de carro","mapsQuery":"Restaurante Paleolitico Vila Nova de Foz Coa","coord":{"lat":41.087,"lng":-7.1367},"coordAproximada":true,"recomendacao":7.5,"recomendacaoNota":"Nome divertido, localização central — boa opção de reserva em Foz Côa."}],"atracoes":[{"id":"dr-fraga-ola","nome":"Miradouro e Cascata da Fraga do Ôla","categoria":"Miradouro","gratis":true,"descricaoCurta":"Estrutura metálica com vista sobre a cascata e o vale do Douro, mesmo ao pé do alojamento.","descricaoCompleta":"Estrutura metálica construída de raiz sobre a cascata da Fraga do Ôla, com vista panorâmica extraordinária sobre um grande troço do vale do Douro e do ribeiro da aldeia. Fica na estrada municipal que liga o Pinhal do Douro a Coleja — literalmente ao virar da esquina do alojamento.","distanciaAlojamento":"A poucos minutos a pé/carro","mapsQuery":"Miradouro Fraga do Ola Pinhal do Douro","coord":{"lat":41.085,"lng":-7.15},"coordAproximada":true,"recomendacao":8.6,"recomendacaoNota":"O miradouro mais conveniente de toda a viagem — literalmente ao pé de casa, ótimo para o fim do primeiro dia com os cães."},{"id":"dr-santa-barbara","nome":"Miradouro de Santa Bárbara","categoria":"Miradouro","gratis":true,"descricaoCurta":"Vista sobre o Douro Superior, perto do alojamento.","descricaoCompleta":"Miradouro na mesma zona do Pinhal do Douro, com vista aberta sobre o Douro Superior. Boa opção rápida para uma pausa ao ar livre com os cães sem grande deslocação.","distanciaAlojamento":"Muito perto do alojamento","mapsQuery":"Miradouro Santa Barbara Pinhal do Douro","coord":{"lat":41.07,"lng":-7.14},"coordAproximada":true,"recomendacao":7.8,"recomendacaoNota":"Alternativa rápida à Fraga do Ôla, sem quase nenhuma condução."},{"id":"dr-sao-martinho","nome":"Miradouro de São Martinho e Barragem da Valeira","categoria":"Miradouro","gratis":true,"descricaoCurta":"Vista sobre a barragem da Valeira, no rio Douro.","descricaoCompleta":"Vista sobre a Barragem da Valeira, uma das barragens do rio Douro, com a paisagem típica de socalcos e encosta a pique sobre a água. Fica no caminho entre o alojamento e Freixo de Numão, fácil de encaixar noutro dia.","distanciaAlojamento":"~10 min de carro","mapsQuery":"Miradouro Sao Martinho Barragem da Valeira","coord":{"lat":41.133,"lng":-7.478},"coordAproximada":true,"foto":"https://upload.wikimedia.org/wikipedia/commons/e/e6/Barragem_da_Valeira_-_Portugal_(17020997765).jpg","recomendacao":8.0,"recomendacaoNota":"Vista de barragem/socalcos sem sair da vizinhança imediata do alojamento."},{"id":"dr-castelo-velho","nome":"Freixo de Numão — Castelo Velho e Ruínas do Prazo","categoria":"História","descricaoCurta":"Aldeia com camadas de ocupação pré-histórica, romana e medieval, e um miradouro.","descricaoCompleta":"Freixo de Numão é uma pequena vila que concentra uma densidade rara de património: o Castelo Velho (sítio pré-histórico com miradouro), as Ruínas do Prazo (ocupação desde a pré-história até época romana e medieval, um dos complexos arqueológicos mais bem preservados do país), o Museu da Casa Grande (etnografia local — pastorícia, vinho, azeite e amêndoa) e o pelourinho da vila. Dá para passear tudo a pé, boa parte ao ar livre.","distanciaAlojamento":"~10 min de carro","mapsQuery":"Freixo de Numao Castelo Velho","coord":{"lat":41.075,"lng":-7.153},"coordAproximada":true,"foto":"https://upload.wikimedia.org/wikipedia/commons/d/d5/Castelo_Velho_de_Freixo_de_Num%C3%A3o.jpg","recomendacao":8.7,"recomendacaoNota":"Talvez a manhã mais rica em história de toda a viagem, e tudo a uma curta distância do alojamento."},{"id":"dr-museu-coa","nome":"Museu do Côa","categoria":"Museu","precoSimbolo":"€","descricaoCurta":"Museu de contexto para a arte rupestre paleolítica do Vale do Côa, Património Mundial UNESCO.","descricaoCompleta":"Construído numa das encostas onde se encontram os rios Douro e Côa, o Museu do Côa serve de porta de entrada para a maior coleção a céu aberto de arte rupestre paleolítica do mundo (gravuras datadas de há 22.000 a 10.000 anos). Tem também um miradouro próprio sobre o rio e os socalcos do Douro. Bilhete combinado com o Museu da Casa Grande: €6,50 (€4 reduzido).","distanciaAlojamento":"~20 min de carro","mapsQuery":"Museu do Coa Vila Nova de Foz Coa","coord":{"lat":41.089,"lng":-7.141},"coordAproximada":true,"recomendacao":9.0,"recomendacaoNota":"Essencial para dar contexto antes de ver as gravuras a sério no parque arqueológico — não saltar este passo.","dicas":"Fechado às segundas-feiras e nos feriados de 1 Jan, Páscoa, 1 Mai e 25 Dez."},{"id":"dr-parque-coa","nome":"Parque Arqueológico do Vale do Côa","categoria":"Arqueologia","precoSimbolo":"€€","descricaoCurta":"Visitas guiadas às gravuras rupestres paleolíticas, em veículos todo-o-terreno.","descricaoCompleta":"As visitas às gravuras propriamente ditas fazem-se a partir dos centros de receção de Muxagata e Castelo Melhor, em grupos de 8 pessoas, com transporte todo-o-terreno do próprio parque, até três sítios: Canada do Inferno, Penascosa e Ribeira de Piscos. Bilhete normal: €10 por pessoa e por sítio visitado. Reserva prévia obrigatória.","distanciaAlojamento":"~25-30 min de carro (Muxagata/Castelo Melhor)","mapsQuery":"Centro de Receção Muxagata Parque Arqueologico Coa","coord":{"lat":41.045,"lng":-7.115},"coordAproximada":true,"foto":"https://upload.wikimedia.org/wikipedia/commons/c/c8/Prehistoric_Rock-Art_Site_of_the_C%C3%B4a_Valley_-_Penascosa_-_Bull_%40_2011-08-06.jpg","recomendacao":9.2,"recomendacaoNota":"O grande motivo de vir a esta zona do Douro — reservar com bastante antecedência, os grupos são pequenos.","dicas":"Confirmar antes se os cães podem ir no veículo todo-o-terreno (+351 279 768 260 / visitas@arte-coa.pt) — se não puderem, combinar revezamento entre os dois."},{"id":"dr-foz-coa-centro","nome":"Centro histórico de Vila Nova de Foz Côa","categoria":"História","gratis":true,"descricaoCurta":"Igreja Matriz manuelina e pelourinho, no centro da vila.","descricaoCompleta":"A Igreja Matriz de estilo manuelino e o pelourinho são os pontos altos de um passeio a pé pelo centro de Vila Nova de Foz Côa — vila pequena, fácil de percorrer com os cães depois do almoço.","distanciaAlojamento":"~20 min de carro","mapsQuery":"Igreja Matriz Vila Nova de Foz Coa","coord":{"lat":41.087,"lng":-7.1367},"coordAproximada":true,"recomendacao":7.4,"recomendacaoNota":"Passeio leve para fechar a tarde, sem grande investimento de tempo."},{"id":"dr-faia-brava","nome":"Reserva da Faia Brava","categoria":"Natureza","gratis":true,"descricaoCurta":"Maior reserva privada de conservação de Portugal — trilhos e observação de aves.","descricaoCompleta":"A maior área de conservação privada do país, com trilhos e boas condições para observação de aves de rapina sobre as escarpas do Côa. Alternativa mais tranquila e ao ar livre ao centro histórico de Foz Côa, se preferirem mais natureza e menos pedra.","distanciaAlojamento":"~25 min de carro","mapsQuery":"Reserva Faia Brava","coord":{"lat":41.03,"lng":-7.1},"coordAproximada":true,"recomendacao":8.1,"recomendacaoNota":"Boa opção se estiverem saturados de igrejas e museus — natureza pura, e os cães vão adorar."},{"id":"dr-sao-leonardo","nome":"Miradouro de São Leonardo da Galafura","categoria":"Miradouro","gratis":true,"descricaoCurta":"O melhor miradouro do Douro Vinhateiro clássico, a 640 m de altitude.","descricaoCompleta":"Considerado o melhor miradouro de todo o Alto Douro, a 640 m de altitude, com vista desimpedida sobre o rio e os socalcos. Tem capela, zona de piquenique com bancos de pedra e sombra, e um marco geodésico. A 1h12/85 km do alojamento — mais longe do que os miradouros do dia a dia, mas perfeitamente viável num só dia.","distanciaAlojamento":"1h12 (85 km) do alojamento","mapsQuery":"Miradouro Sao Leonardo da Galafura","coord":{"lat":41.186,"lng":-7.706},"coordAproximada":true,"foto":"https://upload.wikimedia.org/wikipedia/commons/9/91/Miradouro_de_S%C3%A3o_Leonardo_da_Galafura_-_Portugal_(7339251762).jpg","recomendacao":8.8,"recomendacaoNota":"A vista mais icónica de todo o Douro — vale bem a condução extra deste dia."},{"id":"dr-quinta-vallado","nome":"Quinta do Vallado","categoria":"Vinho","precoSimbolo":"€€","descricaoCurta":"Quinta em Peso da Régua que aceita cães, com passeio pelas vinhas.","descricaoCompleta":"Uma das poucas quintas do Douro claramente preparadas para receber cães — passeio pelas vinhas incluído. A prova de vinhos em si é melhor fazer-se por turnos, com um dos dois a ficar de fora com o Pub e o Dexter, já que o espaço de prova costuma ser interior.","distanciaAlojamento":"Douro Vinhateiro (dia de escapadela)","mapsQuery":"Quinta do Vallado Peso da Regua","coord":{"lat":41.163,"lng":-7.789},"coordAproximada":true,"recomendacao":8.3,"recomendacaoNota":"Rara quinta genuinamente pet-friendly no Douro — vale a pena por isso mesmo.","dicas":"Reservar a visita com antecedência e perguntar diretamente sobre a política de animais no momento da reserva."},{"id":"dr-quinta-sol","nome":"Quinta do Sol (Tendais)","categoria":"Turismo Rural","precoSimbolo":"€€","descricaoCurta":"Turismo rural pet-friendly no Douro, com animais da quinta.","descricaoCompleta":"Propriedade de turismo rural onde os animais de estimação são bem-vindos — tem égua, cabras-anãs, faisões e cães da Serra da Estrela residentes. Mais casual e menos focada em vinho do que a Quinta do Vallado, boa alternativa se preferirem um ambiente de quinta tradicional.","distanciaAlojamento":"Douro Vinhateiro (dia de escapadela)","mapsQuery":"Quinta do Sol Tendais","coord":{"lat":41.05,"lng":-8.05},"coordAproximada":true,"recomendacao":7.7,"recomendacaoNota":"Mais quinta tradicional do que enoturismo — boa se quiserem variar o registo do dia."},{"id":"dr-torre-moncorvo","nome":"Torre de Moncorvo — centro histórico e Igreja Matriz","categoria":"História","gratis":true,"descricaoCurta":"Monumento Nacional com portal renascentista e ruas medievais cheias de casas senhoriais.","descricaoCompleta":"A Igreja Matriz é Monumento Nacional, construída entre o séc. XVI e início do XVII, com um portal renascentista e um órgão de tubos do séc. XVIII. À volta, o núcleo medieval e renascentista da vila está cheio de casas senhoriais, capelas, fontes e pequenos museus (arte sacra, ferro e região de Moncorvo, fotografia do Alto Douro). Passeio fácil a pé, ritmo lento.","distanciaAlojamento":"~25 min de carro","mapsQuery":"Igreja Matriz Torre de Moncorvo","coord":{"lat":41.1758,"lng":-7.0463},"coordAproximada":true,"recomendacao":7.9,"recomendacaoNota":"Bom dia mais lento — muita história concentrada num passeio a pé sem pressa."},{"id":"dr-castelo-melhor","nome":"Aldeia Histórica de Castelo Melhor","categoria":"Aldeia Histórica","gratis":true,"descricaoCurta":"Aldeia medieval com vistas e centro de interpretação da arte rupestre.","descricaoCompleta":"Uma das Aldeias Históricas de Portugal, com características medievais e vistas soberbas sobre o vale. Tem também um dos centros de receção do Parque Arqueológico do Côa e um centro de interpretação dedicado às gravuras e à ocupação ancestral da região.","distanciaAlojamento":"~30 min de carro","mapsQuery":"Castelo Melhor aldeia historica","coord":{"lat":41.0075,"lng":-7.1264},"coordAproximada":true,"foto":"https://upload.wikimedia.org/wikipedia/commons/d/d7/Capela_de_S%C3%A3o_Gabriel_-_Castelo_Melhor_-_Portugal_(50766239596).jpg","recomendacao":8.0,"recomendacaoNota":"Boa alternativa a Torre de Moncorvo se preferirem outra aldeia histórica, com o bónus de ligar de volta ao tema das gravuras."},{"id":"dr-passadicos-coa","nome":"Passadiços do Côa (sugestão da Vanessa)","categoria":"Natureza","origemVanessa":true,"descricaoCurta":"Sugestão da Vanessa: passeio exterior junto ao Côa, pensado especialmente para os cães.","descricaoCompleta":"A Vanessa propôs este passeio para dar aos cães o próprio programa da tarde, já que eles não podem acompanhar dentro do Museu do Côa nem nas visitas guiadas às gravuras rupestres. Não consegui confirmar a existência exacta de um percurso com este nome na zona — vale a pena verificar no local ou substituir por outro passeio pedestre perto de Vila Nova de Foz Côa que aceite animais.","distanciaAlojamento":"~20 min de carro (junto a Vila Nova de Foz Côa)","mapsQuery":"Vila Nova de Foz Coa passeio ribeirinho","coord":{"lat":41.089,"lng":-7.141},"coordAproximada":true,"dicas":"Sugestão da Vanessa — não pesquisei nem confirmei esta localização especificamente; confirmar no local ou adaptar para outro passeio pedestre pet-friendly perto de Foz Côa."},{"id":"dr-trilho-natureza-moncorvo","nome":"Passeio de natureza / trilho perto de Torre de Moncorvo (sugestão da Vanessa)","categoria":"Natureza","origemVanessa":true,"descricaoCurta":"Sugestão da Vanessa: caminhada tranquila para os cães, sem local específico ainda definido.","descricaoCompleta":"Ideia da Vanessa para a tarde de domingo: em vez de deixar a tarde totalmente livre, fazer uma caminhada de verdade com os cães, sem horário apertado nem obrigação de visitar nada em concreto. Ainda não há um trilho específico escolhido — vale a pena decidir no local, conforme o que encontrarem perto de Torre de Moncorvo.","distanciaAlojamento":"~25 min de carro (zona de Torre de Moncorvo)","mapsQuery":"Torre de Moncorvo","coord":{"lat":41.1758,"lng":-7.0463},"coordAproximada":true,"dicas":"Sugestão da Vanessa — sem local exacto definido; escolher no dia conforme trilhos disponíveis perto de Torre de Moncorvo."}],"praias":[],"nightlife":[]}]};
 
 function esc(s) {
   const d = document.createElement("div");
@@ -1261,9 +573,28 @@ function renderItinerario(destino) {
           <p class="periodo-nome">${esc(p.periodo)}</p>
           ${(p.atividades || []).map((a) => atividadeHtml(a)).join("")}
         </div>`).join("")}
+      ${vanessaHtml(d)}
       <a class="voltar-indice" href="#topo-${destino.id}">↑ Voltar ao índice</a>
     </div>`).join("");
   return `<div id="topo-${destino.id}"></div><div class="indice-dias">${indice}</div>${dias}`;
+}
+
+function vanessaHtml(d) {
+  const v = d.vanessa;
+  if (!v) return "";
+  const resumoHtml = (v.resumo || []).map((linha) => `<p class="vanessa-linha">${esc(linha)}</p>`).join("");
+  const diffsHtml = (v.diferencas && v.diferencas.length)
+    ? `<p class="vanessa-diffs-titulo">O que muda em relação ao itinerário acima:</p><ul class="vanessa-diffs">${v.diferencas.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`
+    : `<p class="vanessa-igual">Sem diferenças relevantes em relação ao itinerário acima.</p>`;
+  return `
+    <details class="vanessa">
+      <summary>💜 Roteiro da Vanessa — ver o dia dela</summary>
+      <div class="vanessa-corpo">
+        <p class="vanessa-nota">A Vanessa fez a própria versão deste dia — fica aqui o resumo dela e o que muda.</p>
+        ${resumoHtml}
+        ${diffsHtml}
+      </div>
+    </details>`;
 }
 
 function atividadeHtml(a) {
@@ -1366,11 +697,11 @@ function coletarPontosMapa(destino) {
   const pontos = [];
   let n = 0;
   (destino.alojamento || []).forEach((it) => {
-    if (it.coord) pontos.push({ n: ++n, cat: "alojamento", nome: it.nome, coord: it.coord, id: null, aproximada: !!it.coordAproximada });
+    if (it.coord) pontos.push({ n: ++n, cat: "alojamento", nome: it.nome, coord: it.coord, id: null, aproximada: !!it.coordAproximada, vanessa: false });
   });
   ["restaurantes", "atracoes", "praias", "nightlife"].forEach((cat) => {
     (destino[cat] || []).forEach((it) => {
-      if (it.coord) pontos.push({ n: ++n, cat, nome: it.nome, coord: it.coord, id: it.id, aproximada: !!it.coordAproximada });
+      if (it.coord) pontos.push({ n: ++n, cat, nome: it.nome, coord: it.coord, id: it.id, aproximada: !!it.coordAproximada, vanessa: !!it.origemVanessa });
     });
   });
   return pontos;
@@ -1382,7 +713,8 @@ function renderMapaTab(destino) {
   if (!pontos.length) return "<p>Ainda não há pontos com coordenadas para mostrar no mapa.</p>";
   const categoriasPresentes = Object.keys(MAPA_LABELS).filter((cat) => pontos.some((p) => p.cat === cat));
   const legenda = categoriasPresentes.map((cat) => `
-    <span class="mapa-legenda-item"><span class="mapa-legenda-dot" style="background:${MAPA_CORES[cat]}"></span>${esc(MAPA_LABELS[cat])}</span>`).join("");
+    <span class="mapa-legenda-item"><span class="mapa-legenda-dot" style="background:${MAPA_CORES[cat]}"></span>${esc(MAPA_LABELS[cat])}</span>`).join("")
+    + (pontos.some((p) => p.vanessa) ? `<span class="mapa-legenda-item"><span class="mapa-legenda-dot mapa-legenda-vanessa">💜</span>Sugestão da Vanessa</span>` : "");
   const temAproximada = pontos.some((p) => p.aproximada);
   const avisoAprox = temAproximada ? `<p class="mapa-aviso">📍 Coordenadas estimadas manualmente (sem acesso a geocodificação nesta sessão) — confirmar a localização exacta no Google Maps antes de seguir viagem.</p>` : "";
   const avisoSemCoord = semCoord.length ? `<p class="mapa-aviso">Sem coordenadas ainda: ${semCoord.map((it) => esc(it.nome)).join(", ")}.</p>` : "";
@@ -1414,7 +746,13 @@ function initMapaIfNeeded(destino) {
   const bounds = [];
   pontos.forEach((p) => {
     const cor = MAPA_CORES[p.cat] || "#888";
-    const icon = L.divIcon({
+    const icon = p.vanessa ? L.divIcon({
+      className: "mapa-pin-vanessa-wrap",
+      html: `<div class="mapa-pin-vanessa-icon">💜</div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14],
+      popupAnchor: [0, -16],
+    }) : L.divIcon({
       className: "mapa-pin",
       html: `<div class="mapa-pin-outer" style="background:${cor}"><span class="mapa-pin-label">${p.n}</span></div>`,
       iconSize: [26, 26],
@@ -1423,7 +761,8 @@ function initMapaIfNeeded(destino) {
     });
     const marker = L.marker([p.coord.lat, p.coord.lng], { icon }).addTo(map);
     const botao = p.id ? `<br><button class="btn secundario" type="button" data-open-item="${esc(p.id)}">Detalhes</button>` : "";
-    marker.bindPopup(`<strong>${esc(p.nome)}</strong>${botao}`);
+    const vanessaNota = p.vanessa ? `<br><em>💜 Sugestão da Vanessa</em>` : "";
+    marker.bindPopup(`<strong>${esc(p.nome)}</strong>${vanessaNota}${botao}`);
     bounds.push([p.coord.lat, p.coord.lng]);
   });
   if (bounds.length === 1) map.setView(bounds[0], 13);
@@ -1462,7 +801,7 @@ function cardHtml(it) {
       <img src="${esc(src)}" alt="${esc(it.nome)}" loading="lazy" onerror="this.onerror=null;this.src=placeholderImg(this.alt)">
       <div class="card-body">
         <span class="card-categoria">${esc(it.categoria)}</span>
-        <span class="card-nome">${esc(it.nome)}</span>
+        <span class="card-nome">${esc(it.nome)}${it.origemVanessa ? ` <span class="vanessa-chip">💜 Vanessa</span>` : ""}</span>
         <span class="card-desc">${esc(it.descricaoCurta)}</span>
         <span class="card-preco">${fmtPreco(it)}</span>
       </div>
@@ -1514,7 +853,7 @@ function openModal(id) {
       <div class="modal-topo">
         <div>
           <span class="modal-categoria">${esc(it.categoria)}</span>
-          <h3 class="modal-nome">${esc(it.nome)}</h3>
+          <h3 class="modal-nome">${esc(it.nome)}${it.origemVanessa ? ` <span class="vanessa-chip">💜 Sugestão da Vanessa</span>` : ""}</h3>
         </div>
         <button class="btn secundario" type="button" data-salvo-toggle="${esc(it.id)}" aria-pressed="${salvo ? "true" : "false"}">${salvo ? "★ Guardado" : "☆ Guardar"}</button>
       </div>
