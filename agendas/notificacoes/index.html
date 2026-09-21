@@ -45,6 +45,29 @@
       font-weight: 700;
       font-size: 15px;
     }
+    .view-tabs {
+      max-width: 1120px;
+      margin: 12px auto 0;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 4px;
+      padding: 4px;
+      background: #eef2f5;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+    .view-tab {
+      min-height: 44px;
+      background: transparent;
+      color: #46545f;
+      border: 0;
+      font-weight: 800;
+    }
+    .view-tab.active {
+      background: #fff;
+      color: #0e4d80;
+      box-shadow: 0 1px 4px rgba(23, 32, 38, .12);
+    }
     .filter-bar {
       position: fixed;
       left: 0;
@@ -193,6 +216,58 @@
     .event-card dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
     .event-card p { margin: 8px 0; font-size: 14px; line-height: 1.45; }
     .event-card a { color: #0e4d80; font-size: 14px; font-weight: 800; }
+    .events-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .events-toolbar h2 { margin: 0; font-size: 22px; }
+    .events-toolbar p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+    .restore-events { background: #596873; font-size: 14px; padding: 9px 11px; white-space: nowrap; }
+    .agenda-event-list { display: grid; gap: 10px; }
+    .agenda-event-card {
+      display: grid;
+      grid-template-columns: 136px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--blue);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .event-date-block {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      color: #0e4d80;
+      font-size: 15px;
+    }
+    .event-date-block strong { font-size: 18px; }
+    .event-content h2 { margin: 0; font-size: 20px; }
+    .event-content p { margin: 8px 0; }
+    .event-content dl { margin: 0; font-size: 14px; }
+    .event-content dl div { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 7px; }
+    .event-content dt { color: var(--muted); font-weight: 700; }
+    .event-content dd { margin: 0; overflow-wrap: anywhere; }
+    .event-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .event-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 8px 11px;
+      border-radius: 7px;
+      background: var(--blue);
+      color: #fff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .event-action.secondary { background: #596873; }
+    .event-action.danger { background: #fff; color: var(--red); border: 1px solid #d8b5b2; }
     .reason {
       margin: 0 0 10px;
       color: var(--amber);
@@ -345,8 +420,10 @@
       font-size: 14px;
     }
     [hidden] { display: none !important; }
+    body.events-view-active { padding-bottom: 0; }
     @media (min-width: 760px) {
       body { padding-bottom: 0; padding-top: var(--bar-h); }
+      body.events-view-active { padding-top: 0; }
       .filter-bar {
         top: 0;
         bottom: auto;
@@ -368,6 +445,10 @@
       .card-actions button { flex: 1 1 32%; }
       .details-head { align-items: flex-start; flex-direction: column; }
       .discussion-layout { grid-template-columns: 1fr; }
+      .agenda-event-card { grid-template-columns: 1fr; }
+      .event-date-block { flex-direction: row; align-items: baseline; gap: 8px; }
+      .events-toolbar { align-items: flex-start; }
+      .event-actions .event-action { flex: 1 1 44%; }
     }
   </style>
 </head>
@@ -386,13 +467,18 @@
       <h1>Triagem de Notificacoes</h1>
       <div class="sub">Gerado em 2026-09-21T21:30:11+01:00</div>
       <div class="total-line">42 origens · 705 msgs · Review 20 (48%) · Importantes 24 (57%) · Ruido 5 (12%)</div>
+      <nav class="view-tabs" aria-label="Conteúdo da página">
+        <button class="view-tab active" data-view-target="notifications" aria-selected="true">Notificações</button>
+        <button class="view-tab" data-view-target="events" aria-selected="false">Eventos (<span id="event-tab-count">22</span>)</button>
+      </nav>
     </div>
   </header>
 
   <main>
-    <section>
-      <div class="section-title"><h2>Highlights</h2></div>
-      <div class="highlight-grid">
+    <div data-view-panel="notifications">
+      <section>
+        <div class="section-title"><h2>Highlights</h2></div>
+        <div class="highlight-grid">
     <article class="highlight-item" data-origin="Hff - fotos de pilinhas" data-priority="alta" data-important="true" data-review="true" data-read="false" data-feedback="">
       <div class="origin-name">Hff - fotos de pilinhas</div>
       <div class="highlight-title">
@@ -778,10 +864,10 @@
 
     </article>
     </div>
-    </section>
+      </section>
 
-    <section>
-      <div class="section-title"><h2>Outras origens</h2></div>
+      <section>
+        <div class="section-title"><h2>Outras origens</h2></div>
 
     <article class="group-card is-important" data-origin="Volley &amp; Friends - Indoor" data-priority="media" data-important="true" data-review="true" data-read="false" data-feedback="">
       <div class="group-top">
@@ -1977,23 +2063,32 @@
 
     </article>
 
-    </section>
+      </section>
 
-    <section class="maintenance">
-      <h2>Limpeza por data</h2>
-      <p class="summary">A preferência fica guardada na planilha e é aplicada automaticamente pelo Python na próxima geração. 1 dia mantém apenas hoje; 2 dias mantém hoje e ontem.</p>
-      <div class="maintenance-row">
-        <label class="cleanup-switch" for="auto-cleanup">
-          <input id="auto-cleanup" type="checkbox" checked
-            data-enable-url="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=auto_cleanup&amp;resumo=true&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-disable-url="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=nao_importante&amp;titulo=auto_cleanup&amp;resumo=false&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup">
-          <span>Limpeza automática</span>
-        </label>
-        <label for="expire-days">Manter apenas os ultimos</label>
-        <select id="expire-days" data-url-1="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=1&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-2="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=2&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-3="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=3&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-5="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=5&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup">
-          <option value="1" >1 dia</option><option value="2" selected>2 dias</option><option value="3" >3 dias</option><option value="5" >5 dias</option>
-        </select>
+      <section class="maintenance">
+        <h2>Limpeza por data</h2>
+        <p class="summary">A preferência fica guardada na planilha e é aplicada automaticamente pelo Python na próxima geração. 1 dia mantém apenas hoje; 2 dias mantém hoje e ontem.</p>
+        <div class="maintenance-row">
+          <label class="cleanup-switch" for="auto-cleanup">
+            <input id="auto-cleanup" type="checkbox" checked
+              data-enable-url="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=auto_cleanup&amp;resumo=true&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-disable-url="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=nao_importante&amp;titulo=auto_cleanup&amp;resumo=false&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup">
+            <span>Limpeza automática</span>
+          </label>
+          <label for="expire-days">Manter apenas os ultimos</label>
+          <select id="expire-days" data-url-1="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=1&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-2="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=2&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-3="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=3&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup" data-url-5="https://script.google.com/macros/s/AKfycbwaqG_1pVZM4o0-3uaJ9uEFjCPWRPny0y0-dWM78ddHGJP-cTIsXySC56zI7K7om06O/exec?action=feedback_notificacao&amp;origem=__config_cleanup__&amp;feedback=importante&amp;titulo=cleanup_days&amp;resumo=5&amp;generated_at=2026-09-21T21%3A30%3A11%2B01%3A00&amp;observacao=config_cleanup">
+            <option value="1" >1 dia</option><option value="2" selected>2 dias</option><option value="3" >3 dias</option><option value="5" >5 dias</option>
+          </select>
+        </div>
+        <p class="cleanup-status" id="cleanup-status">Ativa: na próxima geração, o Python manterá hoje e ontem.</p>
+      </section>
+    </div>
+
+    <section data-view-panel="events" hidden>
+      <div class="events-toolbar">
+        <div><h2>Eventos</h2><p>Eventos passados desaparecem automaticamente após a data.</p></div>
+        <button class="restore-events" id="restore-events" hidden>Repor removidos</button>
       </div>
-      <p class="cleanup-status" id="cleanup-status">Ativa: na próxima geração, o Python manterá hoje e ontem.</p>
+      <div id="event-agenda"><div class="agenda-event-list"><article class="agenda-event-card" data-event-id="7f1848fdd0df6abc" data-event-date="2026-09-21" data-event-title="Jogo de ténis" data-event-time="15:00" data-event-location="A confirmar" data-event-details="Convite aberto; nível iniciante mencionado por um participante."><div class="event-date-block"><strong>21/09/2026</strong><span>15:00</span></div><div class="event-content"><div class="origin-name">Tennis</div><h2>Jogo de ténis</h2><p>Convite aberto; nível iniciante mencionado por um participante.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Jogo%20de%20t%C3%A9nis&amp;dates=20260921T150000/20260921T160000&amp;details=Convite%20aberto%3B%20n%C3%ADvel%20iniciante%20mencionado%20por%20um%20participante.&amp;location=A%20confirmar" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="dbf6609653281205" data-event-date="2026-09-21" data-event-title="Videoconferência da escritura" data-event-time="15:30" data-event-location="Online, e-Notariado" data-event-details="Confirmar se a sessão ocorreu e se o pagamento/comprovativo ficou concluído."><div class="event-date-block"><strong>21/09/2026</strong><span>15:30</span></div><div class="event-content"><div class="origin-name">Andre Cartorio Tatui</div><h2>Videoconferência da escritura</h2><p>Confirmar se a sessão ocorreu e se o pagamento/comprovativo ficou concluído.</p><dl><div><dt>Local</dt><dd>Online, e-Notariado</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Videoconfer%C3%AAncia%20da%20escritura&amp;dates=20260921T153000/20260921T163000&amp;details=Confirmar%20se%20a%20sess%C3%A3o%20ocorreu%20e%20se%20o%20pagamento/comprovativo%20ficou%20conclu%C3%ADdo.&amp;location=Online%2C%20e-Notariado" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="b4440ee87a122f71" data-event-date="2026-09-21" data-event-title="Voleibol de segunda-feira" data-event-time="21:00" data-event-location="São Boaventura" data-event-details="Pagamento para João Paiva; contacto redigido."><div class="event-date-block"><strong>21/09/2026</strong><span>21:00</span></div><div class="event-content"><div class="origin-name">Volei 2F - 21h SBoo</div><h2>Voleibol de segunda-feira</h2><p>Pagamento para João Paiva; contacto redigido.</p><dl><div><dt>Local</dt><dd>São Boaventura</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Voleibol%20de%20segunda-feira&amp;dates=20260921T210000/20260921T220000&amp;details=Pagamento%20para%20Jo%C3%A3o%20Paiva%3B%20contacto%20redigido.&amp;location=S%C3%A3o%20Boaventura" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="cec9ee424ce4f5c4" data-event-date="2026-09-21" data-event-title="Reavaliação clínica" data-event-time="A confirmar" data-event-location="HFF" data-event-details="Acompanhamento previsto dentro de 48 horas; detalhes redigidos."><div class="event-date-block"><strong>21/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Isabel Leal Neo Hff</div><h2>Reavaliação clínica</h2><p>Acompanhamento previsto dentro de 48 horas; detalhes redigidos.</p><dl><div><dt>Local</dt><dd>HFF</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Reavalia%C3%A7%C3%A3o%20cl%C3%ADnica&amp;dates=20260921/20260922&amp;details=Acompanhamento%20previsto%20dentro%20de%2048%20horas%3B%20detalhes%20redigidos.&amp;location=HFF" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="18e8146882b7e4ea" data-event-date="2026-09-21" data-event-title="Videoconferência no e-Notariado" data-event-time="A confirmar" data-event-location="Online" data-event-details="Abrir a ligação privada na conversa com André."><div class="event-date-block"><strong>21/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Andre Segundo Cartorio Tatui</div><h2>Videoconferência no e-Notariado</h2><p>Abrir a ligação privada na conversa com André.</p><dl><div><dt>Local</dt><dd>Online</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Videoconfer%C3%AAncia%20no%20e-Notariado&amp;dates=20260921/20260922&amp;details=Abrir%20a%20liga%C3%A7%C3%A3o%20privada%20na%20conversa%20com%20Andr%C3%A9.&amp;location=Online" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="5320f786c90693ab" data-event-date="2026-09-22" data-event-title="Jogo de ténis no Jamor" data-event-time="14:00-15:00" data-event-location="Jamor, campo coberto" data-event-details="Convite aberto no grupo."><div class="event-date-block"><strong>22/09/2026</strong><span>14:00-15:00</span></div><div class="event-content"><div class="origin-name">Marcação de jogos</div><h2>Jogo de ténis no Jamor</h2><p>Convite aberto no grupo.</p><dl><div><dt>Local</dt><dd>Jamor, campo coberto</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Jogo%20de%20t%C3%A9nis%20no%20Jamor&amp;dates=20260922T140000/20260922T150000&amp;details=Convite%20aberto%20no%20grupo.&amp;location=Jamor%2C%20campo%20coberto" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="84c3ee7fcbe4bfb0" data-event-date="2026-09-22" data-event-title="Encontro LisBORA" data-event-time="20:00" data-event-location="Atrium Saldanha" data-event-details="Encontro indicado pelo nome do grupo; confirmar presença."><div class="event-date-block"><strong>22/09/2026</strong><span>20:00</span></div><div class="event-content"><div class="origin-name">LisBORA | 3a 20h Atrium Saldanha</div><h2>Encontro LisBORA</h2><p>Encontro indicado pelo nome do grupo; confirmar presença.</p><dl><div><dt>Local</dt><dd>Atrium Saldanha</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Encontro%20LisBORA&amp;dates=20260922T200000/20260922T210000&amp;details=Encontro%20indicado%20pelo%20nome%20do%20grupo%3B%20confirmar%20presen%C3%A7a.&amp;location=Atrium%20Saldanha" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="18e5e83f8a53314c" data-event-date="2026-09-22" data-event-title="Avaliação clínica pela manhã" data-event-time="Manhã" data-event-location="HFF" data-event-details="Confirmar viabilidade e conduta; detalhes clínicos redigidos."><div class="event-date-block"><strong>22/09/2026</strong><span>Manhã</span></div><div class="event-content"><div class="origin-name">Hff - fotos de pilinhas</div><h2>Avaliação clínica pela manhã</h2><p>Confirmar viabilidade e conduta; detalhes clínicos redigidos.</p><dl><div><dt>Local</dt><dd>HFF</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Avalia%C3%A7%C3%A3o%20cl%C3%ADnica%20pela%20manh%C3%A3&amp;dates=20260922/20260923&amp;details=Confirmar%20viabilidade%20e%20conduta%3B%20detalhes%20cl%C3%ADnicos%20redigidos.&amp;location=HFF" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="524eabd171db9b9d" data-event-date="2026-09-22" data-event-title="Enquete para voleibol de sexta-feira" data-event-time="Noite" data-event-location="A confirmar" data-event-details="A enquete será publicada amanhã; o jogo está previsto para sexta-feira."><div class="event-date-block"><strong>22/09/2026</strong><span>Noite</span></div><div class="event-content"><div class="origin-name">Ana Vooley Bike Lisbon Bonatto</div><h2>Enquete para voleibol de sexta-feira</h2><p>A enquete será publicada amanhã; o jogo está previsto para sexta-feira.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Enquete%20para%20voleibol%20de%20sexta-feira&amp;dates=20260922/20260923&amp;details=A%20enquete%20ser%C3%A1%20publicada%20amanh%C3%A3%3B%20o%20jogo%20est%C3%A1%20previsto%20para%20sexta-feira.&amp;location=A%20confirmar" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="6d994a0db8cf4ed7" data-event-date="2026-09-23" data-event-title="Intercâmbio linguístico" data-event-time="19:30" data-event-location="ForkLore Café" data-event-details="Encontro semanal aberto a todas as línguas."><div class="event-date-block"><strong>23/09/2026</strong><span>19:30</span></div><div class="event-content"><div class="origin-name">Language Events Lisbon</div><h2>Intercâmbio linguístico</h2><p>Encontro semanal aberto a todas as línguas.</p><dl><div><dt>Local</dt><dd>ForkLore Café</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Interc%C3%A2mbio%20lingu%C3%ADstico&amp;dates=20260923T193000/20260923T203000&amp;details=Encontro%20semanal%20aberto%20a%20todas%20as%20l%C3%ADnguas.&amp;location=ForkLore%20Caf%C3%A9" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><a class="event-action secondary" href="https://www.meetup.com/forklore-tribe/events/316406148/" target="_blank" rel="noopener">Abrir evento</a><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="6c7bf76cf998415c" data-event-date="2026-09-23" data-event-title="Encontro com Rauzinho" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Confirmar horário, local e natureza do encontro."><div class="event-date-block"><strong>23/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Rauzinho Lisboa</div><h2>Encontro com Rauzinho</h2><p>Confirmar horário, local e natureza do encontro.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Encontro%20com%20Rauzinho&amp;dates=20260923/20260924&amp;details=Confirmar%20hor%C3%A1rio%2C%20local%20e%20natureza%20do%20encontro.&amp;location=A%20confirmar" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="d87d0fc18b5a721a" data-event-date="2026-09-24" data-event-title="Beach tennis de quinta-feira" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="O grupo ainda precisa responder qual é o horário de início."><div class="event-date-block"><strong>24/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Beach Tennis Regulars ⛱️ 🎾</div><h2>Beach tennis de quinta-feira</h2><p>O grupo ainda precisa responder qual é o horário de início.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Beach%20tennis%20de%20quinta-feira&amp;dates=20260924/20260925&amp;details=O%20grupo%20ainda%20precisa%20responder%20qual%20%C3%A9%20o%20hor%C3%A1rio%20de%20in%C3%ADcio.&amp;location=A%20confirmar" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="76129e74b0d6a664" data-event-date="2026-09-24" data-event-title="Thursday Benfica Indoor Volleyball" data-event-time="A confirmar" data-event-location="Benfica" data-event-details="Jogo com duas equipas; consultar o Luma para horário e inscrição."><div class="event-date-block"><strong>24/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Power Rangers do Voleibol 🏐</div><h2>Thursday Benfica Indoor Volleyball</h2><p>Jogo com duas equipas; consultar o Luma para horário e inscrição.</p><dl><div><dt>Local</dt><dd>Benfica</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Thursday%20Benfica%20Indoor%20Volleyball&amp;dates=20260924/20260925&amp;details=Jogo%20com%20duas%20equipas%3B%20consultar%20o%20Luma%20para%20hor%C3%A1rio%20e%20inscri%C3%A7%C3%A3o.&amp;location=Benfica" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><a class="event-action secondary" href="https://luma.com/vcxqxue8" target="_blank" rel="noopener">Abrir evento</a><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="ffb4bbc371e83c69" data-event-date="2026-09-27" data-event-title="Yoga: tema desapego" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Sessão adiada; a atividade de 20/09 foi cancelada."><div class="event-date-block"><strong>27/09/2026</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Yoga</div><h2>Yoga: tema desapego</h2><p>Sessão adiada; a atividade de 20/09 foi cancelada.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><a class="event-action" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Yoga%3A%20tema%20desapego&amp;dates=20260927/20260928&amp;details=Sess%C3%A3o%20adiada%3B%20a%20atividade%20de%2020/09%20foi%20cancelada.&amp;location=A%20confirmar" target="_blank" rel="noopener">Google Calendar</a><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="6aab974bbf04479b" data-event-date="" data-event-title="Beach tennis em Carcavelos" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Participação em organização; data e hora não aparecem na mensagem atual."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Beach tennis</div><h2>Beach tennis em Carcavelos</h2><p>Participação em organização; data e hora não aparecem na mensagem atual.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="5a037e60d72d25b1" data-event-date="" data-event-title="Fim de semana de verão" data-event-time="A confirmar" data-event-location="Praia ou chácara a definir" data-event-details="Sugestão de alojamento por Airbnb; escolher a data com maior disponibilidade."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Los Três Mosqueteros!!</div><h2>Fim de semana de verão</h2><p>Sugestão de alojamento por Airbnb; escolher a data com maior disponibilidade.</p><dl><div><dt>Local</dt><dd>Praia ou chácara a definir</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="9b1231c119a5b500" data-event-date="" data-event-title="Hack the City: Mobility Challenge" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Ligação para iniciativa da NOVA IMS partilhada no grupo."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">LisBORA | 3a 20h Atrium Saldanha</div><h2>Hack the City: Mobility Challenge</h2><p>Ligação para iniciativa da NOVA IMS partilhada no grupo.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><a class="event-action secondary" href="https://share.google/7JLo9fMTmu58MURFm" target="_blank" rel="noopener">Abrir evento</a><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="7f67e0d1f0f1271f" data-event-date="" data-event-title="Jogo de Volleyball Lisboa" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Evento ajustado para 36 vagas; lista de espera ativa. Data e local não aparecem na captura."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Volleyball Lisboa</div><h2>Jogo de Volleyball Lisboa</h2><p>Evento ajustado para 36 vagas; lista de espera ativa. Data e local não aparecem na captura.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="7f7f1843448e6221" data-event-date="" data-event-title="Jogo indoor do Volley &amp; Friends" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Há 14 jogadores confirmados; data, hora e local não aparecem nas notificações capturadas."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Volley &amp; Friends - Indoor</div><h2>Jogo indoor do Volley &amp; Friends</h2><p>Há 14 jogadores confirmados; data, hora e local não aparecem nas notificações capturadas.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="2b108201ad936f37" data-event-date="" data-event-title="Novo jogo de voleibol" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Será publicado para outra data; todos os níveis são aceites."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Volleyball</div><h2>Novo jogo de voleibol</h2><p>Será publicado para outra data; todos os níveis são aceites.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="243bc13c2fea7f41" data-event-date="" data-event-title="Passeio de bicicleta" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Preferência provável pelo fim de semana; data, hora e percurso por confirmar."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Cycling</div><h2>Passeio de bicicleta</h2><p>Preferência provável pelo fim de semana; data, hora e percurso por confirmar.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article><article class="agenda-event-card" data-event-id="772fd384fbe9391b" data-event-date="" data-event-title="Pescaria do grupo" data-event-time="A confirmar" data-event-location="A confirmar" data-event-details="Interesse e data ainda por confirmar."><div class="event-date-block"><strong>A confirmar</strong><span>A confirmar</span></div><div class="event-content"><div class="origin-name">Los Três Mosqueteros!!</div><h2>Pescaria do grupo</h2><p>Interesse e data ainda por confirmar.</p><dl><div><dt>Local</dt><dd>A confirmar</dd></div></dl><div class="event-actions"><button class="event-action secondary" data-download-event>Baixar .ics</button><button class="event-action danger" data-remove-event>Remover</button></div></div></article></div></div>
     </section>
   </main>
   <div class="toast" id="toast"><span id="toast-text">Acao enviada.</span><button id="undo-button" hidden>Desfazer</button></div>
@@ -2002,7 +2097,107 @@
     const toast = document.getElementById('toast');
     const toastText = document.getElementById('toast-text');
     const undoButton = document.getElementById('undo-button');
+    const filterBar = document.querySelector('.filter-bar');
+    const removedEventsKey = 'notificacoes.removedEvents.v1';
     let undoPayload = null;
+
+    function readRemovedEvents() {
+      try {
+        return new Set(JSON.parse(localStorage.getItem(removedEventsKey) || '[]'));
+      } catch (error) {
+        return new Set();
+      }
+    }
+
+    function writeRemovedEvents(values) {
+      localStorage.setItem(removedEventsKey, JSON.stringify(Array.from(values)));
+    }
+
+    function eventHasPassed(card) {
+      const value = card.dataset.eventDate;
+      if (!value) return false;
+      const parts = value.split('-').map(Number);
+      if (parts.length !== 3) return false;
+      const expiresAt = new Date(parts[0], parts[1] - 1, parts[2] + 1);
+      return new Date() >= expiresAt;
+    }
+
+    function syncEvents() {
+      const removed = readRemovedEvents();
+      let visibleCount = 0;
+      document.querySelectorAll('.agenda-event-card').forEach(card => {
+        const hidden = removed.has(card.dataset.eventId) || eventHasPassed(card);
+        card.hidden = hidden;
+        if (!hidden) visibleCount += 1;
+      });
+      const count = document.getElementById('event-tab-count');
+      if (count) count.textContent = String(visibleCount);
+      const restore = document.getElementById('restore-events');
+      if (restore) restore.hidden = removed.size === 0;
+    }
+
+    function switchView(target) {
+      document.querySelectorAll('[data-view-panel]').forEach(panel => {
+        panel.hidden = panel.dataset.viewPanel !== target;
+      });
+      document.querySelectorAll('[data-view-target]').forEach(button => {
+        const active = button.dataset.viewTarget === target;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      filterBar.hidden = target === 'events';
+      document.body.classList.toggle('events-view-active', target === 'events');
+      if (target === 'events') syncEvents();
+    }
+
+    function icsEscape(value) {
+      const slash = String.fromCharCode(92);
+      return String(value || '')
+        .split(slash).join(slash + slash)
+        .split(String.fromCharCode(10)).join(slash + 'n')
+        .split(',').join(slash + ',')
+        .split(';').join(slash + ';');
+    }
+
+    function compactLocalDate(date) {
+      const pad = value => String(value).padStart(2, '0');
+      return String(date.getFullYear()) + pad(date.getMonth() + 1) + pad(date.getDate()) + 'T' + pad(date.getHours()) + pad(date.getMinutes()) + '00';
+    }
+
+    function buildIcs(card) {
+      const title = card.dataset.eventTitle || 'Evento';
+      const location = card.dataset.eventLocation || '';
+      const details = card.dataset.eventDetails || '';
+      const dateValue = card.dataset.eventDate;
+      if (!dateValue) return '';
+      const parts = dateValue.split('-').map(Number);
+      const timeMatches = Array.from((card.dataset.eventTime || '').matchAll(/\b([01]?\d|2[0-3]):([0-5]\d)\b/g));
+      let startLine;
+      let endLine;
+      if (!timeMatches.length) {
+        const start = dateValue.replaceAll('-', '');
+        const nextDate = new Date(parts[0], parts[1] - 1, parts[2] + 1);
+        const pad = value => String(value).padStart(2, '0');
+        const end = String(nextDate.getFullYear()) + pad(nextDate.getMonth() + 1) + pad(nextDate.getDate());
+        startLine = 'DTSTART;VALUE=DATE:' + start;
+        endLine = 'DTEND;VALUE=DATE:' + end;
+      } else {
+        const start = new Date(parts[0], parts[1] - 1, parts[2], Number(timeMatches[0][1]), Number(timeMatches[0][2]));
+        const end = timeMatches.length > 1
+          ? new Date(parts[0], parts[1] - 1, parts[2], Number(timeMatches[1][1]), Number(timeMatches[1][2]))
+          : new Date(start.getTime() + 60 * 60 * 1000);
+        if (end <= start) end.setDate(end.getDate() + 1);
+        startLine = 'DTSTART:' + compactLocalDate(start);
+        endLine = 'DTEND:' + compactLocalDate(end);
+      }
+      return [
+        'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Rafa//Notificacoes//PT', 'BEGIN:VEVENT',
+        'UID:' + card.dataset.eventId + '@notificacoes.local',
+        startLine, endLine,
+        'SUMMARY:' + icsEscape(title), 'LOCATION:' + icsEscape(location), 'DESCRIPTION:' + icsEscape(details),
+        'END:VEVENT', 'END:VCALENDAR'
+      ].join(String.fromCharCode(13, 10));
+    }
 
     function visibleByLayer(card) {
       const isReview = card.dataset.review === 'true';
@@ -2086,6 +2281,46 @@
         state[key] = !state[key];
         applyFilters();
       });
+    });
+
+    document.querySelectorAll('[data-view-target]').forEach(button => {
+      button.addEventListener('click', () => switchView(button.dataset.viewTarget));
+    });
+
+    document.querySelectorAll('[data-remove-event]').forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.agenda-event-card');
+        if (!card) return;
+        const removed = readRemovedEvents();
+        removed.add(card.dataset.eventId);
+        writeRemovedEvents(removed);
+        syncEvents();
+        showToast('Evento removido deste dispositivo.');
+      });
+    });
+
+    document.querySelectorAll('[data-download-event]').forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.agenda-event-card');
+        if (!card || !card.dataset.eventDate) {
+          showToast('Defina uma data antes de adicionar ao calendário.');
+          return;
+        }
+        const blob = new Blob([buildIcs(card)], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = (card.dataset.eventTitle || 'evento').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() + '.ics';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(link.href), 500);
+      });
+    });
+
+    document.getElementById('restore-events').addEventListener('click', () => {
+      localStorage.removeItem(removedEventsKey);
+      syncEvents();
+      showToast('Eventos removidos foram repostos.');
     });
 
     document.querySelectorAll('[data-expand]').forEach(button => {
@@ -2205,6 +2440,8 @@
     });
 
     syncCleanupUi();
+    syncEvents();
+    switchView('notifications');
     applyFilters();
   </script>
 </body>
