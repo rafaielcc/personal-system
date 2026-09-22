@@ -9,7 +9,7 @@ description: Use quando o Rafa pedir "artigos científicos", "gera os artigos", 
 
 1. **Ler `agendas/CLAUDE.md`** (não o `CLAUDE.md` da raiz do repo — esse é de outro projecto, o AII), se ainda não estiver em contexto nesta sessão.
 2. **Ler o `SYSTEM_PROMPT` mais recente do projecto Agenda** — pasta Drive `15Ge84lmsAeoUgSXDWFpcW26X-UCixrbg` (procurar por `SYSTEM_PROMPT`, usar a cópia de `createdTime` mais recente).
-3. Na mesma pasta Drive, procurar **`INSTRUCOES_ARTIGOS`** pelo nome (usar a cópia mais recente por `createdTime` se houver duplicados — a v1.0 está lá). Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
+3. Na mesma pasta Drive, procurar **`INSTRUCOES_ARTIGOS`** pelo nome (última confirmada: `v1.3`; usar sempre a cópia mais recente por `createdTime` se houver duplicados, não assumir que o número mais alto no título é o mais recente). Descarregar e seguir a rotina na íntegra — não resumir nem saltar etapas.
 4. Seguir a rotina tal como descrita lá. Não inventar passos — o documento é a fonte de verdade, este skill é só o ponteiro para ele.
 
 ## Notas específicas a ter em atenção (não substituem o documento — só orientação)
