@@ -1,34 +1,28 @@
 <!doctype html>
 <!--
-  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v6 DARK · vista unica, so icones, 22 Set 2026)
-  =========================================================================================
+  AGENDA · HOME HUB — TEMPLATE DE ESTRUTURA (v7 DARK · 2 modos, Classico/Polegar, 23 Set 2026)
+  =============================================================================================
   Consumido por render.py (mesma pasta Drive): a LLM produz apenas o JSON
   canonico do modulo dashboard; este ficheiro e preenchido por substituicao
   de texto pura, sem juizo de conteudo. Placeholders {{TOKEN}} — ver schema
-  no cabecalho de render.py.
+  no cabecalho de render.py. NENHUM token mudou desde a v6 — render.py v6
+  continua valido sem alteracoes.
 
-  Mudancas v6 (22 Set 2026, pedido do Rafa — "quero apenas um conjunto de
-  icones com atalhos"): reescrita completa a partir da v5. O Dashboard deixa
-  de mostrar qualquer resumo/texto do dia — banner de nota do dia, 3
-  Prioridades de Hoje e Resumo B3 foram REMOVIDOS por completo (viviam nos
-  antigos modos Classico/Leitura, que tambem deixaram de existir). Os 3
-  modos Leitura/Classico/Polegar e a barra de alternancia no rodape foram
-  removidos — so ha agora UMA vista, equivalente ao antigo modo Polegar mas
-  sem a faixa de prioridades. A barra do tempo (08h/16h/20h) mantem-se, e
-  passa a ser um LINK unico para a aba de tempo do Briefing
-  (briefing/index.html#tempo) — antes era so informativa. A grelha de icones
-  passou de 14 para 12 e foi reordenada: Briefing, Calendario, HFF,
-  Cirurgias, Noticias do Dia, Agenda de Lazer, Viagem, Artigos, TestMe,
-  Historia, Personal Dev (antes "Carnegie" — renomeado a pedido do Rafa,
-  mecanismo de fetch ao vivo inalterado), Notificacoes (NOVO). Removidos:
-  icones "Tarefas" e "Email" e "Clima" (o badge de tarefas do topbar
-  mantem-se; o clima passou a viver so na barra do tempo acima, agora
-  clicavel). O Dashboard deixou de VERIFICAR a frescura de Agenda de Lazer e
-  Noticias do Dia antes de renderizar — os icones sao sempre um atalho
-  estatico, publicada ou nao. TestMe/CIRPED/Artigos continuam a ser
-  accionados pelo Dashboard, mas agora passando primeiro por um pre-filtro
-  Python (X_dashboard_pre.py) que decide se ha alguma coisa por fazer antes
-  da LLM ler a rotina inteira — ver INSTRUCOES_DASHBOARD Seccao 4.
+  Mudancas v7 (23 Set 2026, pedido do Rafa apos usar a v6 em real: sentiu
+  falta do alternador de modo removido na v6): reintroduz um alternador no
+  rodape, agora com APENAS 2 modos (nao os 3 antigos da v5 — a faixa de
+  prioridades do antigo modo Polegar nao volta, esse conteudo continua fora
+  do hub):
+    - Classico (por omissao, igual ao layout unico da v6): barra do tempo
+      horizontal no topo, grelha de 12 icones em 4 colunas por baixo.
+    - Polegar: barra do tempo passa a faixa VERTICAL encostada ao lado
+      DIREITO do ecra; a grelha de icones desloca-se para o lado ESQUERDO
+      (2 colunas, mais larga) — pedido explicito do Rafa para ficar mais
+      acessivel ao polegar ao segurar o telemovel com uma mao.
+  Preferencia de modo guardada em localStorage (so no browser do proprio
+  Rafa, conveniencia de UI — nunca afecta o JSON canonico nem o que a LLM
+  produz). Sem alteracao ao schema/dados: mesmos campos meta/counts/weather
+  de sempre, so a disposicao visual muda por modo.
 
   HOSTING (actual): Cloudflare Pages serve o repositorio GitHub
   rafaielcc/personal-system automaticamente. Site base:
@@ -61,8 +55,7 @@
   (nota de implementacao para o ficheiro de destino, nao faz parte deste hub)
 
   Expansiveis nativos (details/summary) — sem JS adicional, offline. Nao ha
-  nenhum neste template v6 (o unico uso — cartao "Curso" — ja tinha sido
-  removido na v5).
+  nenhum neste template.
 -->
 <html lang="pt-PT">
 <head>
@@ -101,7 +94,7 @@
     font-family:'DM Sans', sans-serif;
     -webkit-font-smoothing:antialiased;
     min-height:100vh;
-    padding-bottom:32px;
+    padding-bottom:88px; /* espaço para a barra de modo fixa no rodapé */
   }
   h1,h2,h3{ font-family:'Frances', serif; margin:0; }
   a{ text-decoration:none; color:inherit; }
@@ -129,6 +122,9 @@
     display:flex; align-items:center; gap:5px; white-space:nowrap;
   }
   .chip b{ color:var(--gold); font-size:12.5px; }
+
+  /* ===== CORPO DO HUB — barra do tempo + grelha, disposicao muda por modo ===== */
+  .hub-body{ display:block; }
 
   /* ===== BARRA DO TEMPO — clicavel, leva a aba de tempo do briefing ===== */
   .wbar-link{ display:block; }
@@ -177,9 +173,46 @@
   .c-lilac{ background:#E3DAF2; }
   .c-navy{ background:#D8E3EA; }
 
+  /* ===== MODO POLEGAR — tempo em faixa vertical a direita, icones a esquerda ===== */
+  body[data-mode="polegar"] .hub-body{
+    display:flex; align-items:flex-start; gap:10px;
+  }
+  body[data-mode="polegar"] .grid{
+    order:1; flex:1 1 auto; min-width:0;
+    grid-template-columns:repeat(2,1fr); gap:16px 10px;
+  }
+  body[data-mode="polegar"] .wbar-link{
+    order:2; flex:0 0 auto;
+  }
+  body[data-mode="polegar"] .wbar{
+    grid-template-columns:1fr; grid-template-rows:repeat(3,1fr);
+    width:64px; padding:8px 4px; margin:12px 0 0; gap:10px 0;
+  }
+  body[data-mode="polegar"] .wbar-cell{
+    border-right:none; border-bottom:1px solid var(--border); padding-bottom:8px;
+  }
+  body[data-mode="polegar"] .wbar-cell:last-child{ border-bottom:none; padding-bottom:0; }
+
   /* ===== FOOTER ===== */
   .footer{ text-align:center; margin-top:20px; }
   .footer p{ font-size:11px; color:var(--muted); margin:0; }
+
+  /* ===== BARRA DE MODO — fixa no rodape, 2 estados ===== */
+  .mode-switch{
+    position:fixed; left:0; right:0; bottom:0; z-index:30;
+    max-width:680px; margin:0 auto;
+    display:grid; grid-template-columns:1fr 1fr;
+    background:linear-gradient(0deg, var(--navy-2), var(--navy));
+    border-top:1px solid var(--border);
+    box-shadow:0 -4px 12px rgba(0,0,0,.30);
+  }
+  .mode-btn{
+    appearance:none; -webkit-appearance:none; border:none; background:transparent;
+    color:var(--muted); font-family:'DM Sans', sans-serif; font-size:13px; font-weight:700;
+    padding:13px 0; cursor:pointer; transition:color .12s;
+  }
+  .mode-btn[aria-pressed="true"]{ color:var(--ink-strong); }
+  .mode-btn:active{ opacity:.7; }
 </style>
 </head>
 <body>
@@ -188,92 +221,102 @@
   <div class="topbar">
     <div class="topbar-inner">
       <div class="topbar-row1">
-        <div class="datebig">Ter, 22 Set</div>
-        <span class="chip">📅 <b>0</b></span>
-        <span class="chip">✅ <b>0</b></span>
+        <div class="datebig">Qua, 23 Set</div>
+        <span class="chip">📅 <b>1</b></span>
+        <span class="chip">✅ <b>2</b></span>
       </div>
     </div>
   </div>
 
   <div class="wrap">
 
-    <!-- ===== TIRA DO TEMPO — clicavel, leva a aba de tempo do briefing ===== -->
-    <a class="wbar-link" href="briefing/index.html#tempo" title="Tempo — abrir no Briefing" aria-label="Tempo — abrir no Briefing">
-      <div class="wbar">
-        <div class="wbar-cell">
-          <span class="wbar-time">08h</span>
-          <span class="wbar-main">— —°</span>
-          <span class="wbar-activity" title="">·</span>
-        </div>
-        <div class="wbar-cell">
-          <span class="wbar-time">16h</span>
-          <span class="wbar-main">— —°</span>
-          <span class="wbar-activity" title="">·</span>
-        </div>
-        <div class="wbar-cell">
-          <span class="wbar-time">20h</span>
-          <span class="wbar-main">— —°</span>
-          <span class="wbar-activity" title="">·</span>
-        </div>
-      </div>
-    </a>
+    <div class="hub-body" id="hubBody">
 
-    <!-- ===== GRELHA DE 12 ICONES — atalhos estaticos, sem dados por preencher ===== -->
-    <div class="grid">
-      <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing">
-        <span class="tile-circle c-cream">🎧</span>
-        <span class="tile-label">Briefing</span>
+      <!-- ===== TIRA DO TEMPO — clicavel, leva a aba de tempo do briefing ===== -->
+      <a class="wbar-link" href="briefing/index.html#tempo" title="Tempo — abrir no Briefing" aria-label="Tempo — abrir no Briefing">
+        <div class="wbar">
+          <div class="wbar-cell">
+            <span class="wbar-time">08h</span>
+            <span class="wbar-main">— —°</span>
+            <span class="wbar-activity" title="">·</span>
+          </div>
+          <div class="wbar-cell">
+            <span class="wbar-time">16h</span>
+            <span class="wbar-main">— —°</span>
+            <span class="wbar-activity" title="">·</span>
+          </div>
+          <div class="wbar-cell">
+            <span class="wbar-time">20h</span>
+            <span class="wbar-main">— —°</span>
+            <span class="wbar-activity" title="">·</span>
+          </div>
+        </div>
       </a>
-      <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
-        <span class="tile-circle c-blue">📅</span>
-        <span class="tile-label">Calendário</span>
-      </a>
-      <a class="tile" href="Hff/index.html" title="Painel HFF" aria-label="Painel HFF">
-        <span class="tile-circle c-terracotta">🏥</span>
-        <span class="tile-label">HFF</span>
-      </a>
-      <a class="tile" href="Hff/index.html#cirurgias" title="Cirurgias HFF" aria-label="Cirurgias HFF">
-        <span class="tile-circle c-coral">🩺</span>
-        <span class="tile-label">Cirurgias</span>
-      </a>
-      <a class="tile" href="noticiasB3/index.html" title="Notícias do Dia · Finanças B3" aria-label="Notícias do Dia">
-        <span class="tile-circle c-red">📈</span>
-        <span class="tile-label">Notícias</span>
-      </a>
-      <a class="tile" href="lazer/index.html" title="Agenda de Lazer" aria-label="Agenda de Lazer">
-        <span class="tile-circle c-teal">🎭</span>
-        <span class="tile-label">Lazer</span>
-      </a>
-      <a class="tile" href="viagem-atual/index.html" title="Viagem atual" aria-label="Viagem atual">
-        <span class="tile-circle c-periwinkle">✈️</span>
-        <span class="tile-label">Viagem</span>
-      </a>
-      <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
-        <span class="tile-circle c-gold">📄</span>
-        <span class="tile-label">Artigos</span>
-      </a>
-      <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
-        <span class="tile-circle c-sage">🧪</span>
-        <span class="tile-label">TestMe</span>
-      </a>
-      <a class="tile" href="cirped/index.html" title="História · Cirurgia Pediátrica" aria-label="História — Cirurgia Pediátrica">
-        <span class="tile-circle c-rose">📜</span>
-        <span class="tile-label">História</span>
-      </a>
-      <a class="tile carnegie-link" href="/personal-development/carnegie/curso-completo.html" title="Personal Dev" aria-label="Personal Dev">
-        <span class="tile-circle c-lilac">📘</span>
-        <span class="tile-label">Personal Dev</span>
-      </a>
-      <a class="tile" href="notificacoes/index.html" title="Notificações" aria-label="Notificações">
-        <span class="tile-circle c-navy">🔔</span>
-        <span class="tile-label">Notificações</span>
-      </a>
+
+      <!-- ===== GRELHA DE 12 ICONES — atalhos estaticos, sem dados por preencher ===== -->
+      <div class="grid">
+        <a class="tile" href="briefing/index.html" title="Briefing · áudio do dia" aria-label="Briefing">
+          <span class="tile-circle c-cream">🎧</span>
+          <span class="tile-label">Briefing</span>
+        </a>
+        <a class="tile" href="briefing/index.html#calendario" title="Calendário" aria-label="Calendário">
+          <span class="tile-circle c-blue">📅</span>
+          <span class="tile-label">Calendário</span>
+        </a>
+        <a class="tile" href="Hff/index.html" title="Painel HFF" aria-label="Painel HFF">
+          <span class="tile-circle c-terracotta">🏥</span>
+          <span class="tile-label">HFF</span>
+        </a>
+        <a class="tile" href="Hff/index.html#cirurgias" title="Cirurgias HFF" aria-label="Cirurgias HFF">
+          <span class="tile-circle c-coral">🩺</span>
+          <span class="tile-label">Cirurgias</span>
+        </a>
+        <a class="tile" href="noticiasB3/index.html" title="Notícias do Dia · Finanças B3" aria-label="Notícias do Dia">
+          <span class="tile-circle c-red">📈</span>
+          <span class="tile-label">Notícias</span>
+        </a>
+        <a class="tile" href="lazer/index.html" title="Agenda de Lazer" aria-label="Agenda de Lazer">
+          <span class="tile-circle c-teal">🎭</span>
+          <span class="tile-label">Lazer</span>
+        </a>
+        <a class="tile" href="viagem-atual/index.html" title="Viagem atual" aria-label="Viagem atual">
+          <span class="tile-circle c-periwinkle">✈️</span>
+          <span class="tile-label">Viagem</span>
+        </a>
+        <a class="tile" href="artigos/index.html" title="Artigos Científicos" aria-label="Artigos Científicos">
+          <span class="tile-circle c-gold">📄</span>
+          <span class="tile-label">Artigos</span>
+        </a>
+        <a class="tile testme-link" href="/personal-development/testme/index.html" title="TestMe" aria-label="TestMe">
+          <span class="tile-circle c-sage">🧪</span>
+          <span class="tile-label">TestMe</span>
+        </a>
+        <a class="tile" href="cirped/index.html" title="História · Cirurgia Pediátrica" aria-label="História — Cirurgia Pediátrica">
+          <span class="tile-circle c-rose">📜</span>
+          <span class="tile-label">História</span>
+        </a>
+        <a class="tile carnegie-link" href="/personal-development/carnegie/curso-completo.html" title="Personal Dev" aria-label="Personal Dev">
+          <span class="tile-circle c-lilac">📘</span>
+          <span class="tile-label">Personal Dev</span>
+        </a>
+        <a class="tile" href="notificacoes/index.html" title="Notificações" aria-label="Notificações">
+          <span class="tile-circle c-navy">🔔</span>
+          <span class="tile-label">Notificações</span>
+        </a>
+      </div>
+
     </div>
 
     <div class="footer">
       <p>Hub leve · toca num ícone para abrir o módulo</p>
     </div>
 
+  </div>
+
+  <!-- ===== BARRA DE MODO — fixa no rodape, alterna Classico/Polegar ===== -->
+  <div class="mode-switch" role="tablist" aria-label="Modo de visualização">
+    <button type="button" class="mode-btn" data-set-mode="classico" aria-pressed="true">🖥️ Clássico</button>
+    <button type="button" class="mode-btn" data-set-mode="polegar" aria-pressed="false">👍 Polegar</button>
   </div>
 
 <script>
@@ -300,6 +343,33 @@
       .then(r => { if (!r.ok) throw new Error('status ' + r.status); return r.json(); })
       .then(dados => aplicarLinkCarnegie(dados))
       .catch(err => console.warn('Não foi possível carregar o estado do Personal Dev:', err));
+  })();
+
+  // ===== Alternador de modo Classico/Polegar — preferencia guardada so no browser (localStorage), nunca afecta dados =====
+  (function(){
+    var KEY = 'agenda_dashboard_mode';
+    var body = document.body;
+    var buttons = document.querySelectorAll('.mode-btn');
+
+    function applyMode(mode){
+      body.setAttribute('data-mode', mode);
+      buttons.forEach(function(btn){
+        var active = btn.getAttribute('data-set-mode') === mode;
+        btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+    }
+
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    applyMode(saved === 'polegar' ? 'polegar' : 'classico');
+
+    buttons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var mode = btn.getAttribute('data-set-mode');
+        applyMode(mode);
+        try { localStorage.setItem(KEY, mode); } catch (e) {}
+      });
+    });
   })();
 </script>
 
