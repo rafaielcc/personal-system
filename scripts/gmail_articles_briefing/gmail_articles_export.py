@@ -91,14 +91,26 @@ PADRAO_ABSTRACT = re.compile(
     r"\b" + _padrao_letras_espacadas("abstract") + r"\b", re.IGNORECASE
 )
 
+# "Graphical Abstract" é um rótulo à parte (legenda de figura), não o
+# heading do resumo textual — sem isto, a primeira ocorrência de "abstract"
+# no PDF pode ser esta legenda, e o candidato extraído fica vazio/lixo.
+PADRAO_GRAPHICAL_ABSTRACT = re.compile(
+    r"graphical\s*" + _padrao_letras_espacadas("abstract"), re.IGNORECASE
+)
+
 # heurística de fim de secção do abstract: primeiro heading destes que
 # aparecer depois do "Abstract" fecha a secção. Tolerante a letras
-# espaçadas, pelo mesmo motivo do heading do abstract acima.
+# espaçadas, pelo mesmo motivo do heading do abstract acima. Inclui
+# "methods"/"highlights" porque nem todo artigo tem Keywords antes da
+# secção seguinte.
 ABSTRACT_FIM_HEADINGS = [
     _padrao_letras_espacadas("keywords"),
     _padrao_letras_espacadas("key words"),
+    _padrao_letras_espacadas("highlights"),
     _padrao_letras_espacadas("introduction"),
     _padrao_letras_espacadas("background"),
+    _padrao_letras_espacadas("materials and methods"),
+    _padrao_letras_espacadas("methods"),
     r"1\.\s+introduction", r"1\s+introduction", r"©", r"doi\s*:",
 ]
 
@@ -231,7 +243,16 @@ def isolar_abstract(texto_completo: str) -> str:
     if not texto_completo:
         return ""
 
-    match_inicio = PADRAO_ABSTRACT.search(texto_completo)
+    match_inicio = None
+    # salta ocorrências de "Graphical Abstract" (legenda de figura, não o
+    # heading do resumo textual) até encontrar um "Abstract" isolado.
+    for m in PADRAO_ABSTRACT.finditer(texto_completo):
+        contexto_antes = texto_completo[max(0, m.start() - 15):m.start()]
+        if PADRAO_GRAPHICAL_ABSTRACT.search(contexto_antes + m.group()):
+            continue
+        match_inicio = m
+        break
+
     if not match_inicio:
         return ""
 
