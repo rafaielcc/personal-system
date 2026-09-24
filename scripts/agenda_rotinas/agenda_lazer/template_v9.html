@@ -1,0 +1,644 @@
+<!-- v9 — 22 Ago 2026 (3a sessão do dia): reversão pedida pelo Rafa. A v8 tinha
+     posto o pedido de nota/pontuação no browser (prompt JS em
+     curarItem() quando acao==='consumido'). O Rafa esclareceu que a ideia
+     dele desde o início era o score ser pedido FORA do browser/LLM, numa
+     rotina Python local (merge_feedback.py, mesmo padrão do
+     preflight_hff.py/postflight_hff.py — corre na máquina do Rafa, nunca
+     numa sessão Claude) que ele próprio corre quando quiser processar o
+     feedback pendente. curarItem() volta a gravar 'consumido' sem pedir
+     nada no clique — o ícone ✅ só marca "já experimentei" no ecrã (.feito
+     num card normal, some do bloco "Guardado para o futuro" quando veio de
+     lá). A coluna `nota` da sheet espelho_lazer fica sempre vazia agora
+     (era só usada por este prompt) — quem grava a pontuação é o
+     merge_feedback.py, directo no Feedback_log.json, não na sheet.
+     Ver AGENDA_LAZER_INSTRUCOES v5.5 Secção 0.5/8.1 e merge_feedback.py.
+     Update local — 28 Ago 2026: o botão antigo "Salvar" / Zapier foi retirado
+     dos renders futuros. Os ícones de curadoria viraram toggle: clicar de novo
+     num botão ativo grava "limpo" na sheet e desfaz a marcação visual.
+-->
+<!-- v8 — 22 Ago 2026 (2a sessão do dia): feedback do Rafa sobre a v7. Duas
+     correcções:
+     (1) Calendário expansível — alinhamento de grelha corrigido para seguir
+     o MESMO padrão já usado no Briefing (agendas/briefing/index.html v6):
+     1a coluna sempre segunda, última domingo, com células vazias
+     (.cal-dia.vazio, visibility:hidden) a preencher os dias antes do
+     periodo_inicio na quantidade do seu dia da semana real (segunda=0).
+     Antes a grelha começava sempre em periodo_inicio/hoje na 1a coluna,
+     independentemente do dia da semana real — desalinhado do resto do
+     projecto. Selecção por omissão passa a ser "hoje" se estiver na
+     grelha, senão o primeiro dia real (nunca uma célula vazia).
+     (2) Novo 4o ícone em TODOS os cards — ✅ "Já experimentei / já vi / já
+     fui" (icon-experimentei) — reaproveita a acção "consumido" que já
+     existia só no bloco "Guardado para o futuro". Histórico: a v8 chegou a
+     pedir nota no browser; a v9 retirou esse prompt e delegou a nota para o
+     merge_feedback.py local.
+     Ver AGENDA_LAZER_INSTRUCOES v5.4 Secção 0.5/8.1/11.4 para a semântica
+     completa. -->
+<!-- v7 — 22 Ago 2026: curadoria (remover/elevar/guardar para o futuro) + calendário
+     expansível na aba Highlights, pedido do Rafa (sessão "ícones de curadoria").
+     Aditivo sobre a v6 — manteve a estrutura de pills/secções por categoria.
+     O canal Salvar/Zapier foi posteriormente aposentado no fluxo local.
+     Novidades:
+     - 3 ícones novos em TODOS os cards (✕ remover · ⬆ elevar · 🕒 guardar para o
+       futuro), gravados via Apps Script (endpoint próprio, ver APPS_SCRIPT_URL
+       abaixo) na sheet espelho_lazer.
+     - Bloco de calendário expansível (<details>) no topo da secção Highlights:
+       clicar num dia mostra sugestões (link para o card) e compromissos reais
+       lado a lado. Só aparece se o JSON canónico trouxer meta.periodo_inicio/fim.
+     - Bloco "Guardado para o futuro" no fim da secção Highlights, a partir de
+       futuro_guardado[] no JSON canónico — só aparece se a lista não vier vazia.
+     - Cards ganham atributo id (token ID) para as âncoras do calendário.
+     Tudo optativo/aditivo no schema — um JSON antigo sem estes campos continua a
+     renderizar exactamente como na v6, só sem calendário/bloco futuro. -->
+<!-- v6 — 17 Jul 2026: fix troca de separador — JS usava style.display='' para
+     "mostrar" uma secção, mas só a secção "highlights" tinha regra CSS de
+     display:block; as restantes caíam de volta no display:none por omissão
+     e nunca apareciam ao clicar no pill. Corrigido para 'block' explícito.
+     Nenhuma outra alteração face à v5. -->
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda de Lazer — {{PERIODO_LABEL}}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#F5F0E8;
+    --navy:#1A3D52;
+    --terracota:#C75A2C;
+    --tv-bg:#EFF6FF;
+    --escape-bg:#F0FDF4;
+    --whatsapp:#25D366;
+    --gold:#D4A017;
+    --confirmado:#16A34A;
+    --remover:#B33F3F;
+    --futuro:#3B6E8F;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--cream);
+    font-family:'DM Sans',sans-serif;
+    color:var(--navy);
+  }
+  h1,h2,h3,.titulo{font-family:'Fraunces',serif;}
+  .header-sticky{
+    position:sticky;top:0;z-index:40;
+    background:var(--navy);color:#fff;
+    padding:16px 20px;
+  }
+  .header-sticky h1{margin:0;font-size:1.4rem;}
+  .header-sticky .periodo{font-size:0.85rem;opacity:0.85;margin-top:2px;}
+
+  .banner-urgente{
+    background:var(--terracota);color:#fff;
+    padding:10px 20px;font-size:0.9rem;font-weight:600;
+    display:none;
+  }
+  .banner-urgente.show{display:block;}
+
+  .filtros-sticky{
+    position:sticky;top:64px;z-index:30;
+    background:var(--cream);
+    padding:10px 16px;
+    display:flex;gap:8px;overflow-x:auto;
+    border-bottom:1px solid rgba(26,61,82,0.1);
+  }
+  .pill{
+    flex:0 0 auto;
+    padding:6px 14px;border-radius:999px;
+    background:#fff;border:1px solid rgba(26,61,82,0.2);
+    font-size:0.82rem;font-weight:600;cursor:pointer;
+    white-space:nowrap;
+  }
+  .pill.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  .banner-viagem{
+    margin:14px 16px 14px;padding:12px 14px;border-radius:10px;
+    background:#FEF3C7;color:#92400E;font-size:0.85rem;font-weight:600;
+    display:none;
+  }
+  .banner-viagem.show{display:block;}
+
+  .secao{padding:14px 16px 24px;display:none;}
+  .secao[data-secao="highlights"]{display:block;}
+  .secao-titulo{
+    font-size:1.1rem;font-weight:600;margin:0 0 10px;
+    display:flex;align-items:center;gap:8px;
+  }
+  .grid-cards{
+    display:grid;gap:12px;
+    grid-template-columns:1fr;
+  }
+  @media(min-width:640px){
+    .grid-cards{grid-template-columns:repeat(2,1fr);}
+  }
+
+  .confirmados-bloco{
+    background:rgba(22,163,74,0.07);
+    border:1.5px solid rgba(22,163,74,0.3);
+    border-radius:14px;padding:12px;margin-bottom:16px;
+  }
+  .confirmados-titulo{
+    font-size:0.9rem;font-weight:700;color:var(--confirmado);
+    margin:0 0 10px;
+  }
+
+  .guardado-bloco{
+    background:rgba(212,160,23,0.09);
+    border:1.5px solid rgba(212,160,23,0.35);
+    border-radius:14px;padding:12px;margin-bottom:16px;
+  }
+  .guardado-titulo{
+    font-size:0.9rem;font-weight:700;color:var(--gold);
+    margin:0 0 10px;
+  }
+  .badge-saved{background:var(--gold);color:#fff;}
+  .badge-elevado{background:var(--gold);color:#fff;}
+
+  .data-grupo{margin-bottom:14px;}
+  .data-grupo:last-child{margin-bottom:0;}
+  .data-grupo-titulo{
+    cursor:pointer;font-weight:700;font-size:0.92rem;
+    padding:8px 12px;background:rgba(26,61,82,0.06);border-radius:10px;
+    margin-bottom:10px;list-style:none;
+  }
+  .data-grupo-titulo::-webkit-details-marker{display:none;}
+  .data-grupo-titulo::marker{content:"";}
+  .data-grupo-titulo::before{content:"▸ ";}
+  .data-grupo[open] > .data-grupo-titulo::before{content:"▾ ";}
+  .data-grupo-count{font-weight:400;opacity:0.65;font-size:0.82rem;}
+
+  .card{
+    background:#fff;border-radius:14px;overflow:hidden;
+    box-shadow:0 1px 3px rgba(26,61,82,0.08);
+    position:relative;padding-left:12px;
+    scroll-margin-top:118px;
+    transition:opacity .35s ease, transform .35s ease, max-height .35s ease, margin .35s ease, padding .35s ease;
+  }
+  .card::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  }
+  .card-inner{padding:14px 14px 14px 4px;}
+  .card-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;}
+  .card-titulo{font-family:'Fraunces',serif;font-size:1.02rem;font-weight:600;margin:0;}
+  .card-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+  .badge{
+    font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:999px;
+    background:rgba(26,61,82,0.08);color:var(--navy);
+  }
+  .badge-confirmed{background:var(--confirmado);color:#fff;}
+  .card-meta{font-size:0.8rem;opacity:0.75;margin-top:6px;}
+  .card-desc{font-size:0.85rem;margin-top:8px;line-height:1.4;}
+  .card-desc-details{margin-top:8px;}
+  .card-desc-details summary.card-desc-preview{
+    font-size:0.85rem;line-height:1.4;cursor:pointer;list-style:none;
+  }
+  .card-desc-details summary.card-desc-preview::-webkit-details-marker{display:none;}
+  .card-desc-details summary.card-desc-preview::after{
+    content:" · ler mais ↓";font-weight:600;color:var(--terracota);
+  }
+  .card-desc-details[open] summary.card-desc-preview{display:none;}
+  .card-desc-full{font-size:0.85rem;line-height:1.5;white-space:pre-line;}
+  .card-with{font-size:0.78rem;opacity:0.7;margin-top:6px;}
+  .card-logistica{
+    font-size:0.78rem;margin-top:8px;opacity:0.85;
+  }
+  .card-acoes{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;align-items:center;}
+  .btn{
+    font-size:0.78rem;font-weight:600;padding:6px 12px;border-radius:999px;
+    text-decoration:none;cursor:pointer;border:1.5px solid transparent;
+    display:inline-flex;align-items:center;gap:4px;
+  }
+  .btn-mais{border-color:var(--navy);color:var(--navy);background:transparent;}
+  .btn-whatsapp{background:var(--whatsapp);color:#fff;}
+  .btn-email{border-color:#2563EB;color:#2563EB;background:transparent;}
+  .card.bg-tv{background:var(--tv-bg);}
+  .card.bg-escape{background:var(--escape-bg);}
+  .card.bg-highlights{background:#FFFBEB;}
+
+  .secao-vazia{display:none;}
+
+  /* ---------- curadoria: ícones remover/elevar/guardar-futuro ---------- */
+  .card-acoes-curar{display:flex;justify-content:flex-end;margin-top:6px;}
+  .icon-acoes{display:flex;gap:6px;}
+  .icon-btn{
+    width:30px;height:30px;border-radius:999px;border:1.5px solid rgba(26,61,82,0.18);
+    background:#fff;display:inline-flex;align-items:center;justify-content:center;
+    font-size:0.92rem;cursor:pointer;line-height:1;padding:0;
+  }
+  .icon-btn:hover{border-color:currentColor;}
+  .icon-btn[disabled]{opacity:0.55;cursor:default;}
+  .icon-remover{color:var(--remover);}
+  .icon-elevar{color:var(--gold);}
+  .icon-elevar.ativo{background:var(--gold);color:#fff;border-color:var(--gold);}
+  .icon-futuro{color:var(--futuro);}
+  .icon-futuro.ativo{background:var(--futuro);color:#fff;border-color:var(--futuro);}
+  .icon-consumido{color:var(--confirmado);}
+  .icon-experimentei{color:var(--confirmado);}
+  .icon-experimentei.feito{background:var(--confirmado);color:#fff;border-color:var(--confirmado);}
+
+  .card.removendo{opacity:0;transform:scale(0.97);max-height:0;margin:0;padding:0;overflow:hidden;border:0;box-shadow:none;}
+
+  .flash{animation:flash-bg 1.1s ease;}
+  @keyframes flash-bg{
+    0%{box-shadow:0 0 0 3px rgba(199,90,44,0.55);}
+    100%{box-shadow:0 1px 3px rgba(26,61,82,0.08);}
+  }
+
+  /* ---------- calendário expansível ---------- */
+  .cal-bloco{
+    background:#fff;border:1.5px solid rgba(26,61,82,0.14);
+    border-radius:14px;overflow:hidden;margin-bottom:14px;
+  }
+  .cal-bloco > summary{
+    list-style:none;cursor:pointer;
+    padding:12px 14px;font-weight:700;font-size:0.92rem;
+    display:flex;align-items:center;justify-content:space-between;
+    background:rgba(26,61,82,0.04);
+  }
+  .cal-bloco > summary::-webkit-details-marker{display:none;}
+  .cal-bloco > summary::after{content:"▾";opacity:0.5;}
+  .cal-bloco[open] > summary::after{content:"▴";}
+  .cal-body{padding:14px;}
+  .cal-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  @media(max-width:480px){.cal-grid{grid-template-columns:repeat(3,1fr);}}
+  .cal-dia{
+    border:1.5px solid rgba(26,61,82,0.14);border-radius:10px;
+    padding:7px 4px;text-align:center;cursor:pointer;background:#fff;
+  }
+  .cal-dia:hover{border-color:var(--navy);}
+  .cal-dia.vazio{visibility:hidden;cursor:default;}
+  .cal-dia.hoje{border-color:var(--terracota);}
+  .cal-dia.selecionado{background:var(--navy);border-color:var(--navy);color:#fff;}
+  .cal-dow{font-size:0.64rem;text-transform:uppercase;letter-spacing:0.04em;opacity:0.6;}
+  .cal-num{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600;margin-top:2px;}
+  .cal-dots{display:flex;gap:3px;justify-content:center;margin-top:5px;height:6px;}
+  .cal-dot{width:5px;height:5px;border-radius:50%;}
+  .cal-dot.sug{background:var(--terracota);}
+  .cal-dia.selecionado .cal-dot.sug{background:#F5B99A;}
+  .cal-dot.comp{background:var(--navy);}
+  .cal-dia.selecionado .cal-dot.comp{background:#9FC2D6;}
+  .cal-detalhe{
+    margin-top:12px;padding-top:12px;border-top:1px solid rgba(26,61,82,0.14);
+    display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  }
+  @media(max-width:480px){.cal-detalhe{grid-template-columns:1fr;}}
+  .cal-col h4{
+    font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;
+    opacity:0.6;margin:0 0 6px;
+  }
+  .cal-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;}
+  .cal-col li{font-size:0.84rem;line-height:1.4;}
+  .cal-col .vazio{opacity:0.45;font-style:italic;}
+  .cal-link{color:var(--terracota);font-weight:600;text-decoration:none;}
+  .cal-link:hover{text-decoration:underline;}
+
+  /* ---------- guardado para o futuro ---------- */
+  .futuro-bloco{
+    background:rgba(59,110,143,0.07);
+    border:1.5px solid rgba(59,110,143,0.28);
+    border-radius:14px;padding:12px;margin-top:16px;
+  }
+  .futuro-titulo{font-size:0.9rem;font-weight:700;color:var(--futuro);margin:0 0 10px;}
+  .futuro-item{
+    background:#fff;border-radius:10px;padding:10px 12px;
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    font-size:0.85rem;
+    transition:opacity .3s ease, transform .3s ease, max-height .3s ease, margin .3s ease, padding .3s ease;
+  }
+  .futuro-item + .futuro-item{margin-top:8px;}
+  .futuro-item .sub{display:block;font-size:0.74rem;opacity:0.6;margin-top:2px;}
+  .futuro-acoes{display:flex;gap:6px;flex-shrink:0;}
+  .futuro-item.saindo{opacity:0;transform:translateX(8px);max-height:0;margin:0;padding:0;overflow:hidden;}
+
+  /* ---------- toasts de confirmação ---------- */
+  .toast-host{
+    position:fixed;left:0;right:0;bottom:16px;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    pointer-events:none;z-index:80;
+  }
+  .toast{
+    background:var(--navy);color:#fff;font-size:0.8rem;font-weight:500;
+    padding:9px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,0.18);
+    max-width:90vw;text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header-sticky">
+  <h1>🗓️ Agenda de Lazer</h1>
+  <div class="periodo">{{PERIODO_LABEL}}</div>
+</div>
+
+<div class="banner-urgente {{URGENTE_CLASS}}">{{URGENTE_TEXTO}}</div>
+
+<div class="filtros-sticky">
+  <div class="pill active" data-filtro="highlights">✨ Highlights</div>
+  <!--PILL:tv--><div class="pill" data-filtro="tv">📺 TV</div><!--/PILL:tv-->
+  <!--PILL:streaming--><div class="pill" data-filtro="streaming">🎬 Streaming</div><!--/PILL:streaming-->
+  <!--PILL:cinema_indoor--><div class="pill" data-filtro="cinema_indoor">🎟️ Cinema</div><!--/PILL:cinema_indoor-->
+  <!--PILL:cinema_outdoor--><div class="pill" data-filtro="cinema_outdoor">🌙 Cinema ar livre</div><!--/PILL:cinema_outdoor-->
+  <!--PILL:meetup--><div class="pill" data-filtro="meetup">🤝 Meetups</div><!--/PILL:meetup-->
+  <!--PILL:culture--><div class="pill" data-filtro="culture">🎭 Cultura</div><!--/PILL:culture-->
+  <!--PILL:books--><div class="pill" data-filtro="books">📚 Livros</div><!--/PILL:books-->
+  <!--PILL:gastro--><div class="pill" data-filtro="gastro">🍽️ Gastro</div><!--/PILL:gastro-->
+  <!--PILL:escape--><div class="pill" data-filtro="escape">🧭 Escapadinhas</div><!--/PILL:escape-->
+  <!--PILL:radar--><div class="pill" data-filtro="radar">📡 Radar</div><!--/PILL:radar-->
+</div>
+
+<div class="banner-viagem {{VIAGEM_CLASS}}">{{VIAGEM_TEXTO}}</div>
+
+<!--SECTION:highlights-->
+<div class="secao" data-secao="highlights">
+  <div class="secao-titulo">✨ Highlights</div>
+  {{CALENDARIO_BLOCK}}
+  <div class="grid-cards">
+    {{CARDS:highlights}}
+  </div>
+  {{FUTURO_BLOCK}}
+</div>
+<!--/SECTION:highlights-->
+
+<!--SECTION:tv-->
+<div class="secao" data-secao="tv">
+  <div class="secao-titulo">📺 Televisão</div>
+  <div class="grid-cards">
+    {{CARDS:tv}}
+  </div>
+</div>
+<!--/SECTION:tv-->
+
+<!--SECTION:streaming-->
+<div class="secao" data-secao="streaming">
+  <div class="secao-titulo">🎬 Streaming</div>
+  {{CARDS:streaming}}
+</div>
+<!--/SECTION:streaming-->
+
+<!--SECTION:cinema_indoor-->
+<div class="secao" data-secao="cinema_indoor">
+  <div class="secao-titulo">🎟️ Cinema</div>
+  <div class="grid-cards">
+    {{CARDS:cinema_indoor}}
+  </div>
+</div>
+<!--/SECTION:cinema_indoor-->
+
+<!--SECTION:cinema_outdoor-->
+<div class="secao" data-secao="cinema_outdoor">
+  <div class="secao-titulo">🌙 Cinema ao ar livre</div>
+  <div class="grid-cards">
+    {{CARDS:cinema_outdoor}}
+  </div>
+</div>
+<!--/SECTION:cinema_outdoor-->
+
+<!--SECTION:meetup-->
+<div class="secao" data-secao="meetup">
+  <div class="secao-titulo">🤝 Meetups</div>
+  {{CARDS:meetup}}
+</div>
+<!--/SECTION:meetup-->
+
+<!--SECTION:culture-->
+<div class="secao" data-secao="culture">
+  <div class="secao-titulo">🎭 Cultura</div>
+  {{CARDS:culture}}
+</div>
+<!--/SECTION:culture-->
+
+<!--SECTION:books-->
+<div class="secao" data-secao="books">
+  <div class="secao-titulo">📚 Livros</div>
+  {{CARDS:books}}
+</div>
+<!--/SECTION:books-->
+
+<!--SECTION:gastro-->
+<div class="secao" data-secao="gastro">
+  <div class="secao-titulo">🍽️ Gastronomia</div>
+  <div class="grid-cards">
+    {{CARDS:gastro}}
+  </div>
+</div>
+<!--/SECTION:gastro-->
+
+<!--SECTION:escape-->
+<div class="secao" data-secao="escape">
+  <div class="secao-titulo">🧭 Escapadinhas</div>
+  {{CARDS:escape}}
+</div>
+<!--/SECTION:escape-->
+
+<!--SECTION:radar-->
+<div class="secao" data-secao="radar">
+  <div class="secao-titulo">📡 Radar (a confirmar)</div>
+  <div class="grid-cards">
+    {{CARDS:radar}}
+  </div>
+</div>
+<!--/SECTION:radar-->
+
+<!--CARD-->
+<div class="card {{CARD_BG_CLASS}}" id="{{ID}}" data-categoria="{{CATEGORY}}" style="--stripe:{{STRIPE_COLOR}}">
+  <style>.card[data-categoria="{{CATEGORY}}"]::before{background:{{STRIPE_COLOR}};}</style>
+  <div class="card-inner">
+    <div class="card-top">
+      <h3 class="card-titulo">{{TITLE}}</h3>
+    </div>
+    <div class="card-badges">{{BADGES_HTML}}</div>
+    <div class="card-meta">{{DATE_LABEL}}{{TIME_SUFFIX}}{{LOCATION_SUFFIX}}</div>
+    {{DESCRIPTION_BLOCK}}
+    {{WITH_BLOCK}}
+    {{LOGISTICS_BLOCK}}
+    <div class="card-acoes">
+      {{LINK_BUTTON}}
+      <a class="btn btn-whatsapp" href="{{WHATSAPP_HREF}}" target="_blank" rel="noopener">📲 Partilhar</a>
+      <a class="btn btn-email" href="{{EMAIL_HREF}}">📧 Email</a>
+      {{SAVE_BUTTON}}
+    </div>
+    <div class="card-acoes-curar">
+      {{CURATION_BUTTONS}}
+    </div>
+  </div>
+</div>
+<!--/CARD-->
+
+<div class="toast-host" id="toastHost"></div>
+
+<script>
+  var EVENTOS = {{EVENTOS_JSON}};
+  var CALENDARIO_DIAS = {{CALENDARIO_JSON}};
+  var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby55kxxULU9j657IP86lrqr66iw8wPjLKDQMPFoIqVPQpzwUs8-LrcON4ihJ6zLC4ei/exec';
+
+  document.querySelectorAll('.pill').forEach(function(p){
+    p.addEventListener('click', function(){
+      document.querySelectorAll('.pill').forEach(function(x){x.classList.remove('active');});
+      p.classList.add('active');
+      var f = p.getAttribute('data-filtro');
+      document.querySelectorAll('.secao').forEach(function(s){
+        s.style.display = (s.getAttribute('data-secao') === f) ? 'block' : 'none';
+      });
+    });
+  });
+
+  // ---------------- Curadoria: remover / elevar / guardar para o futuro / consumido ----------------
+  function toast(msg){
+    var host = document.getElementById('toastHost');
+    var el = document.createElement('div');
+    el.className = 'toast';
+    el.textContent = msg;
+    host.appendChild(el);
+    setTimeout(function(){ el.remove(); }, 4200);
+  }
+
+  function curarItem(btn){
+    var payload;
+    try { payload = JSON.parse(btn.getAttribute('data-payload')); } catch(e){ return; }
+    var acao = btn.getAttribute('data-acao');
+    if (btn.classList.contains('ativo') || btn.classList.contains('feito')){
+      acao = 'limpo';
+      payload.acao = 'limpo';
+      payload.acao_original = btn.getAttribute('data-acao') || '';
+    }
+    btn.disabled = true;
+    fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'text/plain'},
+      body: JSON.stringify(payload)
+    }).then(function(){
+      aplicarEfeitoCuradoria(btn, acao);
+    }).catch(function(){
+      btn.disabled = false;
+      toast('⚠️ Falha ao gravar — tenta de novo');
+    });
+  }
+
+  function aplicarEfeitoCuradoria(btn, acao){
+    var grupo = btn.closest('.icon-acoes') || btn.closest('.futuro-acoes');
+    if (grupo){
+      grupo.querySelectorAll('.icon-btn').forEach(function(x){
+        x.classList.remove('ativo');
+        x.classList.remove('feito');
+        x.disabled = false;
+      });
+    } else {
+      btn.disabled = false;
+    }
+    if (acao === 'limpo'){
+      var cardLimpo = btn.closest('.card');
+      if (cardLimpo) cardLimpo.classList.remove('removendo');
+      var itemLimpo = btn.closest('.futuro-item');
+      if (itemLimpo) itemLimpo.classList.remove('saindo');
+      toast('↩ Marcação desfeita — este item volta ao estado neutro');
+      return;
+    }
+    btn.classList.add('ativo');
+    if (acao === 'removido'){
+      var card = btn.closest('.card');
+      if (card){
+        card.classList.add('removendo');
+      } else {
+        var item = btn.closest('.futuro-item');
+        if (item) item.classList.add('saindo');
+      }
+      toast('✕ Removido — fica excluído enquanto esta marcação estiver ativa');
+    } else if (acao === 'elevar'){
+      toast('⬆ Elevado — entra nos Highlights na próxima geração');
+    } else if (acao === 'guardado_futuro'){
+      toast('🕒 Guardado — aparece em "Guardado para o futuro" na próxima geração');
+    } else if (acao === 'consumido'){
+      var item2 = btn.closest('.futuro-item');
+      if (item2){
+        item2.classList.add('saindo');
+      } else {
+        btn.classList.add('feito');
+      }
+      toast('✅ Marcado como experimentado — a pontuação fica pendente para o merge_feedback.py');
+    }
+  }
+
+  // ---------------- Calendário expansível ----------------
+  function escHtml(s){
+    var d = document.createElement('div');
+    d.textContent = s == null ? '' : s;
+    return d.innerHTML;
+  }
+
+  if (CALENDARIO_DIAS && CALENDARIO_DIAS.length){
+    var calGrid = document.getElementById('calGrid');
+    CALENDARIO_DIAS.forEach(function(dia, idx){
+      var el = document.createElement('div');
+      if (dia.vazio){
+        // celula de alinhamento (mesmo padrao do Briefing): 1a coluna e
+        // sempre segunda, ultima domingo — nunca clicavel, so ocupa o
+        // lugar na grelha.
+        el.className = 'cal-dia vazio';
+        calGrid.appendChild(el);
+        return;
+      }
+      el.className = 'cal-dia' + (dia.hoje ? ' hoje' : '');
+      el.innerHTML = '<div class="cal-dow">' + escHtml(dia.dow) + '</div>' +
+        '<div class="cal-num">' + dia.d + '</div>' +
+        '<div class="cal-dots">' +
+        (dia.sug.length ? '<span class="cal-dot sug"></span>' : '') +
+        (dia.comp.length ? '<span class="cal-dot comp"></span>' : '') +
+        '</div>';
+      el.addEventListener('click', function(){ selecionarDiaCalendario(idx); });
+      calGrid.appendChild(el);
+    });
+
+    var selecionarDiaCalendario = function(idx){
+      var dia = CALENDARIO_DIAS[idx];
+      document.querySelectorAll('.cal-dia').forEach(function(n, i){
+        n.classList.toggle('selecionado', i === idx);
+      });
+      var detalhe = document.getElementById('calDetalhe');
+      detalhe.hidden = false;
+
+      var sugUl = document.getElementById('calSugestoes');
+      sugUl.innerHTML = dia.sug.length
+        ? dia.sug.map(function(s){ return '<li><a class="cal-link" data-cat="' + escHtml(s.cat) + '" href="' + s.href + '">→ ' + escHtml(s.t) + '</a></li>'; }).join('')
+        : '<li class="vazio">Sem sugestões marcadas</li>';
+
+      var compUl = document.getElementById('calCompromissos');
+      compUl.innerHTML = dia.comp.length
+        ? dia.comp.map(function(c){ return '<li>' + escHtml(c) + '</li>'; }).join('')
+        : '<li class="vazio">Sem compromissos</li>';
+
+      sugUl.querySelectorAll('a').forEach(function(a){
+        a.addEventListener('click', function(e){
+          e.preventDefault();
+          // muda para a aba real do evento antes de saltar — o calendario
+          // vive dentro de Highlights, mas a copia com id unico do card
+          // fica na seccao da sua categoria real (ver render_v8.py).
+          var cat = a.getAttribute('data-cat');
+          if (cat){
+            var pill = document.querySelector('.pill[data-filtro="' + cat + '"]');
+            if (pill) pill.click();
+          }
+          var target = document.querySelector(a.getAttribute('href'));
+          if (!target) return;
+          target.scrollIntoView({behavior:'smooth', block:'center'});
+          target.classList.remove('flash');
+          void target.offsetWidth;
+          target.classList.add('flash');
+        });
+      });
+    };
+
+    // seleccao por omissao: o dia de hoje se estiver na grelha, senao o
+    // primeiro dia real (nunca uma célula vazia de alinhamento).
+    var idxInicial = CALENDARIO_DIAS.findIndex(function(d){ return d.hoje; });
+    if (idxInicial === -1) idxInicial = CALENDARIO_DIAS.findIndex(function(d){ return !d.vazio; });
+    if (idxInicial !== -1) selecionarDiaCalendario(idxInicial);
+  }
+</script>
+
+</body>
+</html>
