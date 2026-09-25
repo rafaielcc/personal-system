@@ -34,6 +34,7 @@ Uso
     python3 X_briefing_pre.py --next-business-day  # Modo C: briefing do proximo dia util
     python3 X_briefing_pre.py --target-date 2026-09-15
     python3 X_briefing_pre.py --today          # forcar o dia real mesmo depois das 16h
+    python3 X_briefing_pre.py --authorize-google  # consentimento Google manual, sem gerar briefing
     python3 X_briefing_pre.py --self-test          # testa a logica pura, sem rede
 
 Credenciais
@@ -41,7 +42,7 @@ Credenciais
   Google : PROJECT_ROOT/credentials.json  (o mesmo OAuth client que as rotinas AII ja usam)
            PROJECT_ROOT/token_agenda.json (token PROPRIO desta rotina — deliberadamente
            separado de token.json para nao mexer nos scopes das rotinas AII)
-           Na 1a execucao abre o browser uma vez para consentir Calendar+Gmail+Sheets.
+           Correr --authorize-google manualmente para consentir Calendar+Gmail+Sheets.
   Todoist: variavel de ambiente TODOIST_API_TOKEN, ou ficheiro PROJECT_ROOT/token_todoist.md
            (tambem aceite: todoist_token.md)
            (mesmo padrao do github_token.md; a 1a linha nao-comentario e o token).
@@ -388,7 +389,7 @@ def http_get_json(url: str, headers: dict[str, str] | None = None, timeout: int 
 # ======================================================================================
 # Autenticacao Google
 # ======================================================================================
-def google_services(errors: list[str]) -> dict[str, Any]:
+def google_services(errors: list[str], *, reauthorize: bool = False) -> dict[str, Any]:
     """Devolve {'calendar':..., 'gmail':..., 'sheets':...} ou {} se a auth falhar."""
     try:
         from google.auth.transport.requests import Request
@@ -403,30 +404,50 @@ def google_services(errors: list[str]) -> dict[str, Any]:
         return {}
 
     creds = None
-    if GOOGLE_TOKEN_PATH.exists():
+    gmail_authorized = True
+    if GOOGLE_TOKEN_PATH.exists() and not reauthorize:
         try:
-            creds = Credentials.from_authorized_user_file(str(GOOGLE_TOKEN_PATH), GOOGLE_SCOPES)
+            token_data = json.loads(GOOGLE_TOKEN_PATH.read_text(encoding="utf-8"))
+            missing = set(GOOGLE_SCOPES) - set(token_data.get("scopes") or [])
+            if missing:
+                if missing != {"https://www.googleapis.com/auth/gmail.readonly"}:
+                    errors.append("token_agenda.json sem acessos Google necessarios; "
+                                  "correr X_briefing_pre.py --authorize-google manualmente.")
+                    return {}
+                gmail_authorized = False
+                errors.append("token_agenda.json sem acesso a Gmail; "
+                              "correr X_briefing_pre.py --authorize-google manualmente.")
+            creds = Credentials.from_authorized_user_file(str(GOOGLE_TOKEN_PATH))
         except Exception as exc:
-            errors.append(f"token_agenda.json ilegivel ({exc}); vai pedir novo consentimento.")
-            creds = None
+            errors.append(f"token_agenda.json ilegivel ({exc}); "
+                          "correr X_briefing_pre.py --authorize-google manualmente.")
+            return {}
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             try:
                 creds.refresh(Request())
             except Exception as exc:
-                errors.append(f"Refresh do token falhou ({exc}); vai pedir novo consentimento.")
-                creds = None
+                errors.append(f"Refresh do token falhou ({exc}); "
+                              "correr X_briefing_pre.py --authorize-google manualmente.")
+                return {}
         if not creds or not creds.valid:
+            if not reauthorize:
+                errors.append("Token Google do Briefing ausente ou invalido; "
+                              "correr X_briefing_pre.py --authorize-google manualmente.")
+                return {}
             if not GOOGLE_CREDENTIALS_PATH.exists():
                 errors.append(f"credentials.json nao encontrado em {GOOGLE_CREDENTIALS_PATH}")
                 return {}
             flow = InstalledAppFlow.from_client_secrets_file(str(GOOGLE_CREDENTIALS_PATH), GOOGLE_SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=0, prompt="consent")
+            if creds.granted_scopes is not None and set(GOOGLE_SCOPES) - set(creds.granted_scopes):
+                errors.append("Nem todos os acessos Google foram concedidos; token anterior preservado.")
+                return {}
         GOOGLE_TOKEN_PATH.write_text(creds.to_json(), encoding="utf-8")
 
     return {
         "calendar": build("calendar", "v3", credentials=creds, cache_discovery=False),
-        "gmail": build("gmail", "v1", credentials=creds, cache_discovery=False),
+        "gmail": build("gmail", "v1", credentials=creds, cache_discovery=False) if gmail_authorized else None,
         "sheets": build("sheets", "v4", credentials=creds, cache_discovery=False),
     }
 
@@ -1789,20 +1810,23 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             errors.append(f"Calendario: {exc}")
 
         try:
-            email = collect_gmail(services["gmail"], warnings)
-            seccoes = gmail_sections(email)
-            # ok=True so quando NENHUMA seccao falhou. Antes, cinco seccoes em erro davam
-            # cinco zeros e um ok=True — indistinguivel de uma caixa de correio vazia.
-            falhadas = sorted(k for k, v in seccoes.items() if v.get("erro"))
-            fontes["gmail"] = {
-                "ok": not falhadas,
-                "conta": email.get("_conta"),
-                "conta_esperada": EXPECTED_GOOGLE_ACCOUNT,
-                "seccoes": {k: v.get("total", 0) for k, v in seccoes.items()},
-                "seccoes_em_erro": {k: seccoes[k]["erro"] for k in falhadas},
-            }
-            if falhadas:
-                errors.append("Gmail: seccoes sem leitura: " + ", ".join(falhadas))
+            if services["gmail"] is None:
+                fontes["gmail"] = {"ok": False, "erro": "token sem gmail.readonly"}
+            else:
+                email = collect_gmail(services["gmail"], warnings)
+                seccoes = gmail_sections(email)
+                # ok=True so quando NENHUMA seccao falhou. Antes, cinco seccoes em erro davam
+                # cinco zeros e um ok=True — indistinguivel de uma caixa de correio vazia.
+                falhadas = sorted(k for k, v in seccoes.items() if v.get("erro"))
+                fontes["gmail"] = {
+                    "ok": not falhadas,
+                    "conta": email.get("_conta"),
+                    "conta_esperada": EXPECTED_GOOGLE_ACCOUNT,
+                    "seccoes": {k: v.get("total", 0) for k, v in seccoes.items()},
+                    "seccoes_em_erro": {k: seccoes[k]["erro"] for k in falhadas},
+                }
+                if falhadas:
+                    errors.append("Gmail: seccoes sem leitura: " + ", ".join(falhadas))
         except Exception as exc:
             fontes["gmail"] = {"ok": False, "erro": f"{type(exc).__name__}: {exc}"}
             errors.append(f"Gmail: {exc}")
@@ -2195,10 +2219,21 @@ def main() -> int:
     parser.add_argument("--no-cleanup", action="store_true", help="Nao apagar os briefings anteriores.")
     parser.add_argument("--stdout", action="store_true", help="Imprimir o JSON tambem no stdout.")
     parser.add_argument("--self-test", action="store_true", help="Testar a logica pura, sem rede nem credenciais.")
+    parser.add_argument("--authorize-google", action="store_true",
+                        help="Abrir consentimento Google e atualizar apenas o token do Briefing.")
     args = parser.parse_args()
 
     if args.self_test:
         return self_test()
+    if args.authorize_google:
+        errors: list[str] = []
+        google_services(errors, reauthorize=True)
+        if errors:
+            for message in errors:
+                print(f"ERRO: {message}", file=sys.stderr)
+            return 1
+        print(f"Token Google do Briefing autorizado em {GOOGLE_TOKEN_PATH}")
+        return 0
 
     payload = run(args)
 

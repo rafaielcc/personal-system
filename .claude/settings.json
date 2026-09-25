@@ -7,8 +7,14 @@
       "Bash(python \"G:/My Drive/Claude_PRJ/Agenda/X_Rotinas_Python/X_briefing_pos.py\" *)",
       "Bash(python \"G:/My Drive/Claude_PRJ/Agenda/X_Rotinas_Python/X_hff_pos.py\" *)",
       "Read(//g/My Drive/Claude_PRJ/Agenda/X_Outputs/**)",
+      "Glob(//g/My Drive/Claude_PRJ/Agenda/X_Outputs/**)",
       "Write(//g/My Drive/Claude_PRJ/Agenda/X_Outputs/**)",
-      "Edit(//g/My Drive/Claude_PRJ/Agenda/X_Outputs/**)"
+      "Edit(//g/My Drive/Claude_PRJ/Agenda/X_Outputs/**)",
+      "Read(//g/My Drive/Claude_PRJ/Rafa_profile.md)",
+      "Read(//g/My Drive/Claude_PRJ/Feedback_log.json)",
+      "Read(//g/My Drive/Claude_PRJ/Agenda/TESTME.md)",
+      "Read(//g/My Drive/Claude_PRJ/Agenda/INSTRUCOES_CIRPED.md)",
+      "Read(//g/My Drive/Claude_PRJ/Agenda/INSTRUCOES_ARTIGOS_v1.6.md)"
     ]
   }
 }

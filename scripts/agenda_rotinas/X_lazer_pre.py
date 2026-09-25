@@ -62,7 +62,7 @@ OUTPUT_DIR = AGENDA_ROOT / "X_Outputs" / "lazer"
 SOURCE_SYSTEM = PROJECT_ROOT / "Relatorios" / "Sources" / "System"
 SOURCES_ROOT = PROJECT_ROOT / "Relatorios" / "Sources"
 GOOGLE_CREDENTIALS = PROJECT_ROOT / "credentials.json"
-GOOGLE_TOKEN = PROJECT_ROOT / "token_agenda.json"
+GOOGLE_TOKEN = PROJECT_ROOT / "token_lazer.json"
 
 PROFILE_PATH = PROJECT_ROOT / "Rafa_profile.md"
 FEEDBACK_PATH = PROJECT_ROOT / "Feedback_log.json"
@@ -375,7 +375,7 @@ def run_exporter(
     return raw, state, None
 
 
-def google_services(errors: list[str]) -> dict[str, Any]:
+def google_services(errors: list[str], *, reauthorize: bool = False) -> dict[str, Any]:
     try:
         from google.auth.transport.requests import Request as GoogleRequest
         from google.oauth2.credentials import Credentials
@@ -387,7 +387,7 @@ def google_services(errors: list[str]) -> dict[str, Any]:
 
     creds = None
     try:
-        if GOOGLE_TOKEN.exists():
+        if GOOGLE_TOKEN.exists() and not reauthorize:
             creds = Credentials.from_authorized_user_file(str(GOOGLE_TOKEN), list(GOOGLE_SCOPES))
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(GoogleRequest())
@@ -396,7 +396,10 @@ def google_services(errors: list[str]) -> dict[str, Any]:
                 errors.append(f"Google: credentials em falta: {GOOGLE_CREDENTIALS}")
                 return {}
             flow = InstalledAppFlow.from_client_secrets_file(str(GOOGLE_CREDENTIALS), list(GOOGLE_SCOPES))
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=0, prompt="consent")
+            if creds.granted_scopes is not None and set(GOOGLE_SCOPES) - set(creds.granted_scopes):
+                errors.append("Google: nem todos os acessos foram concedidos; token anterior preservado.")
+                return {}
         GOOGLE_TOKEN.write_text(creds.to_json(), encoding="utf-8")
         return {
             "calendar": build("calendar", "v3", credentials=creds, cache_discovery=False),
@@ -1628,9 +1631,20 @@ def main() -> int:
     parser.add_argument("--skip-public-sources", action="store_true")
     parser.add_argument("--motelx-json")
     parser.add_argument("--self-test", action="store_true")
+    parser.add_argument("--authorize-google", action="store_true",
+                        help="Abrir consentimento Google e atualizar apenas o token do Lazer.")
     args = parser.parse_args()
     if args.self_test:
         return self_test()
+    if args.authorize_google:
+        errors: list[str] = []
+        google_services(errors, reauthorize=True)
+        if errors:
+            for message in errors:
+                print(f"ERRO: {message}")
+            return 1
+        print(f"Token Google do Lazer autorizado em {GOOGLE_TOKEN}")
+        return 0
 
     output_dir = Path(args.output_dir)
     if args.ensure_fresh_hours is not None:

@@ -255,7 +255,7 @@ def cirped_needs_action(today: date, out_dir: Path, warnings: list[str], errors:
 
     try:
         result = subprocess.run(
-            [sys.executable, str(CIRPED_PREFLIGHT)],
+            [sys.executable, str(CIRPED_PREFLIGHT), "--output", str(out_dir / f"cirped_manifest_{today.isoformat()}.json")],
             cwd=str(CIRPED_PREFLIGHT.parent), capture_output=True, text=True, timeout=60, check=True,
         )
     except (subprocess.SubprocessError, OSError) as exc:
